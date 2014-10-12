@@ -16,6 +16,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MyActivity"
+            android:label="@string/title_activity_my" >
+        </activity>
+        <activity
+            android:name=".MyActivity2"
+            android:label="@string/title_activity_my_activity2"
+            android:parentActivityName=".overview" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kd8bnyapps.kd8bny.maintenanceman.overview" />
+        </activity>
     </application>
 
 </manifest>
