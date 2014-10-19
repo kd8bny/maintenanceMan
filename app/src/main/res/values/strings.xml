@@ -2,7 +2,22 @@
 <resources>
 
     <string name="app_name">Maintenance Man</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Overview-->
+    <string name="button_add">Add</string>
+
+    <!--Add Device-->
+    <string name="save">Save</string>
+    <string name="spec_make">Make</string>
+    <string name="spec_model">Model</string>
+    <string name="spec_year">Year</string>
+    <string name="spec_engine">Engine</string>
+    <string name="spec_filter_oil">Oil Filter</string>
+    <string name="spec_filter_fuel">Fuel Filter</string>
+    <string name="spec_type_oil">Oil</string>
+
+    <string name="spec_make_Ford">Ford</string>
+    <string name="spec_model_mustang">Mustang</string>
 
 </resources>
