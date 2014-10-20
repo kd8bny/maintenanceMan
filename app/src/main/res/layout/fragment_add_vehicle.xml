@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    tools:context="com.kd8bny.maintenanceman.addVehicle">
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="11"
+        android:columnCount="3">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/spec_make"
+            android:id="@+id/spec_make"
+            android:layout_row="0" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/val_spec_make"
+            android:layout_column="1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/spec_model"
+            android:id="@+id/spec_model"
+            android:layout_column="0"
+            android:layout_row="3" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/val_spec_model"
+            android:layout_gravity="right"
+            android:layout_column="1"
+            android:layout_row="3" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/val_spec_engine"
+            android:layout_gravity="right"
+            android:layout_column="1"
+            android:layout_row="6"
+            android:hint="@string/hint_spec_engine"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/spec_engine"
+            android:id="@+id/spec_engine"
+            android:layout_column="0"
+            android:layout_row="6" />
+    </GridLayout>
+
+</LinearLayout>
