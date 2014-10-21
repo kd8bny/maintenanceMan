@@ -16,14 +16,11 @@ public class overview extends Activity {
 
     private static final String TAG = "overviewActivity";
 
-    //private Button maddButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        Log.d(TAG, "testing 123");
 
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
@@ -34,14 +31,7 @@ public class overview extends Activity {
                     .add(R.id.fragmentContainer, fragment)
                     .commit();
         }
-        //maddButton = (Button)findViewById(R.id.button_add);
-        //maddButton.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        Intent i = new Intent(overview.this, add.class);
-        //        startActivity(i);
-        //    }
-        //});
+
     }
 
 
