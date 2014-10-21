@@ -1,16 +1,16 @@
 package com.kd8bny.maintenanceman;
 
-import android.app.Activity;
-import android.net.Uri;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 
 public class addVehicle extends Fragment {
@@ -22,7 +22,10 @@ public class addVehicle extends Fragment {
     private EditText mmake;
     private EditText mmodel;
     private EditText mengine;
+    private NumberPicker myear;
 
+    private Button mYearButton;
+    private static final String dialog_year = "Vehicle Year"; //TODO:String??
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +54,17 @@ public class addVehicle extends Fragment {
             }
         });
 
+        mYearButton = (Button)v.findViewById(R.id.button_year);
+        mYearButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FragmentManager fm = getActivity()
+                        .getFragmentManager();
+                dialog_year dialog = new dialog_year();
+                dialog.show(fm, dialog_year);
+            }
+        });
+
         return v;
     }
-
 }
+

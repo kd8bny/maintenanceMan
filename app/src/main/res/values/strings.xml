@@ -13,14 +13,15 @@
     <string name="spec_model">Model</string>
     <string name="spec_year">Year</string>
     <string name="spec_engine">Engine</string>
-
     <string name="spec_filter_oil">Oil Filter</string>
     <string name="spec_filter_fuel">Fuel Filter</string>
     <string name="spec_type_oil">Oil</string>
-
     <string name="spec_make_Ford">Ford</string>
     <string name="spec_model_mustang">Mustang</string>
-
     <string name="hint_spec_engine">4LV6</string>
+
+    <!--Dialog-->
+    <string name="title_vehicle_year">Vehicle Year</string>
+
 
 </resources>
