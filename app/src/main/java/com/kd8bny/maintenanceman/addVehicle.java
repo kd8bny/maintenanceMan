@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,16 +41,18 @@ public class addVehicle extends Fragment {
         mmake.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-
+                Log.d(TAG,"before");
             }
 
             @Override
             public void onTextChanged(CharSequence value, int start, int before, int count) {
+                Log.d(TAG,"on");
                 mvehicle.setMfield(value.toString());
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                Log.d(TAG,"after");
 
             }
         });
