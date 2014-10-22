@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kd8bny.maintenanceman.addVehicle">
+    tools:context="com.kd8bny.maintenanceman.fragment_add_vehicle"
+    android:id="@+id/fragment_add_vehicle">
 
     <LinearLayout
         android:layout_width="wrap_content"

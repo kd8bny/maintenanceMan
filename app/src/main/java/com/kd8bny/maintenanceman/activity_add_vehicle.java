@@ -8,23 +8,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class maintenanceman extends Activity {
+public class activity_add_vehicle extends Activity {
 
-    private static final String TAG = "overviewActivity";
+    private static final String TAG = "activity_add_vehicle";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maintenanceman);
-
+        setContentView(R.layout.activity_add_vehicle);//TODO use same frag contain
 
         FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer_add_vehicle);
 
         if (fragment == null){
-            fragment = new overview();
+            fragment = new fragment_add_vehicle();
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
+                    .add(R.id.fragmentContainer_add_vehicle, fragment)
                     .commit();
         }
 

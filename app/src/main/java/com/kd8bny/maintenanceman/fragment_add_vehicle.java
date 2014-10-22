@@ -7,18 +7,21 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.support.v4.app.NavUtils;
 
 
-public class addVehicle extends Fragment {
+public class fragment_add_vehicle extends Fragment {
 
-    private static final String TAG = "addFragment";
+    private static final String TAG = "fragment_add_vehicle";
 
-    //private careLog mlogValue;
     private vehicle mvehicle;
     private EditText mmake;
     private EditText mmodel;
@@ -28,15 +31,23 @@ public class addVehicle extends Fragment {
     private Button mYearButton;
     private static final String dialog_year = "Vehicle Year"; //TODO:String??
 
+    public void addVehicle(){
+
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mvehicle = new vehicle();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_vehicle, parent, false);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
         mmake = (EditText)v.findViewById(R.id.val_spec_make);
         mmake.addTextChangedListener(new TextWatcher() {
             @Override
@@ -67,7 +78,11 @@ public class addVehicle extends Fragment {
             }
         });
 
+
+
         return v;
     }
+
+
 }
 

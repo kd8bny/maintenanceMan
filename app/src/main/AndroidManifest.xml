@@ -8,13 +8,26 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".maintenanceman"
-            android:label="@string/app_name" >
+            android:name=".activity_main"
+            android:label="@string/app_name"
+            android:parentActivityName=".activity_main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".maintenanceman" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity_add_vehicle"
+            android:label="@string/title_activity_add_vehicle"
+            android:parentActivityName=".activity_main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kd8bny.maintenanceman.activity_main" />
         </activity>
     </application>
 

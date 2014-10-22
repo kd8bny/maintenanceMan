@@ -16,17 +16,18 @@
     <string name="spec_type_oil">Oil</string>
     <string name="spec_make_Ford">Ford</string>
     <string name="spec_model_mustang">Mustang</string>
-
     <string name="hint_spec_engine">4LV6</string>
 
     <!-- Dialog -->
     <string name="title_vehicle_year">Vehicle Year</string>
 
-    <!-- Action Bar-->
+    <!-- Action Bar -->
     <string name="menu_add">Add</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_save">Save</string>
     <string name="menu_settings">Settings</string>
-
+    <string name="title_activity_add_vehicle">add_vehicle</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
