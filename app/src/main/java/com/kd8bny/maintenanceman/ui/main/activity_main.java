@@ -1,29 +1,30 @@
-package com.kd8bny.maintenanceman;
+package com.kd8bny.maintenanceman.ui.main;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import com.kd8bny.maintenanceman.R;
 
 
-public class activity_add_vehicle extends Activity {
+public class activity_main extends Activity {
 
-    private static final String TAG = "activity_add_vehicle";
+    private static final String TAG = "activity_main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_vehicle);//TODO use same frag contain
+        setContentView(R.layout.activity_main);
+
 
         FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer_add_vehicle);
+        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer_main);
 
         if (fragment == null){
-            fragment = new fragment_add_vehicle();
+            fragment = new fragment_overview();
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer_add_vehicle, fragment)
+                    .add(R.id.fragmentContainer_main, fragment)
                     .commit();
         }
 

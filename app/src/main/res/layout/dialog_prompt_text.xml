@@ -2,11 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kd8bny.maintenanceman.ui.main.fragment_overview">
+    tools:context="com.kd8bny.maintenanceman.ui.dialogs.prompt_text"
+    android:id="@+id/dialog_prompt_text">
+
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="This is the overview it will display graphs and shit" />
+        android:text="hello_blank_fragment" />
 
 </FrameLayout>
