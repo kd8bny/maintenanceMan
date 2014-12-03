@@ -20,10 +20,10 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_VEHICLE_NAME = "name";
 
-    public static final String DATABASE_CREATE = "create table"
+    public static final String DATABASE_CREATE = "create table "
             + TABLE_VEHICLE + "(" + COLUMN_ID
-            + "integer primary key autoincrement, " + COLUMN_VEHICLE_NAME
-            + "text not null);";
+            + " integer primary key autoincrement, " + COLUMN_VEHICLE_NAME
+            + " text not null);";
 
     public vehicleLogDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

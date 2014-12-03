@@ -5,8 +5,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 
+import java.sql.SQLDataException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+//import com.kd8bny.maintenanceman.data.vehicleLog;
 
 public class vehicleLog_DataSource {
     private SQLiteDatabase database;
@@ -17,7 +23,7 @@ public class vehicleLog_DataSource {
         dbHelper = new vehicleLogDBHelper(context);
     }
 
-    public void open() throws SQLException{
+    public void open() throws SQLiteException {
         database = dbHelper.getWritableDatabase();
     }
 
@@ -37,6 +43,30 @@ public class vehicleLog_DataSource {
         cursor.close();
         return newvehicleLog;
 
+    }
+
+    /*public void deletevehicleLog(vehicleLog vehicleLog) {
+        long id = vehicleLog.getId();
+        System.out.println("Comment deleted with id: " + id);
+        database.delete(vehicleLogDBHelper.TABLE_VEHICLE, vehicleLogDBHelper.COLUMN_ID
+                + " = " + id, null);
+    }*/
+
+    public List<vehicleLog> getAllvehicleLog() {
+        List<vehicleLog> comments = new ArrayList<vehicleLog>();
+
+        Cursor cursor = database.query(vehicleLogDBHelper.TABLE_VEHICLE,
+                allColumns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            vehicleLog comment = cursorTovehicleName(cursor);
+            comments.add(comment);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return comments;
     }
 
     private vehicleLog cursorTovehicleName(Cursor cursor){

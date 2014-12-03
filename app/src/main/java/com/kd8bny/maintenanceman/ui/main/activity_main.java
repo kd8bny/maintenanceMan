@@ -24,7 +24,8 @@ public class activity_main extends Activity {
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer_main);
 
         if (fragment == null){
-            fragment = new fragment_overview();
+            //fragment = new fragment_overview();
+            fragment = new fragment_dbtest();
             fm.beginTransaction()
                     .add(R.id.fragmentContainer_main, fragment)
                     .commit();
