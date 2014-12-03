@@ -10,11 +10,8 @@ import com.kd8bny.maintenanceman.R;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * Created by kd8bny on 10/20/14.
- */
 public class vehicleLog {
-    private static final String TAG = "careLog";
+    private static final String TAG = "vehicleLog";
 
     private long mID;
     private String mvehicle;

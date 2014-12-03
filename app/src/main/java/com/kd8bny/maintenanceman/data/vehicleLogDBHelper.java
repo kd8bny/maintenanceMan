@@ -13,12 +13,12 @@ import com.kd8bny.maintenanceman.data.vehicleLog;
 public class vehicleLogDBHelper extends SQLiteOpenHelper {
     private static final String TAG = "vehicleLog";
 
-    private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "vehicleLog.db";
+    public static final int DB_VERSION = 1;
+    public static final String DB_NAME = "vehicleLog.db";
 
-    private static final String TABLE_VEHICLE = "vehicle";
-    private static final String COLUMN_ID = "_id";
-    private static final String COLUMN_VEHICLE_NAME = "name";
+    public static final String TABLE_VEHICLE = "vehicle";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_VEHICLE_NAME = "name";
 
     public static final String DATABASE_CREATE = "create table"
             + TABLE_VEHICLE + "(" + COLUMN_ID
