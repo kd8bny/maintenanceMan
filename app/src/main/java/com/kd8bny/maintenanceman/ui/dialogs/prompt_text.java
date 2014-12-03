@@ -29,6 +29,8 @@ public class prompt_text extends DialogFragment {
         View v = getActivity().getLayoutInflater()
                 .inflate(R.layout.dialog_prompt_text, null);
 
+
+
         return new AlertDialog.Builder(getActivity())
                 .setView(v)
                 .setTitle(R.string.spec_year)

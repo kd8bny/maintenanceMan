@@ -1,11 +1,14 @@
 package com.kd8bny.maintenanceman.ui.add;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.location.GpsStatus;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -37,17 +40,15 @@ public class fragment_add_vehicle extends ListFragment {
 
     private static final String TAG = "fragment_add_vehicle";
 
-    public interface OnArticleSelectedListener {
-        public void onArticleSelected(Uri articleUri);
-    }
-
     private vehicleLog mvehicleLog;
+    private int value;
     private ArrayList<String> mvehicleData;
     private static final String dialog_year = "Vehicle Year"; //TODO:String??
 
     public void add_vehicle(){
 
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,23 +67,26 @@ public class fragment_add_vehicle extends ListFragment {
     public void onListItemClick(ListView l, View v, int pos, long id){
         String item = (String)(getListAdapter()).getItem(pos);
 
-        FragmentManager fm = getActivity()
-                .getFragmentManager();
-        prompt_text dialog = new prompt_text();
-        dialog.show(fm, null);
+        //Intent i = new Intent(getActivity(), vehicleLog.class);
+        //startActivity(i);
+
+        //FragmentManager fm = getActivity()
+        //        .getFragmentManager();
+        //prompt_text dialog = new prompt_text();
+        //dialog.show(fm, null);
+
+        //Dialog dialog = prompt_text.newInstance(this);
+
+        //dialog.setTargetFragment(this, 0);
 
     }
+
 
     @Override
-    public void onAttach(Activity activity){
-        super.onAttach(activity);
-        try {
-            mListener = (OnArticleSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement OnArticleSelectedListener");
-        }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, data.toString());
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

@@ -12,6 +12,8 @@ public class activity_main extends Activity {
 
     private static final String TAG = "activity_main";
 
+    private static final String version = "V0.1a";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
