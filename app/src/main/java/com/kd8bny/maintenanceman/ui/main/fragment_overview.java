@@ -27,6 +27,9 @@ public class fragment_overview extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        //Set loader to update Screen when SQL changes
+        //TODO getLoaderManager().initLoader(0,null,this);
     }
 
     @Override

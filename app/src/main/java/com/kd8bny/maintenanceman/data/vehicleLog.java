@@ -99,4 +99,9 @@ public class vehicleLog {
     public void setData(ArrayList mData) {
         this.mData = mData;
     }
+
+    @Override
+    public String toString() {
+        return mvehicle;
+    }
 }
