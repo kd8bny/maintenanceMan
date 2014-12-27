@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.ui.main;
+/*package com.kd8bny.maintenanceman.ui.main;
 
 
 
@@ -20,7 +20,7 @@ import android.widget.ArrayAdapter;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.vehicleLog;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
-import com.kd8bny.maintenanceman.data.vehicleLog_DataSource;
+//import com.kd8bny.maintenanceman.data.vehicleLog_DataSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.Random;
 public class fragment_dbtest extends ListFragment {
     private static final String TAG = "vehicleLog";
 
-    private vehicleLog_DataSource dataSource;
+    //private vehicleLog_DataSource dataSource;
 
 
 
@@ -43,12 +43,12 @@ public class fragment_dbtest extends ListFragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        dataSource = new vehicleLog_DataSource(this.getActivity());
-        List<vehicleLog> values = dataSource.getAllvehicleLog();
+        //dataSource = new vehicleLog_DataSource(this.getActivity());
+        //List<vehicleLog> values = dataSource.getAllvehicleLog();
 
         // use the SimpleCursorAdapter to show the
         // elements in a ListView
-        ArrayAdapter<vehicleLog> adapter = new ArrayAdapter<vehicleLog>(getActivity(), android.R.layout.simple_list_item_1, values);
+        //ArrayAdapter<vehicleLog> adapter = new ArrayAdapter<vehicleLog>(getActivity(), android.R.layout.simple_list_item_1, values);
         setListAdapter(adapter);
 
 
@@ -63,30 +63,30 @@ public class fragment_dbtest extends ListFragment {
         final View view = inflater.inflate(R.layout.fragment_dbtest,container,false);
         final View addButton = view.findViewById(R.id.add);
         final View delButton = view.findViewById(R.id.delete);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        /*addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 vehicleLogDBHelper.addShit(v);
             }
-        });
-        delButton.setOnClickListener(new View.OnClickListener(){
+        });*/
+        /*delButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 vehicleLogDBHelper.addShit(v);
             }
-        });
-        return view;
+        });*/
+        /*return view;
     }
 
     @Override
     public void onResume() {
-        dataSource.open();
+       // dataSource.open();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        dataSource.close();
+       // dataSource.close();
         super.onPause();
     }
-}
+}*/

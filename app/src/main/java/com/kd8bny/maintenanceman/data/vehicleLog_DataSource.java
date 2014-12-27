@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.data;
+/*package com.kd8bny.maintenanceman.data;
 
 
 import android.content.ContentValues;
@@ -52,7 +52,7 @@ public class vehicleLog_DataSource {
                 + " = " + id, null);
     }*/
 
-    public List<vehicleLog> getAllvehicleLog() {
+    /*public List<vehicleLog> getAllvehicleLog() {
         List<vehicleLog> comments = new ArrayList<vehicleLog>();
 
         Cursor cursor = database.query(vehicleLogDBHelper.TABLE_VEHICLE,
@@ -77,3 +77,4 @@ public class vehicleLog_DataSource {
         return vehicleName;
     }
 }
+*/
