@@ -77,7 +77,19 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-            Toast.makeText(context, "Database Exists", Toast.LENGTH_SHORT).show();
+            String id = "00FordMust";
+            String date = "1/1/15";
+            int odo = 175000;
+            String event = "Wheel Bearing";
+
+            vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
+
+            vehicleLogDB.execSQL("INSERT INTO vehicle (id, date, odo, event) VALUES ('"
+                    + id +"','"
+                    + date + "','"
+                    + odo + "','"
+                    + event + "');"
+            );
         }
 
 
