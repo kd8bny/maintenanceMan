@@ -55,28 +55,35 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     }
 
     public void createDatabase(Context context){
-        Log.d(TAG,"Database created");
+        Log.d(TAG,"Database Creation");
         try {
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
             vehicleLogDB.execSQL(DATABASE_CREATE);
 
-            File database = context.getDatabasePath("vehicleLog.db");
-
-            if (!database.exists()) {
-                Toast.makeText(context, "Database created", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(context, "Database Missing", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(context, "Database created", Toast.LENGTH_SHORT).show();
         }
 
-            catch(Exception e){
-                Log.e(TAG,"Error creating db");
-            }
+        catch(Exception e){
+            Log.e(TAG,"Error creating db");
+        }
     }
 
     public void saveEntry(Context context){
         Log.d(TAG,"Saving entry");
-        this.createDatabase(context);
+
+        File database = context.getDatabasePath("vehicleLog.db");
+        if (!database.exists()) {
+            this.createDatabase(context);
+        }
+
+        else {
+            Toast.makeText(context, "Database Exists", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+
     }
 
 
