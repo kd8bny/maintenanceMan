@@ -28,4 +28,20 @@
     <string name="menu_save">Save</string>
     <string name="menu_settings">Settings</string>
 
+    <!-- Makes-->
+    <string name="make_chevy">Chevrolet</string>
+    <string name="make_dodge">Dodge</string>
+    <string name="make_ford">Ford</string>
+    <string name="make_saturn">Saturn</string>
+
+    <!--Models-->
+    <!--Chevy-->
+    <string name="model_camero">Camero</string>
+    <!--Dodge-->
+    <string name="model_charger">Charger</string>
+    <!--Ford-->
+    <string name="model_must">Mustang</string>
+    <!--Saturn-->
+    <string name="model_ion">Ion</string>
+
 </resources>

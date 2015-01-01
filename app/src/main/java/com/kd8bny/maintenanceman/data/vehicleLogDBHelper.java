@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.data;
 
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -17,7 +18,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     public static final String DB_NAME = "vehicleLog.db";
     SQLiteDatabase vehicleLogDB = null;
 
-    public static final String TABLE_VEHICLE = "vehicle";
+    public static final String TABLE_VEHICLE = "grandVehicleLog";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_VEHICLE_ID = "id";
     public static final String COLUMN_VEHICLE_DATE = "date";
@@ -68,8 +69,8 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void saveEntry(Context context){
-        Log.d(TAG,"Saving entry");
+    public void saveEntry(Context context) {
+        Log.d(TAG, "Saving entry");
 
         File database = context.getDatabasePath("vehicleLog.db");
         if (!database.exists()) {
@@ -84,48 +85,21 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
-            vehicleLogDB.execSQL("INSERT INTO vehicle (id, date, odo, event) VALUES ('"
-                    + id +"','"
-                    + date + "','"
-                    + odo + "','"
-                    + event + "');"
-            );
+            vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (id, date, odo, event) VALUES ('"
+                            + id + "','"
+                            + date + "','"
+                            + odo + "','"
+                            + event + "');");
         }
+    }
+    public void getEntries(Context context){
+        Log.d(TAG,"GET ENTRIES");
 
+        String id = "00FordMust";
 
-
-
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT id FROM grandVehicleLog", null);
+        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
 
     }
-
-
-
-    /*public static void addShit(View v){
-        @SuppressWarnings("unchecked")
-
-        dataSource.open();
-
-        ArrayAdapter<vehicleLog> adapter = (ArrayAdapter<vehicleLog>) getListAdapter();
-        vehicleLog vehicleName = null;
-        switch (v.getId()) {
-            case R.id.add:
-                String[] names = new String[] { "Mustang", "Saturn", "G8" };
-                int nextInt = new Random().nextInt(3);
-                // save the new comment to the database
-                vehicleName = dataSource.createvehicleLog(names[nextInt]);
-                adapter.add(vehicleName);
-                break;
-            
-            case R.id.delete:
-                if (context.getResources().getListAdapter().getCount() > 0) {
-                    vehicleName = (vehicleLog) getListAdapter().getItem(0);
-                    //dataSource.deleteComment(vehicleName);
-                    adapter.remove(vehicleName);
-                }
-                break;
-        }
-        adapter.notifyDataSetChanged();
-    };*/
-
 
 }
