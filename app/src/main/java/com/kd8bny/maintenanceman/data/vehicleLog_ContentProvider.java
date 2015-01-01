@@ -1,6 +1,6 @@
 package com.kd8bny.maintenanceman.data;
 
-import android.content.ContentProvider;
+/*import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -13,9 +13,8 @@ import android.text.TextUtils;
 import java.util.Arrays;
 import java.util.HashSet;
 
-/**
- * Created by kd8bny on 12/21/14.
- */
+
+
 public class vehicleLog_ContentProvider extends ContentProvider{
 
     //db
@@ -179,5 +178,5 @@ public class vehicleLog_ContentProvider extends ContentProvider{
         }
     }
     
-}
+} */
 

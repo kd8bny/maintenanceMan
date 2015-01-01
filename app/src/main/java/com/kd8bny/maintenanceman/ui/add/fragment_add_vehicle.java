@@ -1,36 +1,23 @@
 package com.kd8bny.maintenanceman.ui.add;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.ListFragment;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.location.GpsStatus;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.content.Context;
+import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.ui.dialogs.prompt_text;
-import com.kd8bny.maintenanceman.ui.year;
+import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.data.vehicleLog;
 
 import java.util.ArrayList;
@@ -55,17 +42,25 @@ public class fragment_add_vehicle extends ListFragment {
         super.onCreate(savedInstanceState);
         mvehicleLog = new vehicleLog();
         setHasOptionsMenu(true);
+
         ArrayList<vehicleLog> mvehicleData = mvehicleLog.getData(this.getResources());
 
-        ArrayAdapter <vehicleLog> adapter =
-                new ArrayAdapter<vehicleLog>(getActivity(),android.R.layout.simple_list_item_1, mvehicleData);
+
+
+        ArrayAdapter<vehicleLog> adapter =
+                new ArrayAdapter<vehicleLog>(getActivity(), android.R.layout.simple_list_item_1, mvehicleData);
 
         setListAdapter(adapter);
+
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int pos, long id){
+   //@Override
+    public void onListItemClick(ListView l, View v, int pos, long id, Context context){
         String item = (String)(getListAdapter()).getItem(pos);
+        ContentValues conval = new ContentValues();
+        conval.put("new",item);
+        Log.d(TAG,item);
+        Toast.makeText(context,  "added", Toast.LENGTH_LONG).show();
 
         //Intent i = new Intent(getActivity(), vehicleLog.class);
         //startActivity(i);
@@ -102,6 +97,10 @@ public class fragment_add_vehicle extends ListFragment {
                 return true;
 
             case R.id.menu_save:
+                Context context = getActivity().getApplicationContext();
+
+                vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(context);
+                vehicleDB.saveEntry(context);
 
             default:
                 return super.onOptionsItemSelected(item);

@@ -24,9 +24,9 @@
             android:parentActivityName=".ui.main.activity_main">
 
         </activity>
-        <provider
+        <!--<provider
             android:name=".data.vehicleLog_ContentProvider"
             android:authorities="com.kd8bny.maintenanceman.vehicleLogDB.contentprovider" >
-        </provider>
+        </provider>-->
     </application>
 </manifest>
