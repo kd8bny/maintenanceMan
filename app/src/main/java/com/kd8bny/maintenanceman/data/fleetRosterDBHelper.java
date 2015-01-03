@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class fleetRosterDBHelper extends SQLiteOpenHelper{
@@ -91,13 +93,52 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
                     + engine + "');");
         }
     }
-    public void getEntries(Context context){
+    public ArrayList<String> getEntries(Context context){
         Log.d(TAG,"GET ENTRIES");
 
-        String id = "00FordMust";
+        /*Cursor cursor = new Cursor;
 
-        Cursor cursor = fleetRosterDB.rawQuery("SELECT id FROM grandVehicleLog", null);
-        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
+        try {
+            cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
+        }
+        catch(Exception e) {
+            Log.e(TAG, "Error using cursor");
+        }
+        finally {*/
+            this.createDatabase(context);
+            Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
+        //}
+
+        //Lacks refid
+        int yearCol = cursor.getColumnIndex("year");
+        int makeCol = cursor.getColumnIndex("make");
+        int modelCol = cursor.getColumnIndex("model");
+        //int engineCol = cursor.getColumnIndex("engine");
+
+        String vehicle;
+
+        ArrayList<String> vehicleList = new ArrayList<String>();
+
+        cursor.moveToFirst();
+
+        if(cursor != null && (cursor.getCount() > 0)) {
+            do {
+                String year = cursor.getString(yearCol);
+                String make = cursor.getString(makeCol);
+                String model = cursor.getString(modelCol);
+
+                vehicle = year + make + model;
+                vehicleList.add(vehicle);
+
+            } while(cursor.moveToNext());
+
+            }
+        else{
+            Log.d(TAG,"nothing in DB");
+            vehicleList.add("Please Add Vehicle To Database");
+        }
+
+        return vehicleList;
 
     }
 
