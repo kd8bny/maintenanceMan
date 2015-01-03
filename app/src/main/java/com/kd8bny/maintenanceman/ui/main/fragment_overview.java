@@ -28,9 +28,18 @@ import java.util.List;
 public class fragment_overview extends ListFragment {
     private static final String TAG = "fragment_overview";
 
+    public ArrayAdapter<String> adapter;
+
 
     public fragment_overview() {
         // Required empty public constructor
+    }
+
+    public void poplulateAdapter(){
+        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
+        ArrayList<String> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+
+        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, vehicleList);
     }
 
     @Override
@@ -38,21 +47,21 @@ public class fragment_overview extends ListFragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //Set loader to update Screen when SQL changes
         //TODO getLoaderManager().initLoader(0,null,this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        ArrayList<String> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, vehicleList);
-
-        //ListView listView = (ListView) getActivity().findViewById(android.R.id.list);
-        //listView.setAdapter(adapter);
+        poplulateAdapter();
         setListAdapter(adapter);
         return inflater.inflate(R.layout.fragment_overview, container, false);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        poplulateAdapter();
+        setListAdapter(adapter);
     }
 
     @Override
@@ -71,6 +80,5 @@ public class fragment_overview extends ListFragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 }

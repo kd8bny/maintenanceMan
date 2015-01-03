@@ -58,12 +58,12 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
     }
 
     public void createDatabase(Context context){
-        Log.d(TAG,"Database Creation");
+
         try {
             fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
             fleetRosterDB.execSQL(DATABASE_CREATE);
 
-            Toast.makeText(context, "Database created", Toast.LENGTH_SHORT).show();
+            Log.d(TAG,"fleetRoster created");
         }
 
         catch(Exception e){
@@ -82,7 +82,6 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
 
         else {
             String refid = year+make+model;
-            Toast.makeText(context, refid, Toast.LENGTH_SHORT).show();
             fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
             fleetRosterDB.execSQL("INSERT INTO grandFleetRoster (refid, make, model, year, engine) VALUES ('"
@@ -94,20 +93,9 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
     }
     public ArrayList<String> getEntries(Context context){
-        Log.d(TAG,"GET ENTRIES");
 
-        /*Cursor cursor = new Cursor;
-
-        try {
-            cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
-        }
-        catch(Exception e) {
-            Log.e(TAG, "Error using cursor");
-        }
-        finally {*/
-            this.createDatabase(context);
-            Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
-        //}
+        this.createDatabase(context);
+        Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
 
         //Lacks refid
         int yearCol = cursor.getColumnIndex("year");
