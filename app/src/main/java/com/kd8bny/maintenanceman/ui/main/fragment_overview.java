@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.ui.add.activity_add;
+import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 
 
 public class fragment_overview extends Fragment {
@@ -49,7 +49,7 @@ public class fragment_overview extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_add:
-                Intent intent = new Intent(getActivity(), activity_add.class);
+                Intent intent = new Intent(getActivity(), activity_add_fleetRoster.class);
                 startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);

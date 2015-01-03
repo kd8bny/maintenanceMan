@@ -20,7 +20,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     public static final String TABLE_VEHICLE = "grandVehicleLog";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_VEHICLE_ID = "id";
+    public static final String COLUMN_VEHICLE_REFID = "refid";
     public static final String COLUMN_VEHICLE_DATE = "date";
     public static final String COLUMN_VEHICLE_ODO = "odo";
     public static final String COLUMN_VEHICLE_EVENT = "event";
@@ -30,7 +30,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + TABLE_VEHICLE
         + "("
         + COLUMN_ID + " integer primary key autoincrement, "
-        + COLUMN_VEHICLE_ID + " text not null, "
+        + COLUMN_VEHICLE_REFID + " text not null, "
         + COLUMN_VEHICLE_DATE + " text not null, "
         + COLUMN_VEHICLE_ODO + " integer, "
         + COLUMN_VEHICLE_EVENT + " text not null"
@@ -42,7 +42,6 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        //db.execSQL(DATABASE_CREATE);
         Log.d(TAG,"This is oncreate!!!");
     }
 
@@ -78,15 +77,15 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-            String id = "00FordMust";
+            String refid = "00FordMust";
             String date = "1/1/15";
             int odo = 175000;
             String event = "Wheel Bearing";
 
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
-            vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (id, date, odo, event) VALUES ('"
-                            + id + "','"
+            vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event) VALUES ('"
+                            + refid + "','"
                             + date + "','"
                             + odo + "','"
                             + event + "');");
@@ -95,10 +94,10 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     public void getEntries(Context context){
         Log.d(TAG,"GET ENTRIES");
 
-        String id = "00FordMust";
+        String refid = "00FordMust";
 
-        Cursor cursor = vehicleLogDB.rawQuery("SELECT id FROM grandVehicleLog", null);
-        Toast.makeText(context, id, Toast.LENGTH_SHORT).show();
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT refid FROM grandVehicleLog", null);
+        Toast.makeText(context, refid, Toast.LENGTH_SHORT).show();
 
     }
 

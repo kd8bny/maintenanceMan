@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.add.activity_add"
+            android:name=".ui.add.activity_add_fleetRoster"
             android:label="@string/title_add_vehicle"
             android:parentActivityName=".ui.main.activity_main">
 

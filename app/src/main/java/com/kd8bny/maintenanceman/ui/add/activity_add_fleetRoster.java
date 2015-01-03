@@ -8,22 +8,22 @@ import android.os.Bundle;
 import com.kd8bny.maintenanceman.R;
 
 
-public class activity_add extends Activity {
+public class activity_add_fleetRoster extends Activity {
 
-    private static final String TAG = "activity_add_vehicle";
+    private static final String TAG = "activity_add_fleetroster";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_vehicle);//TODO use same frag contain
+        setContentView(R.layout.activity_add_fleetroster);
 
         FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer_add_vehicle);
+        Fragment fragment = fm.findFragmentById(R.id.fragmentcontainer_add_fleetroster);
 
         if (fragment == null){
-            fragment = new fragment_add_vehicle();
+            fragment = new fragment_add_fleetRoster();
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer_add_vehicle, fragment)
+                    .add(R.id.fragmentcontainer_add_fleetroster, fragment)
                     .commit();
         }
 
