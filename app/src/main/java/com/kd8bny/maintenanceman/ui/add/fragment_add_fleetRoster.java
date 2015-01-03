@@ -1,11 +1,8 @@
 package com.kd8bny.maintenanceman.ui.add;
 
 import android.app.Fragment;
-import android.app.ListFragment;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
@@ -16,21 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.fleetRoster;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 
 
 public class fragment_add_fleetRoster extends Fragment {
     private static final String TAG = "fragment_add_vehicle";
-
-    //private EditText editYear;
-    //private EditText editMake = (EditText) getActivity().findViewById(R.id.make);
-    //private EditText editModel = (EditText) getActivity().findViewById(R.id.model);
-    //private EditText editEngine = (EditText) getActivity().findViewById(R.id.engine);
 
     private String myear;
     private String mmake;
@@ -40,7 +30,6 @@ public class fragment_add_fleetRoster extends Fragment {
     public void fleetRoster(){
 
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +53,7 @@ public class fragment_add_fleetRoster extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_add_vehicle, menu);
+        inflater.inflate(R.menu.menu_add_fleetroster, menu);
     }
 
     @Override
@@ -82,8 +71,11 @@ public class fragment_add_fleetRoster extends Fragment {
                 fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(context);
                 fleetDB.saveEntry(context, mmake, mmodel, myear, mengine);
 
-                //TODO go back fragment
                 Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+
+            case R.id.menu_cancel:
+                getActivity().onBackPressed();
 
             default:
                 return super.onOptionsItemSelected(item);
