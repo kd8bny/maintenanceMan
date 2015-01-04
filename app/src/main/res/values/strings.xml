@@ -28,20 +28,24 @@
     <string name="menu_save">Save</string>
     <string name="menu_settings">Settings</string>
 
-    <!-- Makes-->
+    <!-- Makes -->
     <string name="make_chevy">Chevrolet</string>
     <string name="make_dodge">Dodge</string>
     <string name="make_ford">Ford</string>
     <string name="make_saturn">Saturn</string>
 
-    <!--Models-->
-    <!--Chevy-->
+    <!-- Models -->
+    <!-- Chevy -->
     <string name="model_camero">Camero</string>
-    <!--Dodge-->
+    <!-- Dodge -->
     <string name="model_charger">Charger</string>
-    <!--Ford-->
+    <!-- Ford -->
     <string name="model_must">Mustang</string>
-    <!--Saturn-->
+    <!-- Saturn -->
     <string name="model_ion">Ion</string>
+    <string name="title_activity_add_vehicle_event">add_vehicleEvent</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

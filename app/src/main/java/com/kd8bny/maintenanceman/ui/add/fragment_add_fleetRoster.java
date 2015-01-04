@@ -20,7 +20,7 @@ import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 
 
 public class fragment_add_fleetRoster extends Fragment {
-    private static final String TAG = "fragment_add_vehicle";
+    private static final String TAG = "fragment_add_fleetRoster";
 
     private String myear;
     private String mmake;
@@ -41,7 +41,7 @@ public class fragment_add_fleetRoster extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_fleetroster, container, false);
+        return inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class fragment_add_fleetRoster extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_add_fleetroster, menu);
+        inflater.inflate(R.menu.menu_add_fleet_roster, menu);
     }
 
     @Override
@@ -72,10 +72,10 @@ public class fragment_add_fleetRoster extends Fragment {
                 fleetDB.saveEntry(context, mmake, mmodel, myear, mengine);
 
                 Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
-                getActivity().onBackPressed();
+                getActivity().finish();
 
             case R.id.menu_cancel:
-                getActivity().onBackPressed();
+                getActivity().finish();
 
             default:
                 return super.onOptionsItemSelected(item);

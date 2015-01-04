@@ -10,11 +10,10 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class fleetRosterDBHelper extends SQLiteOpenHelper{
-    private static final String TAG = "vehicleLogDB";
+    private static final String TAG = "fleetRosterDBHelper";
 
     public static final int DB_VERSION = 1;
     public static final String DB_NAME = "fleetRoster.db";
@@ -92,7 +91,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
                     + engine + "');");
         }
     }
-    public ArrayList<String> getEntries(Context context){
+    public ArrayList<ArrayList> getEntries(Context context){
 
         this.createDatabase(context);
         Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
@@ -101,31 +100,33 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         int yearCol = cursor.getColumnIndex("year");
         int makeCol = cursor.getColumnIndex("make");
         int modelCol = cursor.getColumnIndex("model");
-        //int engineCol = cursor.getColumnIndex("engine");
+        int engineCol = cursor.getColumnIndex("engine");
 
-        String vehicle;
-
-        ArrayList<String> vehicleList = new ArrayList<String>();
+        ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
 
         cursor.moveToFirst();
 
         if(cursor != null && (cursor.getCount() > 0)) {
             do {
-                String year = cursor.getString(yearCol);
-                String make = cursor.getString(makeCol);
-                String model = cursor.getString(modelCol);
+                ArrayList<String> singleVehicleList = new ArrayList<String>();
 
-                vehicle = year + make + model;
-                vehicleList.add(vehicle);
+                //UID
+                singleVehicleList.add(cursor.getString(yearCol));
+                singleVehicleList.add(cursor.getString(makeCol));
+                singleVehicleList.add(2,cursor.getString(modelCol));
+                singleVehicleList.add(3,cursor.getString(engineCol));
+
+                vehicleList.add(singleVehicleList);
 
             } while(cursor.moveToNext());
 
             }
         else{
-            Log.d(TAG,"nothing in DB");
-            vehicleList.add("Please Add Vehicle To Database");
+            ArrayList<String> singleVehicleList = new ArrayList<String>();
+            singleVehicleList.add("Please Add Vehicle To Database");
+            vehicleList.add(singleVehicleList);
         }
-
+        Log.i(TAG,vehicleList.toString());
         return vehicleList;
 
     }

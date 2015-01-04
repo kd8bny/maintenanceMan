@@ -10,20 +10,21 @@ import com.kd8bny.maintenanceman.R;
 
 public class activity_add_fleetRoster extends Activity {
 
-    private static final String TAG = "activity_add_fleetroster";
+    private static final String TAG = "activity_add_fleet_roster";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_fleetroster);
+        setContentView(R.layout.activity_add_fleet_roster);
 
         FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentcontainer_add_fleetroster);
+        Fragment fragment = fm.findFragmentById(R.id.fragmentcontainer_add_fleet_roster);
 
         if (fragment == null){
             fragment = new fragment_add_fleetRoster();
             fm.beginTransaction()
-                    .add(R.id.fragmentcontainer_add_fleetroster, fragment)
+                    .add(R.id.fragmentcontainer_add_fleet_roster, fragment)
                     .commit();
         }
 
@@ -33,4 +34,5 @@ public class activity_add_fleetRoster extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState){
         //Used to save instance on rotation or if destroyed
     }
+
 }

@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kd8bny.maintenanceman" >
+    package="com.kd8bny.maintenanceman"
+    android:versionCode="0"
+    android:versionName="0.2">
 
     <application
-        android:debuggable="true"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".ui.main.activity_main"
-            android:label="@string/app_name"
-            android:parentActivityName=".ui.main.activity_main" >
-
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.add.activity_add_fleetRoster"
             android:label="@string/title_add_vehicle"
-            android:parentActivityName=".ui.main.activity_main">
-
+            android:parentActivityName=".ui.main.activity_main" >
         </activity>
-        <!--<provider
-            android:name=".data.vehicleLog_ContentProvider"
-            android:authorities="com.kd8bny.maintenanceman.vehicleLogDB.contentprovider" >
-        </provider>-->
+
+        <activity
+            android:name=".ui.add.activity_vehicleEvent"
+            android:label="@string/title_activity_add_vehicle_event"
+            android:parentActivityName=".ui.main.activity_main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+        </activity>
     </application>
+
 </manifest>

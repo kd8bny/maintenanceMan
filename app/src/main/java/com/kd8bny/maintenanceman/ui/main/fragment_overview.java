@@ -3,10 +3,8 @@ package com.kd8bny.maintenanceman.ui.main;
 
 
 import android.app.ListFragment;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,30 +14,47 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
+import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class fragment_overview extends ListFragment {
     private static final String TAG = "fragment_overview";
 
-    public ArrayAdapter<String> adapter;
+    //public ArrayAdapter<String> adapter = new ArrayAdapter<String>(null);
+
 
 
     public fragment_overview() {
         // Required empty public constructor
     }
 
-    public void poplulateAdapter(){
+    public ArrayAdapter poplulateAdapter(){
+        ArrayList<String> singleVehicleList = new ArrayList<String>();
         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        ArrayList<String> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+        ArrayList<ArrayList> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
 
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, vehicleList);
+        ArrayList<String> temp;
+        Log.i(TAG,vehicleList.toString());
+        for(int i = 0; i < vehicleList.size(); i++){
+            Log.i(TAG,""+i);
+            temp = vehicleList.get(i);
+            if(temp.size()>1) {
+                singleVehicleList.add(temp.get(0) + " " + temp.get(1) + " " + temp.get(2));
+            }else{
+                singleVehicleList.add(temp.get(0));
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, singleVehicleList);
+        Log.i(TAG,adapter.toString());
+        return adapter;
     }
 
     @Override
@@ -52,16 +67,25 @@ public class fragment_overview extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        poplulateAdapter();
-        setListAdapter(adapter);
+        super.onResume();
+        //poplulateAdapter();
+        //setListAdapter(poplulateAdapter());
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        poplulateAdapter();
-        setListAdapter(adapter);
+        //poplulateAdapter();
+        setListAdapter(poplulateAdapter());
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        //This will add individual og stuff
+        Intent intent = new Intent(getActivity(), activity_vehicleEvent.class);
+        startActivity(intent);
+        //Toast.makeText(getActivity(),(singleVehicleList.get(position)).toString(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
