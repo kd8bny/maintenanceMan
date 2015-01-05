@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class fleetRosterDBHelper extends SQLiteOpenHelper{
@@ -21,7 +22,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
 
     public static final String TABLE_ROSTER = "grandFleetRoster";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_ROSTER_refID = "refid";
+    public static final String COLUMN_ROSTER_refID = "refID";
     public static final String COLUMN_ROSTER_YEAR = "year";
     public static final String COLUMN_ROSTER_MAKE = "make";
     public static final String COLUMN_ROSTER_MODEL = "model";
@@ -80,11 +81,11 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-            String refid = year+make+model;
+            UUID refID = UUID.randomUUID();
             fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
-            fleetRosterDB.execSQL("INSERT INTO grandFleetRoster (refid, make, model, year, engine) VALUES ('"
-                    + refid + "','"
+            fleetRosterDB.execSQL("INSERT INTO grandFleetRoster (refID, make, model, year, engine) VALUES ('"
+                    + refID + "','"
                     + make + "','"
                     + model + "','"
                     + year + "','"
@@ -96,7 +97,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         this.createDatabase(context);
         Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
 
-        //Lacks refid
+        int refIDCol = cursor.getColumnIndex("refID");
         int yearCol = cursor.getColumnIndex("year");
         int makeCol = cursor.getColumnIndex("make");
         int modelCol = cursor.getColumnIndex("model");
@@ -110,11 +111,11 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
             do {
                 ArrayList<String> singleVehicleList = new ArrayList<String>();
 
-                //UID
+                singleVehicleList.add(cursor.getString(refIDCol));
                 singleVehicleList.add(cursor.getString(yearCol));
                 singleVehicleList.add(cursor.getString(makeCol));
-                singleVehicleList.add(2,cursor.getString(modelCol));
-                singleVehicleList.add(3,cursor.getString(engineCol));
+                singleVehicleList.add(cursor.getString(modelCol));
+                singleVehicleList.add(cursor.getString(engineCol));
 
                 vehicleList.add(singleVehicleList);
 

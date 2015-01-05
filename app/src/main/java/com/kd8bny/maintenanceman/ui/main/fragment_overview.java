@@ -46,7 +46,7 @@ public class fragment_overview extends ListFragment {
             Log.i(TAG,""+i);
             temp = vehicleList.get(i);
             if(temp.size()>1) {
-                singleVehicleList.add(temp.get(0) + " " + temp.get(1) + " " + temp.get(2));
+                singleVehicleList.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
             }else{
                 singleVehicleList.add(temp.get(0));
             }
