@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.ui.main;
 
 
 
+import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,8 +28,7 @@ import java.util.ArrayList;
 public class fragment_overview extends ListFragment {
     private static final String TAG = "fragment_overview";
 
-    //public ArrayAdapter<String> adapter = new ArrayAdapter<String>(null);
-
+    public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
 
 
     public fragment_overview() {
@@ -38,10 +38,10 @@ public class fragment_overview extends ListFragment {
     public ArrayAdapter poplulateAdapter(){
         ArrayList<String> singleVehicleList = new ArrayList<String>();
         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        ArrayList<ArrayList> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+        //ArrayList<ArrayList> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
 
         ArrayList<String> temp;
-        Log.i(TAG,vehicleList.toString());
         for(int i = 0; i < vehicleList.size(); i++){
             Log.i(TAG,""+i);
             temp = vehicleList.get(i);
@@ -68,8 +68,7 @@ public class fragment_overview extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onResume();
-        //poplulateAdapter();
-        //setListAdapter(poplulateAdapter());
+
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
@@ -84,8 +83,14 @@ public class fragment_overview extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         //This will add individual og stuff
         Intent intent = new Intent(getActivity(), activity_vehicleEvent.class);
+        //Bundle bundle = new Bundle();
+        //bundle.putStringArrayList("vehicleSent", vehicleList.get(position));
+
+        //Fragment newFragment = new Fragment ();
+        //newFragment.setArguments(bundle);
+
+        intent.putStringArrayListExtra("vehicleSent",vehicleList.get(position));
         startActivity(intent);
-        //Toast.makeText(getActivity(),(singleVehicleList.get(position)).toString(),Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -20,10 +20,11 @@ public class activity_vehicleEvent extends Activity {
         Fragment fragment = fm.findFragmentById(R.id.fragmentcontainer_vehicle_event);
 
         if (fragment == null){
-            fragment = new fragment_vehicleEvent_add();
+            fragment = new fragment_add_vehicleEvent();
             fm.beginTransaction()
                     .add(R.id.fragmentcontainer_vehicle_event, fragment)
                     .commit();
+
         }
 
     }

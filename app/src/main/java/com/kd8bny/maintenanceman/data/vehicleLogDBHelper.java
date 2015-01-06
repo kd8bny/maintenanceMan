@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
 
 
 public class vehicleLogDBHelper extends SQLiteOpenHelper{
@@ -20,10 +21,10 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     public static final String TABLE_VEHICLE = "grandVehicleLog";
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_VEHICLE_REFID = "refid";
+    public static final String COLUMN_VEHICLE_REFID = "refID";
     public static final String COLUMN_VEHICLE_DATE = "date";
     public static final String COLUMN_VEHICLE_ODO = "odo";
-    public static final String COLUMN_VEHICLE_EVENT = "event";
+    public static final String COLUMN_VEHICLE_TASK = "event";
 
 
     public static final String DATABASE_CREATE = "create table "
@@ -32,8 +33,8 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + COLUMN_ID + " integer primary key autoincrement, "
         + COLUMN_VEHICLE_REFID + " text not null, "
         + COLUMN_VEHICLE_DATE + " text not null, "
-        + COLUMN_VEHICLE_ODO + " integer, "
-        + COLUMN_VEHICLE_EVENT + " text not null"
+        + COLUMN_VEHICLE_ODO + " text not null, "
+        + COLUMN_VEHICLE_TASK + " text not null"
         + ");";
 
     public vehicleLogDBHelper(Context context){
@@ -68,7 +69,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void saveEntry(Context context) {
+    public void saveEntry(Context context, String refID, String date, String odo, String task) {
         Log.d(TAG, "Saving entry");
 
         File database = context.getDatabasePath("vehicleLog.db");
@@ -77,28 +78,54 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-            String refid = "00FordMust";
-            String date = "1/1/15";
-            int odo = 175000;
-            String event = "Wheel Bearing";
 
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
             vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event) VALUES ('"
-                            + refid + "','"
+                            + refID + "','"
                             + date + "','"
                             + odo + "','"
-                            + event + "');");
+                            + task + "');");
         }
     }
-    public void getEntries(Context context){
-        Log.d(TAG,"GET ENTRIES");
 
-        String refid = "00FordMust";
+    public ArrayList<ArrayList> getEntries(Context context){
 
-        Cursor cursor = vehicleLogDB.rawQuery("SELECT refid FROM grandVehicleLog", null);
-        Toast.makeText(context, refid, Toast.LENGTH_SHORT).show();
+        this.createDatabase(context);
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandFleetRoster", null);
+
+        int refIDCol = cursor.getColumnIndex("refID");
+        int dateCol = cursor.getColumnIndex("date");
+        int odoCol = cursor.getColumnIndex("odo");
+        int taskCol = cursor.getColumnIndex("task");
+
+        ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
+
+        cursor.moveToFirst();
+
+        if(cursor != null && (cursor.getCount() > 0)) {
+            do {
+                ArrayList<String> singleVehicleList = new ArrayList<String>();
+
+                singleVehicleList.add(cursor.getString(refIDCol));
+                singleVehicleList.add(cursor.getString(dateCol));
+                singleVehicleList.add(cursor.getString(odoCol));
+                singleVehicleList.add(cursor.getString(taskCol));
+
+                vehicleList.add(singleVehicleList);
+
+            } while(cursor.moveToNext());
+
+        }
+        else{
+            ArrayList<String> singleVehicleList = new ArrayList<String>();
+            singleVehicleList.add("Please Add Vehicle To Database");
+            vehicleList.add(singleVehicleList);
+        }
+        Log.i(TAG,vehicleList.toString());
+        return vehicleList;
 
     }
+
 
 }
