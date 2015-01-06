@@ -75,19 +75,12 @@ public class fragment_overview extends ListFragment {
     @Override
     public void onResume(){
         super.onResume();
-        //poplulateAdapter();
         setListAdapter(poplulateAdapter());
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        //This will add individual og stuff
         Intent intent = new Intent(getActivity(), activity_vehicleEvent.class);
-        //Bundle bundle = new Bundle();
-        //bundle.putStringArrayList("vehicleSent", vehicleList.get(position));
-
-        //Fragment newFragment = new Fragment ();
-        //newFragment.setArguments(bundle);
 
         intent.putStringArrayListExtra("vehicleSent",vehicleList.get(position));
         startActivity(intent);

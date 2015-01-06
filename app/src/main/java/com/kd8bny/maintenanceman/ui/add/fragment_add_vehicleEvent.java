@@ -37,6 +37,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
     }
 
@@ -51,7 +52,9 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        Log.d(TAG,"menu create");
         inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+
     }
 
     @Override
@@ -80,7 +83,13 @@ public class fragment_add_vehicleEvent extends Fragment {
         }
     }
 
-    @Override
+    public void getValues(){
+        date = ((EditText) getActivity().findViewById(R.id.date)).getText().toString();
+        task = ((EditText) getActivity().findViewById(R.id.task)).getText().toString();
+        odo = ((EditText) getActivity().findViewById(R.id.odo)).getText().toString();
+    }
+
+    /*@Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
@@ -88,11 +97,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
+    }*/
 
-    public void getValues(){
-        date = ((EditText) getActivity().findViewById(R.id.date)).getText().toString();
-        task = ((EditText) getActivity().findViewById(R.id.task)).getText().toString();
-        odo = ((EditText) getActivity().findViewById(R.id.odo)).getText().toString();
-    }
+
 }
