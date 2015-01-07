@@ -21,6 +21,7 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
+import com.kd8bny.maintenanceman.ui.settings.activity_settings;
 
 import java.util.ArrayList;
 
@@ -40,8 +41,6 @@ public class fragment_overview extends ListFragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        //TODO getLoaderManager().initLoader(0,null,this);
     }
 
     @Override
@@ -78,8 +77,12 @@ public class fragment_overview extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_add:
-                Intent intent = new Intent(getActivity(), activity_add_fleetRoster.class);
-                startActivity(intent);
+                Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                startActivity(addIntent);
+            case R.id.menu_settings:
+                Intent settingsIntent = new Intent(getActivity(), activity_settings.class);
+                startActivity(settingsIntent);
+
             default:
                 return super.onOptionsItemSelected(item);
         }

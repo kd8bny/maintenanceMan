@@ -59,22 +59,17 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     }
 
     public void createDatabase(Context context){
-        Log.d(TAG,"Database Creation");
         try {
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
             vehicleLogDB.execSQL(DATABASE_CREATE);
-
-            Toast.makeText(context, "Database created", Toast.LENGTH_SHORT).show();
         }
 
         catch(Exception e){
-            Log.e(TAG,"Error creating db");
+            Log.e(TAG,e.toString());
         }
     }
 
     public void saveEntry(Context context, String refID, String date, String odo, String task) {
-        Log.d(TAG, "Saving entry");
-
         File database = context.getDatabasePath("vehicleLog.db");
         if (!database.exists()) {
             this.createDatabase(context);
@@ -91,10 +86,10 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<ArrayList> getEntries(Context context){
+    public ArrayList<ArrayList> getEntries(Context context, String refID){
 
         this.createDatabase(context);
-        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog", null);
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog", null);//TODO selcted only right refID
 
         int refIDCol = cursor.getColumnIndex("refID");
         int dateCol = cursor.getColumnIndex("date");
@@ -109,12 +104,14 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
             do {
                 ArrayList<String> singleVehicleList = new ArrayList<String>();
 
-                singleVehicleList.add(cursor.getString(refIDCol));
-                singleVehicleList.add(cursor.getString(dateCol));
-                singleVehicleList.add(cursor.getString(odoCol));
-                singleVehicleList.add(cursor.getString(eventCol));
+                if(refID.equals(cursor.getString(refIDCol))) {
+                    singleVehicleList.add(refID);
+                    singleVehicleList.add(cursor.getString(dateCol));
+                    singleVehicleList.add(cursor.getString(odoCol));
+                    singleVehicleList.add(cursor.getString(eventCol));
 
-                vehicleList.add(singleVehicleList);
+                    vehicleList.add(singleVehicleList);
+                }
 
             } while(cursor.moveToNext());
 
@@ -129,7 +126,5 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         return vehicleList;
 
     }
-
-
 
 }

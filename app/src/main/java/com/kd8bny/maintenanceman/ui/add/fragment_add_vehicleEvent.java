@@ -97,7 +97,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     public ArrayAdapter poplulateAdapter(){
         ArrayList<String> histEvent = new ArrayList<String>();
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        ArrayList<ArrayList> vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext());
+        ArrayList<ArrayList> vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
 
         ArrayList<String> temp;
         for(int i = 0; i < vehicleHist.size(); i++){

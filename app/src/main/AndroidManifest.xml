@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kd8bny.maintenanceman"
-    android:versionCode="1"
-    android:versionName="1.0.1">
+    android:versionCode="2"
+    android:versionName="1.0.1" >
 
     <application
         android:allowBackup="true"
@@ -23,10 +23,17 @@
             android:label="@string/title_add_fleet_roster"
             android:parentActivityName=".ui.main.activity_main" >
         </activity>
-
         <activity
             android:name=".ui.add.activity_vehicleEvent"
             android:label="@string/title_add_vehicle_event"
+            android:parentActivityName=".ui.main.activity_main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+        </activity>
+        <activity
+            android:name=".ui.settings.activity_settings"
+            android:label="@string/title_settings"
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
