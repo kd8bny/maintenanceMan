@@ -43,12 +43,11 @@ public class fragment_overview extends ListFragment {
 
         ArrayList<String> temp;
         for(int i = 0; i < vehicleList.size(); i++){
-            Log.i(TAG,""+i);
             temp = vehicleList.get(i);
-            if(temp.size()>1) {
+            if(temp.size()>2) {
                 singleVehicleList.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
             }else{
-                singleVehicleList.add(temp.get(0));
+                singleVehicleList.add(temp.get(1));
             }
         }
 
@@ -80,10 +79,13 @@ public class fragment_overview extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(getActivity(), activity_vehicleEvent.class);
+        if((vehicleList.get(position)).get(0)!=null){
+            Intent intent = new Intent(getActivity(), activity_vehicleEvent.class);
 
-        intent.putStringArrayListExtra("vehicleSent",vehicleList.get(position));
-        startActivity(intent);
+            intent.putStringArrayListExtra("vehicleSent",vehicleList.get(position));
+            startActivity(intent);
+        }
+
     }
 
     @Override

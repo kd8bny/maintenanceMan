@@ -78,7 +78,6 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
             vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event) VALUES ('"
