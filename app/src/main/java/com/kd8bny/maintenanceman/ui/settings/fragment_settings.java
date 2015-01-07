@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 
 public class fragment_settings extends Fragment {
+    private static final String TAG = "fragment_settings";
 
     public fragment_settings() {
     }
@@ -33,6 +34,7 @@ public class fragment_settings extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"Why????");
     }
 
     @Override

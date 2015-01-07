@@ -45,6 +45,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onResume();
+        Log.d(TAG,"Why????");
         ArrayList<String> vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
         refID = vehicleSent.get(0);
 
