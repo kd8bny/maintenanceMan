@@ -35,26 +35,6 @@ public class fragment_overview extends ListFragment {
         // Required empty public constructor
     }
 
-    public ArrayAdapter poplulateAdapter(){
-        ArrayList<String> singleVehicleList = new ArrayList<String>();
-        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        //ArrayList<ArrayList> vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-
-        ArrayList<String> temp;
-        for(int i = 0; i < vehicleList.size(); i++){
-            temp = vehicleList.get(i);
-            if(temp.size()>2) {
-                singleVehicleList.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
-            }else{
-                singleVehicleList.add(temp.get(1));
-            }
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, singleVehicleList);
-        Log.i(TAG,adapter.toString());
-        return adapter;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -103,6 +83,26 @@ public class fragment_overview extends ListFragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public ArrayAdapter poplulateAdapter(){
+        ArrayList<String> singleVehicleList = new ArrayList<String>();
+        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
+        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+
+        ArrayList<String> temp;
+        for(int i = 0; i < vehicleList.size(); i++){
+            temp = vehicleList.get(i);
+            if(temp.size()>2) {
+                singleVehicleList.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
+            }else{
+                singleVehicleList.add(temp.get(1));
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, singleVehicleList);
+        Log.i(TAG,adapter.toString());
+        return adapter;
     }
 
 }

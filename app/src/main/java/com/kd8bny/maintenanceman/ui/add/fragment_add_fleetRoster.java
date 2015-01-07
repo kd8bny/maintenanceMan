@@ -83,10 +83,10 @@ public class fragment_add_fleetRoster extends Fragment {
     }
 
     public void getValues(){
-        myear = ((EditText) getActivity().findViewById(R.id.year)).getText().toString();
-        mmake = ((EditText) getActivity().findViewById(R.id.make)).getText().toString();
-        mmodel = ((EditText) getActivity().findViewById(R.id.model)).getText().toString();
-        mengine = ((EditText) getActivity().findViewById(R.id.engine)).getText().toString();
+        myear = ((EditText) getActivity().findViewById(R.id.val_spec_year)).getText().toString();
+        mmake = ((EditText) getActivity().findViewById(R.id.val_spec_make)).getText().toString();
+        mmodel = ((EditText) getActivity().findViewById(R.id.val_spec_model)).getText().toString();
+        mengine = ((EditText) getActivity().findViewById(R.id.val_spec_engine)).getText().toString();
     }
 
 }

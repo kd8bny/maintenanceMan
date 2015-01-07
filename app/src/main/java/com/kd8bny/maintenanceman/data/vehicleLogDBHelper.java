@@ -6,7 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.kd8bny.maintenanceman.R;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -91,12 +94,12 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     public ArrayList<ArrayList> getEntries(Context context){
 
         this.createDatabase(context);
-        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandFleetRoster", null);
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog", null);
 
         int refIDCol = cursor.getColumnIndex("refID");
         int dateCol = cursor.getColumnIndex("date");
         int odoCol = cursor.getColumnIndex("odo");
-        int taskCol = cursor.getColumnIndex("task");
+        int eventCol = cursor.getColumnIndex("event");
 
         ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
 
@@ -109,7 +112,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
                 singleVehicleList.add(cursor.getString(refIDCol));
                 singleVehicleList.add(cursor.getString(dateCol));
                 singleVehicleList.add(cursor.getString(odoCol));
-                singleVehicleList.add(cursor.getString(taskCol));
+                singleVehicleList.add(cursor.getString(eventCol));
 
                 vehicleList.add(singleVehicleList);
 
@@ -118,13 +121,15 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
         else{
             ArrayList<String> singleVehicleList = new ArrayList<String>();
-            singleVehicleList.add("Please Add Vehicle To Database");
+            singleVehicleList.add(null);
+            singleVehicleList.add("No Vehicle History Given");
             vehicleList.add(singleVehicleList);
         }
         Log.i(TAG,vehicleList.toString());
         return vehicleList;
 
     }
+
 
 
 }

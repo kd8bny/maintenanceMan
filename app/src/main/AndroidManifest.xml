@@ -20,13 +20,13 @@
         </activity>
         <activity
             android:name=".ui.add.activity_add_fleetRoster"
-            android:label="@string/title_add_vehicle"
+            android:label="@string/title_add_fleet_roster"
             android:parentActivityName=".ui.main.activity_main" >
         </activity>
 
         <activity
             android:name=".ui.add.activity_vehicleEvent"
-            android:label="@string/title_activity_add_vehicle_event"
+            android:label="@string/title_add_vehicle_event"
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
