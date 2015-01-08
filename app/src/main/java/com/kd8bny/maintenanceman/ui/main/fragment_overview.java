@@ -76,27 +76,22 @@ public class fragment_overview extends ListFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Log.i(TAG,""+item.getItemId());
         switch (item.getItemId()){
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(getActivity());
                 return true;
 
             case R.id.menu_add:
-                Log.d(TAG,"Why????add");
                 Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
                 startActivity(addIntent);
                 return true;
 
             case R.id.menu_settings:
-                Log.d(TAG,"Why????right");
-                Log.i(TAG,""+R.id.menu_settings);
                 Intent settingsIntent = new Intent(getActivity(), activity_settings.class);
                 startActivity(settingsIntent);
                 return true;
 
             default:
-                Log.d(TAG,"Why????return");
                 return super.onOptionsItemSelected(item);
         }
     }

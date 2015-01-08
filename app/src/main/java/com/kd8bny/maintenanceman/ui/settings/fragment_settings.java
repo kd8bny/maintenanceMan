@@ -34,7 +34,6 @@ public class fragment_settings extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"Why????");
     }
 
     @Override
