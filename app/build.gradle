@@ -11,15 +11,16 @@ android {
 
     }
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        maintenanceMan_release {
         }
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    //compile 'com.android.support:cardview-v7:21.0.+'
-    //compile 'com.android.support:recyclerview-v7:21.0.+'
+    compile 'com.android.support:cardview-v7:+'
+    //compile 'com.android.support:recyclerview-v7:+'
+    compile ('com.android.support:recyclerview-v7:+') {
+        exclude module: 'support-v4'
+    }
 }
