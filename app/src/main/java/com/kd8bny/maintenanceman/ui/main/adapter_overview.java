@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.ui.main;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,30 +9,37 @@ import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by kd8bny on 1/7/15.
- */
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder> {
+    private static final String TAG = "adapter_overview";
 
-    private List<String> vehicleSpecs;
+    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
 
-    public adapter_overview(List<String> vehicleSpecs) {
-        this.vehicleSpecs = vehicleSpecs;
+    public adapter_overview(ArrayList vehicleList) {
+        this.vehicleList = vehicleList;
     }
 
     @Override
     public int getItemCount() {
-        return vehicleSpecs.size();
+        return vehicleList.size();
     }
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        adapterViewHolder.vyear.setText(vehicleSpecs.get(0));
-        adapterViewHolder.vmake.setText(vehicleSpecs.get(1));
-        adapterViewHolder.vmodel.setText(vehicleSpecs.get(2));
-        adapterViewHolder.vengine.setText(vehicleSpecs.get(3));
+        ArrayList<String> vehicleSpecs = new ArrayList<>();
+        vehicleSpecs.addAll(vehicleList.get(i));
+
+        if(vehicleSpecs.get(0) != null) {
+            adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
+            adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
+            adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
+            adapterViewHolder.vengine.setText(vehicleSpecs.get(4));
+        }else{
+            adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
+        }
     }
     @Override
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

@@ -33,9 +33,7 @@ import java.util.List;
 public class fragment_overview extends Fragment {
     private static final String TAG = "fragment_overview";
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
-    public List<String> vehicleSpecs= new ArrayList<String>();
-
+    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
 
     public fragment_overview() {
         // Required empty public constructor
@@ -52,46 +50,33 @@ public class fragment_overview extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onResume();
 
-        return inflater.inflate(R.layout.fragment_overview, container, false);
+        return inflater.inflate(R.layout.fragment_overview, container, false); //TODO need this????
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //setListAdapter(poplulateAdapter());
-        testRecycle();
+        getActivity().setContentView(R.layout.fragment_overview);
+
+        RecyclerView cardList = (RecyclerView) getActivity().findViewById(R.id.overview_cardList);
+        LinearLayoutManager linMan = new LinearLayoutManager(getActivity());
+
+        cardList.setHasFixedSize(true);
+
+        linMan.setOrientation(LinearLayoutManager.VERTICAL);
+        cardList.setLayoutManager(linMan);
+
+        cardList.setAdapter(poplulateAdapter());
     }
 
-    public void testRecycle() {
+    public adapter_overview poplulateAdapter(){
+        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
+        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
 
+        adapter_overview adapter = new adapter_overview(vehicleList);
 
-        vehicleSpecs.add("year");
-        vehicleSpecs.add("make");
-        vehicleSpecs.add("model");
-        vehicleSpecs.add("Engine");
-
-    getActivity().setContentView(R.layout.fragment_overview);
-
-    RecyclerView recList = (RecyclerView) getActivity().findViewById(R.id.cardList);
-    recList.setHasFixedSize(true);
-    LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-    llm.setOrientation(LinearLayoutManager.VERTICAL);
-    recList.setLayoutManager(llm);
-
-        adapter_overview ca = new adapter_overview(vehicleSpecs);
-        recList.setAdapter(ca);
+        return adapter;
     }
-
-   /* @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        if((vehicleList.get(position)).get(0)!=null){
-            Intent intent = new Intent(getActivity(), activity_vehicleEvent.class);
-
-            intent.putStringArrayListExtra("vehicleSent",vehicleList.get(position));
-            startActivity(intent);
-        }
-
-    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -120,25 +105,5 @@ public class fragment_overview extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    /*public ArrayAdapter poplulateAdapter(){
-        ArrayList<String> singleVehicleList = new ArrayList<String>();
-        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-
-        ArrayList<String> temp;
-        for(int i = 0; i < vehicleList.size(); i++){
-            temp = vehicleList.get(i);
-            if(temp.size()>2) {
-                singleVehicleList.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
-            }else{
-                singleVehicleList.add(temp.get(1));
-            }
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, singleVehicleList);
-        Log.i(TAG,adapter.toString());
-        return adapter;
-    }*/
 
 }

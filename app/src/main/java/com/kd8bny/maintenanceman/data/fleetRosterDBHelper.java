@@ -128,7 +128,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
             singleVehicleList.add("Please Add Vehicle To Database");
             vehicleList.add(singleVehicleList);
         }
-        Log.i(TAG,vehicleList.toString());
+
         return vehicleList;
 
     }
