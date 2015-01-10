@@ -1,6 +1,5 @@
 package com.kd8bny.maintenanceman.ui.main;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,12 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
     private static final String TAG = "adapter_overview";
