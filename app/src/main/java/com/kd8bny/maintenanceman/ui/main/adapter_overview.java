@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
     private static final String TAG = "adapter_overview";
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
+    public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
 
     public adapter_overview(ArrayList vehicleList) {
         this.vehicleList = vehicleList;
@@ -30,7 +30,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        ArrayList<String> vehicleSpecs = new ArrayList<>();
+        ArrayList<String> vehicleSpecs = new ArrayList<String>();
         vehicleSpecs.addAll(vehicleList.get(i));
 
         if(vehicleSpecs.get(0) != null) {

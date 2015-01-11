@@ -33,7 +33,7 @@ import java.util.List;
 public class fragment_overview extends Fragment {
     private static final String TAG = "fragment_overview";
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
+    public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
 
     public fragment_overview() {
         // Required empty public constructor

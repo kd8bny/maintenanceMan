@@ -39,6 +39,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
         </activity>
+        <activity
+            android:name=".ui.settings.activity_sub_settings"
+            android:label="@string/title_activity_sub_settings"
+            android:parentActivityName=".ui.settings.activity_settings" >
+            <intent-filter>
+                <action android:name=".ui.settings.activity_sub_settings"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kd8bny.maintenanceman.ui.settings.activity_settings" />
+        </activity>
     </application>
 
 </manifest>
