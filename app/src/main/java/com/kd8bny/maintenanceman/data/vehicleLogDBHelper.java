@@ -89,7 +89,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     public ArrayList<ArrayList> getEntries(Context context, String refID){
 
         this.createDatabase(context);
-        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog", null);//TODO selcted only right refID
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog WHERE refID = '" + refID + "';", null);
 
         int refIDCol = cursor.getColumnIndex("refID");
         int dateCol = cursor.getColumnIndex("date");
