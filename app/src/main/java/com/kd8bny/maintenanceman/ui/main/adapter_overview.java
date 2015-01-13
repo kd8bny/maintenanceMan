@@ -18,6 +18,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     private static final String TAG = "adapter_overview";
 
     public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
+    private boolean DBisEmpty;
 
     public adapter_overview(ArrayList vehicleList) {
         this.vehicleList = vehicleList;
@@ -33,7 +34,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         ArrayList<String> vehicleSpecs = new ArrayList<String>();
         vehicleSpecs.addAll(vehicleList.get(i));
 
-        if(vehicleSpecs.get(0) != null) {
+        if(!DBisEmpty) {
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
             adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
             adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
@@ -47,8 +48,22 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.overview_card, viewGroup, false);
-        return new AdapterViewHolder(itemView, vehicleList);
+                inflate(determineLayout(), viewGroup, false);
+                //inflate(R.layout.overview_card, viewGroup, false);
+        return new AdapterViewHolder(itemView, vehicleList, DBisEmpty);
+    }
+
+    public int determineLayout(){
+        ArrayList<String> vehicleSpecs = new ArrayList<String>();
+        vehicleSpecs.addAll(vehicleList.get(0));
+
+        if(vehicleSpecs.get(0) != null) {
+            DBisEmpty = false;
+            return R.layout.overview_card;
+        }else{
+            DBisEmpty = true;
+            return R.layout.overview_card_empty;
+        }
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -57,11 +72,13 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         protected TextView vmodel;
         protected TextView vengine;
 
-        public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList) {
+        public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
             super(view);
 
             view.setTag(vehicleList);
-            view.setOnClickListener(this);
+            if(!DBisEmpty) {
+                view.setOnClickListener(this);
+            }
 
             vyear = (TextView) view.findViewById(R.id.year);
             vmake = (TextView) view.findViewById(R.id.make);

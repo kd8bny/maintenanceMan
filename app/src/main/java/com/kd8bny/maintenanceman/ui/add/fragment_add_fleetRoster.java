@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,10 +58,6 @@ public class fragment_add_fleetRoster extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(getActivity());
-                return true;
-
             case R.id.menu_save:
                 Context context = getActivity().getApplicationContext();
 

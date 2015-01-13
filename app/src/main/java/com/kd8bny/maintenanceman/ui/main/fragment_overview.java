@@ -6,7 +6,6 @@ import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -87,10 +86,6 @@ public class fragment_overview extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(getActivity());
-                return true;
-
             case R.id.menu_add:
                 Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
                 startActivity(addIntent);
