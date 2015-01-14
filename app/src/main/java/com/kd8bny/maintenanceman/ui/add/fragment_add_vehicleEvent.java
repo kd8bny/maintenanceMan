@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class fragment_add_vehicleEvent extends Fragment {
     private static final String TAG = "fragment_add_vehicleEvent";
 
-    //private SlidingUpPanelLayout addEvent;
+    private SlidingUpPanelLayout addEvent;
 
     private String date;
     private String odo;
@@ -61,7 +61,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         ListView taskHist = (ListView) getActivity().findViewById(R.id.taskList);
         taskHist.setAdapter(poplulateAdapter());
 
-        SlidingUpPanelLayout addEvent = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout);
+        addEvent = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout);
         addEvent.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
@@ -127,11 +127,12 @@ public class fragment_add_vehicleEvent extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     /*@Override
     public void onBackPressed() {
         if (addEvent != null &&
-                (addEvent.getPanelState() == addEvent.EXPANDED || addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
-            addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                (addEvent.getPanelState() == PanelState.EXPANDED || addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
+            addEvent.collapsePanel();
         } else {
             super.onBackPressed();
         }

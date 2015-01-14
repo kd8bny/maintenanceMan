@@ -1,11 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".overview" >
-    <item android:id="@+id/menu_add"
-        android:title="@string/menu_add"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_menu_btn_add"
-        android:showAsAction="ifRoom|withText" />
     <item android:id="@+id/menu_settings"
         android:title="@string/menu_settings"
         android:orderInCategory="100"

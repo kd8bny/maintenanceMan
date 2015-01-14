@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.settings.activity_settings;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,12 +60,22 @@ public class fragment_overview extends Fragment {
         getActivity().setContentView(R.layout.fragment_overview);
 
         RecyclerView cardList = (RecyclerView) getActivity().findViewById(R.id.overview_cardList);
+
         LinearLayoutManager linMan = new LinearLayoutManager(getActivity());
-
         cardList.setHasFixedSize(true);
-
+        cardList.setItemAnimator(new DefaultItemAnimator());
         linMan.setOrientation(LinearLayoutManager.VERTICAL);
         cardList.setLayoutManager(linMan);
+
+        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab.attachToRecyclerView(cardList);
+        getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                startActivity(addIntent);
+            }
+        });
 
         cardList.setAdapter(poplulateAdapter());
     }
@@ -86,11 +98,6 @@ public class fragment_overview extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case R.id.menu_add:
-                Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
-                startActivity(addIntent);
-                return true;
-
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(getActivity(), activity_settings.class);
                 startActivity(settingsIntent);
