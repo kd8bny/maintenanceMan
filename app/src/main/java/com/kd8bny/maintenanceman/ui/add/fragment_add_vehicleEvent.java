@@ -1,7 +1,5 @@
 package com.kd8bny.maintenanceman.ui.add;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -18,14 +16,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState;
 
 import java.util.ArrayList;
 
 
 public class fragment_add_vehicleEvent extends Fragment {
     private static final String TAG = "fragment_add_vehicleEvent";
+
+    //private SlidingUpPanelLayout addEvent;
 
     private String date;
     private String odo;
@@ -39,15 +41,14 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG,"oncerat");
         setHasOptionsMenu(true);
-
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onResume();
-        Log.d(TAG,"Why????");
         ArrayList<String> vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
         refID = vehicleSent.get(0);
 
@@ -59,6 +60,38 @@ public class fragment_add_vehicleEvent extends Fragment {
         super.onResume();
         ListView taskHist = (ListView) getActivity().findViewById(R.id.taskList);
         taskHist.setAdapter(poplulateAdapter());
+
+        SlidingUpPanelLayout addEvent = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout);
+        addEvent.setPanelSlideListener(new PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View view) {
+                setMenuVisibility(false);
+
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
+                setMenuVisibility(true);
+
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+
+            }
+        });
+
     }
 
     @Override
@@ -74,7 +107,7 @@ public class fragment_add_vehicleEvent extends Fragment {
             case R.id.menu_save:
                 Context context = getActivity().getApplicationContext();
 
-                this.getValues();//TODO test for nulls
+                this.getValues();
 
                 vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(context);
                 vehicleDB.saveEntry(context, refID, date, odo, task);
@@ -94,6 +127,15 @@ public class fragment_add_vehicleEvent extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+    /*@Override
+    public void onBackPressed() {
+        if (addEvent != null &&
+                (addEvent.getPanelState() == addEvent.EXPANDED || addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
+            addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        } else {
+            super.onBackPressed();
+        }
+    }*/
 
 
     public ArrayAdapter poplulateAdapter(){
