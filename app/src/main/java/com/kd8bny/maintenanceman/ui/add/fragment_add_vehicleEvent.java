@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.ui.add;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -39,6 +40,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+
     }
 
     @Override
@@ -71,19 +74,21 @@ public class fragment_add_vehicleEvent extends Fragment {
             case R.id.menu_save:
                 Context context = getActivity().getApplicationContext();
 
-                this.getValues();
+                this.getValues();//TODO test for nulls
 
                 vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(context);
                 vehicleDB.saveEntry(context, refID, date, odo, task);
 
                 Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show();
-                //getActivity().finish();
                 ListView taskHist = (ListView) getActivity().findViewById(R.id.taskList);
                 taskHist.setAdapter(poplulateAdapter());
+
+                return true;
 
 
             case R.id.menu_cancel:
                 getActivity().finish();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);

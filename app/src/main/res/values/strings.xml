@@ -25,7 +25,8 @@
     <string name="hint_spec_engine">4LV6</string>
 
     <!-- Add Vehicle Event -->
-    <string name="title_add_vehicle_event">Add Maintenance Task</string>
+    <string name="title_add_vehicle_event">Maintenance History</string>
+    <string name="add_vehicle_event">Add Maintenance Task</string>
     <string name="spec_date">Date</string>
     <string name="spec_odo">Odometer</string>
 
