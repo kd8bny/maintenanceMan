@@ -33,6 +33,14 @@
     <!-- Dialog -->
     <string name="title_dialog_year">Vehicle Year</string>
 
+    <!-- Drawer -->
+    <string-array name="drawer_items">
+        <item>Add Vehicle</item>
+        <item>Add Event</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
     <!-- Overview -->
     <string name="button_add">Add</string>
 
