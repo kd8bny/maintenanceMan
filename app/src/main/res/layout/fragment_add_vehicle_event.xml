@@ -1,44 +1,19 @@
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:sothree="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sliding_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="bottom"
-    sothree:panelHeight="68dp"
-    sothree:shadowHeight="4dp">
-
-    <ListView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-
-        android:id="@+id/taskList"
-
-        tools:context="com.kd8bny.maintenanceman.ui.add.add_vehicleEvent"/>
-
-    <GridLayout
+<GridLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center|top"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:text="@string/add_vehicle_event"
-            android:textSize="16sp"
-            android:paddingBottom="40dp"/>
-        <LinearLayout
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/vehicleSpinner"
+        android:layout_row="0"
+        android:layout_column="0" />
+
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -115,5 +90,3 @@
                 android:id="@+id/val_spec_event"/>
         </LinearLayout>
     </GridLayout>
-
-</com.sothree.slidinguppanel.SlidingUpPanelLayout>

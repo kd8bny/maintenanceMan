@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
+import com.kd8bny.maintenanceman.ui.history.activity_history;
 
 import java.util.ArrayList;
 
@@ -90,7 +91,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         public void onClick(View view) {
             ArrayList<ArrayList> vehicleList = (ArrayList<ArrayList>) view.getTag();
 
-            Intent viewIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
+            Intent viewIntent = new Intent(view.getContext(), activity_history.class);
             viewIntent.putStringArrayListExtra("vehicleSent", vehicleList.get(getPosition()));
             view.getContext().startActivity(viewIntent);
         }

@@ -1,18 +1,15 @@
 package com.kd8bny.maintenanceman.ui.main;
 
 import android.app.Fragment;
-import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,13 +21,10 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
-import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
-import com.kd8bny.maintenanceman.ui.drawer.drawer_items;
 import com.kd8bny.maintenanceman.ui.settings.activity_settings;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class fragment_overview extends Fragment {
@@ -46,7 +40,6 @@ public class fragment_overview extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -77,7 +70,7 @@ public class fragment_overview extends Fragment {
         getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
                 startActivity(addIntent);
             }
         });
@@ -91,17 +84,13 @@ public class fragment_overview extends Fragment {
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
         getActivity().getActionBar().setHomeButtonEnabled(true);
 
-
-
     }
 
     public adapter_overview poplulateAdapter(){
         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
         vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
 
-        adapter_overview adapter = new adapter_overview(vehicleList);
-
-        return adapter;
+        return new adapter_overview(vehicleList);
     }
 
     public ArrayAdapter<String> populateDrawer(){
@@ -117,33 +106,25 @@ public class fragment_overview extends Fragment {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.drawer_item , singleDrawerItems);
 
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
+                R.drawable.ic_drawer, //nav menu toggle icon
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ){
+            public void onDrawerClosed(View view) {
+                Log.i(TAG,"closed");
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                Log.i(TAG,"open");
+            }
+        };
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+
         return adapter;
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_overview, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.menu_settings:
-                Intent settingsIntent = new Intent(getActivity(), activity_settings.class);
-                startActivity(settingsIntent);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /*private void selectItem(int position) {
-        mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
-        mDrawerLayout.closeDrawer(mDrawerList);
-    }*/
 
     public class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -157,8 +138,8 @@ public class fragment_overview extends Fragment {
                     break;
 
                 case 1:
-                    /*Intent addEventIntent = new Intent(getActivity(), activity_vehicleEvent.class);
-                    startActivity(addEventIntent);*/
+                    Intent addEventIntent = new Intent(getActivity(), activity_vehicleEvent.class);
+                    startActivity(addEventIntent);
                     break;
 
                 case 2:

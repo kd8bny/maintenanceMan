@@ -13,9 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
@@ -34,6 +36,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     private String task;
     private String refID;
 
+    ArrayList<ArrayList> vehicleList;
+
     public fragment_add_vehicleEvent() {
         // Required empty public constructor
     }
@@ -41,7 +45,6 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"oncerat");
         setHasOptionsMenu(true);
 
     }
@@ -49,8 +52,6 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onResume();
-        ArrayList<String> vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
-        refID = vehicleSent.get(0);
 
         return inflater.inflate(R.layout.fragment_add_vehicle_event, container, false);
     }
@@ -58,40 +59,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        ListView taskHist = (ListView) getActivity().findViewById(R.id.taskList);
-        taskHist.setAdapter(poplulateAdapter());
 
-        addEvent = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout);
-        addEvent.setPanelSlideListener(new PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View view, float v) {
-
-
-            }
-
-            @Override
-            public void onPanelCollapsed(View view) {
-                setMenuVisibility(false);
-
-            }
-
-            @Override
-            public void onPanelExpanded(View view) {
-                setMenuVisibility(true);
-
-            }
-
-            @Override
-            public void onPanelAnchored(View view) {
-
-            }
-
-            @Override
-            public void onPanelHidden(View view) {
-
-            }
-        });
-
+        setVehicles();
     }
 
     @Override
@@ -113,8 +82,8 @@ public class fragment_add_vehicleEvent extends Fragment {
                 vehicleDB.saveEntry(context, refID, date, odo, task);
 
                 Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show();
-                ListView taskHist = (ListView) getActivity().findViewById(R.id.taskList);
-                taskHist.setAdapter(poplulateAdapter());
+
+                getActivity().finish();
 
                 return true;
 
@@ -128,35 +97,23 @@ public class fragment_add_vehicleEvent extends Fragment {
         }
     }
 
-    /*@Override
-    public void onBackPressed() {
-        if (addEvent != null &&
-                (addEvent.getPanelState() == PanelState.EXPANDED || addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
-            addEvent.collapsePanel();
-        } else {
-            super.onBackPressed();
-        }
-    }*/
+    public void setVehicles(){
+        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
+        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+        ArrayList<String> temp = new ArrayList<String>();
+        ArrayList<String> singleVehicle = new ArrayList<String>();
 
-
-    public ArrayAdapter poplulateAdapter(){
-        ArrayList<String> histEvent = new ArrayList<String>();
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        ArrayList<ArrayList> vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
-
-        ArrayList<String> temp;
-        for(int i = 0; i < vehicleHist.size(); i++){
-            Log.i(TAG,vehicleHist.toString());
-            temp = vehicleHist.get(i);
-            if(temp.size()>2) {
-                histEvent.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
-            }else{
-                histEvent.add(temp.get(1));
-            }
+        for(int i=0; i<vehicleList.size(); i++) {
+            temp = (vehicleList.get(i));
+            String name = temp.get(1)+temp.get(2)+temp.get(3);
+            singleVehicle.add(name);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, histEvent);
-        return adapter;
+        Spinner vehicleSpinner = (Spinner) getActivity().findViewById(R.id.vehicleSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String> (getActivity(), android.R.layout.simple_spinner_item, singleVehicle);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleSpinner.setAdapter(adapter);
+
     }
 
     public void getValues(){

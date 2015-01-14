@@ -41,6 +41,9 @@
         <item>About</item>
     </string-array>
 
+    <!-- History -->
+    <string name="title_history">Vehicle History</string>
+
     <!-- Overview -->
     <string name="button_add">Add</string>
 
