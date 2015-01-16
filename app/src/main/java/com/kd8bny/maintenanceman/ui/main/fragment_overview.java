@@ -61,12 +61,10 @@ public class fragment_overview extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         //Toolbar
-        toolbar = (Toolbar) getActivity().findViewById(R.id.tool_bar);
-        if (toolbar != null) {
-            ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        }
+        toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
+        ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //cards
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
