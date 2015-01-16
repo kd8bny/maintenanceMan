@@ -4,10 +4,12 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
+import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
 import com.kd8bny.maintenanceman.ui.settings.activity_settings;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -29,6 +32,15 @@ import java.util.ArrayList;
 
 public class fragment_overview extends Fragment {
     private static final String TAG = "fragment_overview";
+
+    private Toolbar toolbar;
+    RecyclerView cardList, drawerList;
+    //RecyclerView.Adapter
+    RecyclerView.LayoutManager cardMan, drawerMan;
+    DrawerLayout Drawer;
+    ActionBarDrawerToggle mDrawerToggle;
+
+    FloatingActionButton fab;
 
     public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
 
@@ -40,34 +52,35 @@ public class fragment_overview extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onResume();
+        super.onCreate(savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        return inflater.inflate(R.layout.fragment_overview, container, false); //TODO need this???? YES but should take out of return and move things from onResume
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setContentView(R.layout.fragment_overview);
-
-        RecyclerView cardList = (RecyclerView) getActivity().findViewById(R.id.overview_cardList);
+        //Toolbar
+        toolbar = (Toolbar) getActivity().findViewById(R.id.tool_bar);
+        if (toolbar != null) {
+            ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         //cards
-        LinearLayoutManager linMan = new LinearLayoutManager(getActivity());
+        cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
+        cardMan = new LinearLayoutManager(getActivity());
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
-        linMan.setOrientation(LinearLayoutManager.VERTICAL);
-        cardList.setLayoutManager(linMan);
-        cardList.setAdapter(poplulateAdapter());
+        cardList.setLayoutManager(cardMan);
+        //cardMan.setOrientation(LinearLayoutManager.VERTICAL);
+        cardList.setAdapter(populateCards());
 
         //fab
-        FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.attachToRecyclerView(cardList);
-        getActivity().findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
@@ -76,27 +89,54 @@ public class fragment_overview extends Fragment {
         });
 
         //drawer_item
-        ListView drawerList = (ListView) getActivity().findViewById(R.id.list_slidermenu);
+        drawerList = (RecyclerView) view.findViewById(R.id.drawerList);
+        drawerMan = new LinearLayoutManager(getActivity());
+        drawerList.setHasFixedSize(true);
+        drawerList.setItemAnimator(new DefaultItemAnimator());
+        //drawerMan.setOrientation(LinearLayoutManager.VERTICAL);
+        drawerList.setLayoutManager(drawerMan);
         drawerList.setAdapter(populateDrawer());
+        Drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(getActivity(),Drawer,toolbar,R.string.drawer_open,R.string.drawer_close){
+            @Override
+            public void onDrawerOpened(View drawerView){
+                super.onDrawerOpened(drawerView);
+                //TODO hide fab
 
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
+            }
+            @Override
+            public void onDrawerClosed(View drawerView){
+                super.onDrawerClosed(drawerView);
+                //TODO
+            }
+        };
+        Drawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
-        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActivity().getActionBar().setHomeButtonEnabled(true);
+        return view;
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
 
     }
 
-    public adapter_overview poplulateAdapter(){
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    public adapter_overview populateCards(){
         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
         vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
 
         return new adapter_overview(vehicleList);
     }
 
-    public ArrayAdapter<String> populateDrawer(){
+    public adapter_drawer populateDrawer(){
         String[] mMenuTitles = getResources().getStringArray(R.array.drawer_items);
-        DrawerLayout mDrawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
-
         ArrayList<String> singleDrawerItems = new ArrayList<String>();
 
         singleDrawerItems.add(mMenuTitles[0]);
@@ -104,29 +144,10 @@ public class fragment_overview extends Fragment {
         singleDrawerItems.add(mMenuTitles[2]);
         singleDrawerItems.add(mMenuTitles[3]);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.drawer_item , singleDrawerItems);
-
-        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
-                R.drawable.ic_drawer, //nav menu toggle icon
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
-        ){
-            public void onDrawerClosed(View view) {
-                Log.i(TAG,"closed");
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                Log.i(TAG,"open");
-            }
-        };
-
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-
-        return adapter;
+        return new adapter_drawer(singleDrawerItems);
     }
 
-    public class DrawerItemClickListener implements ListView.OnItemClickListener {
+    /*public class DrawerItemClickListener implements RecyclerView.RecyclerListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             //selectItem(position);
@@ -157,5 +178,5 @@ public class fragment_overview extends Fragment {
 
             }
         }
-    }
+    }*/
 }

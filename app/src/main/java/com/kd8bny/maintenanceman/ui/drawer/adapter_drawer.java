@@ -1,59 +1,67 @@
 package com.kd8bny.maintenanceman.ui.drawer;
 
-import android.app.Activity;
-import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.ui.history.activity_history;
 
 import java.util.ArrayList;
 
-/**
- * Created by kd8bny on 1/13/15.
- * Used:
- * http://www.androidhive.info/2013/11/android-sliding-menu-using-navigation-drawer_item/
- */
-public class adapter_drawer extends BaseAdapter {
+public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterViewHolder>{
+    private static final String TAG = "adapter_overview";
 
-    private Context context;
-    private ArrayList<drawer_items> drawerItems;
+    public ArrayList<String> menuItems = new ArrayList<String>();
 
-    public adapter_drawer(Context context, ArrayList<drawer_items> drawerItems){
-        this.context = context;
-        this.drawerItems = drawerItems;
-    }
-    @Override
-    public int getCount() {
-        return drawerItems.size();
+    public adapter_drawer(ArrayList menuItems) {
+        this.menuItems = menuItems;
     }
 
     @Override
-    public Object getItem(int position) {
-        return drawerItems.get(position);
+    public int getItemCount() {
+        return menuItems.size();
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
+            adapterViewHolder.vitemText.setText(menuItems.get(i));
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            LayoutInflater mInflater = (LayoutInflater)
-                    context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = mInflater.inflate(R.layout.drawer_item, null);
+    public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View itemView = LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.drawer_item, viewGroup, false);
+        return new AdapterViewHolder(itemView, menuItems);
+    }
+
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        protected TextView vitemText;
+
+        public AdapterViewHolder(View view, final ArrayList<String> menuItems) {
+            super(view);
+
+            view.setTag(menuItems);
+            view.setOnClickListener(this);
+
+            vitemText = (TextView) view.findViewById(R.id.itemText);
+
         }
 
-        TextView txtTitle = (TextView) convertView.findViewById(R.id.title);
+        @Override
+        public void onClick(View view) {
+            ArrayList<ArrayList> vehicleList = (ArrayList<ArrayList>) view.getTag();
 
-        txtTitle.setText(drawerItems.get(position).getTitle());
-
-        return convertView;
-    }
+            Intent viewIntent = new Intent(view.getContext(), activity_history.class);
+            viewIntent.putStringArrayListExtra("vehicleSent", vehicleList.get(getPosition()));
+            view.getContext().startActivity(viewIntent);
+        }
 
 }
+}
+
+

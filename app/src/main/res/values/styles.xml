@@ -1,8 +1,22 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+
+        <!--<item name="navigationBarColor">@color/color_primary_dark</item>-->
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/color_accent</item>
+
+        <!--<item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">true</item>-->
     </style>
 
 </resources>
+

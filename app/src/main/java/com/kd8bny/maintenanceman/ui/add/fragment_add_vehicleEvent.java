@@ -105,7 +105,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         for(int i=0; i<vehicleList.size(); i++) {
             temp = (vehicleList.get(i));
-            if(vehicleList.get(0) != null){
+            if(temp.get(0) != null){
             String name = temp.get(1)+temp.get(2)+temp.get(3);
             singleVehicle.add(name);
             }else {

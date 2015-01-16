@@ -34,6 +34,8 @@
     <string name="title_dialog_year">Vehicle Year</string>
 
     <!-- Drawer -->
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Closed</string>
     <string-array name="drawer_items">
         <item>Add Vehicle</item>
         <item>Add Event</item>
