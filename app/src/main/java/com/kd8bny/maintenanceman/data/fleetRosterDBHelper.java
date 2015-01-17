@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
             fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
             fleetRosterDB.execSQL(DATABASE_CREATE);
 
-            Log.d(TAG,"fleetRoster created");
+            Log.i(TAG,"fleetRoster created");
         }
 
         catch(Exception e){

@@ -131,6 +131,7 @@ public class fragment_overview extends Fragment {
 
     public adapter_drawer populateDrawer(){
         String[] mMenuTitles = getResources().getStringArray(R.array.drawer_items);
+        int[] icons = new int[]{R.drawable.ic_action_car_gray, R.drawable.ic_action_card,R.drawable.ic_action_settings, R.drawable.ic_action_info_gray};
         ArrayList<String> singleDrawerItems = new ArrayList<String>();
 
         singleDrawerItems.add(mMenuTitles[0]);
@@ -138,7 +139,7 @@ public class fragment_overview extends Fragment {
         singleDrawerItems.add(mMenuTitles[2]);
         singleDrawerItems.add(mMenuTitles[3]);
 
-        return new adapter_drawer(singleDrawerItems);
+        return new adapter_drawer(singleDrawerItems, icons);
     }
 
 }

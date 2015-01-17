@@ -1,12 +1,14 @@
 package com.kd8bny.maintenanceman.ui.drawer;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +24,11 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
     private static final String TAG = "adapter_overview";
 
     public ArrayList<String> menuItems = new ArrayList<>();
+    private int [] icons;
 
-    public adapter_drawer(ArrayList menuItems) {
+    public adapter_drawer(ArrayList menuItems, int [] icons) {
         this.menuItems = menuItems;
+        this.icons = icons;
     }
 
     @Override
@@ -35,6 +39,7 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
             adapterViewHolder.vitemText.setText(menuItems.get(i));
+            adapterViewHolder.vitemIcon.setImageResource(icons[i]);
     }
 
     @Override
@@ -51,6 +56,7 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
 
         private DrawerLayout mDrawerLayout;
         protected TextView vitemText;
+        protected ImageView vitemIcon;
 
         public AdapterViewHolder(View view, View parent, final ArrayList<String> menuItems) {
             super(view);
@@ -59,6 +65,7 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
             view.setOnClickListener(this);
 
             vitemText = (TextView) view.findViewById(R.id.itemText);
+            vitemIcon = (ImageView) view.findViewById(R.id.itemIcon);
 
         }
 

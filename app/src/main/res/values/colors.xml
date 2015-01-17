@@ -4,5 +4,7 @@
     <color name="color_primary_dark">#1976d2</color>
     <color name="color_nav_bar">#1e88e5</color>
     <color name="color_accent">#ef6c00</color>
+    <color name="color_text">#de474747</color>
+    <color name="color_error">#ded40011</color>
 
 </resources>
