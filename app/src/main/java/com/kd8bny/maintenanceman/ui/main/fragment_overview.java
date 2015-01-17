@@ -14,17 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
-import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
-import com.kd8bny.maintenanceman.ui.settings.activity_settings;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -35,8 +30,8 @@ public class fragment_overview extends Fragment {
 
     private Toolbar toolbar;
     RecyclerView cardList, drawerList;
-    //RecyclerView.Adapter
     RecyclerView.LayoutManager cardMan, drawerMan;
+    RecyclerView.Adapter cardListAdapter;
     DrawerLayout Drawer;
     ActionBarDrawerToggle mDrawerToggle;
 
@@ -73,7 +68,8 @@ public class fragment_overview extends Fragment {
         cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
         //cardMan.setOrientation(LinearLayoutManager.VERTICAL);
-        cardList.setAdapter(populateCards());
+        populateCards();
+        cardList.setAdapter(cardListAdapter);
 
         //fab
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -123,14 +119,14 @@ public class fragment_overview extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        populateCards();
+        cardList.setAdapter(cardListAdapter);
     }
 
-    public adapter_overview populateCards(){
+    public void populateCards(){
         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
         vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-
-        return new adapter_overview(vehicleList);
+        cardListAdapter = new adapter_overview(vehicleList);
     }
 
     public adapter_drawer populateDrawer(){
@@ -145,36 +141,4 @@ public class fragment_overview extends Fragment {
         return new adapter_drawer(singleDrawerItems);
     }
 
-    /*public class DrawerItemClickListener implements RecyclerView.RecyclerListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            //selectItem(position);
-
-            switch (position){
-                case 0:
-                    Intent addFleetIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
-                    startActivity(addFleetIntent);
-                    break;
-
-                case 1:
-                    Intent addEventIntent = new Intent(getActivity(), activity_vehicleEvent.class);
-                    startActivity(addEventIntent);
-                    break;
-
-                case 2:
-                    Intent settingsIntent = new Intent(getActivity(), activity_settings.class);
-                    startActivity(settingsIntent);
-                    break;
-
-                case 3:
-
-                    break;
-
-                default:
-                    break;
-
-
-            }
-        }
-    }*/
 }

@@ -3,6 +3,8 @@ package com.kd8bny.maintenanceman.ui.history;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 public class fragment_history extends Fragment {
     private static final String TAG = "fragment_add_vehicleEvent";
 
+    private Toolbar toolbar;
     private SlidingUpPanelLayout addEvent;
 
     private String date;
@@ -46,20 +49,22 @@ public class fragment_history extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onResume();
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
+
         ArrayList<String> vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
         refID = vehicleSent.get(0);
 
-        return inflater.inflate(R.layout.fragment_history, container, false);
-    }
+        //Toolbar
+        toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
+        ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        ListView taskHist = (ListView) getActivity().findViewById(R.id.taskList);
+        //Slidy up menu
+        ListView taskHist = (ListView) view.findViewById(R.id.taskList);
         taskHist.setAdapter(poplulateAdapter());
 
-        addEvent = (SlidingUpPanelLayout) getActivity().findViewById(R.id.sliding_layout);
+        addEvent = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
         addEvent.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
@@ -90,6 +95,14 @@ public class fragment_history extends Fragment {
             }
         });
 
+        return view;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+
     }
 
     @Override
@@ -119,9 +132,11 @@ public class fragment_history extends Fragment {
 
             case R.id.menu_cancel:
                 getActivity().finish();
+
                 return true;
 
             default:
+
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -138,7 +153,7 @@ public class fragment_history extends Fragment {
 
 
     public ArrayAdapter poplulateAdapter(){
-        ArrayList<String> histEvent = new ArrayList<String>();
+        ArrayList<String> histEvent = new ArrayList<>();
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         ArrayList<ArrayList> vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
 
@@ -153,8 +168,7 @@ public class fragment_history extends Fragment {
             }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, histEvent);
-        return adapter;
+        return new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, histEvent);
     }
 
     public void getValues(){

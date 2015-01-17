@@ -50,9 +50,9 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(determineLayout(), viewGroup, false);
-                //inflate(R.layout.overview_card, viewGroup, false);
         return new AdapterViewHolder(itemView, vehicleList, DBisEmpty);
     }
+
 
     public int determineLayout(){
         ArrayList<String> vehicleSpecs = new ArrayList<String>();

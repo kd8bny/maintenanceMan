@@ -1,15 +1,14 @@
 package com.kd8bny.maintenanceman.ui.settings;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import com.kd8bny.maintenanceman.R;
 
 
-public class activity_settings extends Activity {
+public class activity_settings extends ActionBarActivity {
 
     private static final String TAG = "activity_settings";
 

@@ -1,14 +1,13 @@
 package com.kd8bny.maintenanceman.ui.history;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.ui.add.fragment_add_vehicleEvent;
 
-public class activity_history extends Activity {
+public class activity_history extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

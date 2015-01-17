@@ -4,6 +4,8 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +22,8 @@ import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 
 public class fragment_add_fleetRoster extends Fragment {
     private static final String TAG = "fragment_add_fleetRoster";
+
+    private Toolbar toolbar;
 
     private String myear;
     private String mmake;
@@ -39,14 +43,15 @@ public class fragment_add_fleetRoster extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, data.toString());
+        //Toolbar
+        toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
+        ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+
+        return view;
     }
 
     @Override
@@ -68,9 +73,11 @@ public class fragment_add_fleetRoster extends Fragment {
 
                 Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
+                return true;
 
             case R.id.menu_cancel:
                 getActivity().finish();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
