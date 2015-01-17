@@ -44,7 +44,6 @@ public class fragment_add_fleetRoster extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
-        view.isInEditMode();
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
