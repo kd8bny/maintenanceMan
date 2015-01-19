@@ -29,6 +29,11 @@ public class fragment_add_fleetRoster extends Fragment {
     private String mmake;
     private String mmodel;
     private String mengine;
+    private String mplate;
+    private String moil_filter;
+    private String moil_weight;
+    private String mtire_winter;
+    private String mtire_summer;
 
     public void fleetRoster(){
 
@@ -69,7 +74,7 @@ public class fragment_add_fleetRoster extends Fragment {
                 this.getValues();
 
                 fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(context);
-                fleetDB.saveEntry(context, mmake, mmodel, myear, mengine);
+                fleetDB.saveEntry(context, mmake, mmodel, myear, mengine, mplate, moil_filter, moil_weight, mtire_summer, mtire_winter);//TODO Arraylist or dict
 
                 Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
@@ -89,6 +94,13 @@ public class fragment_add_fleetRoster extends Fragment {
         mmake = ((EditText) getActivity().findViewById(R.id.val_spec_make)).getText().toString();
         mmodel = ((EditText) getActivity().findViewById(R.id.val_spec_model)).getText().toString();
         mengine = ((EditText) getActivity().findViewById(R.id.val_spec_engine)).getText().toString();
+
+        mplate = ((EditText) getActivity().findViewById(R.id.val_spec_plate)).getText().toString();
+        moil_filter = ((EditText) getActivity().findViewById(R.id.val_spec_oil_filter)).getText().toString();
+        moil_weight = ((EditText) getActivity().findViewById(R.id.val_spec_oil_weight)).getText().toString();
+        mtire_winter = ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_winter)).getText().toString();
+        mtire_summer = ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_summer)).getText().toString();
+
     }
 
 }
