@@ -22,7 +22,7 @@
         tools:context="com.kd8bny.maintenanceman.ui.settings.sub_settings">
 
         <TextView
-            android:text="@string/hello_world"
+            android:text="subsettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

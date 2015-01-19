@@ -9,86 +9,168 @@
         layout="@layout/toolbar">
     </include>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_below="@+id/tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="@dimen/header_horizontal_margin"
-        android:paddingEnd="@dimen/header_horizontal_margin"
-        android:paddingTop="@dimen/header_vertical_margin"
-        android:paddingBottom="@dimen/header_vertical_margin"
-        tools:context="com.kd8bny.maintenanceman.ui.main.fragment_add_fleet_roster">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/carSpecs"
-            layout="@layout/header"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </include>
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/header_horizontal_margin"
+            android:paddingEnd="@dimen/header_horizontal_margin"
+            android:paddingTop="@dimen/header_vertical_margin"
+            android:paddingBottom="@dimen/header_vertical_margin"
+            tools:context="com.kd8bny.maintenanceman.ui.main.fragment_add_fleet_roster">
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="100dp"
-            android:layout_below="@+id/carSpecs"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/val_spec_year"
-            android:hint="ex. 2000"
-            app:baseColor="@color/color_text"
-            app:primaryColor="@color/color_accent"
-            app:errorColor="@color/color_error"
-            app:floatingLabel="highlight"
-            app:floatingLabelText="@string/spec_year"
-            app:floatingLabelAlwaysShown="true"/>
+            <include
+                android:id="@+id/carSpecs"
+                layout="@layout/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/header_vertical_margin"
+                android:paddingBottom="@dimen/header_vertical_margin">
+            </include>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/val_spec_year"
-            android:id="@+id/val_spec_make"
-            android:hint="ex. Ford"
-            app:baseColor="@color/color_text"
-            app:primaryColor="@color/color_accent"
-            app:errorColor="@color/color_error"
-            app:floatingLabel="highlight"
-            app:floatingLabelText="@string/spec_make"
-            app:floatingLabelAlwaysShown="true"/>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/carSpecs"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/val_spec_year"
+                android:hint="ex. 2000"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_year"
+                app:floatingLabelAlwaysShown="true"/>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/val_spec_make"
-            android:id="@+id/val_spec_model"
-            android:hint="ex. Mustang"
-            app:baseColor="@color/color_text"
-            app:primaryColor="@color/color_accent"
-            app:errorColor="@color/color_error"
-            app:floatingLabel="highlight"
-            app:floatingLabelText="@string/spec_model"
-            app:floatingLabelAlwaysShown="true"/>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/val_spec_year"
+                android:id="@+id/val_spec_make"
+                android:hint="ex. Ford"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_make"
+                app:floatingLabelAlwaysShown="true"/>
 
-        <include
-            android:id="@+id/engineSpecs"
-            layout="@layout/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/val_spec_model">
-        </include>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/val_spec_make"
+                android:id="@+id/val_spec_model"
+                android:hint="ex. Mustang"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_model"
+                app:floatingLabelAlwaysShown="true"/>
 
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/val_spec_model"
+                android:id="@+id/val_spec_plate"
+                android:hint="ex. ABC123"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_plate"
+                app:floatingLabelAlwaysShown="true"/>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/engineSpecs"
-            android:id="@+id/val_spec_engine"
-            android:hint="ex. 3.8L V6"
-            app:baseColor="@color/color_text"
-            app:primaryColor="@color/color_accent"
-            app:errorColor="@color/color_error"
-            app:floatingLabel="highlight"
-            app:floatingLabelText="@string/spec_engine"
-            app:floatingLabelAlwaysShown="true"/>
+            <include
+                android:id="@+id/engineSpecs"
+                layout="@layout/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/header_vertical_margin"
+                android:paddingBottom="@dimen/header_vertical_margin"
+                android:layout_below="@id/val_spec_plate">
+            </include>
 
-    </RelativeLayout>
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/engineSpecs"
+                android:id="@+id/val_spec_engine"
+                android:hint="ex. 3.8L V6"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_engine"
+                app:floatingLabelAlwaysShown="true"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/val_spec_engine"
+                android:id="@+id/val_spec_oil_filter"
+                android:hint="ex. ST9801"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_oil_filter"
+                app:floatingLabelAlwaysShown="true"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/val_spec_oil_filter"
+                android:id="@+id/val_spec_oil_weight"
+                android:hint="ex. 5W30"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_oil_weight"
+                app:floatingLabelAlwaysShown="true"/>
+
+            <include
+                android:id="@+id/tires"
+                layout="@layout/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/header_vertical_margin"
+                android:paddingBottom="@dimen/header_vertical_margin"
+                android:layout_below="@id/val_spec_oil_weight">
+            </include>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tires"
+                android:id="@+id/val_spec_tire_size_winter"
+                android:hint="205/75R17"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_oil_weight"
+                app:floatingLabelAlwaysShown="true"/>
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/val_spec_tire_size_winter"
+                android:id="@+id/val_spec_tire_size_summer"
+                android:hint="195/75R14"
+                app:baseColor="@color/color_text"
+                app:primaryColor="@color/color_accent"
+                app:errorColor="@color/color_error"
+                app:floatingLabel="highlight"
+                app:floatingLabelText="@string/spec_oil_weight"
+                app:floatingLabelAlwaysShown="true"/>
+
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

@@ -70,14 +70,6 @@
             app:floatingLabelText="@string/spec_odo"
             app:floatingLabelAlwaysShown="true"/>
 
-        <include
-            android:id="@+id/carSpecsssss"
-            layout="@layout/header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/val_spec_event">
-        </include>
-
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
