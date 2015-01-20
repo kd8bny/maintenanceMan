@@ -1,0 +1,9 @@
+1-14-15
+Holy mother of changes batman!
+Material stuff including floating actions button. Changed navigation.
+Nav drawer (swipe left) ---Still pretty buggy
+1-13-15
+TESTING
+New Add/History Layout! :D
+Bug fix when vehicle DB is empty
+All around bug fixes
