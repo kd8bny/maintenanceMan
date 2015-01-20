@@ -24,7 +24,7 @@
             tools:context="com.kd8bny.maintenanceman.ui.main.fragment_add_fleet_roster">
 
             <include
-                android:id="@+id/carSpecs"
+                android:id="@+id/header_carSpecs"
                 layout="@layout/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/carSpecs"
+                android:layout_below="@+id/header_carSpecs"
                 android:inputType="number"
                 android:ems="10"
                 android:id="@+id/val_spec_year"
@@ -87,7 +87,7 @@
                 app:floatingLabelAlwaysShown="true"/>
 
             <include
-                android:id="@+id/engineSpecs"
+                android:id="@+id/header_engineSpecs"
                 layout="@layout/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/engineSpecs"
+                android:layout_below="@+id/header_engineSpecs"
                 android:id="@+id/val_spec_engine"
                 android:hint="ex. 3.8L V6"
                 app:baseColor="@color/color_text"
@@ -136,7 +136,7 @@
                 app:floatingLabelAlwaysShown="true"/>
 
             <include
-                android:id="@+id/tires"
+                android:id="@+id/header_tiresSpecs"
                 layout="@layout/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tires"
+                android:layout_below="@+id/header_tiresSpecs"
                 android:id="@+id/val_spec_tire_size_winter"
                 android:hint="205/75R17"
                 app:baseColor="@color/color_text"
