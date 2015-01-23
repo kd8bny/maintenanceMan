@@ -65,15 +65,15 @@ public class fragment_add_fleetRoster extends Fragment {
 
         vheader = view.findViewById(R.id.header_carSpecs);
         iheader = (ImageView) vheader.findViewById(R.id.header_icon);
-        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_card));
+        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_car));
 
         vheader = view.findViewById(R.id.header_engineSpecs);
         iheader = (ImageView) vheader.findViewById(R.id.header_icon);
-        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_card)); //TODO white icon
+        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_engine));
 
         vheader = view.findViewById(R.id.header_tiresSpecs);
         iheader = (ImageView) vheader.findViewById(R.id.header_icon);
-        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_card)); //TODO tire icon
+        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_tires));
 
         return view;
     }

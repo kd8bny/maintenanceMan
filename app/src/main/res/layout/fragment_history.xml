@@ -35,17 +35,10 @@
 
             tools:context="com.kd8bny.maintenanceman.ui.add.add_vehicleEvent"/>
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center|top"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:text="Specs.....Slide up to display vehicle specs"
-                android:textSize="16sp"
-                android:paddingBottom="40dp"/>
-
+        <include
+            android:id="@+id/slide_bar"
+            layout="@layout/slide_info">
+        </include>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </RelativeLayout>

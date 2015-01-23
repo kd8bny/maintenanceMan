@@ -7,4 +7,14 @@
     <color name="color_text">#de474747</color>
     <color name="color_error">#ded40011</color>
 
+    <!-- Headings -->
+    <array name="header_color">
+        <item>#fffff500</item>
+        <item>#ffff0026</item>
+        <item>#ff00ff5e</item>
+        <item>#ff00e0ff</item>
+        <item>#ff049500</item>
+        <item>#fff9a500</item>
+    </array>
+
 </resources>

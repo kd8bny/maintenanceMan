@@ -25,7 +25,7 @@
         android:paddingBottom="@dimen/header_vertical_margin">
 
         <include
-            android:id="@+id/carSpecs"
+            android:id="@+id/header_carSpecs"
             layout="@layout/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -38,7 +38,7 @@
             android:paddingBottom="@dimen/header_vertical_margin"
             android:layout_gravity="center_horizontal"
             android:id="@+id/vehicleSpinner"
-            android:layout_below="@+id/carSpecs"/>
+            android:layout_below="@+id/header_carSpecs"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/info_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="true"
+    card_view:cardCornerRadius="5dp"
+    android:layout_margin="5dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/colorHeader"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="start"
+            android:layout_alignParentStart="true"
+            android:src="@color/color_primary"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
+            android:text="Tires"
+
+            android:gravity="start"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"/>
+
+        <TextView
+            android:id="@+id/label_summer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/colorHeader"
+            android:text="Summer"
+
+            android:gravity="start"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
+            android:layout_marginBottom="@dimen/header_vertical_margin"
+            android:layout_marginTop="@dimen/header_vertical_margin"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/summer_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/colorHeader"
+            android:text="size"
+            android:layout_marginTop="@dimen/header_vertical_margin"
+
+
+            android:layout_toEndOf="@+id/label_summer"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
+            android:layout_marginBottom="@dimen/header_vertical_margin"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/label_winter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/label_summer"
+            android:text="Winter"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
+            android:layout_marginTop="@dimen/header_vertical_margin"
+            android:layout_marginBottom="@dimen/header_vertical_margin"
+            android:layout_toEndOf="@+id/make"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/winter_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/summer_size"
+            android:text="size"
+            android:layout_marginTop="@dimen/header_vertical_margin"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
+            android:layout_marginBottom="@dimen/header_vertical_margin"
+            android:layout_toEndOf="@+id/label_winter"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

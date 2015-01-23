@@ -37,7 +37,7 @@ public class fragment_overview extends Fragment {
 
     FloatingActionButton fab;
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
+    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
 
     public fragment_overview() {
         // Required empty public constructor
