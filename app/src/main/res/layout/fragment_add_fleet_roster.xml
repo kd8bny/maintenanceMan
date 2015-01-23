@@ -155,7 +155,7 @@
                 app:primaryColor="@color/color_accent"
                 app:errorColor="@color/color_error"
                 app:floatingLabel="highlight"
-                app:floatingLabelText="@string/spec_oil_weight"
+                app:floatingLabelText="@string/spec_tire_size_winter"
                 app:floatingLabelAlwaysShown="true"/>
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -168,7 +168,7 @@
                 app:primaryColor="@color/color_accent"
                 app:errorColor="@color/color_error"
                 app:floatingLabel="highlight"
-                app:floatingLabelText="@string/spec_oil_weight"
+                app:floatingLabelText="@string/spec_tire_size_summer"
                 app:floatingLabelAlwaysShown="true"/>
 
         </RelativeLayout>
