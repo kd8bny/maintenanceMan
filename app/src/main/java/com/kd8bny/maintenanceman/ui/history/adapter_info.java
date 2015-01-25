@@ -13,7 +13,7 @@ import com.kd8bny.maintenanceman.R;
 import java.util.ArrayList;
 
 public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private static final String TAG = "adapter_overview";
+    private static final String TAG = "adapter_info";
 
     public ArrayList<ArrayList> vehicleInfo = new ArrayList<>();
     public ArrayList<String> cardInfo = new ArrayList<>();
@@ -63,7 +63,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         cardInfo = vehicleInfo.get(i);
-        Log.i(TAG,cardInfo+"");
         switch (getItemViewType(i)) {
             case VIEW_GENERAL:
                 ViewHolderGeneral viewHolderGeneral = (ViewHolderGeneral) viewHolder;
