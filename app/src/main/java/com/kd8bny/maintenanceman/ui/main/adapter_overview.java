@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.history.activity_history;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
     private static final String TAG = "adapter_overview";
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
+    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
     private boolean DBisEmpty;
 
     public adapter_overview(ArrayList vehicleList) {
@@ -54,7 +54,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
 
     public int determineLayout(){
-        ArrayList<String> vehicleSpecs = new ArrayList<String>();
+        ArrayList<String> vehicleSpecs = new ArrayList<>();
         vehicleSpecs.addAll(vehicleList.get(0));
 
         if(vehicleSpecs.get(0) != null) {
@@ -75,10 +75,9 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
             super(view);
 
-            view.setTag(vehicleList);
-            if(!DBisEmpty) {
-                view.setOnClickListener(this);
-            }
+            view.setTag(R.id.tag_0, vehicleList);
+            view.setTag(R.id.tag_1, DBisEmpty);
+            view.setOnClickListener(this);
 
             vyear = (TextView) view.findViewById(R.id.year);
             vmake = (TextView) view.findViewById(R.id.make);
@@ -88,11 +87,17 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
         @Override
         public void onClick(View view) {
-            ArrayList<ArrayList> vehicleList = (ArrayList<ArrayList>) view.getTag();
+            ArrayList<ArrayList> vehicleList = (ArrayList<ArrayList>) view.getTag(R.id.tag_0);
+            Boolean DBisEmpty = (Boolean) view.getTag(R.id.tag_1);
 
-            Intent viewIntent = new Intent(view.getContext(), activity_history.class);
-            viewIntent.putStringArrayListExtra("vehicleSent", vehicleList.get(getPosition()));
-            view.getContext().startActivity(viewIntent);
+            if(!DBisEmpty) {
+                Intent viewIntent = new Intent(view.getContext(), activity_history.class);
+                viewIntent.putStringArrayListExtra("vehicleSent", vehicleList.get(getPosition()));
+                view.getContext().startActivity(viewIntent);
+            }else{
+                Intent viewAddIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
+                view.getContext().startActivity(viewAddIntent);
+            }
         }
 
 }
