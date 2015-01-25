@@ -7,13 +7,13 @@
         android:title="@string/menu_save"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_ok"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/header_horizontal_margin"
         app:showAsAction="ifRoom" />
 
     <item android:id="@+id/menu_cancel"
         android:title="@string/menu_cancel"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_not_ok"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/header_horizontal_margin"
         app:showAsAction="ifRoom" />
 </menu>

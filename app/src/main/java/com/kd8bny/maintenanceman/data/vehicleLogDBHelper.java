@@ -50,18 +50,25 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         Log.w(vehicleLogDBHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
-        onCreate(db);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
+        //onCreate(db);
     }
 
     public void createDatabase(Context context){
         try {
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
-            vehicleLogDB.execSQL(DATABASE_CREATE);
-        }
 
-        catch(Exception e){
-            Log.e(TAG,e.toString());
+            vehicleLogDB.execSQL(DATABASE_CREATE);
+            vehicleLogDB.setVersion(DB_VERSION);
+
+            Log.i(TAG,"vehiclelog created");
+        }catch(Exception e){
+            Log.e(TAG,"Error creating db");
+        }finally {
+            if(vehicleLogDB.getVersion() < DB_VERSION){
+                onUpgrade(vehicleLogDB, vehicleLogDB.getVersion(), DB_VERSION);
+                Log.i(TAG,(vehicleLogDB.getVersion())+"");
+            }
         }
     }
 
@@ -84,7 +91,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     public ArrayList<ArrayList> getEntries(Context context, String refID){
 
-        this.createDatabase(context);
+        createDatabase(context);
         Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog WHERE refID = '" + refID + "';", null);
 
         int refIDCol = cursor.getColumnIndex("refID");
@@ -121,6 +128,16 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
         return vehicleList;
 
+    }
+    public void deleteEntry(Context context, String date,  String odo, String event){
+        createDatabase(context);
+
+        //("DELETE FROM grandFleetRoster WHERE refID = '" + refID + "';");
+
+        vehicleLogDB.execSQL("DELETE FROM grandVehicleLog WHERE " +
+                "date = '" + date + "'" +
+                " AND event = '" + event +
+                "' AND odo = '" + odo + "';");
     }
 
 }

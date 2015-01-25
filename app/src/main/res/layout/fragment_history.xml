@@ -26,6 +26,7 @@
             android:id="@+id/taskList"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:longClickable="true"
             android:orientation="vertical"
             android:paddingLeft="@dimen/header_horizontal_margin"
             android:paddingRight="@dimen/header_horizontal_margin"

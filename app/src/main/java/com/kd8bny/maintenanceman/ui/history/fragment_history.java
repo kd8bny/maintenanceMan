@@ -1,7 +1,9 @@
 package com.kd8bny.maintenanceman.ui.history;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -16,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,10 +46,13 @@ public class fragment_history extends Fragment {
     RecyclerView.LayoutManager cardMan;
     RecyclerView.Adapter cardListAdapter;
 
-
+    private ArrayAdapter taskAdapter;
     private String refID;
     public ArrayList<ArrayList> vehicleList;
     public ArrayList<String> vehicleSent;
+
+    private ArrayList<String> histEvent;
+    private ArrayList<ArrayList> vehicleHist;
 
     public fragment_history() {
         // Required empty public constructor
@@ -75,7 +81,38 @@ public class fragment_history extends Fragment {
 
         //Task History
         ListView taskHist = (ListView) view.findViewById(R.id.taskList);
-        taskHist.setAdapter(poplulateAdapter());
+        poplulateAdapter();
+        taskHist.setAdapter(taskAdapter);
+        taskHist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int pos, long id) {
+                Log.i(TAG, "Long");
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Delete " + histEvent.get(pos));
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        taskAdapter.remove(taskAdapter.getItem(pos));
+
+                        ArrayList<String> temp = vehicleHist.get(pos);
+                        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity());
+                        vehicleDB.deleteEntry(getActivity(), temp.get(1), temp.get(2), temp.get(3));
+
+                    }
+
+                });
+                builder.show();
+                return true;
+            }
+        });
 
         //Slide-y up menu
         final View include;
@@ -190,10 +227,10 @@ public class fragment_history extends Fragment {
         cardListAdapter = new adapter_info(vehicleInfo);
     }
 
-    public ArrayAdapter poplulateAdapter(){
-        ArrayList<String> histEvent = new ArrayList<>();
+    public void poplulateAdapter(){
+        histEvent = new ArrayList<>();
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        ArrayList<ArrayList> vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
 
         ArrayList<String> temp;
         for(int i = 0; i < vehicleHist.size(); i++){
@@ -205,7 +242,7 @@ public class fragment_history extends Fragment {
             }
         }
 
-        return new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, histEvent);
+        taskAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, histEvent);
     }
 
 }

@@ -184,7 +184,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
     }
 
     public void deleteEntry(Context context, String refID){
-        fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
+        createDatabase(context);
         fleetRosterDB.execSQL("DELETE FROM grandFleetRoster WHERE refID = '" + refID + "';");
     }
 
