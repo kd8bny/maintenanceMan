@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.ui.history;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.ui.edit.activity_edit;
 import com.kd8bny.maintenanceman.ui.main.adapter_overview;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
@@ -53,7 +55,7 @@ public class fragment_history extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
 
     }
 
@@ -90,14 +92,14 @@ public class fragment_history extends Fragment {
 
             @Override
             public void onPanelCollapsed(View view) {
-                //setMenuVisibility(false);
+                setMenuVisibility(false);
                 direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_up));
 
             }
 
             @Override
             public void onPanelExpanded(View view) {
-                //setMenuVisibility(true);
+                setMenuVisibility(true);
                 direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_down));
 
             }
@@ -134,14 +136,23 @@ public class fragment_history extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        //inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+        inflater.inflate(R.menu.menu_info, menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_edit:
+                Intent editIntent = new Intent(getActivity(), activity_edit.class);
+                editIntent.putStringArrayListExtra("vehicleSent", vehicleSent);
+                getActivity().startActivity(editIntent);
 
-        return super.onOptionsItemSelected(item);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
     /*@Override
     public void onBackPressed() {

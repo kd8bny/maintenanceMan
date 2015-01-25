@@ -8,7 +8,8 @@
     android:clickable="true"
     android:focusable="true"
     card_view:cardCornerRadius="5dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    card_view:cardElevation="10sp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,51 +17,35 @@
 
         <ImageView
             android:id="@+id/carPic"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:scaleType="fitCenter"
+            android:elevation="50sp"
             android:gravity="start"
             android:layout_alignParentStart="true"
-
-            android:layout_marginBottom="@dimen/header_vertical_margin"
-            android:src="@drawable/ic_action_car_main"
-            android:tint="@color/color_accent"
-            android:layout_centerInParent="true"/>
+            android:src="@drawable/ic_action_car_icon_md"
+            android:background="@color/color_primary_dark"
+            android:tint="@android:color/white"/>
 
         <TextView
             android:id="@+id/year"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/horLine"
+            android:layout_toEndOf="@+id/carPic"
             android:text="Year"
-
-            android:gravity="end"
-            android:layout_marginEnd="@dimen/header_horizontal_margin"
-            android:layout_marginBottom="@dimen/header_vertical_margin"
+            android:layout_marginTop="@dimen/header_vertical_margin"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
             android:textColor="@color/color_primary"
             android:textSize="45sp"/>
-
-        <View
-            android:id="@+id/horLine"
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/carPic"
-            android:gravity="start"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="@android:color/darker_gray"/>
 
         <TextView
             android:id="@+id/make"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/horLine"
+            android:layout_toEndOf="@+id/carPic"
+            android:layout_below="@+id/year"
             android:text="make"
-            android:gravity="start"
             android:layout_marginTop="@dimen/header_vertical_margin"
-            android:layout_alignParentStart="true"
             android:layout_marginStart="@dimen/header_horizontal_margin"
             android:layout_marginBottom="@dimen/header_vertical_margin"
             android:textColor="@android:color/black"
@@ -70,10 +55,11 @@
             android:id="@+id/model"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/horLine"
-            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/year"
+            android:layout_toEndOf="@id/make"
             android:text="model"
             android:layout_marginTop="@dimen/header_vertical_margin"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
             android:layout_marginBottom="@dimen/header_vertical_margin"
             android:textColor="@android:color/black"
             android:textSize="20sp"/>
@@ -82,13 +68,11 @@
             android:id="@+id/engine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_toEndOf="@+id/model"
             android:text="engine"
-            android:gravity="end"
-            android:layout_below="@+id/horLine"
-            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/year"
             android:layout_marginTop="@dimen/header_vertical_margin"
-            android:layout_marginEnd="@dimen/header_horizontal_margin"
+            android:layout_marginStart="@dimen/header_horizontal_margin"
             android:layout_marginBottom="@dimen/header_vertical_margin"
             android:textColor="@android:color/black"
             android:textSize="20sp"/>

@@ -40,6 +40,14 @@
                 android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
         </activity>
         <activity
+            android:name=".ui.edit.activity_edit"
+            android:label="@string/title_edit"
+            android:parentActivityName=".ui.main.activity_main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+        </activity>
+        <activity
             android:name=".ui.settings.activity_settings"
             android:label="@string/title_settings"
             android:parentActivityName=".ui.main.activity_main" >

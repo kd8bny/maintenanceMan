@@ -106,7 +106,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void saveEntry(Context context, String make, String model, String year, String engine,
+    public void saveEntry(Context context, String refID, String make, String model, String year, String engine,
                           String plate, String oilFilter, String oilWeight, String tireSummer, String tireWinter) {
         Log.d(TAG, "Saving entry");
 
@@ -117,7 +117,9 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-            UUID refID = UUID.randomUUID();
+            if (refID == null) {
+                refID = (UUID.randomUUID()).toString();
+            }
             fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
             fleetRosterDB.execSQL("INSERT INTO grandFleetRoster (refID, make, model, year, engine, plate, oilFilter, oilWeight, tireSummer, tireWinter) " +
