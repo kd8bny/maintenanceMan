@@ -15,7 +15,7 @@ import java.util.UUID;
 public class fleetRosterDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "fleetRosterDBHelper";
 
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2; //v16
     public static final String DB_NAME = "fleetRoster.db";
     SQLiteDatabase fleetRosterDB = null;
 
@@ -67,17 +67,17 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         try {
             Log.d(TAG,"trying");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ROSTER_NEW + " AS SELECT * FROM " + TABLE_ROSTER);
-            Log.d(TAG, "create new");
-            db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " ADD COLUMN " + COLUMN_ROSTER_PLATE);
-            db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " ADD COLUMN " + COLUMN_ROSTER_OIL_FILTER);
-            db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " ADD COLUMN " + COLUMN_ROSTER_OIL_WEIGHT);
-            db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " ADD COLUMN " + COLUMN_ROSTER_TIRE_SUMMER);
-            db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " ADD COLUMN " + COLUMN_ROSTER_TIRE_WINTER);
+            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_PLATE + " = '' WHERE " + COLUMN_ROSTER_PLATE + " IS NULL");
+            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_OIL_FILTER + " = '' WHERE " + COLUMN_ROSTER_OIL_FILTER + " IS NULL");
+            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_OIL_WEIGHT + " = '' WHERE " + COLUMN_ROSTER_OIL_WEIGHT + " IS NULL");
+            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_TIRE_SUMMER + " = '' WHERE " + COLUMN_ROSTER_TIRE_SUMMER + " IS NULL");
+            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_TIRE_WINTER + " = '' WHERE " + COLUMN_ROSTER_TIRE_WINTER + " IS NULL");
 
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_ROSTER);
             db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " RENAME TO " + TABLE_ROSTER);
+
             onCreate(db);
-        db.setTransactionSuccessful();
+            db.setTransactionSuccessful();
         } catch (Exception e){
             Log.e(TAG,e.toString());
             Log.e(TAG, "Error updating db");
@@ -157,7 +157,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
 
         if(cursor != null && (cursor.getCount() > 0)) {
             do {
-                ArrayList<String> singleVehicleList = new ArrayList<String>();
+                ArrayList<String> singleVehicleList = new ArrayList<>();
 
                 singleVehicleList.add(cursor.getString(refIDCol));
                 singleVehicleList.add(cursor.getString(yearCol));
