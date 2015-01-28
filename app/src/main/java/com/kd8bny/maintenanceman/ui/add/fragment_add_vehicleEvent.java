@@ -1,10 +1,6 @@
 package com.kd8bny.maintenanceman.ui.add;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -18,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -29,6 +25,7 @@ import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class fragment_add_vehicleEvent extends Fragment {
@@ -36,9 +33,12 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     private Toolbar toolbar;
     private Spinner vehicleSpinner;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> spinnerAdapter;
+    private ArrayAdapter<String> eventAdapter;
+
 
     private EditText dateEdit;
+    private AutoCompleteTextView eventEdit;
 
     private String date;
     private String odo;
@@ -46,6 +46,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private String refID;
 
     ArrayList<ArrayList> vehicleList;
+    ArrayList<String> eventList;
 
     public fragment_add_vehicleEvent() {
         // Required empty public constructor
@@ -70,9 +71,9 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         //Spinner
         vehicleSpinner = (Spinner) view.findViewById(R.id.vehicleSpinner);
-        adapter = setVehicles();
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        vehicleSpinner.setAdapter(adapter);
+        spinnerAdapter = setVehicles();
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleSpinner.setAdapter(spinnerAdapter);
 
         //Date
         dateEdit = (EditText) view.findViewById(R.id.val_spec_date);
@@ -84,6 +85,12 @@ public class fragment_add_vehicleEvent extends Fragment {
                 datePickerFrag.show(getFragmentManager(), "datePicker");
             }
         });
+
+        //Event
+        eventEdit = (AutoCompleteTextView) view.findViewById(R.id.val_spec_event);
+        if(getEvents() != null) {
+            eventEdit.setAdapter(eventAdapter);
+        }
 
         return view;
     }
@@ -107,7 +114,7 @@ public class fragment_add_vehicleEvent extends Fragment {
             case R.id.menu_save:
                 Context context = getActivity().getApplicationContext();
 
-                getValues();
+                getVehicles();
                 vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(context);
                 vehicleDB.saveEntry(context, refID, date, odo, task);
 
@@ -148,13 +155,44 @@ public class fragment_add_vehicleEvent extends Fragment {
         return new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_item, singleVehicle);
     }
 
-    public void getValues(){
+    public void getVehicles(){
         int pos = vehicleSpinner.getSelectedItemPosition();
         ArrayList<String> temp = vehicleList.get(pos);
         refID = temp.get(0);
         date = ((EditText) getActivity().findViewById(R.id.val_spec_date)).getText().toString();
         task = ((EditText) getActivity().findViewById(R.id.val_spec_event)).getText().toString();
         odo = ((EditText) getActivity().findViewById(R.id.val_spec_odo)).getText().toString();
+    }
+
+    public ArrayAdapter<String> getEvents(){
+        int pos = vehicleSpinner.getSelectedItemPosition();
+        ArrayList<String> tempVehicle = vehicleList.get(pos);
+        refID = tempVehicle.get(0);
+
+        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+        eventList = new ArrayList<>();
+        ArrayList<String> temp;
+
+        for(int i=0; i<tempEvents.size(); i++) {
+            temp = tempEvents.get(i);
+            if(temp.get(0) != null){
+                eventList.add(temp.get(3));
+            }else {
+                Log.i(TAG,"nothing to show");
+                return null;
+            }
+        }
+
+        // Remove dup's
+        HashSet tempHS = new HashSet();
+        tempHS.addAll(eventList);
+        eventList.clear();
+        eventList.addAll(tempHS);
+
+        eventAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,eventList);
+
+        return eventAdapter;
     }
 
 
