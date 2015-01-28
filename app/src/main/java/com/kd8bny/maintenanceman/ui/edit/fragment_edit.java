@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -116,16 +117,16 @@ public class fragment_edit extends Fragment {
     }
 
     public void setValues(View view){
-        ((EditText) view.findViewById(R.id.val_spec_year)).setText((vehicleSent.get(1)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_make)).setText((vehicleSent.get(2)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_model)).setText((vehicleSent.get(3)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_engine)).setText((vehicleSent.get(4)).toString());
+        ((EditText) view.findViewById(R.id.val_spec_year)).setText((vehicleSent.get(1)));
+        ((EditText) view.findViewById(R.id.val_spec_make)).setText((vehicleSent.get(2)));
+        ((EditText) view.findViewById(R.id.val_spec_model)).setText((vehicleSent.get(3)));
+        ((EditText) view.findViewById(R.id.val_spec_engine)).setText((vehicleSent.get(4)));
 
-        ((EditText) view.findViewById(R.id.val_spec_plate)).setText((vehicleSent.get(5)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_oil_filter)).setText((vehicleSent.get(6)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_oil_weight)).setText((vehicleSent.get(7)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_tire_size_winter)).setText((vehicleSent.get(8)).toString());
-        ((EditText) view.findViewById(R.id.val_spec_tire_size_summer)).setText((vehicleSent.get(9)).toString());
+        ((EditText) view.findViewById(R.id.val_spec_plate)).setText((vehicleSent.get(5)));
+        ((EditText) view.findViewById(R.id.val_spec_oil_filter)).setText((vehicleSent.get(6)));
+        ((EditText) view.findViewById(R.id.val_spec_oil_weight)).setText((vehicleSent.get(7)));
+        ((EditText) view.findViewById(R.id.val_spec_tire_size_winter)).setText((vehicleSent.get(8)));
+        ((EditText) view.findViewById(R.id.val_spec_tire_size_summer)).setText((vehicleSent.get(9)));
 
     }
 

@@ -41,19 +41,19 @@
             android:layout_below="@+id/header_carSpecs"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/val_spec_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:id="@+id/val_spec_date"
             android:layout_below="@+id/vehicleSpinner"
             android:hint="1/17/15"
+
             app:baseColor="@color/color_text"
             app:primaryColor="@color/color_accent"
             app:errorColor="@color/color_error"
             app:floatingLabel="highlight"
             app:floatingLabelText="@string/spec_date"
-            app:floatingLabelAlwaysShown="true"/>
+            app:floatingLabelAlwaysShown="true"
+            android:singleLine="true"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
@@ -68,7 +68,8 @@
             app:errorColor="@color/color_error"
             app:floatingLabel="highlight"
             app:floatingLabelText="@string/spec_odo"
-            app:floatingLabelAlwaysShown="true"/>
+            app:floatingLabelAlwaysShown="true"
+            android:singleLine="true"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
@@ -81,7 +82,8 @@
             app:errorColor="@color/color_error"
             app:floatingLabel="highlight"
             app:floatingLabelText="@string/spec_event"
-            app:floatingLabelAlwaysShown="true"/>
+            app:floatingLabelAlwaysShown="true"
+            android:singleLine="true"/>
 
     </RelativeLayout>
     </ScrollView>

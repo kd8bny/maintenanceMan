@@ -86,7 +86,6 @@ public class fragment_history extends Fragment {
         taskHist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int pos, long id) {
-                Log.i(TAG, "Long");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(true);
                 builder.setTitle("Delete " + histEvent.get(pos));

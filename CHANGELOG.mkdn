@@ -1,3 +1,13 @@
+1-17-15
+New layouts
+And icons!
+
+1-16-15
+Major Major Major Major Major Major Major  Updates!
+Material design almost complete.
+
+1-15-15
+Fixed add bug when DB is empty. Fixed missing color res for non api21 devices
 1-14-15
 Holy mother of changes batman!
 Material stuff including floating actions button. Changed navigation.

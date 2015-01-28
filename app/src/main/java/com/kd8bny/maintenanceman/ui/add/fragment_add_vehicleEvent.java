@@ -1,10 +1,15 @@
 package com.kd8bny.maintenanceman.ui.add;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -20,6 +26,7 @@ import android.widget.Toast;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
 import java.util.ArrayList;
 
@@ -30,6 +37,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     private Toolbar toolbar;
     private Spinner vehicleSpinner;
     private ArrayAdapter<String> adapter;
+
+    private EditText dateEdit;
 
     private String date;
     private String odo;
@@ -59,10 +68,22 @@ public class fragment_add_vehicleEvent extends Fragment {
         ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
+        //Spinner
         vehicleSpinner = (Spinner) view.findViewById(R.id.vehicleSpinner);
         adapter = setVehicles();
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(adapter);
+
+        //Date
+        dateEdit = (EditText) view.findViewById(R.id.val_spec_date);
+        dateEdit.setInputType(InputType.TYPE_NULL);
+        dateEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_datePicker datePickerFrag = new dialog_datePicker();
+                datePickerFrag.show(getFragmentManager(), "datePicker");
+            }
+        });
 
         return view;
     }
