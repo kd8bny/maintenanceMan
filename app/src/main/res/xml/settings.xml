@@ -2,7 +2,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <!--<PreferenceCategory
         android:title="@string/pref_cat_db" >
         <PreferenceScreen
             android:title="@string/pref_delete_fleet_roster">
@@ -10,7 +10,7 @@
             <intent android:action=".ui.settings.activity_sub_settings"/>
         </PreferenceScreen>
 
-        </PreferenceCategory>
+        </PreferenceCategory>-->
 
     <PreferenceCategory
         android:title="@string/pref_cat_about" />

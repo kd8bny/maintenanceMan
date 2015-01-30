@@ -4,13 +4,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.kd8bny.maintenanceman.R;
 
 
 public class activity_settings extends ActionBarActivity {
-
     private static final String TAG = "activity_settings";
+
+    private Toolbar toolbar;
 
 
     @Override
@@ -18,13 +20,19 @@ public class activity_settings extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        //Toolbar
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragmentContainer_settings);
 
         if (fragment == null) {
             fragment = new fragment_settings();
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer_settings, fragment)
+                    .replace(R.id.fragmentContainer_settings, fragment)
                     .commit();
         }
 
