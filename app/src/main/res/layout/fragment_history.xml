@@ -12,25 +12,26 @@
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_below="@+id/tool_bar"
+
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:panelHeight="68dp"
+        sothree:panelHeight="38dp"
         sothree:shadowHeight="4dp">
 
         <ListView
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/taskList"
+            android:layout_below="@+id/tool_bar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:longClickable="true"
             android:orientation="vertical"
             android:paddingLeft="@dimen/header_horizontal_margin"
             android:paddingRight="@dimen/header_horizontal_margin"
-            android:paddingTop="@dimen/header_vertical_margin"
+            android:paddingTop="60dp"
             android:paddingBottom="@dimen/header_vertical_margin"
             tools:context="com.kd8bny.maintenanceman.ui.add.add_vehicleEvent"/>
 

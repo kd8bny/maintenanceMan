@@ -2,7 +2,6 @@ package com.kd8bny.maintenanceman.ui.history;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,25 +10,24 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.edit.activity_edit;
-import com.kd8bny.maintenanceman.ui.main.adapter_overview;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
@@ -42,6 +40,7 @@ public class fragment_history extends Fragment {
     private Toolbar toolbar;
     private SlidingUpPanelLayout addEvent;
     private ImageView direction;
+    private ImageButton button_del, button_edit;
     RecyclerView cardList;
     RecyclerView.LayoutManager cardMan;
     RecyclerView.Adapter cardListAdapter;
@@ -68,6 +67,8 @@ public class fragment_history extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View include;
+
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
@@ -89,13 +90,7 @@ public class fragment_history extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(true);
                 builder.setTitle("Delete " + histEvent.get(pos));
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
-
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
+                builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
@@ -114,22 +109,59 @@ public class fragment_history extends Fragment {
         });
 
         //Slide-y up menu
-        final View include;
-
         include = view.findViewById(R.id.slide_bar);
         direction = (ImageView) include.findViewById(R.id.slide_icon);
+        button_del = (ImageButton) include.findViewById(R.id.slide_button_del);
+        button_edit = (ImageButton) include.findViewById(R.id.slide_button_edit);
+
+        button_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editIntent = new Intent(getActivity(), activity_edit.class);
+                editIntent.putStringArrayListExtra("vehicleSent", vehicleSent);
+                getActivity().startActivity(editIntent);
+            }
+        });
+
+        button_del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you would like to delete this vehicle?");
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(getActivity());
+                        fleetDB.deleteEntry(getActivity(), refID);
+
+                    }
+
+                });
+                builder.show();
+            }
+        });
+        button_edit.setVisibility(View.INVISIBLE);
+        button_del.setVisibility(View.INVISIBLE);
 
         addEvent = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
         addEvent.setPanelSlideListener(new PanelSlideListener() {
             @Override
-            public void onPanelSlide(View view, float v) {
-
+            public void onPanelSlide(View view, float slideOffset) {
+                if (slideOffset > 0.2) {
+                    toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                } else {
+                    toolbar.animate().translationY(+toolbar.getTop()).setInterpolator(new AccelerateInterpolator()).start();
+                }
 
             }
 
             @Override
             public void onPanelCollapsed(View view) {
                 setMenuVisibility(false);
+                button_edit.setVisibility(View.INVISIBLE);
+                button_del.setVisibility(View.INVISIBLE);
                 direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_up));
 
             }
@@ -137,6 +169,8 @@ public class fragment_history extends Fragment {
             @Override
             public void onPanelExpanded(View view) {
                 setMenuVisibility(true);
+                button_edit.setVisibility(View.VISIBLE);
+                button_del.setVisibility(View.VISIBLE);
                 direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_down));
 
             }
@@ -173,16 +207,15 @@ public class fragment_history extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_info, menu);
+        inflater.inflate(R.menu.menu_history, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_edit:
-                Intent editIntent = new Intent(getActivity(), activity_edit.class);
-                editIntent.putStringArrayListExtra("vehicleSent", vehicleSent);
-                getActivity().startActivity(editIntent);
+            case R.id.menu_add:
+                Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
+                getActivity().startActivity(addIntent);
 
                 return true;
 

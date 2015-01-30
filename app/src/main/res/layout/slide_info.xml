@@ -3,24 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/slide_icon"
-        android:layout_height="60dp"
-        android:layout_width="60dp"
-        android:gravity="start"
-        android:paddingTop="@dimen/header_vertical_margin"
-        android:paddingStart="@dimen/header_vertical_margin"
-        android:src="@drawable/ic_action_up"/>
-
-    <TextView
+    <LinearLayout
         android:id="@+id/slidebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/header_vertical_margin"
-        android:gravity="center|top"
-        android:text="Vehicle Info"
-        android:textSize="40sp"
-        android:paddingBottom="@dimen/header_vertical_margin"/>
+        android:elevation="4dp"
+        android:background="@color/color_primary">
+
+        <ImageView
+            android:id="@+id/slide_icon"
+            android:layout_height="32dp"
+            android:layout_width="32dp"
+            android:gravity="start"
+            android:paddingStart="@dimen/header_vertical_margin"
+            android:src="@drawable/ic_action_up"
+            android:tint="@android:color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/header_vertical_margin"
+            android:gravity="center"
+            android:layout_weight="3"
+            android:text="Vehicle Info"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:paddingBottom="@dimen/header_vertical_margin"/>
+
+        <ImageButton
+            android:id="@+id/slide_button_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:title="@string/menu_del"
+            android:src="@drawable/ic_action_trash"
+            android:background="@color/color_primary"
+            android:clickable="true"/>
+
+        <ImageButton
+            android:id="@+id/slide_button_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:title="@string/menu_edit"
+            android:gravity="end"
+            android:src="@drawable/ic_action_edit"
+            android:background="@color/color_primary"
+            android:clickable="true"/>
+
+    </LinearLayout>
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -37,3 +67,4 @@
         </FrameLayout>
 
 </RelativeLayout>
+
