@@ -61,14 +61,11 @@ public class fragment_history extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        setMenuVisibility(false);
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View include;
-
         View view = inflater.inflate(R.layout.fragment_history, container, false);
 
         vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
@@ -109,7 +106,7 @@ public class fragment_history extends Fragment {
         });
 
         //Slide-y up menu
-        include = view.findViewById(R.id.slide_bar);
+        final View include = view.findViewById(R.id.slide_bar);
         direction = (ImageView) include.findViewById(R.id.slide_icon);
         button_del = (ImageButton) include.findViewById(R.id.slide_button_del);
         button_edit = (ImageButton) include.findViewById(R.id.slide_button_edit);
@@ -136,6 +133,7 @@ public class fragment_history extends Fragment {
                         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(getActivity());
                         fleetDB.deleteEntry(getActivity(), refID);
 
+                        getActivity().finish();
                     }
 
                 });
