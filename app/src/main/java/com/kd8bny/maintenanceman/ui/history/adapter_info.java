@@ -123,10 +123,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
 
-            Log.i(TAG,hMdp+"");
-            Log.i(TAG,metrics.density+"den");
-            Log.i(TAG,hMargin+"");
-
             HashSet tempHS = new HashSet();
             tempHS.addAll(cardInfo);
 
