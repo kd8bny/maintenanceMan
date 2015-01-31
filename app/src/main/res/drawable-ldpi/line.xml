@@ -4,6 +4,6 @@
     android:shape="line">
     <solid android:color="#00FFFFFF"/>
     <stroke android:width="5dp"
-        android:color="@color/color_primary"/>
+        android:color="@color/primary"/>
 
 </shape>

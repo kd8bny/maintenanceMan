@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#1e88e5</color>
-    <color name="color_primary_dark">#1976d2</color>
-    <color name="color_nav_bar">#1e88e5</color>
-    <color name="color_accent">#ef6c00</color>
-    <color name="color_text">#de474747</color>
-    <color name="color_error">#ded40011</color>
+
+    <color name="primary">#03A9F4</color>
+    <color name="primary_dark">#0288D1</color>
+    <color name="primary_light">#B3E5FC</color>
+    <color name="accent">#FF5722</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="error">#d50000</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="header">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
 
     <!-- Headings -->
     <array name="header_color">
-        <item>#fffff500</item>
-        <item>#ffff0026</item>
-        <item>#ff00ff5e</item>
-        <item>#ff00e0ff</item>
-        <item>#ff049500</item>
-        <item>#fff9a500</item>
+        <item>#f44336</item>
+        <item>#3f51b5</item>
+        <item>#4caf50</item>
+        <item>#009688</item>
+        <item>#673ab7</item>
     </array>
 
 </resources>

@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"/>
+
             <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
@@ -37,9 +38,9 @@
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_action_add"
-                fab:fab_colorNormal="@color/color_primary"
-                fab:fab_colorPressed="@color/color_accent"
-                fab:fab_colorRipple="@color/color_primary" />
+                fab:fab_colorNormal="@color/accent"
+                fab:fab_colorPressed="@color/primary_light"
+                fab:fab_colorRipple="@color/primary_dark" />
         </FrameLayout>
 
         <android.support.v7.widget.RecyclerView

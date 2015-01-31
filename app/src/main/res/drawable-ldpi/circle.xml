@@ -9,7 +9,7 @@
         android:right="2dp"
         android:bottom="2dp" />
     <solid
-        android:color="@color/color_primary"
+        android:color="@color/primary"
         android:angle="270">
     </solid>
 </shape>

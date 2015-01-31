@@ -42,10 +42,9 @@
                 android:id="@+id/val_spec_year"
                 android:hint="ex. 2000"
 
-
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_year"
                 app:floatingLabelAlwaysShown="true"/>
@@ -58,9 +57,9 @@
                 android:hint="ex. Ford"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_make"
                 app:floatingLabelAlwaysShown="true"/>
@@ -73,9 +72,9 @@
                 android:hint="ex. Mustang"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_model"
                 app:floatingLabelAlwaysShown="true"/>
@@ -88,9 +87,9 @@
                 android:hint="ex. ABC123"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_plate"
                 app:floatingLabelAlwaysShown="true"/>
@@ -113,9 +112,9 @@
                 android:hint="ex. 3.8L V6"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_engine"
                 app:floatingLabelAlwaysShown="true"/>
@@ -128,9 +127,9 @@
                 android:hint="ex. ST9801"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_oil_filter"
                 app:floatingLabelAlwaysShown="true"/>
@@ -143,9 +142,9 @@
                 android:hint="ex. 5W30"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_oil_weight"
                 app:floatingLabelAlwaysShown="true"/>
@@ -168,9 +167,9 @@
                 android:hint="205/75R17"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_tire_size_winter"
                 app:floatingLabelAlwaysShown="true"/>
@@ -183,9 +182,9 @@
                 android:hint="195/75R14"
 
                 android:singleLine="true"
-                app:baseColor="@color/color_text"
-                app:primaryColor="@color/color_accent"
-                app:errorColor="@color/color_error"
+                app:baseColor="@color/primary_text"
+                app:primaryColor="@color/accent"
+                app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_tire_size_summer"
                 app:floatingLabelAlwaysShown="true"/>

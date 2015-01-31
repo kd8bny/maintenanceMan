@@ -25,7 +25,7 @@
             android:gravity="start"
             android:layout_alignParentStart="true"
             android:src="@drawable/ic_action_car_icon_md"
-            android:background="@color/color_primary_dark"
+            android:background="@color/accent"
             android:tint="@android:color/white"/>
 
         <TextView
@@ -39,7 +39,8 @@
             android:singleLine="true"
             android:layout_marginTop="@dimen/header_vertical_margin"
             android:layout_marginStart="@dimen/header_horizontal_margin"
-            android:textColor="@color/color_primary"
+            android:layout_marginEnd="@dimen/header_horizontal_margin"
+            android:textColor="@color/primary_text"
             android:textSize="45sp"/>
 
         <LinearLayout
@@ -65,7 +66,7 @@
                 android:maxWidth="70dp"
 
                 android:text="make"
-                android:textColor="@android:color/black"
+                android:textColor="@color/secondary_text"
                 android:textSize="20sp"/>
 
             <TextView
@@ -81,7 +82,7 @@
                 android:maxWidth="70dp"
 
                 android:text="model"
-                android:textColor="@android:color/black"
+                android:textColor="@color/secondary_text"
                 android:textSize="20sp"/>
 
             <TextView
@@ -97,7 +98,7 @@
                 android:maxWidth="70dp"
 
                 android:text="engine"
-                android:textColor="@android:color/black"
+                android:textColor="@color/secondary_text"
                 android:textSize="20sp"/>
 
         </LinearLayout>
