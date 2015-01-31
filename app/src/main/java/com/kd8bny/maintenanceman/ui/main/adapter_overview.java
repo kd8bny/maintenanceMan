@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.ui.main;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
             adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
             adapterViewHolder.vengine.setText(vehicleSpecs.get(4));
+            adapterViewHolder.pos = i;
+            Log.i(TAG,i+"binf");
         }else{
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
         }
@@ -71,10 +74,17 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         protected TextView vmake;
         protected TextView vmodel;
         protected TextView vengine;
+        protected TypedArray headerColors;
+        protected int pos;
+
+
 
         public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
             super(view);
+            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
+            (view.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(pos%5, 0));
 
+            Log.i(TAG,pos+"");
             view.setTag(R.id.tag_0, vehicleList);
             view.setTag(R.id.tag_1, DBisEmpty);
             view.setOnClickListener(this);
