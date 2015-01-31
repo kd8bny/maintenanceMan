@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
-        android:background="@color/color_primary">
+        android:background="@color/primary">
 
         <ImageView
             android:id="@+id/slide_icon"
@@ -37,7 +37,7 @@
             android:gravity="end"
             android:title="@string/menu_del"
             android:src="@drawable/ic_action_trash"
-            android:background="@color/color_primary"
+            android:background="@color/primary"
             android:clickable="true"/>
 
         <ImageButton
@@ -47,7 +47,7 @@
             android:title="@string/menu_edit"
             android:gravity="end"
             android:src="@drawable/ic_action_edit"
-            android:background="@color/color_primary"
+            android:background="@color/primary"
             android:clickable="true"/>
 
     </LinearLayout>

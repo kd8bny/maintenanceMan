@@ -41,7 +41,7 @@
             android:layout_marginStart="@dimen/header_horizontal_margin"
             android:layout_marginEnd="@dimen/header_horizontal_margin"
             android:textColor="@color/primary_text"
-            android:textSize="45sp"/>
+            android:textSize="@dimen/header_font"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +67,7 @@
 
                 android:text="make"
                 android:textColor="@color/secondary_text"
-                android:textSize="20sp"/>
+                android:textSize="@dimen/field_font"/>
 
             <TextView
                 android:id="@+id/model"
@@ -83,7 +83,7 @@
 
                 android:text="model"
                 android:textColor="@color/secondary_text"
-                android:textSize="20sp"/>
+                android:textSize="@dimen/field_font"/>
 
             <TextView
                 android:id="@+id/engine"
@@ -99,7 +99,7 @@
 
                 android:text="engine"
                 android:textColor="@color/secondary_text"
-                android:textSize="20sp"/>
+                android:textSize="@dimen/field_font"/>
 
         </LinearLayout>
     </RelativeLayout>

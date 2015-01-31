@@ -1,9 +1,24 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!-- Horizontal -->
+    <dimen name="start_end_horizontal_margin">16dp</dimen>
+    <dimen name="content_horizontal_margin">72dp</dimen>
+
+    <!-- Vertical -->
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="content_height">72dp</dimen>
+    <dimen name="heading_sub_vertical_margin">48dp</dimen>
+    <dimen name="content_vertical_space">8dp</dimen>
+
+
+
     <dimen name="header_horizontal_margin">16dp</dimen>
-    <dimen name="header_vertical_margin">8dp</dimen>
+    <dimen name="header_vertical_margin">16dp</dimen>
 
     <dimen name="field_horizontal_margin">16dp</dimen>
     <dimen name="field_vertical_margin">16dp</dimen>
+
+    <!-- Fonts -->
+    <dimen name="header_font">45sp</dimen>
+    <dimen name="field_font">18sp</dimen>
 
 </resources>

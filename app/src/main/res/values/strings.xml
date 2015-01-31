@@ -46,6 +46,9 @@
 
     <!-- Info -->
     <string name="title_info">Vehicle Info</string>
+    <string name="header_general">General</string>
+    <string name="header_engine">Engine</string>
+    <string name="header_tires">Tires</string>
 
     <!-- Overview -->
     <string name="button_add">Add</string>
