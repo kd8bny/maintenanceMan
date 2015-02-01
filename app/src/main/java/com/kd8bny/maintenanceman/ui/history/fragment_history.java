@@ -157,7 +157,7 @@ public class fragment_history extends Fragment {
 
             @Override
             public void onPanelCollapsed(View view) {
-                setMenuVisibility(false);
+                setMenuVisibility(true);
                 button_edit.setVisibility(View.INVISIBLE);
                 button_del.setVisibility(View.INVISIBLE);
                 direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_up));
@@ -166,7 +166,7 @@ public class fragment_history extends Fragment {
 
             @Override
             public void onPanelExpanded(View view) {
-                setMenuVisibility(true);
+                setMenuVisibility(false);
                 button_edit.setVisibility(View.VISIBLE);
                 button_del.setVisibility(View.VISIBLE);
                 direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_down));
