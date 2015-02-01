@@ -166,33 +166,38 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     public ArrayAdapter<String> getEvents(){
         int pos = vehicleSpinner.getSelectedItemPosition();
-        ArrayList<String> tempVehicle = vehicleList.get(pos);
-        refID = tempVehicle.get(0);
+        if(pos > -1) {
+            ArrayList<String> tempVehicle = vehicleList.get(pos);
+            refID = tempVehicle.get(0);
 
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
-        eventList = new ArrayList<>();
-        ArrayList<String> temp;
+            vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+            ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+            eventList = new ArrayList<>();
+            ArrayList<String> temp;
 
-        for(int i=0; i<tempEvents.size(); i++) {
-            temp = tempEvents.get(i);
-            if(temp.get(0) != null){
-                eventList.add(temp.get(3));
-            }else {
-                Log.i(TAG,"nothing to show");
-                return null;
+            for (int i = 0; i < tempEvents.size(); i++) {
+                temp = tempEvents.get(i);
+                if (temp.get(0) != null) {
+                    eventList.add(temp.get(3));
+                } else {
+                    Log.i(TAG, "nothing to show");
+                    return null;
+                }
             }
+
+            // Remove dup's
+            HashSet tempHS = new HashSet();
+            tempHS.addAll(eventList);
+            eventList.clear();
+            eventList.addAll(tempHS);
+
+            eventAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, eventList);
+
+
+            return eventAdapter;
+        }else {
+            return null;
         }
-
-        // Remove dup's
-        HashSet tempHS = new HashSet();
-        tempHS.addAll(eventList);
-        eventList.clear();
-        eventList.addAll(tempHS);
-
-        eventAdapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_list_item_1,eventList);
-
-        return eventAdapter;
     }
 
 
