@@ -1,3 +1,22 @@
+1-26-15
+BUG FIX!
+FC on edit vehicles...occurring on vehicles from older app version.
+
+1-24-15
+NEW!! Edit current vehicle info
+NEW!! Delete vehicle events
+NEW!! Icon!
+NEW!! Cards
+
+Layout fixes
+1-22-15
+Many more layout fixes
+Dynamic header icons
+Black border fix on header
+
+1-19-15
+Add way more vehicle info
+Many layout fixes
 1-17-15
 New layouts
 And icons!

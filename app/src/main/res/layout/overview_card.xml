@@ -20,11 +20,13 @@
             android:id="@+id/carPic"
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:scaleType="fitCenter"
+            android:scaleType="centerInside"
             android:elevation="50sp"
             android:gravity="start"
             android:layout_alignParentStart="true"
-            android:src="@drawable/ic_action_car_icon_md"
+            android:src="@drawable/car_icon_md_9"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:background="@color/accent"
             android:tint="@android:color/white"/>
 

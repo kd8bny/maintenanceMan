@@ -32,16 +32,18 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        ArrayList<String> vehicleSpecs = new ArrayList<String>();
+        ArrayList<String> vehicleSpecs = new ArrayList<>();
         vehicleSpecs.addAll(vehicleList.get(i));
 
         if(!DBisEmpty) {
+            Log.i(TAG,i+"binf");
+            adapterViewHolder.pos = i;
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
             adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
             adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
             adapterViewHolder.vengine.setText(vehicleSpecs.get(4));
-            adapterViewHolder.pos = i;
-            Log.i(TAG,i+"binf");
+
+
         }else{
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
         }
@@ -52,6 +54,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(determineLayout(), viewGroup, false);
+        Log.i(TAG,i+"creaete");
         return new AdapterViewHolder(itemView, vehicleList, DBisEmpty);
     }
 
@@ -81,10 +84,13 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
         public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
             super(view);
+            pos=pos+1;
+            Log.i(TAG,pos+"");
+
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
             (view.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(pos%5, 0));
 
-            Log.i(TAG,pos+"");
+
             view.setTag(R.id.tag_0, vehicleList);
             view.setTag(R.id.tag_1, DBisEmpty);
             view.setOnClickListener(this);
