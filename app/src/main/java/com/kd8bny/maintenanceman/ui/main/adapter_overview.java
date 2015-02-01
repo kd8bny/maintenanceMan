@@ -20,9 +20,14 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     public ArrayList<ArrayList> vehicleList = new ArrayList<>();
     private boolean DBisEmpty;
+    private TypedArray headerColors;
+    private String color;
+    private int errorColor;
+    private View itemView;
 
     public adapter_overview(ArrayList vehicleList) {
         this.vehicleList = vehicleList;
+
     }
 
     @Override
@@ -31,33 +36,36 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     }
 
     @Override
+    public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        itemView = LayoutInflater
+                .from(viewGroup.getContext())
+                .inflate(determineLayout(), viewGroup, false);
+
+        headerColors = itemView.getResources().obtainTypedArray(R.array.header_color);
+        errorColor = itemView.getResources().getColor(R.color.error);
+
+        return new AdapterViewHolder(itemView, vehicleList, DBisEmpty);
+    }
+
+    @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
         ArrayList<String> vehicleSpecs = new ArrayList<>();
         vehicleSpecs.addAll(vehicleList.get(i));
 
         if(!DBisEmpty) {
-            Log.i(TAG,i+"binf");
-            adapterViewHolder.pos = i;
+            (itemView.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(i%5, 0));
+
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
             adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
             adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
             adapterViewHolder.vengine.setText(vehicleSpecs.get(4));
 
-
         }else{
+            (itemView.findViewById(R.id.carPic)).setBackgroundColor(errorColor);
+
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
         }
     }
-
-    @Override
-    public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(determineLayout(), viewGroup, false);
-        Log.i(TAG,i+"creaete");
-        return new AdapterViewHolder(itemView, vehicleList, DBisEmpty);
-    }
-
 
     public int determineLayout(){
         ArrayList<String> vehicleSpecs = new ArrayList<>();
@@ -65,9 +73,11 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
         if(vehicleSpecs.get(0) != null) {
             DBisEmpty = false;
+
             return R.layout.overview_card;
         }else{
             DBisEmpty = true;
+
             return R.layout.overview_card_empty;
         }
     }
@@ -77,18 +87,12 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         protected TextView vmake;
         protected TextView vmodel;
         protected TextView vengine;
-        protected TypedArray headerColors;
-        protected int pos;
-
 
 
         public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
             super(view);
-            pos=pos+1;
-            Log.i(TAG,pos+"");
 
-            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-            (view.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(pos%5, 0));
+
 
 
             view.setTag(R.id.tag_0, vehicleList);
