@@ -160,7 +160,7 @@ public class fragment_history extends Fragment {
                 setMenuVisibility(true);
                 button_edit.setVisibility(View.INVISIBLE);
                 button_del.setVisibility(View.INVISIBLE);
-                direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_up));
+                direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_up_single));
 
             }
 
@@ -169,7 +169,7 @@ public class fragment_history extends Fragment {
                 setMenuVisibility(false);
                 button_edit.setVisibility(View.VISIBLE);
                 button_del.setVisibility(View.VISIBLE);
-                direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_down));
+                direction.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_down_single));
 
             }
 
