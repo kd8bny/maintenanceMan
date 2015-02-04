@@ -88,7 +88,7 @@
                 android:textSize="@dimen/field_font"/>
 
             <TextView
-                android:id="@+id/engine"
+                android:id="@+id/plate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -99,7 +99,7 @@
                 android:singleLine="true"
                 android:maxWidth="70dp"
 
-                android:text="engine"
+                android:text="ABC123"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
 

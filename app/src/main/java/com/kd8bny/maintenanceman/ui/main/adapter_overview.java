@@ -20,7 +20,6 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     public ArrayList<ArrayList> vehicleList = new ArrayList<>();
     private boolean DBisEmpty;
     private TypedArray headerColors;
-    private String color;
     private int errorColor;
     private View itemView;
 
@@ -57,11 +56,10 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
             adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
             adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
-            adapterViewHolder.vengine.setText(vehicleSpecs.get(4));
+            adapterViewHolder.vplate.setText(vehicleSpecs.get(5));
 
         }else{
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(errorColor);
-
             adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
         }
     }
@@ -85,14 +83,11 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         protected TextView vyear;
         protected TextView vmake;
         protected TextView vmodel;
-        protected TextView vengine;
+        protected TextView vplate;
 
 
         public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
             super(view);
-
-
-
 
             view.setTag(R.id.tag_0, vehicleList);
             view.setTag(R.id.tag_1, DBisEmpty);
@@ -101,7 +96,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             vyear = (TextView) view.findViewById(R.id.year);
             vmake = (TextView) view.findViewById(R.id.make);
             vmodel = (TextView) view.findViewById(R.id.model);
-            vengine = (TextView) view.findViewById(R.id.engine);
+            vplate = (TextView) view.findViewById(R.id.plate);
         }
 
         @Override
