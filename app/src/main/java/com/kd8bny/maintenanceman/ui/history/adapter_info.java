@@ -3,7 +3,6 @@ package com.kd8bny.maintenanceman.ui.history;
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;

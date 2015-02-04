@@ -10,11 +10,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
@@ -67,7 +65,6 @@ public class fragment_overview extends Fragment {
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
-        //cardMan.setOrientation(LinearLayoutManager.VERTICAL);
         populateCards();
         cardList.setAdapter(cardListAdapter);
 
@@ -87,7 +84,7 @@ public class fragment_overview extends Fragment {
         drawerMan = new LinearLayoutManager(getActivity());
         drawerList.setHasFixedSize(true);
         drawerList.setItemAnimator(new DefaultItemAnimator());
-        //drawerMan.setOrientation(LinearLayoutManager.VERTICAL);
+
         drawerList.setLayoutManager(drawerMan);
         drawerList.setAdapter(populateDrawer());
         Drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);

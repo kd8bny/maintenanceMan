@@ -1,7 +1,5 @@
 package com.kd8bny.maintenanceman.ui.main;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;

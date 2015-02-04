@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- Horizontal -->
     <dimen name="start_end_horizontal_margin">16dp</dimen>
     <dimen name="content_horizontal_margin">72dp</dimen>
@@ -8,17 +10,15 @@
     <dimen name="content_height">72dp</dimen>
     <dimen name="heading_sub_vertical_margin">48dp</dimen>
     <dimen name="content_vertical_space">8dp</dimen>
-
-
-
     <dimen name="header_horizontal_margin">16dp</dimen>
     <dimen name="header_vertical_margin">16dp</dimen>
-
     <dimen name="field_horizontal_margin">16dp</dimen>
     <dimen name="field_vertical_margin">16dp</dimen>
 
     <!-- Fonts -->
     <dimen name="header_font">45sp</dimen>
     <dimen name="field_font">18sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 
 </resources>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kd8bny.maintenanceman"
-    android:versionCode="18"
-    android:versionName="1.3.3" >
+    android:versionCode="22"
+    android:versionName="1.4.0" >
+
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
         android:allowBackup="true"
@@ -29,7 +31,7 @@
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+                android:value=".ui.main.activity_main" />
         </activity>
         <activity
             android:name=".ui.history.activity_history"
@@ -37,7 +39,7 @@
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+                android:value=".ui.main.activity_main" />
         </activity>
         <activity
             android:name=".ui.edit.activity_edit"
@@ -45,7 +47,7 @@
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+                android:value=".ui.main.activity_main" />
         </activity>
         <activity
             android:name=".ui.settings.activity_settings"
@@ -53,7 +55,15 @@
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kd8bny.maintenanceman.ui.main.activity_main" />
+                android:value=".ui.main.activity_main" />
+        </activity>
+        <activity
+            android:name=".billing.activity_billing"
+            android:label="@string/title_activity_activity_billing"
+            android:parentActivityName=".ui.main.activity_main" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.activity_main" />
         </activity>
     </application>
 

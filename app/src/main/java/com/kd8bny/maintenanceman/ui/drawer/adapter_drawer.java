@@ -1,10 +1,8 @@
 package com.kd8bny.maintenanceman.ui.drawer;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
+//import com.kd8bny.maintenanceman.billing.activity_billing;
+import com.kd8bny.maintenanceman.billing.activity_billing;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
-import com.kd8bny.maintenanceman.ui.history.activity_history;
 import com.kd8bny.maintenanceman.ui.settings.activity_settings;
 
 import java.util.ArrayList;
@@ -85,12 +84,18 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
                     break;
 
                 case 2:
+                    Intent donateIntent = new Intent(view.getContext(), activity_billing.class);
+                    view.getContext().startActivity(donateIntent);
+                    mDrawerLayout.closeDrawers();
+                    break;
+
+                case 3:
                     Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
                     view.getContext().startActivity(settingsIntent);
                     mDrawerLayout.closeDrawers();
                     break;
 
-                case 3:
+                case 4:
                     //Intent aboutIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
                     //view.getContext().startActivity(aboutIntent);
                     Toast.makeText(view.getContext(),"Daryl Bennett",Toast.LENGTH_LONG).show();

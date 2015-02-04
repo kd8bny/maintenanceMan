@@ -16,7 +16,6 @@
     <string name="spec_model">Model</string>
     <string name="spec_year">Year</string>
     <string name="spec_plate">License Plate</string>
-
     <string name="hint_spec_engine">3.8LV6</string>
 
     <!-- Add Vehicle Event -->
@@ -31,9 +30,11 @@
     <!-- Drawer -->
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Closed</string>
+
     <string-array name="drawer_items">
         <item>Add Vehicle</item>
         <item>Add Event</item>
+        <item>Donate</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
@@ -69,5 +70,7 @@
     <string name="menu_save">Save</string>
     <string name="menu_settings">Settings</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_activity_billing">activity_billing</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
