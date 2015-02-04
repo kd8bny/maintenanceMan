@@ -84,13 +84,13 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
                     mDrawerLayout.closeDrawers();
                     break;
 
-                case 2: //Settings
+                /*case 2: //Settings
                     Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
                     view.getContext().startActivity(settingsIntent);
                     mDrawerLayout.closeDrawers();
-                    break;
+                    break;*/
 
-                case 3: //Donate
+                case 2: //Donate
                     FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
 
                     dialog_donate dialog_donate = new dialog_donate();
