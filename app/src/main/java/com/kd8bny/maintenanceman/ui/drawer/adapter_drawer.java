@@ -1,6 +1,8 @@
 package com.kd8bny.maintenanceman.ui.drawer;
 
+import android.app.FragmentManager;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,13 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 //import com.kd8bny.maintenanceman.billing.activity_billing;
-import com.kd8bny.maintenanceman.billing.activity_billing;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.ui.settings.activity_settings;
 
 import java.util.ArrayList;
@@ -71,36 +72,38 @@ public class adapter_drawer extends RecyclerView.Adapter<adapter_drawer.AdapterV
         @Override
         public void onClick(View view) {
             switch (getPosition()){
-                case 0:
+                case 0: //Add Vehicle
                     Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
                     view.getContext().startActivity(addFleetIntent);
                     mDrawerLayout.closeDrawers();
                     break;
 
-                case 1:
+                case 1: //Add Event
                     Intent addEventIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
                     view.getContext().startActivity(addEventIntent);
                     mDrawerLayout.closeDrawers();
                     break;
 
-                case 2:
-                    Intent donateIntent = new Intent(view.getContext(), activity_billing.class);
-                    view.getContext().startActivity(donateIntent);
-                    mDrawerLayout.closeDrawers();
-                    break;
-
-                case 3:
+                case 2: //Settings
                     Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
                     view.getContext().startActivity(settingsIntent);
                     mDrawerLayout.closeDrawers();
                     break;
 
-                case 4:
+                case 3: //Donate
+                    FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+
+                    dialog_donate dialog_donate = new dialog_donate();
+                    dialog_donate.show(fm, "dialog_donate");
+                    mDrawerLayout.closeDrawers();
+                    break;
+
+                /*case 4:
                     //Intent aboutIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
                     //view.getContext().startActivity(aboutIntent);
                     Toast.makeText(view.getContext(),"Daryl Bennett",Toast.LENGTH_LONG).show();
                     mDrawerLayout.closeDrawers();
-                    break;
+                    break;*/
         }
 
     }

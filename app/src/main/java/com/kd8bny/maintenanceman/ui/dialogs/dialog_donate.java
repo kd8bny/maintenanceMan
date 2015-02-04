@@ -1,43 +1,24 @@
-package com.kd8bny.maintenanceman.billing;
+package com.kd8bny.maintenanceman.ui.dialogs;
 
-import android.app.Fragment;
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.android.vending.billing.IInAppBillingService;
-
+import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
-import android.content.ServiceConnection;
 
 import com.android.vending.billing.IInAppBillingService;
-import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
-
 import com.kd8bny.maintenanceman.billing.util.IabHelper;
 import com.kd8bny.maintenanceman.billing.util.IabResult;
 import com.kd8bny.maintenanceman.billing.util.Inventory;
 import com.kd8bny.maintenanceman.billing.util.Purchase;
-import com.kd8bny.maintenanceman.billing.util.Security;
-
-import java.security.PublicKey;
 
 
-public class fragment_billing extends Fragment {
-    private static final String TAG = "fragment_billing";
+public class dialog_donate extends DialogFragment{
+    private static final String TAG = "dialog_billing";
 
     private IabHelper mHelper;
     private IInAppBillingService mService;
@@ -45,14 +26,7 @@ public class fragment_billing extends Fragment {
     static final int RC_REQUEST = 1001;
     static final String SKU_BEER = "donate_beer";//"android.test.purchased";//
 
-    private Button clickButton;
-    private Button buyButton;
-
-
-    public fragment_billing() {
-        // Required empty public constructor
-    }
-
+    public dialog_donate(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +34,7 @@ public class fragment_billing extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_billing, container, false);
+        View view = inflater.inflate(R.layout.dialog_billing, container, false);
 
         Button button_donateSmall = (Button) view.findViewById(R.id.button_donate_small);
         button_donateSmall.setOnClickListener(new View.OnClickListener() {
@@ -233,7 +207,7 @@ public class fragment_billing extends Fragment {
 
             }
             else {
-               Log.d(TAG, "Error while consuming: " + result);
+                Log.d(TAG, "Error while consuming: " + result);
             }
         }
     };

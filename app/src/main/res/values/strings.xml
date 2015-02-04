@@ -24,8 +24,10 @@
     <string name="spec_date">Date</string>
     <string name="spec_odo">Odometer</string>
 
-    <!-- Dialog -->
-    <string name="title_dialog_year">Vehicle Year</string>
+    <!-- Donate -->
+    <string name="title_donate">Donate</string>
+    <string name="message_donate">Thank you for your interest in my app :) Any donation would be appreciated</string>
+    <string name="amount_sm">Buy me a Beer</string>
 
     <!-- Drawer -->
     <string name="drawer_open">Open</string>
@@ -34,9 +36,8 @@
     <string-array name="drawer_items">
         <item>Add Vehicle</item>
         <item>Add Event</item>
-        <item>Donate</item>
         <item>Settings</item>
-        <item>About</item>
+        <item>Donate</item>
     </string-array>
 
     <!-- Edit -->
