@@ -1,3 +1,16 @@
+1-31-15
+NEW!! Reorganized slide menu
+NEW!! Dynamic info cards/Overview cards
+FIX!! Over-scaled images
+Changes to color palette
+Fixed settings fragment
+Edit and delete options in vehicle info
+
+1-27-15
+NEW!!! Auto-complete Events
+NEW!!! Date picker for add event
+Layout fixes
+    - Cards now overflow text
 1-26-15
 BUG FIX!
 FC on edit vehicles...occurring on vehicles from older app version.

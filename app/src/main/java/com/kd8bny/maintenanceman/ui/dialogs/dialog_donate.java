@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 
 import com.android.vending.billing.IInAppBillingService;
@@ -31,10 +32,13 @@ public class dialog_donate extends DialogFragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_billing, container, false);
+        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         Button button_donateSmall = (Button) view.findViewById(R.id.button_donate_small);
         button_donateSmall.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +49,7 @@ public class dialog_donate extends DialogFragment{
                 /* TODO: for security, generate your payload here for verification. See the comments on
                  *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
                  *        an empty string, but on a production app you should carefully generate this. */
-                String payload = "";
+                String payload = "beer";
 
 
                 mHelper.launchPurchaseFlow(getActivity(), SKU_BEER, RC_REQUEST, mPurchaseFinishedListener, payload);
@@ -224,6 +228,4 @@ public class dialog_donate extends DialogFragment{
             mHelper = null;
         }
     }
-
-
 }

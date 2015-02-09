@@ -183,6 +183,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             super(view);
 
             View layout = view.findViewById(R.id.card_info_lin);
+            //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
             DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
             float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
