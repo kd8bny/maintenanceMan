@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
@@ -41,16 +39,13 @@ public class fragment_history extends Fragment {
     private SlidingUpPanelLayout addEvent;
     private ImageView direction;
     private ImageButton button_del, button_edit;
-    RecyclerView cardList;
-    RecyclerView.LayoutManager cardMan;
-    RecyclerView.Adapter cardListAdapter;
+    RecyclerView cardList, histList;
+    RecyclerView.LayoutManager cardMan, histMan;
+    RecyclerView.Adapter cardListAdapter, histListAdapter;
 
-    private ArrayAdapter taskAdapter;
     private String refID;
-    public ArrayList<ArrayList> vehicleList;
     public ArrayList<String> vehicleSent;
 
-    private ArrayList<String> histEvent;
     private ArrayList<ArrayList> vehicleHist;
 
     public fragment_history() {
@@ -78,32 +73,14 @@ public class fragment_history extends Fragment {
         ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //Task History
-        ListView taskHist = (ListView) view.findViewById(R.id.taskList);
-        poplulateAdapter();
-        taskHist.setAdapter(taskAdapter);
-        taskHist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int pos, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setCancelable(true);
-                builder.setTitle("Delete " + histEvent.get(pos));
-                builder.setNegativeButton("No", null);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        histList = (RecyclerView) view.findViewById(R.id.histList);
+        histMan = new LinearLayoutManager(getActivity());
+        histList.setHasFixedSize(true);
+        histList.setItemAnimator(new DefaultItemAnimator());
+        histList.setLayoutManager(histMan);
+        populateAdapter();
+        histList.setAdapter(histListAdapter);
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        taskAdapter.remove(taskAdapter.getItem(pos));
-
-                        ArrayList<String> temp = vehicleHist.get(pos);
-                        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity());
-                        vehicleDB.deleteEntry(getActivity(), temp.get(1), temp.get(2), temp.get(3));
-
-                    }
-
-                });
-                builder.show();
-                return true;
-            }
-        });
 
         //Slide-y up menu
         final View include = view.findViewById(R.id.slide_bar);
@@ -200,6 +177,9 @@ public class fragment_history extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
+
+        populateAdapter();
+        histList.setAdapter(histListAdapter);
     }
 
     @Override
@@ -215,6 +195,9 @@ public class fragment_history extends Fragment {
                 Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
                 getActivity().startActivity(addIntent);
 
+                Log.i(TAG, "after");
+                //histListAdapter = new adapter_history(vehicleHist);
+
                 return true;
 
             default:
@@ -222,7 +205,7 @@ public class fragment_history extends Fragment {
         }
     }
 
-    /*@Override
+    /*@Override //TODO
     public void onBackPressed() {
         if (addEvent != null &&
                 (addEvent.getPanelState() == PanelState.EXPANDED || addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
@@ -257,22 +240,10 @@ public class fragment_history extends Fragment {
         cardListAdapter = new adapter_info(vehicleInfo);
     }
 
-    public void poplulateAdapter(){
-        histEvent = new ArrayList<>();
+    public void populateAdapter(){
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
 
-        ArrayList<String> temp;
-        for(int i = 0; i < vehicleHist.size(); i++){
-            temp = vehicleHist.get(i);
-            if(temp.size()>2) {
-                histEvent.add(temp.get(1) + " " + temp.get(2) + " " + temp.get(3));
-            }else{
-                histEvent.add(temp.get(1));
-            }
-        }
-
-        taskAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, histEvent);
+        histListAdapter = new adapter_history(vehicleHist);
     }
-
 }
