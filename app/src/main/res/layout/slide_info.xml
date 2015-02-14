@@ -1,81 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/slidebar"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar_bottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:background="@color/accent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:elevation="4dp"
-        android:background="@color/primary">
-
-        <ImageView
-            android:id="@+id/slide_icon"
-            android:layout_height="24dp"
-            android:layout_width="24dp"
-            android:gravity="start"
-            android:layout_weight="1"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="16dp"
-
-            android:src="@drawable/ic_action_up_single"
-            android:tint="@android:color/white"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="start"
-            android:layout_weight="4"
-            android:text="Vehicle Info"
-            android:textSize="20sp"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="16dp"/>
-
-        <ImageButton
-            android:id="@+id/slide_button_del"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:gravity="end"
-
-            android:title="@string/menu_del"
-            android:src="@drawable/ic_action_trash"
-            android:background="@color/primary"
-            android:clickable="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"/>
-
-        <ImageButton
-            android:id="@+id/slide_button_edit"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:title="@string/menu_edit"
-            android:gravity="end"
-
-            android:src="@drawable/ic_action_edit"
-            android:background="@color/primary"
-            android:clickable="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"/>
-
-    </LinearLayout>
+        tools:context=".MainActivity"/>
 
     <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_below="@+id/slidebar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tool_bar_bottom">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/info_cardList"
