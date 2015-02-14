@@ -92,13 +92,13 @@ public class fragment_overview extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView){
                 super.onDrawerOpened(drawerView);
-                //TODO hide fab
+                fab.hide();
 
             }
             @Override
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
-                //TODO
+                fab.show();
             }
         };
         Drawer.setDrawerListener(mDrawerToggle);

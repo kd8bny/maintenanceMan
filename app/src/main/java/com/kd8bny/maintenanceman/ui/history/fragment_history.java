@@ -11,15 +11,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
@@ -73,8 +71,7 @@ public class fragment_history extends Fragment {
         //Toolbar bottom
         toolbarBottom = (Toolbar) view.findViewById(R.id.tool_bar_bottom);
         toolbarBottom.setTitle(R.string.title_info);
-        //toolbarBottom.inflateMenu(R.menu.menu_info);
-
+        toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
         toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
@@ -125,12 +122,7 @@ public class fragment_history extends Fragment {
         addEvent.setPanelSlideListener(new PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float slideOffset) {
-                if (slideOffset > 0.2) {
-                    toolbar.animate().translationY(-toolbar.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-                } else {
-                    toolbar.animate().translationY(+toolbar.getTop()).setInterpolator(new AccelerateInterpolator()).start();
-                }
-
+                toolbarBottom.getMenu().clear();
             }
 
             @Override
@@ -153,6 +145,20 @@ public class fragment_history extends Fragment {
             @Override
             public void onPanelHidden(View view) {
 
+            }
+        });
+
+        view.setFocusableInTouchMode(true);
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if( keyCode == KeyEvent.KEYCODE_BACK ){
+                    if(addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                        addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    }
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -201,16 +207,6 @@ public class fragment_history extends Fragment {
                 return super.onOptionsItemSelected(menuitem);
         }
     }
-
-    /*@Override //TODO
-    public void onBackPressed() {
-        if (addEvent != null &&
-                (addEvent.getPanelState() == PanelState.EXPANDED || addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED)) {
-            addEvent.collapsePanel();
-        } else {
-            super.onBackPressed();
-        }
-    }*/
 
     public void populateCards(){
         //year make model engine plate oilFilter oilWeight tireSummer tireWinter
