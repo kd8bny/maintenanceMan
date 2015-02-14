@@ -3,11 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/tool_bar"
-        layout="@layout/toolbar">
-    </include>
-
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,19 +11,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        sothree:panelHeight="@dimen/toolbar_height"
-        sothree:shadowHeight="4dp">
+        sothree:umanoPanelHeight="@dimen/toolbar_height"
+        sothree:umanoShadowHeight="10dp"
+        sothree:umanoParalaxOffset="100dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/histList"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/tool_bar"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <include
+                android:id="@+id/tool_bar"
+                layout="@layout/toolbar">
+            </include>
 
-            android:clickable="true"
-            android:focusable="true"
-            android:orientation="vertical"
-            android:paddingTop="60dp"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/histList"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/tool_bar"
+
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"/>
+            </RelativeLayout>
 
         <include
             android:id="@+id/slide_bar"
