@@ -149,14 +149,20 @@ public class fragment_history extends Fragment {
         });
 
         view.setFocusableInTouchMode(true);
+        view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.i(TAG, addEvent.getPanelState()+"");
                 if( keyCode == KeyEvent.KEYCODE_BACK ){
                     if(addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
                         addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+
+                        return true;
+                    }else {
+                        
+                        return false;
                     }
-                    return true;
                 }
                 return false;
             }
