@@ -1,3 +1,7 @@
+1.4.1
+NEW!!! Donate option! (App still remains free)
+Engine spec is replaced by plates in overview
+Bug/layout fixes
 1-31-15
 NEW!! Reorganized slide menu
 NEW!! Dynamic info cards/Overview cards

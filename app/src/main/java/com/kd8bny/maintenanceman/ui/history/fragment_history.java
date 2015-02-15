@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -127,18 +128,25 @@ public class fragment_history extends Fragment {
             @Override
             public void onPanelSlide(View view, float slideOffset) {
                 toolbarBottom.getMenu().clear();
+
             }
 
             @Override
             public void onPanelCollapsed(View view) {
                 toolbarBottom.getMenu().clear();
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));
+                }
             }
 
             @Override
             public void onPanelExpanded(View view) {
                 toolbarBottom.inflateMenu(R.menu.menu_info);
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_down);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.accent_dark));
+                }
             }
 
             @Override
