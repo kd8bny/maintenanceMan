@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 
@@ -107,9 +108,8 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
     }
 
     public void saveEntry(Context context, String refID, String make, String model, String year, String engine,
-                          String plate, String oilFilter, String oilWeight, String tireSummer, String tireWinter) {
+                          String plate, String oilFilter, String oilWeight, String tireSummer, String tireWinter) { //TODO fix hasmap
         Log.d(TAG, "Saving entry");
-
 
         File database = context.getDatabasePath("fleetRoster.db");
         if (!database.exists()) {
@@ -136,7 +136,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
                     + tireWinter + "');");
         }
     }
-    public ArrayList<ArrayList> getEntries(Context context){
+    public ArrayList<HashMap> getEntries(Context context){
         createDatabase(context);
         Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
 
@@ -151,32 +151,37 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         int tireSummerCol = cursor.getColumnIndex("tireSummer");
         int tireWinterCol = cursor.getColumnIndex("tireWinter");
 
-        ArrayList<ArrayList> vehicleList = new ArrayList<>();
+        ArrayList<HashMap> vehicleList = new ArrayList<>();
 
         cursor.moveToFirst();
 
         if(cursor != null && (cursor.getCount() > 0)) {
             do {
-                ArrayList<String> singleVehicleList = new ArrayList<>();
+                HashMap<String, String> singleVehicleList = new HashMap<>();
 
-                singleVehicleList.add(cursor.getString(refIDCol));
-                singleVehicleList.add(cursor.getString(yearCol));
-                singleVehicleList.add(cursor.getString(makeCol));
-                singleVehicleList.add(cursor.getString(modelCol));
-                singleVehicleList.add(cursor.getString(engineCol));
-                singleVehicleList.add(cursor.getString(plateCol));
-                singleVehicleList.add(cursor.getString(oilFilterCol));
-                singleVehicleList.add(cursor.getString(oilWeightCol));
-                singleVehicleList.add(cursor.getString(tireSummerCol));
-                singleVehicleList.add(cursor.getString(tireWinterCol));
+                singleVehicleList.put("refID", cursor.getString(refIDCol));
+                singleVehicleList.put("year", cursor.getString(yearCol));
+                singleVehicleList.put("make", cursor.getString(makeCol));
+                singleVehicleList.put("model", cursor.getString(modelCol));
+                singleVehicleList.put("engine", cursor.getString(engineCol));
+                singleVehicleList.put("plate", cursor.getString(plateCol));
+                singleVehicleList.put("oilFilter", cursor.getString(oilFilterCol));
+                singleVehicleList.put("oilWeight", cursor.getString(oilWeightCol));
+                singleVehicleList.put("tireSummer", cursor.getString(tireSummerCol));
+                singleVehicleList.put("tireWinter", cursor.getString(tireWinterCol));
+
+                /*for (String key : singleVehicleList.keySet()){
+                    if((singleVehicleList.get(key)).equals("")){
+                        singleVehicleList.put(key, null);
+                    }
+                }*/
 
                 vehicleList.add(singleVehicleList);
 
             } while(cursor.moveToNext());
             }else{
-                ArrayList<String> singleVehicleList = new ArrayList<>();
-                singleVehicleList.add(null);
-                singleVehicleList.add("Please Add Vehicle To Database");
+                HashMap<String, String> singleVehicleList = new HashMap<>();
+                singleVehicleList.put(null, "Please Add Vehicle To Database");
                 vehicleList.add(singleVehicleList);
             }
 
@@ -187,5 +192,4 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         createDatabase(context);
         fleetRosterDB.execSQL("DELETE FROM grandFleetRoster WHERE refID = '" + refID + "';");
     }
-
 }

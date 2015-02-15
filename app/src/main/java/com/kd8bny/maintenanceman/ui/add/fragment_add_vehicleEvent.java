@@ -25,11 +25,12 @@ import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 
 public class fragment_add_vehicleEvent extends Fragment {
-    private static final String TAG = "fragment_add_vehicleEvent";
+    private static final String TAG = "f_add_vehicleEvent";
 
     private Toolbar toolbar;
     private Spinner vehicleSpinner;
@@ -45,7 +46,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private String task;
     private String refID;
 
-    ArrayList<ArrayList> vehicleList;
+    ArrayList<HashMap> vehicleList;
     ArrayList<String> eventList;
 
     public fragment_add_vehicleEvent() {
@@ -138,17 +139,17 @@ public class fragment_add_vehicleEvent extends Fragment {
     public ArrayAdapter<String> setVehicles(){
         fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
         vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-        ArrayList<String> temp;
+        HashMap<String, String> temp;
         ArrayList<String> singleVehicle = new ArrayList<>();
 
         for(int i=0; i<vehicleList.size(); i++) {
             temp = (vehicleList.get(i));
-            if(temp.get(0) != null){
-                String name = temp.get(1) + " " + temp.get(2) + " " + temp.get(3);
-                singleVehicle.add(name);
-            }else {
-                Toast.makeText(this.getActivity(), temp.get(1), Toast.LENGTH_SHORT).show();
+            if(temp.containsKey(null)){
+                Toast.makeText(this.getActivity(), temp.get(null), Toast.LENGTH_SHORT).show();
                 getActivity().finish();
+            }else {
+                String name = temp.get("year") + " " + temp.get("make") + " " + temp.get("model");
+                singleVehicle.add(name);
             }
         }
 
@@ -157,8 +158,8 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     public void getVehicles(){
         int pos = vehicleSpinner.getSelectedItemPosition();
-        ArrayList<String> temp = vehicleList.get(pos);
-        refID = temp.get(0);
+        HashMap<String, String> temp = vehicleList.get(pos);
+        refID = temp.get("refID");
         date = ((EditText) getActivity().findViewById(R.id.val_spec_date)).getText().toString();
         task = ((EditText) getActivity().findViewById(R.id.val_spec_event)).getText().toString();
         odo = ((EditText) getActivity().findViewById(R.id.val_spec_odo)).getText().toString();
@@ -167,8 +168,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     public ArrayAdapter<String> getEvents(){
         int pos = vehicleSpinner.getSelectedItemPosition();
         if(pos > -1) {
-            ArrayList<String> tempVehicle = vehicleList.get(pos);
-            refID = tempVehicle.get(0);
+            HashMap<String, String> tempVehicle = vehicleList.get(pos);
+            refID = tempVehicle.get("refID");
 
             vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
             ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
@@ -193,9 +194,10 @@ public class fragment_add_vehicleEvent extends Fragment {
 
             eventAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, eventList);
 
-
             return eventAdapter;
+
         }else {
+
             return null;
         }
     }

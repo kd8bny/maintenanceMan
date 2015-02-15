@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class fragment_edit extends Fragment {
@@ -25,6 +25,7 @@ public class fragment_edit extends Fragment {
 
     private Toolbar toolbar;
 
+    private String refID;
     private String myear;
     private String mmake;
     private String mmodel;
@@ -35,10 +36,7 @@ public class fragment_edit extends Fragment {
     private String mtire_winter;
     private String mtire_summer;
 
-    private EditText some;
-    private String refID;
-    public ArrayList<ArrayList> vehicleList;
-    public ArrayList<String> vehicleSent;
+    public HashMap<String, String> vehicleSent;
 
     public fragment_edit() {
         // Required empty public constructor
@@ -55,8 +53,8 @@ public class fragment_edit extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
 
-        vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
-        refID = vehicleSent.get(0);
+        vehicleSent = (HashMap<String, String>) getActivity().getIntent().getSerializableExtra("vehicleSent");
+        refID = vehicleSent.get("refID");
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -106,16 +104,16 @@ public class fragment_edit extends Fragment {
     }
 
     public void setValues(View view){
-        ((EditText) view.findViewById(R.id.val_spec_year)).setText((vehicleSent.get(1)));
-        ((EditText) view.findViewById(R.id.val_spec_make)).setText((vehicleSent.get(2)));
-        ((EditText) view.findViewById(R.id.val_spec_model)).setText((vehicleSent.get(3)));
-        ((EditText) view.findViewById(R.id.val_spec_engine)).setText((vehicleSent.get(4)));
+        ((EditText) view.findViewById(R.id.val_spec_year)).setText((vehicleSent.get("year")));
+        ((EditText) view.findViewById(R.id.val_spec_make)).setText((vehicleSent.get("make")));
+        ((EditText) view.findViewById(R.id.val_spec_model)).setText((vehicleSent.get("model")));
+        ((EditText) view.findViewById(R.id.val_spec_engine)).setText((vehicleSent.get("engine")));
 
-        ((EditText) view.findViewById(R.id.val_spec_plate)).setText((vehicleSent.get(5)));
-        ((EditText) view.findViewById(R.id.val_spec_oil_filter)).setText((vehicleSent.get(6)));
-        ((EditText) view.findViewById(R.id.val_spec_oil_weight)).setText((vehicleSent.get(7)));
-        ((EditText) view.findViewById(R.id.val_spec_tire_size_winter)).setText((vehicleSent.get(8)));
-        ((EditText) view.findViewById(R.id.val_spec_tire_size_summer)).setText((vehicleSent.get(9)));
+        ((EditText) view.findViewById(R.id.val_spec_plate)).setText((vehicleSent.get("plate")));
+        ((EditText) view.findViewById(R.id.val_spec_oil_filter)).setText((vehicleSent.get("oilFilter")));
+        ((EditText) view.findViewById(R.id.val_spec_oil_weight)).setText((vehicleSent.get("oilWeight")));
+        ((EditText) view.findViewById(R.id.val_spec_tire_size_winter)).setText((vehicleSent.get("tireWinter")));
+        ((EditText) view.findViewById(R.id.val_spec_tire_size_summer)).setText((vehicleSent.get("tireSummer")));
 
     }
 
@@ -132,5 +130,4 @@ public class fragment_edit extends Fragment {
         mtire_summer = ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_summer)).getText().toString();
 
     }
-
 }

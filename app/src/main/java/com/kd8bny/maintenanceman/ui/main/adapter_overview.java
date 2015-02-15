@@ -13,11 +13,12 @@ import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.history.activity_history;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
     private static final String TAG = "adapter_overview";
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
+    public ArrayList<HashMap> vehicleList = new ArrayList<>();
     private boolean DBisEmpty;
     private TypedArray headerColors;
     private int errorColor;
@@ -47,35 +48,35 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        ArrayList<String> vehicleSpecs = new ArrayList<>();
-        vehicleSpecs.addAll(vehicleList.get(i));
+        HashMap<String, String> vehicleSpecs = new HashMap<>();
+        vehicleSpecs.putAll(vehicleList.get(i));
 
         if(!DBisEmpty) {
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(i%5, 0));
 
-            adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
-            adapterViewHolder.vmake.setText(vehicleSpecs.get(2));
-            adapterViewHolder.vmodel.setText(vehicleSpecs.get(3));
-            adapterViewHolder.vplate.setText(vehicleSpecs.get(5));
+            adapterViewHolder.vyear.setText(vehicleSpecs.get("year"));
+            adapterViewHolder.vmake.setText(vehicleSpecs.get("make"));
+            adapterViewHolder.vmodel.setText(vehicleSpecs.get("model"));
+            adapterViewHolder.vplate.setText(vehicleSpecs.get("plate"));
 
         }else{
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(errorColor);
-            adapterViewHolder.vyear.setText(vehicleSpecs.get(1));
+            adapterViewHolder.vyear.setText(vehicleSpecs.get(null));
         }
     }
 
     public int determineLayout(){
-        ArrayList<String> vehicleSpecs = new ArrayList<>();
-        vehicleSpecs.addAll(vehicleList.get(0));
+        HashMap<String, String> vehicleSpecs = new HashMap<>();
+        vehicleSpecs.putAll(vehicleList.get(0));
 
-        if(vehicleSpecs.get(0) != null) {
-            DBisEmpty = false;
-
-            return R.layout.overview_card;
-        }else{
+        if(vehicleSpecs.containsKey(null)) {
             DBisEmpty = true;
 
             return R.layout.overview_card_empty;
+        }else{
+            DBisEmpty = false;
+
+            return R.layout.overview_card;
         }
     }
 
@@ -86,7 +87,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         protected TextView vplate;
 
 
-        public AdapterViewHolder(View view, final ArrayList<ArrayList> vehicleList, final Boolean DBisEmpty) {
+        public AdapterViewHolder(View view, final ArrayList<HashMap> vehicleList, final Boolean DBisEmpty) {
             super(view);
 
             view.setTag(R.id.tag_0, vehicleList);
@@ -101,20 +102,19 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
         @Override
         public void onClick(View view) {
-            ArrayList<ArrayList> vehicleList = (ArrayList<ArrayList>) view.getTag(R.id.tag_0);
+            ArrayList<HashMap> vehicleList = (ArrayList<HashMap>) view.getTag(R.id.tag_0);
             Boolean DBisEmpty = (Boolean) view.getTag(R.id.tag_1);
 
             if(!DBisEmpty) {
                 Intent viewIntent = new Intent(view.getContext(), activity_history.class);
-                viewIntent.putStringArrayListExtra("vehicleSent", vehicleList.get(getPosition()));
+                viewIntent.putExtra("vehicleSent", vehicleList.get(getPosition()));
                 view.getContext().startActivity(viewIntent);
             }else{
                 Intent viewAddIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
                 view.getContext().startActivity(viewAddIntent);
             }
         }
-
-}
+    }
 }
 
 

@@ -21,6 +21,7 @@ import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class fragment_overview extends Fragment {
@@ -35,7 +36,7 @@ public class fragment_overview extends Fragment {
 
     FloatingActionButton fab;
 
-    public ArrayList<ArrayList> vehicleList = new ArrayList<>();
+    public ArrayList<HashMap> vehicleList = new ArrayList<>();
 
     public fragment_overview() {
         // Required empty public constructor
@@ -133,7 +134,7 @@ public class fragment_overview extends Fragment {
 
         singleDrawerItems.add(mMenuTitles[0]);
         singleDrawerItems.add(mMenuTitles[1]);
-        //singleDrawerItems.add(mMenuTitles[2]);
+        //singleDrawerItems.add(mMenuTitles[2]); //TODO add settings back
         singleDrawerItems.add(mMenuTitles[3]);
 
         return new adapter_drawer(singleDrawerItems, icons);

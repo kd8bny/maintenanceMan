@@ -28,6 +28,10 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 public class fragment_history extends Fragment {
@@ -40,7 +44,7 @@ public class fragment_history extends Fragment {
     RecyclerView.Adapter cardListAdapter, histListAdapter;
 
     private String refID;
-    public ArrayList<String> vehicleSent;
+    public HashMap<String, String> vehicleSent;
 
     private ArrayList<ArrayList> vehicleHist;
 
@@ -59,8 +63,8 @@ public class fragment_history extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        vehicleSent = getActivity().getIntent().getStringArrayListExtra("vehicleSent");
-        refID = vehicleSent.get(0);
+        vehicleSent = (HashMap<String, String>) getActivity().getIntent().getSerializableExtra("vehicleSent");
+        refID = vehicleSent.get("refID");
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -97,7 +101,7 @@ public class fragment_history extends Fragment {
 
                     case R.id.menu_edit:
                         Intent editIntent = new Intent(getActivity(), activity_edit.class);
-                        editIntent.putStringArrayListExtra("vehicleSent", vehicleSent);
+                        editIntent.putExtra("vehicleSent", vehicleSent);
                         getActivity().startActivity(editIntent);
 
                         return true;
@@ -153,14 +157,13 @@ public class fragment_history extends Fragment {
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                Log.i(TAG, addEvent.getPanelState()+"");
                 if( keyCode == KeyEvent.KEYCODE_BACK ){
                     if(addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
                         addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
                         return true;
                     }else {
-                        
+
                         return false;
                     }
                 }
@@ -215,26 +218,47 @@ public class fragment_history extends Fragment {
     }
 
     public void populateCards(){
-        //year make model engine plate oilFilter oilWeight tireSummer tireWinter
-        ArrayList<ArrayList> vehicleInfo = new ArrayList<>();
-        ArrayList<String> tempGeneral = new ArrayList<>();
-        ArrayList<String> tempEngine = new ArrayList<>();
-        ArrayList<String> tempTires = new ArrayList<>();
+        Map<String, Map> vehicleInfo = new LinkedHashMap<>();
+        Map<String, String> tempGeneral = new LinkedHashMap<>();
+        Map<String, String> tempEngine = new LinkedHashMap<>();
+        Map<String, String> tempTires = new LinkedHashMap<>();
 
-        tempGeneral.add(vehicleSent.get(1));
-        tempGeneral.add(vehicleSent.get(2));
-        tempGeneral.add(vehicleSent.get(3));
-        tempGeneral.add(vehicleSent.get(5));
-        vehicleInfo.add(tempGeneral);
+        if(!(
+                (vehicleSent.get("year")).isEmpty() &&
+                (vehicleSent.get("make")).isEmpty() &&
+                (vehicleSent.get("model")).isEmpty() &&
+                (vehicleSent.get("plate")).isEmpty()
+        )) {
+            tempGeneral.put("year", vehicleSent.get("year"));
+            tempGeneral.put("make", vehicleSent.get("make"));
+            tempGeneral.put("model", vehicleSent.get("model"));
+            tempGeneral.put("plate", vehicleSent.get("plate"));
 
-        tempEngine.add(vehicleSent.get(4));
-        tempEngine.add(vehicleSent.get(6));
-        tempEngine.add(vehicleSent.get(7));
-        vehicleInfo.add(tempEngine);
+            vehicleInfo.put("gen", tempGeneral);
+        }
 
-        tempTires.add(vehicleSent.get(8));
-        tempTires.add(vehicleSent.get(9));
-        vehicleInfo.add(tempTires);
+        if(!(
+                (vehicleSent.get("engine")).isEmpty() &&
+                (vehicleSent.get("oilFilter")).isEmpty() &&
+                (vehicleSent.get("oilWeight")).isEmpty()
+        )) {
+            tempEngine.put("engine", vehicleSent.get("engine"));
+            tempEngine.put("oilFilter", vehicleSent.get("oilFilter"));
+            tempEngine.put("oilWeight", vehicleSent.get("oilWeight"));
+
+            vehicleInfo.put("eng", tempEngine);
+        }
+
+        if(!(
+                (vehicleSent.get("tireSummer")).isEmpty() &&
+                (vehicleSent.get("tireWinter")).isEmpty()
+        )){
+
+            tempTires.put("tireSummer", vehicleSent.get("tireSummer"));
+            tempTires.put("tireWinter", vehicleSent.get("tireWinter"));
+
+            vehicleInfo.put("tires", tempTires);
+        }
 
         cardListAdapter = new adapter_info(vehicleInfo);
     }
