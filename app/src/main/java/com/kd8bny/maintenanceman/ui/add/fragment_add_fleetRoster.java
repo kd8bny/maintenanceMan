@@ -18,24 +18,16 @@ import android.widget.Toast;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 
+import java.util.HashMap;
+
 
 public class fragment_add_fleetRoster extends Fragment {
     private static final String TAG = "fragment_add_fleetRoster";
 
     private Toolbar toolbar;
 
-    private String myear;
-    private String mmake;
-    private String mmodel;
-    private String mengine;
-    private String mplate;
-    private String moil_filter;
-    private String moil_weight;
-    private String mtire_winter;
-    private String mtire_summer;
-
-    public void fleetRoster(){
-
+    public fragment_add_fleetRoster(){
+        // Required empty public constructor
     }
 
     @Override
@@ -86,10 +78,8 @@ public class fragment_add_fleetRoster extends Fragment {
             case R.id.menu_save:
                 Context context = getActivity().getApplicationContext();
 
-                this.getValues();
-
                 fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(context);
-                fleetDB.saveEntry(context, null, mmake, mmodel, myear, mengine, mplate, moil_filter, moil_weight, mtire_summer, mtire_winter);//TODO Arraylist or dict
+                fleetDB.saveEntry(context, getValues());
 
                 Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
@@ -104,19 +94,22 @@ public class fragment_add_fleetRoster extends Fragment {
         }
     }
 
-    public void getValues(){
-        myear = ((EditText) getActivity().findViewById(R.id.val_spec_year)).getText().toString();
-        mmake = ((EditText) getActivity().findViewById(R.id.val_spec_make)).getText().toString();
-        mmodel = ((EditText) getActivity().findViewById(R.id.val_spec_model)).getText().toString();
-        mengine = ((EditText) getActivity().findViewById(R.id.val_spec_engine)).getText().toString();
+    public HashMap<String, String> getValues(){
+        HashMap<String, String> vehicleInfo = new HashMap<>();
 
-        mplate = ((EditText) getActivity().findViewById(R.id.val_spec_plate)).getText().toString();
-        moil_filter = ((EditText) getActivity().findViewById(R.id.val_spec_oil_filter)).getText().toString();
-        moil_weight = ((EditText) getActivity().findViewById(R.id.val_spec_oil_weight)).getText().toString();
-        mtire_winter = ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_winter)).getText().toString();
-        mtire_summer = ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_summer)).getText().toString();
+        vehicleInfo.put("refID", null);
+        vehicleInfo.put("year", ((EditText) getActivity().findViewById(R.id.val_spec_year)).getText().toString());
+        vehicleInfo.put("make", ((EditText) getActivity().findViewById(R.id.val_spec_make)).getText().toString());
+        vehicleInfo.put("model", ((EditText) getActivity().findViewById(R.id.val_spec_model)).getText().toString());
+        vehicleInfo.put("engine", ((EditText) getActivity().findViewById(R.id.val_spec_engine)).getText().toString());
 
+        vehicleInfo.put("plate", ((EditText) getActivity().findViewById(R.id.val_spec_plate)).getText().toString());
+        vehicleInfo.put("oilFilter", ((EditText) getActivity().findViewById(R.id.val_spec_oil_filter)).getText().toString());
+        vehicleInfo.put("oilWeight", ((EditText) getActivity().findViewById(R.id.val_spec_oil_weight)).getText().toString());
+        vehicleInfo.put("tireWinter", ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_winter)).getText().toString());
+        vehicleInfo.put("tireSummer", ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_summer)).getText().toString());
+
+        return vehicleInfo;
     }
-
 }
 

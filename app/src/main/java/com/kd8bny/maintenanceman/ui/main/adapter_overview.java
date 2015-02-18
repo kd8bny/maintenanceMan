@@ -72,11 +72,11 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         if(vehicleSpecs.containsKey(null)) {
             DBisEmpty = true;
 
-            return R.layout.overview_card_empty;
+            return R.layout.card_overview_empty;
         }else{
             DBisEmpty = false;
 
-            return R.layout.overview_card;
+            return R.layout.card_overview;
         }
     }
 

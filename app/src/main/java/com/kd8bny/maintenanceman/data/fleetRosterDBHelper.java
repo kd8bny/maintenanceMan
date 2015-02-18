@@ -16,13 +16,14 @@ import java.util.UUID;
 public class fleetRosterDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "fleetRosterDBHelper";
 
-    public static final int DB_VERSION = 2; //v16
+    public static final int DB_VERSION = 2; //v25
     public static final String DB_NAME = "fleetRoster.db";
     SQLiteDatabase fleetRosterDB = null;
 
     public static final String TABLE_ROSTER = "grandFleetRoster";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ROSTER_refID = "refID";
+    public static final String COLUMN_ROSTER_TYPE = "type";
     public static final String COLUMN_ROSTER_YEAR = "year";
     public static final String COLUMN_ROSTER_MAKE = "make";
     public static final String COLUMN_ROSTER_MODEL = "model";
@@ -39,6 +40,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         + "("
         + COLUMN_ID + " integer primary key autoincrement, "
         + COLUMN_ROSTER_refID + " text not null, "
+        + COLUMN_ROSTER_TYPE + " text not null"
         + COLUMN_ROSTER_YEAR + " text not null, "
         + COLUMN_ROSTER_MAKE + " text not null, "
         + COLUMN_ROSTER_MODEL + " text not null, "
@@ -68,11 +70,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         try {
             Log.d(TAG,"trying");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ROSTER_NEW + " AS SELECT * FROM " + TABLE_ROSTER);
-            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_PLATE + " = '' WHERE " + COLUMN_ROSTER_PLATE + " IS NULL");
-            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_OIL_FILTER + " = '' WHERE " + COLUMN_ROSTER_OIL_FILTER + " IS NULL");
-            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_OIL_WEIGHT + " = '' WHERE " + COLUMN_ROSTER_OIL_WEIGHT + " IS NULL");
-            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_TIRE_SUMMER + " = '' WHERE " + COLUMN_ROSTER_TIRE_SUMMER + " IS NULL");
-            db.execSQL("UPDATE " + TABLE_ROSTER_NEW + " SET " + COLUMN_ROSTER_TIRE_WINTER + " = '' WHERE " + COLUMN_ROSTER_TIRE_WINTER + " IS NULL");
+            db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " ADD COLUMN " + COLUMN_ROSTER_TYPE + " text not null");
 
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_ROSTER);
             db.execSQL("ALTER TABLE " + TABLE_ROSTER_NEW + " RENAME TO " + TABLE_ROSTER);
@@ -107,8 +105,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void saveEntry(Context context, String refID, String make, String model, String year, String engine,
-                          String plate, String oilFilter, String oilWeight, String tireSummer, String tireWinter) { //TODO fix hasmap
+    public void saveEntry(Context context, HashMap vehicleInfo) {
         Log.d(TAG, "Saving entry");
 
         File database = context.getDatabasePath("fleetRoster.db");
@@ -117,25 +114,26 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
 
         else {
-            if (refID == null) {
-                refID = (UUID.randomUUID()).toString();
+            if (vehicleInfo.get("refID") == null) {
+                vehicleInfo.put("refID", (UUID.randomUUID()).toString());
             }
             fleetRosterDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
 
             fleetRosterDB.execSQL("INSERT INTO grandFleetRoster (refID, make, model, year, engine, plate, oilFilter, oilWeight, tireSummer, tireWinter) " +
                     "VALUES ('"
-                    + refID + "','"
-                    + make + "','"
-                    + model + "','"
-                    + year + "','"
-                    + engine + "','"
-                    + plate + "','"
-                    + oilFilter + "','"
-                    + oilWeight + "','"
-                    + tireSummer + "','"
-                    + tireWinter + "');");
+                    + vehicleInfo.get("refID") + "','"
+                    + vehicleInfo.get("make") + "','"
+                    + vehicleInfo.get("model") + "','"
+                    + vehicleInfo.get("year") + "','"
+                    + vehicleInfo.get("engine") + "','"
+                    + vehicleInfo.get("plate") + "','"
+                    + vehicleInfo.get("oilFilter") + "','"
+                    + vehicleInfo.get("oilWeight") + "','"
+                    + vehicleInfo.get("tireSummer") + "','"
+                    + vehicleInfo.get("tireWinter") + "');");
         }
     }
+
     public ArrayList<HashMap> getEntries(Context context){
         createDatabase(context);
         Cursor cursor = fleetRosterDB.rawQuery("SELECT * FROM grandFleetRoster", null);
@@ -169,12 +167,6 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
                 singleVehicleList.put("oilWeight", cursor.getString(oilWeightCol));
                 singleVehicleList.put("tireSummer", cursor.getString(tireSummerCol));
                 singleVehicleList.put("tireWinter", cursor.getString(tireWinterCol));
-
-                /*for (String key : singleVehicleList.keySet()){
-                    if((singleVehicleList.get(key)).equals("")){
-                        singleVehicleList.put(key, null);
-                    }
-                }*/
 
                 vehicleList.add(singleVehicleList);
 
