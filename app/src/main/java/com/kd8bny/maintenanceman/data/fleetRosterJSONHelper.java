@@ -73,15 +73,15 @@ public class fleetRosterJSONHelper {
             }
             for (int i = 0; i < vehicleDataENG.size(); i++) {
                 ArrayList<String> tempData = new ArrayList<String>(vehicleDataENG.get(i));
-                gen.put(tempData.get(0), tempData.get(1));
+                eng.put(tempData.get(0), tempData.get(1));
             }
             for (int i = 0; i < vehicleDataPWR.size(); i++) {
                 ArrayList<String> tempData = new ArrayList<String>(vehicleDataPWR.get(i));
-                gen.put(tempData.get(0), tempData.get(1));
+                pwr.put(tempData.get(0), tempData.get(1));
             }
             for (int i = 0; i < vehicleDataOTHER.size(); i++) {
                 ArrayList<String> tempData = new ArrayList<String>(vehicleDataOTHER.get(i));
-                gen.put(tempData.get(0), tempData.get(1));
+                other.put(tempData.get(0), tempData.get(1));
             }
 
             vehicle.put("gen", gen);
