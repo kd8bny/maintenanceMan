@@ -163,6 +163,8 @@ public class fleetRosterJSONHelper {
                         }
                     }
                 }
+            }else{
+                vehicleDataAll.put(null, null);
             }
             }catch(JSONException e){
                 e.printStackTrace();
