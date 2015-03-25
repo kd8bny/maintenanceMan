@@ -157,6 +157,10 @@ public class fleetRosterJSONHelper {
                                     vehicleData.put("other", tempSpecMap);
                                     break;
 
+                                case "type":
+                                    vehicleData.put("type", tempSpecMap);
+                                    break;
+
                                 default:
                                     break;
                             }
