@@ -84,7 +84,6 @@ public class fleetRosterJSONHelper {
                 other.put(tempData.get(0), tempData.get(1));
             }
 
-            vehicle.put("type", type);
             vehicle.put("gen", gen);
             vehicle.put("eng", eng);
             vehicle.put("pwr", pwr);
@@ -155,10 +154,6 @@ public class fleetRosterJSONHelper {
 
                                 case "other":
                                     vehicleData.put("other", tempSpecMap);
-                                    break;
-
-                                case "type":
-                                    vehicleData.put("type", tempSpecMap);
                                     break;
 
                                 default:
