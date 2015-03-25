@@ -51,7 +51,7 @@ public class fleetRosterJSONHelper {
         return null;
     }
 
-    public void saveEntry(Context context, String refID, ArrayList<ArrayList> vehicleDataGEN, ArrayList<ArrayList> vehicleDataENG,
+    public void saveEntry(Context context, String type, String refID, ArrayList<ArrayList> vehicleDataGEN, ArrayList<ArrayList> vehicleDataENG,
                           ArrayList<ArrayList> vehicleDataPWR, ArrayList<ArrayList> vehicleDataOTHER) {
 
         String json = openJSON(context);
@@ -84,6 +84,7 @@ public class fleetRosterJSONHelper {
                 other.put(tempData.get(0), tempData.get(1));
             }
 
+            vehicle.put("type", type);
             vehicle.put("gen", gen);
             vehicle.put("eng", eng);
             vehicle.put("pwr", pwr);
