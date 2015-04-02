@@ -51,8 +51,7 @@ public class fleetRosterJSONHelper {
         return null;
     }
 
-    public void saveEntry(Context context, String type, String refID, ArrayList<ArrayList> vehicleDataGEN, ArrayList<ArrayList> vehicleDataENG,
-                          ArrayList<ArrayList> vehicleDataPWR, ArrayList<ArrayList> vehicleDataOTHER) {
+    public void saveEntry(Context context, String refID, ArrayList<ArrayList> vehicleDataAll) {
 
         String json = openJSON(context);
 
@@ -67,21 +66,28 @@ public class fleetRosterJSONHelper {
         JSONObject other = new JSONObject();
 
         try{
-            for (int i = 0; i < vehicleDataGEN.size(); i++) {
-                ArrayList<String> tempData = new ArrayList<String>(vehicleDataGEN.get(i));
-                gen.put(tempData.get(0), tempData.get(1));
-            }
-            for (int i = 0; i < vehicleDataENG.size(); i++) {
-                ArrayList<String> tempData = new ArrayList<String>(vehicleDataENG.get(i));
-                eng.put(tempData.get(0), tempData.get(1));
-            }
-            for (int i = 0; i < vehicleDataPWR.size(); i++) {
-                ArrayList<String> tempData = new ArrayList<String>(vehicleDataPWR.get(i));
-                pwr.put(tempData.get(0), tempData.get(1));
-            }
-            for (int i = 0; i < vehicleDataOTHER.size(); i++) {
-                ArrayList<String> tempData = new ArrayList<String>(vehicleDataOTHER.get(i));
-                other.put(tempData.get(0), tempData.get(1));
+            for (int i = 0; i < vehicleDataAll.size(); i++){
+                ArrayList<String> tempData = new ArrayList<String>(vehicleDataAll.get(i));
+                switch (tempData.get(0)){
+                    case ("gen"):
+                        gen.put(tempData.get(1), tempData.get(2));
+                        break;
+
+                    case ("eng"):
+                        eng.put(tempData.get(1), tempData.get(2));
+                        break;
+
+                    case ("pwr"):
+                        pwr.put(tempData.get(1), tempData.get(2));
+                        break;
+
+                    case ("other"):
+                        other.put(tempData.get(1), tempData.get(2));
+                        break;
+
+                    default:
+                        Log.e(TAG, "NOT GOOD: category is missing");
+                }
             }
 
             vehicle.put("gen", gen);

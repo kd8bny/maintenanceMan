@@ -1,33 +1,70 @@
 package com.kd8bny.maintenanceman.ui.add;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
-
-import java.util.HashMap;
+import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
+import com.melnykov.fab.FloatingActionButton;
 
 
 public class fragment_add_fleetRoster extends Fragment {
-    private static final String TAG = "fragment_add_fleetRoster";
+    private static final String TAG = "frg_add_fltRstr";
 
     private Toolbar toolbar;
+    private Spinner vehicleSpinner;
+
+    private RecyclerView addList;
+    private RecyclerView.LayoutManager addMan;
+    private RecyclerView.Adapter addListAdapter;
+    private FloatingActionButton fab;
+
+    private ArrayAdapter<String> spinnerAdapter;
+    public ArrayList<ArrayList> vehicleDataAll = new ArrayList<>();
 
     public fragment_add_fleetRoster(){
-        // Required empty public constructor
+        ArrayList<String> tempYear = new ArrayList<>();
+            tempYear.add("gen");
+            tempYear.add("Year");
+            tempYear.add(null);
+
+        ArrayList<String> tempMake = new ArrayList<>();
+            tempMake.add("gen");
+            tempMake.add("Make");
+            tempMake.add(null);
+
+        ArrayList<String> tempModel = new ArrayList<>();
+            tempModel.add("gen");
+            tempModel.add("Model");
+            tempModel.add(null);
+
+        vehicleDataAll.add(tempYear);
+        vehicleDataAll.add(tempMake);
+        vehicleDataAll.add(tempModel);
     }
 
     @Override
@@ -39,7 +76,7 @@ public class fragment_add_fleetRoster extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -47,23 +84,83 @@ public class fragment_add_fleetRoster extends Fragment {
         ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
-        //Headers
-        View vheader;
-        ImageView iheader;
+        //Spinner
+        vehicleSpinner = (Spinner) view.findViewById(R.id.spinner_vehicle_type);
+        final String [] mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
+        spinnerAdapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_dropdown_item, mvehicleTypes);
+        vehicleSpinner.setAdapter(spinnerAdapter);
 
-        vheader = view.findViewById(R.id.header_carSpecs);
-        iheader = (ImageView) vheader.findViewById(R.id.header_icon);
-        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_car));
+        //Recycler View
+        addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
+        addMan = new LinearLayoutManager(getActivity());
+        addList.setHasFixedSize(true);
+        addList.setItemAnimator(new DefaultItemAnimator());
+        addList.setLayoutManager(addMan);
+        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                Bundle args = new Bundle();
+                args.putSerializable("field", vehicleDataAll.get(pos));
+                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
 
-        vheader = view.findViewById(R.id.header_engineSpecs);
-        iheader = (ImageView) vheader.findViewById(R.id.header_icon);
-        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_engine));
+                dialog_addField dialog_addField = new dialog_addField();
+                dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
+                dialog_addField.setArguments(args);
+                dialog_addField.show(fm, "dialog_add_field");
+            }
 
-        vheader = view.findViewById(R.id.header_tiresSpecs);
-        iheader = (ImageView) vheader.findViewById(R.id.header_icon);
-        iheader.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_tires));
+            @Override
+            public void onItemLongClick(View view, int pos) {
+
+            }
+        }));
+        //RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        //recyclerView.addItemDecoration(itemDecoration);
+
+        addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
+        addList.setAdapter(addListAdapter);
+
+        //fab
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.attachToRecyclerView(addList);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+
+                dialog_addField dialog_addField = new dialog_addField();
+                dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
+                dialog_addField.show(fm, "dialog_add_field");
+            }
+        });
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        ArrayList<String> result = data.getStringArrayListExtra("fieldData");
+
+        switch (data.getStringExtra("action")){
+            case ("edit"): //TODO notify adapter
+                for (int i =0; i<vehicleDataAll.size(); i++){
+                    ArrayList<String> temp = vehicleDataAll.get(i);
+                    if (temp.get(1).equals(result.get(1))){
+                        vehicleDataAll.set(i, result);
+                        break;
+                    }
+
+                }
+                break;
+
+            default: //new
+                vehicleDataAll.add(result);
+
+                break;
+        }
+
+        addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
+        addList.swapAdapter(addListAdapter, false);
     }
 
     @Override
@@ -76,10 +173,15 @@ public class fragment_add_fleetRoster extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add("gen");
+                temp.add("type");
+                temp.add((String)vehicleSpinner.getSelectedItem());
+                vehicleDataAll.add(temp);
                 Context context = getActivity().getApplicationContext();
 
-                fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(context);
-                fleetDB.saveEntry(context, getValues());
+                fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
+                fleetDB.saveEntry(context, null, vehicleDataAll);
 
                 Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
@@ -92,24 +194,6 @@ public class fragment_add_fleetRoster extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public HashMap<String, String> getValues(){
-        HashMap<String, String> vehicleInfo = new HashMap<>();
-
-        vehicleInfo.put("refID", null);
-        vehicleInfo.put("year", ((EditText) getActivity().findViewById(R.id.val_spec_year)).getText().toString());
-        vehicleInfo.put("make", ((EditText) getActivity().findViewById(R.id.val_spec_make)).getText().toString());
-        vehicleInfo.put("model", ((EditText) getActivity().findViewById(R.id.val_spec_model)).getText().toString());
-        vehicleInfo.put("engine", ((EditText) getActivity().findViewById(R.id.val_spec_engine)).getText().toString());
-
-        vehicleInfo.put("plate", ((EditText) getActivity().findViewById(R.id.val_spec_plate)).getText().toString());
-        vehicleInfo.put("oilFilter", ((EditText) getActivity().findViewById(R.id.val_spec_oil_filter)).getText().toString());
-        vehicleInfo.put("oilWeight", ((EditText) getActivity().findViewById(R.id.val_spec_oil_weight)).getText().toString());
-        vehicleInfo.put("tireWinter", ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_winter)).getText().toString());
-        vehicleInfo.put("tireSummer", ((EditText) getActivity().findViewById(R.id.val_spec_tire_size_summer)).getText().toString());
-
-        return vehicleInfo;
     }
 }
 
