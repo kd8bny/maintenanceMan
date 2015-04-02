@@ -30,9 +30,6 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
 
 
 public class fragment_history extends Fragment {
@@ -66,7 +63,6 @@ public class fragment_history extends Fragment {
 
         vehicleSent = (HashMap<String, HashMap>) getActivity().getIntent().getSerializableExtra("vehicleSent");
         refID = getActivity().getIntent().getStringExtra("refID");
-        Log.d(TAG, vehicleSent.toString());
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -120,7 +116,7 @@ public class fragment_history extends Fragment {
         histList.setHasFixedSize(true);
         histList.setItemAnimator(new DefaultItemAnimator());
         histList.setLayoutManager(histMan);
-        cardListAdapter = new adapter_info(vehicleSent);
+        populateAdapter();
         histList.setAdapter(histListAdapter);
 
         //Slide-y up menu
@@ -187,7 +183,7 @@ public class fragment_history extends Fragment {
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
-        populateCards();
+        cardListAdapter = new adapter_info(vehicleSent);
         cardList.setAdapter(cardListAdapter);
 
         return view;

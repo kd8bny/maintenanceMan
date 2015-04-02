@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/carPic"
             android:layout_gravity="end"
-            android:text="Year"
+            android:text="@string/no_data"
             android:ellipsize="end"
             android:singleLine="true"
             android:layout_marginTop="@dimen/header_vertical_margin"
@@ -67,7 +67,7 @@
                 android:singleLine="true"
                 android:maxWidth="70dp"
 
-                android:text="make"
+                android:text="@string/no_data"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
 
@@ -83,23 +83,7 @@
                 android:singleLine="true"
                 android:maxWidth="70dp"
 
-                android:text="model"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"/>
-
-            <TextView
-                android:id="@+id/plate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_weight="1"
-
-                android:ellipsize="marquee"
-                android:fadingEdge="horizontal"
-                android:singleLine="true"
-                android:maxWidth="70dp"
-
-                android:text="ABC123"
+                android:text="@string/no_data"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
 

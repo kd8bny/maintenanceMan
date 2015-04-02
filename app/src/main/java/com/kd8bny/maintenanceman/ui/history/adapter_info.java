@@ -112,7 +112,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         vehicleInfoItem = vehicleInfoArray.get(i);
         cardInfo = vehicleInfoArray.get(i);
-        Log.i(TAG,cardInfo.toString());
 
         switch (getItemViewType(i)) {
             case VIEW_GENERAL:
@@ -142,7 +141,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private static final String TAG = "adptr_info_VwHldr_gen";
 
         private TypedArray headerColors;
-        private HashMap<String, String> labels = new HashMap();
+        private ArrayList<String> labels = new ArrayList<>();
 
         public ViewHolderGeneral(View view, final Map<String, String> cardInfo) {
             super(view);
@@ -168,12 +167,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             if(cardInfo.size() > 1) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
-                /*labels.put("year", view.getResources().getString(R.string.spec_year));
-                labels.put("make", view.getResources().getString(R.string.spec_make));
-                labels.put("model", view.getResources().getString(R.string.spec_model));
-                labels.put("plate", view.getResources().getString(R.string.spec_plate));*/
-
-
                 //Header
                 TextView tempHeaderTitle = new TextView(view.getContext());
 
@@ -190,7 +183,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 ((LinearLayout) layout).addView(tempHeaderTitle);
 
                 for (String key : cardInfo.keySet()) {
-                    if(!cardInfo.get(key).isEmpty()) {
+                    if(!cardInfo.get(key).isEmpty() && !key.equals("type")) {
                         TextView tempTextView = new TextView(view.getContext());
 
                         tempTextView.setLayoutParams(new ViewGroup.LayoutParams(
@@ -203,7 +196,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
                         tempTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(labels.get(key) + ":     " + cardInfo.get(key));
+                        tempTextView.setText(key + ":     " + cardInfo.get(key));
 
                         ((LinearLayout) layout).addView(tempTextView);
                     }
@@ -243,10 +236,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             if(cardInfo.size() > 1) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
-                /*labels.put("engine", view.getResources().getString(R.string.spec_engine));
-                labels.put("oilFilter", view.getResources().getString(R.string.spec_oil_filter));
-                labels.put("oilWeight", view.getResources().getString(R.string.spec_oil_weight));*/
-
                 //Header
                 TextView tempHeaderTitle = new TextView(view.getContext());
 
@@ -276,7 +265,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
                         tempTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(labels.get(key) + ":     " + cardInfo.get(key));
+                        tempTextView.setText(key + ":     " + cardInfo.get(key));
 
                         ((LinearLayout) layout).addView(tempTextView);
                     }
@@ -316,9 +305,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             if (cardInfo.size() > 1) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
-                //labels.put("tireWinter", view.getResources().getString(R.string.spec_tire_size_winter));
-                //labels.put("tireSummer", view.getResources().getString(R.string.spec_tire_size_summer));
-
                 //Header
                 TextView tempHeaderTitle = new TextView(view.getContext());
 
@@ -348,7 +334,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
                         tempTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(labels.get(key) + ":     " + cardInfo.get(key));
+                        tempTextView.setText(key + ":     " + cardInfo.get(key));
 
                         ((LinearLayout) layout).addView(tempTextView);
                     }
@@ -388,9 +374,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             if(cardInfo.size() > 1) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
-                //labels.put("tireWinter", view.getResources().getString(R.string.spec_tire_size_winter));
-                //labels.put("tireSummer", view.getResources().getString(R.string.spec_tire_size_summer));
-
                 //Header
                 TextView tempHeaderTitle = new TextView(view.getContext());
 
@@ -420,7 +403,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
                         tempTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(labels.get(key) + ":     " + cardInfo.get(key));
+                        tempTextView.setText(key + ":     " + cardInfo.get(key));
 
                         ((LinearLayout) layout).addView(tempTextView);
                     }
