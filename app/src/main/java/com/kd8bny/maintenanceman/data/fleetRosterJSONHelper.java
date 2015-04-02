@@ -51,6 +51,19 @@ public class fleetRosterJSONHelper {
         return null;
     }
 
+    public void writeJSON(Context context, JSONObject object){
+        try {
+            File file = new File(context.getFilesDir() + "/" + JSON_NAME);
+            FileWriter fileWriter = new FileWriter(file);
+
+            fileWriter.write(object.toString());
+            fileWriter.flush();
+            fileWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void saveEntry(Context context, String refID, ArrayList<ArrayList> vehicleDataAll) {
 
         String json = openJSON(context);
@@ -99,25 +112,15 @@ public class fleetRosterJSONHelper {
                 JSONObject roster = new JSONObject(json);
                 roster.put(refID, vehicle);
 
-                File file = new File(context.getFilesDir() + "/" + JSON_NAME);
-                FileWriter fileWriter = new FileWriter(file); //TODO write class
+                writeJSON(context, roster);
 
-                fileWriter.write(roster.toString());
-                fileWriter.flush();
-                fileWriter.close();
             }else{
-                File file = new File(context.getFilesDir() + "/" + JSON_NAME);
-
                 JSONObject roster = new JSONObject();
                 roster.put(refID, vehicle);
 
-                FileWriter fileWriter = new FileWriter(file);
-
-                fileWriter.write(roster.toString());
-                fileWriter.flush();
-                fileWriter.close();
+                writeJSON(context, roster);
             }
-        }catch (IOException | JSONException e){
+        }catch (JSONException e){
             e.printStackTrace();
         }
     }
@@ -180,12 +183,13 @@ public class fleetRosterJSONHelper {
     }
 
     public void deleteEntry(Context context, String refID){
-
         String json = openJSON(context);
 
         try {
             JSONObject roster = new JSONObject(json);
             roster.remove(refID);
+
+            writeJSON(context, roster);
 
         }catch(JSONException e){
             e.printStackTrace();

@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
+import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.edit.activity_edit;
@@ -86,8 +87,8 @@ public class fragment_history extends Fragment {
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                //fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(getActivity());
-                                //fleetDB.deleteEntry(getActivity(), refID);
+                                fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+                                fltjson.deleteEntry(getActivity(), refID);
 
                                 getActivity().finish();
                             }
