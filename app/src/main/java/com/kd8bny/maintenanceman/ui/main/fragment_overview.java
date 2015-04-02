@@ -10,14 +10,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
+import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
+import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
+import com.kd8bny.maintenanceman.ui.history.activity_history;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -25,18 +30,18 @@ import java.util.HashMap;
 
 
 public class fragment_overview extends Fragment {
-    private static final String TAG = "fragment_overview";
+    private static final String TAG = "frg_ovrvw";
 
     private Toolbar toolbar;
-    RecyclerView cardList, drawerList;
-    RecyclerView.LayoutManager cardMan, drawerMan;
-    RecyclerView.Adapter cardListAdapter;
-    DrawerLayout Drawer;
-    ActionBarDrawerToggle mDrawerToggle;
+    private RecyclerView cardList, drawerList;
+    private RecyclerView.LayoutManager cardMan, drawerMan;
+    private RecyclerView.Adapter cardListAdapter;
+    private DrawerLayout Drawer;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private FloatingActionButton fab;
 
-    FloatingActionButton fab;
-
-    public ArrayList<HashMap> vehicleList = new ArrayList<>();
+    private HashMap<String, HashMap> roster;
+    private Boolean DBisEmpty = false;
 
     public fragment_overview() {
         // Required empty public constructor
@@ -46,7 +51,6 @@ public class fragment_overview extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -61,12 +65,38 @@ public class fragment_overview extends Fragment {
         ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //cards
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
-        populateCards();
+
+        if (roster.containsKey(null)){
+             DBisEmpty = true;
+        }
+        cardListAdapter = new adapter_overview(roster);
+        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                if(!DBisEmpty) {
+                    ArrayList<String> refIDs = new ArrayList<>();
+                    refIDs.addAll(roster.keySet());
+                    Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_history.class);
+                    viewIntent.putExtra("vehicleSent", roster.get(refIDs.get(pos)));
+                    view.getContext().startActivity(viewIntent);
+                }else{
+                    Intent viewAddIntent = new Intent(getActivity().getApplicationContext(), activity_add_fleetRoster.class);
+                    view.getContext().startActivity(viewAddIntent);}
+            }
+
+            @Override
+            public void onItemLongClick(View view, int pos) {
+
+            }
+        }));
         cardList.setAdapter(cardListAdapter);
 
         //fab
@@ -117,14 +147,10 @@ public class fragment_overview extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        populateCards();
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        cardListAdapter = new adapter_overview(roster);
         cardList.setAdapter(cardListAdapter);
-    }
-
-    public void populateCards(){
-        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
-        cardListAdapter = new adapter_overview(vehicleList);
     }
 
     public adapter_drawer populateDrawer(){
@@ -139,5 +165,4 @@ public class fragment_overview extends Fragment {
 
         return new adapter_drawer(singleDrawerItems, icons);
     }
-
 }

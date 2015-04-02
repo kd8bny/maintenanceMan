@@ -27,7 +27,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/overview_cardList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:clickable="true"
                 android:focusable="true"/>
 
@@ -40,7 +40,7 @@
                 android:src="@drawable/ic_action_add"
                 fab:fab_colorNormal="@color/accent"
                 fab:fab_colorPressed="@color/primary_light"
-                fab:fab_colorRipple="@color/primary_dark" />
+                fab:fab_colorRipple="@color/accent_dark" />
         </FrameLayout>
 
         <android.support.v7.widget.RecyclerView

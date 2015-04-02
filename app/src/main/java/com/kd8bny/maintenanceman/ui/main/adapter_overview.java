@@ -1,22 +1,21 @@
 package com.kd8bny.maintenanceman.ui.main;
 
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
-import com.kd8bny.maintenanceman.ui.history.activity_history;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
-    private static final String TAG = "adapter_overview";
+    private static final String TAG = "adptr_ovrvw";
 
     public ArrayList<HashMap> vehicleList = new ArrayList<>();
     private boolean DBisEmpty;
@@ -24,8 +23,8 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     private int errorColor;
     private View itemView;
 
-    public adapter_overview(ArrayList vehicleList) {
-        this.vehicleList = vehicleList;
+    public adapter_overview(HashMap<String, HashMap> vehicleList) {
+        this.vehicleList.addAll(vehicleList.values());
 
     }
 
@@ -43,33 +42,47 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         headerColors = itemView.getResources().obtainTypedArray(R.array.header_color);
         errorColor = itemView.getResources().getColor(R.color.error);
 
-        return new AdapterViewHolder(itemView, vehicleList, DBisEmpty);
+        return new AdapterViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        HashMap<String, String> vehicleSpecs = new HashMap<>();
-        vehicleSpecs.putAll(vehicleList.get(i));
+        HashMap<String, HashMap> vehicle = vehicleList.get(i);
 
         if(!DBisEmpty) {
+            HashMap<String, String> category = vehicle.get("gen");
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(i%5, 0));
 
-            adapterViewHolder.vyear.setText(vehicleSpecs.get("year"));
-            adapterViewHolder.vmake.setText(vehicleSpecs.get("make"));
-            adapterViewHolder.vmodel.setText(vehicleSpecs.get("model"));
-            adapterViewHolder.vplate.setText(vehicleSpecs.get("plate"));
+            adapterViewHolder.vyear.setText(category.get("Year"));
+            adapterViewHolder.vmake.setText(category.get("Make"));
+            adapterViewHolder.vmodel.setText(category.get("Model"));
+            switch (category.get("type")){
+                case "Automobile":
+                    adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
+                    break;
+                case "Motorcycle":
+                    adapterViewHolder.carPic.setImageResource(R.drawable.motorcycle_md_9);
+                    break;
+                case "Utility":
+                    adapterViewHolder.carPic.setImageResource(R.drawable.utility_md_9);
+                    break;
+                case "Water": //TODO
+                    adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
+                    break;
+                default:
+                    break;
+            }
 
         }else{
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(errorColor);
-            adapterViewHolder.vyear.setText(vehicleSpecs.get(null));
+            adapterViewHolder.vyear.setText(R.string.empty_db);
         }
     }
 
     public int determineLayout(){
-        HashMap<String, String> vehicleSpecs = new HashMap<>();
-        vehicleSpecs.putAll(vehicleList.get(0));
+        HashMap<String, HashMap> vehicle = vehicleList.get(0);
 
-        if(vehicleSpecs.containsKey(null)) {
+        if(vehicle == null) {
             DBisEmpty = true;
 
             return R.layout.card_overview_empty;
@@ -80,39 +93,19 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         }
     }
 
-    public static class AdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder{
         protected TextView vyear;
         protected TextView vmake;
         protected TextView vmodel;
-        protected TextView vplate;
+        protected ImageView carPic;
 
-
-        public AdapterViewHolder(View view, final ArrayList<HashMap> vehicleList, final Boolean DBisEmpty) {
+        public AdapterViewHolder(View view) {
             super(view);
-
-            view.setTag(R.id.tag_0, vehicleList);
-            view.setTag(R.id.tag_1, DBisEmpty);
-            view.setOnClickListener(this);
 
             vyear = (TextView) view.findViewById(R.id.year);
             vmake = (TextView) view.findViewById(R.id.make);
             vmodel = (TextView) view.findViewById(R.id.model);
-            vplate = (TextView) view.findViewById(R.id.plate);
-        }
-
-        @Override
-        public void onClick(View view) {
-            ArrayList<HashMap> vehicleList = (ArrayList<HashMap>) view.getTag(R.id.tag_0);
-            Boolean DBisEmpty = (Boolean) view.getTag(R.id.tag_1);
-
-            if(!DBisEmpty) {
-                Intent viewIntent = new Intent(view.getContext(), activity_history.class);
-                viewIntent.putExtra("vehicleSent", vehicleList.get(getPosition()));
-                view.getContext().startActivity(viewIntent);
-            }else{
-                Intent viewAddIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
-                view.getContext().startActivity(viewAddIntent);
-            }
+            carPic = (ImageView) view.findViewById(R.id.carPic);
         }
     }
 }
