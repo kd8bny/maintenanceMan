@@ -69,19 +69,19 @@ public class fleetRosterJSONHelper {
             for (int i = 0; i < vehicleDataAll.size(); i++){
                 ArrayList<String> tempData = new ArrayList<String>(vehicleDataAll.get(i));
                 switch (tempData.get(0)){
-                    case ("gen"):
+                    case ("General"):
                         gen.put(tempData.get(1), tempData.get(2));
                         break;
 
-                    case ("eng"):
+                    case ("Engine"):
                         eng.put(tempData.get(1), tempData.get(2));
                         break;
 
-                    case ("pwr"):
+                    case ("Power Train"):
                         pwr.put(tempData.get(1), tempData.get(2));
                         break;
 
-                    case ("other"):
+                    case ("Other"):
                         other.put(tempData.get(1), tempData.get(2));
                         break;
 
