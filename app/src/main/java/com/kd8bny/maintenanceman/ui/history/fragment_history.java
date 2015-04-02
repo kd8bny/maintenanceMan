@@ -45,7 +45,7 @@ public class fragment_history extends Fragment {
     RecyclerView.Adapter cardListAdapter, histListAdapter;
 
     private String refID;
-    public HashMap<String, String> vehicleSent;
+    public HashMap<String, HashMap> vehicleSent;
 
     private ArrayList<ArrayList> vehicleHist;
 
@@ -64,8 +64,9 @@ public class fragment_history extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        vehicleSent = (HashMap<String, String>) getActivity().getIntent().getSerializableExtra("vehicleSent");
-        refID = vehicleSent.get("refID");
+        vehicleSent = (HashMap<String, HashMap>) getActivity().getIntent().getSerializableExtra("vehicleSent");
+        refID = getActivity().getIntent().getStringExtra("refID");
+        Log.d(TAG, vehicleSent.toString());
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -89,8 +90,8 @@ public class fragment_history extends Fragment {
                         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int which) {
-                                fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(getActivity());
-                                fleetDB.deleteEntry(getActivity(), refID);
+                                //fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(getActivity());
+                                //fleetDB.deleteEntry(getActivity(), refID);
 
                                 getActivity().finish();
                             }
@@ -119,7 +120,7 @@ public class fragment_history extends Fragment {
         histList.setHasFixedSize(true);
         histList.setItemAnimator(new DefaultItemAnimator());
         histList.setLayoutManager(histMan);
-        populateAdapter();
+        cardListAdapter = new adapter_info(vehicleSent);
         histList.setAdapter(histListAdapter);
 
         //Slide-y up menu
@@ -223,52 +224,6 @@ public class fragment_history extends Fragment {
             default:
                 return super.onOptionsItemSelected(menuitem);
         }
-    }
-
-    public void populateCards(){
-        Map<String, Map> vehicleInfo = new LinkedHashMap<>();
-        Map<String, String> tempGeneral = new LinkedHashMap<>();
-        Map<String, String> tempEngine = new LinkedHashMap<>();
-        Map<String, String> tempTires = new LinkedHashMap<>();
-
-        if(!(
-                (vehicleSent.get("year")).isEmpty() &&
-                (vehicleSent.get("make")).isEmpty() &&
-                (vehicleSent.get("model")).isEmpty() &&
-                (vehicleSent.get("plate")).isEmpty()
-        )) {
-            tempGeneral.put("year", vehicleSent.get("year"));
-            tempGeneral.put("make", vehicleSent.get("make"));
-            tempGeneral.put("model", vehicleSent.get("model"));
-            tempGeneral.put("plate", vehicleSent.get("plate"));
-
-            vehicleInfo.put("gen", tempGeneral);
-        }
-
-        if(!(
-                (vehicleSent.get("engine")).isEmpty() &&
-                (vehicleSent.get("oilFilter")).isEmpty() &&
-                (vehicleSent.get("oilWeight")).isEmpty()
-        )) {
-            tempEngine.put("engine", vehicleSent.get("engine"));
-            tempEngine.put("oilFilter", vehicleSent.get("oilFilter"));
-            tempEngine.put("oilWeight", vehicleSent.get("oilWeight"));
-
-            vehicleInfo.put("eng", tempEngine);
-        }
-
-        if(!(
-                (vehicleSent.get("tireSummer")).isEmpty() &&
-                (vehicleSent.get("tireWinter")).isEmpty()
-        )){
-
-            tempTires.put("tireSummer", vehicleSent.get("tireSummer"));
-            tempTires.put("tireWinter", vehicleSent.get("tireWinter"));
-
-            vehicleInfo.put("tires", tempTires);
-        }
-
-        cardListAdapter = new adapter_info(vehicleInfo);
     }
 
     public void populateAdapter(){

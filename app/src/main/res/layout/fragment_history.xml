@@ -18,10 +18,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <include
                 android:id="@+id/tool_bar"
-                layout="@layout/toolbar">
-            </include>
+                layout="@layout/toolbar"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/histList"
@@ -36,8 +36,7 @@
 
         <include
             android:id="@+id/slide_bar"
-            layout="@layout/slide_info">
-        </include>
+            layout="@layout/slide_info"/>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </RelativeLayout>
