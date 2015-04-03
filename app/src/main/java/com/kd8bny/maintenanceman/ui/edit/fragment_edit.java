@@ -56,6 +56,7 @@ public class fragment_edit extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        refID = getActivity().getIntent().getStringExtra("refID");
         HashMap<String, HashMap> vehicleSent = (HashMap<String, HashMap>) getActivity().getIntent().getSerializableExtra("vehicleSent");
         for (String key : vehicleSent.keySet()){
             HashMap<String, String> fieldTemp = vehicleSent.get(key);
@@ -184,13 +185,13 @@ public class fragment_edit extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
-                ArrayList<String> temp = new ArrayList<>();
+                /*ArrayList<String> temp = new ArrayList<>();
                 temp.add("General");
                 temp.add("type");
                 temp.add((String)vehicleSpinner.getSelectedItem());
-                vehicleDataAll.add(temp);
+                vehicleDataAll.add(temp);*///TODO creates an extra arraylist???
                 Context context = getActivity().getApplicationContext();
-
+Log.d(TAG,vehicleDataAll.toString());
                 fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
                 fleetDB.deleteEntry(context, refID);
                 fleetDB.saveEntry(context, null, vehicleDataAll);
