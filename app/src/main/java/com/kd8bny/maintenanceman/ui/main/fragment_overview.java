@@ -90,7 +90,8 @@ public class fragment_overview extends Fragment {
                     view.getContext().startActivity(viewIntent);
                 }else{
                     Intent viewAddIntent = new Intent(getActivity().getApplicationContext(), activity_add_fleetRoster.class);
-                    view.getContext().startActivity(viewAddIntent);}
+                    view.getContext().startActivity(viewAddIntent);
+                }
             }
 
             @Override
@@ -150,9 +151,13 @@ public class fragment_overview extends Fragment {
         super.onResume();
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+
         if (roster.containsKey(null)){
             DBisEmpty = true;
+        }else{
+            DBisEmpty = false;
         }
+
         cardListAdapter = new adapter_overview(roster);
         cardList.setAdapter(cardListAdapter);
     }
