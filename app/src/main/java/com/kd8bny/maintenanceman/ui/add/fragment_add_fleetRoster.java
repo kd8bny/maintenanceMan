@@ -48,17 +48,17 @@ public class fragment_add_fleetRoster extends Fragment {
 
     public fragment_add_fleetRoster(){
         ArrayList<String> tempYear = new ArrayList<>();
-            tempYear.add("gen");
+            tempYear.add("General");
             tempYear.add("Year");
             tempYear.add(null);
 
         ArrayList<String> tempMake = new ArrayList<>();
-            tempMake.add("gen");
+            tempMake.add("General");
             tempMake.add("Make");
             tempMake.add(null);
 
         ArrayList<String> tempModel = new ArrayList<>();
-            tempModel.add("gen");
+            tempModel.add("General");
             tempModel.add("Model");
             tempModel.add(null);
 
@@ -149,7 +149,6 @@ public class fragment_add_fleetRoster extends Fragment {
                         vehicleDataAll.set(i, result);
                         break;
                     }
-
                 }
                 break;
 
@@ -174,7 +173,7 @@ public class fragment_add_fleetRoster extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 ArrayList<String> temp = new ArrayList<>();
-                temp.add("gen");
+                temp.add("General");
                 temp.add("type");
                 temp.add((String)vehicleSpinner.getSelectedItem());
                 vehicleDataAll.add(temp);
