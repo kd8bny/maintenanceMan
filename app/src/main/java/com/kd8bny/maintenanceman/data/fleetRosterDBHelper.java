@@ -40,7 +40,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         + "("
         + COLUMN_ID + " integer primary key autoincrement, "
         + COLUMN_ROSTER_refID + " text not null, "
-        + COLUMN_ROSTER_TYPE + " text not null"
+        + COLUMN_ROSTER_TYPE + " text not null, "
         + COLUMN_ROSTER_YEAR + " text not null, "
         + COLUMN_ROSTER_MAKE + " text not null, "
         + COLUMN_ROSTER_MODEL + " text not null, "
@@ -105,7 +105,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void saveEntry(Context context, HashMap vehicleInfo) {
+    /*public void saveEntry(Context context, HashMap vehicleInfo) {
         Log.d(TAG, "Saving entry");
 
         File database = context.getDatabasePath("fleetRoster.db");
@@ -132,7 +132,7 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
                     + vehicleInfo.get("tireSummer") + "','"
                     + vehicleInfo.get("tireWinter") + "');");
         }
-    }
+    }*/
 
     public ArrayList<HashMap> getEntries(Context context){
         createDatabase(context);
@@ -180,8 +180,8 @@ public class fleetRosterDBHelper extends SQLiteOpenHelper{
         return vehicleList;
     }
 
-    public void deleteEntry(Context context, String refID){
+    /*public void deleteEntry(Context context, String refID){
         createDatabase(context);
         fleetRosterDB.execSQL("DELETE FROM grandFleetRoster WHERE refID = '" + refID + "';");
-    }
+    }*/
 }

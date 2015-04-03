@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
@@ -101,6 +100,7 @@ public class fragment_history extends Fragment {
                     case R.id.menu_edit:
                         Intent editIntent = new Intent(getActivity(), activity_edit.class);
                         editIntent.putExtra("vehicleSent", vehicleSent);
+                        editIntent.putExtra("refID", refID);
                         getActivity().startActivity(editIntent);
 
                         return true;
@@ -196,6 +196,9 @@ public class fragment_history extends Fragment {
 
         populateAdapter();
         histList.setAdapter(histListAdapter);
+
+        cardListAdapter = new adapter_info(vehicleSent);
+        cardList.setAdapter(cardListAdapter);
     }
 
     @Override

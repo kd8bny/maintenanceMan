@@ -32,7 +32,7 @@
                 android:paddingBottom="@dimen/header_vertical_margin">
             </include>
 
-            <com.rengwuxian.materialedittext.MaterialEditText
+            <!--<com.rengwuxian.materialedittext.MaterialEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/header_carSpecs"
@@ -178,7 +178,7 @@
                 app:errorColor="@color/error"
                 app:floatingLabel="highlight"
                 app:floatingLabelText="@string/spec_tire_size_summer"
-                app:floatingLabelAlwaysShown="true"/>
+                app:floatingLabelAlwaysShown="true"/>-->
 
         </RelativeLayout>
     </ScrollView>

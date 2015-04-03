@@ -22,8 +22,6 @@ public class activity_edit extends ActionBarActivity {
             fm.beginTransaction()
                     .add(R.id.fragmentcontainer_edit, fragment)
                     .commit();
-
         }
-
     }
 }

@@ -201,6 +201,4 @@ public class fragment_add_vehicleEvent extends Fragment {
             return null;
         }
     }
-
-
 }

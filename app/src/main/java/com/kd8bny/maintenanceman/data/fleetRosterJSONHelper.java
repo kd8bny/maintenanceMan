@@ -67,7 +67,7 @@ public class fleetRosterJSONHelper {
     public void saveEntry(Context context, String refID, ArrayList<ArrayList> vehicleDataAll) {
 
         String json = openJSON(context);
-
+Log.d(TAG,vehicleDataAll.toString());
         if (refID == null) {
             refID = UUID.randomUUID().toString();
         }
