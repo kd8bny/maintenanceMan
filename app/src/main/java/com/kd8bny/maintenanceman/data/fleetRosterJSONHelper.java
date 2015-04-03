@@ -133,17 +133,18 @@ Log.d(TAG,vehicleDataAll.toString());
         try {
             if (json != null) {
                 JSONObject roster = new JSONObject(json);
-                JSONArray vehicles = roster.names(); //TODO use object.keys() to iterate
+                JSONArray vehicles = roster.names();
 
                 for (int i = 0; i < vehicles.length(); i++) {
                     JSONObject vehicle = roster.getJSONObject(vehicles.getString(i));
                     JSONArray categories = vehicle.names();
+                    HashMap<String, HashMap> vehicleData = new HashMap<>();
                     for (int j = 0; j < categories.length(); j++) {
                         JSONObject category = vehicle.getJSONObject(categories.getString(j));
                         JSONArray specs = category.names();
 
                         HashMap<String, String> tempSpecMap = new HashMap<>();
-                        HashMap<String, HashMap> vehicleData = new HashMap<>();
+
                         if(specs != null) {
                             for (int k = 0; k < specs.length(); k++) {
                                 tempSpecMap.put(specs.getString(k), category.getString(specs.getString(k)));
