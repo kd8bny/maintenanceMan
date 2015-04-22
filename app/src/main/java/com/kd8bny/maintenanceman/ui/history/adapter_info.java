@@ -20,9 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private static final String TAG = "adapter_info";
+    private static final String TAG = "adptr_inf";
 
-    public HashMap<String, HashMap> vehicleInfoItem = new HashMap<>();
     public ArrayList<HashMap> vehicleInfoArray = new ArrayList<>();
     public ArrayList<String> keyList = new ArrayList<>();
     public Map<String, String> cardInfo = new LinkedHashMap<>();
@@ -38,10 +37,8 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int VIEW_OTHER = 3;
 
     public adapter_info(HashMap<String, HashMap> vehicleInfo) {
-        Log.d(TAG, vehicleInfo.toString());
         for (String key : vehicleInfo.keySet()) {
             if (vehicleInfo.get(key) != null) {
-                Log.d(TAG,"not null");
                 this.vehicleInfoArray.add(vehicleInfo.get(key));
                 this.keyList.add(key);
             }
@@ -49,8 +46,21 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     @Override
-    public int getItemViewType(int viewType){
-        return viewType;
+    public int getItemViewType(int i){
+        switch (keyList.get(i)){
+            case "gen":
+                return VIEW_GENERAL;
+
+            case "eng":
+                return VIEW_ENGINE;
+
+            case "pwr":
+                return VIEW_PWR;
+
+            case "other":
+                return VIEW_OTHER;
+        }
+        return -1;
     }
 
     @Override
@@ -59,8 +69,8 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-       switch(viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+       switch(i) {
            case VIEW_GENERAL:
                itemViewGeneral = LayoutInflater
                        .from(viewGroup.getContext())
@@ -86,12 +96,12 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 return new ViewHolderPWR(itemViewPWR, cardInfo);
 
            case VIEW_OTHER:
-               itemViewOther = LayoutInflater
+                itemViewOther = LayoutInflater
                        .from(viewGroup.getContext())
                        .inflate(R.layout.card_info, viewGroup, false);
-               cardInfo.clear();
+                cardInfo.clear();
 
-               return new ViewHolderGeneral(itemViewOther, cardInfo);
+               return new ViewHolderOther(itemViewOther, cardInfo);
 
            default:
                Log.e(TAG, "No view");
@@ -102,7 +112,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        vehicleInfoItem = vehicleInfoArray.get(i);
         cardInfo = vehicleInfoArray.get(i);
 
         switch (getItemViewType(i)) {
@@ -155,7 +164,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
 
-            if(cardInfo.size() > 1) {
+            if(cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
                 //Header
@@ -223,7 +232,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
 
-            if(cardInfo.size() > 1) {
+            if(cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
                 //Header
@@ -290,7 +299,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             int fieldSize = (int) (fieldsp / metrics.density + 0.5f);
             int headerSize = (int) (headersp / metrics.density + 0.5f);
 
-            if (cardInfo.size() > 1) {
+            if (cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
                 //Header
@@ -303,7 +312,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 tempHeaderTitle.setPadding(hMargin, vMargin, hMargin, hMargin);
                 tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
                 tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
-                tempHeaderTitle.setText(R.string.header_other);
+                tempHeaderTitle.setText(R.string.header_power_train);
                 tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
 
                 ((LinearLayout) layout).addView(tempHeaderTitle);
@@ -357,7 +366,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
 
-            if(cardInfo.size() > 1) {
+            if(cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
 
                 //Header
