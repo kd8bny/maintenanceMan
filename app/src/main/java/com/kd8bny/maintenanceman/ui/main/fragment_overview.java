@@ -85,7 +85,6 @@ public class fragment_overview extends Fragment {
                     ArrayList<String> refIDs = new ArrayList<>();
                     refIDs.addAll(roster.keySet());
                     Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_history.class);
-                    viewIntent.putExtra("vehicleSent", roster.get(refIDs.get(pos)));
                     viewIntent.putExtra("refID", refIDs.get(pos));
                     view.getContext().startActivity(viewIntent);
                 }else{

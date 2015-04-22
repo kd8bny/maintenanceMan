@@ -38,21 +38,13 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int VIEW_OTHER = 3;
 
     public adapter_info(HashMap<String, HashMap> vehicleInfo) {
-        if(vehicleInfo.get("gen")!=null) {
-            this.vehicleInfoArray.add(vehicleInfo.get("gen"));
-            this.keyList.add("gen");
-        }
-        if(vehicleInfo.get("eng")!=null) {
-            this.vehicleInfoArray.add(vehicleInfo.get("eng"));
-            this.keyList.add("eng");
-        }
-        if(vehicleInfo.get("pwr")!=null) {
-            this.vehicleInfoArray.add(vehicleInfo.get("pwr"));
-            this.keyList.add("pwr");
-        }
-        if(vehicleInfo.get("other")!=null) {
-            this.vehicleInfoArray.add(vehicleInfo.get("other"));
-            this.keyList.add("other");
+        Log.d(TAG, vehicleInfo.toString());
+        for (String key : vehicleInfo.keySet()) {
+            if (vehicleInfo.get(key) != null) {
+                Log.d(TAG,"not null");
+                this.vehicleInfoArray.add(vehicleInfo.get(key));
+                this.keyList.add(key);
+            }
         }
     }
 
@@ -141,7 +133,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private static final String TAG = "adptr_info_VwHldr_gen";
 
         private TypedArray headerColors;
-        private ArrayList<String> labels = new ArrayList<>();
 
         public ViewHolderGeneral(View view, final Map<String, String> cardInfo) {
             super(view);
@@ -209,7 +200,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private static final String TAG = "adptr_info_VwHldr_eng";
 
         private TypedArray headerColors;
-        private HashMap<String, String> labels = new HashMap<>();
 
         public ViewHolderEngine(View view, final Map<String, String> cardInfo) {
             super(view);
@@ -278,8 +268,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private static final String TAG = "adptr_info_VwHldr_pwr";
 
         private TypedArray headerColors;
-        private HashMap<String, String> labels = new HashMap<>();
-
 
         public ViewHolderPWR(View view, final Map<String, String> cardInfo) {
             super(view);
@@ -347,8 +335,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private static final String TAG = "adptr_info_VwHldr_othr";
 
         private TypedArray headerColors;
-        private HashMap<String, String> labels = new HashMap<>();
-
 
         public ViewHolderOther(View view, final Map<String, String> cardInfo) {
             super(view);

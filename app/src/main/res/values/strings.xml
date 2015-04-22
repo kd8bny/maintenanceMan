@@ -27,6 +27,8 @@
 
     <!-- Add Field -->
     <string name="title_add_field">Add Field</string>
+    <string name="hint_field_name">Entry</string>
+    <string name="hint_field_value">Value</string>
     <string-array name="field_type">
         <item>General</item>
         <item>Engine</item>

@@ -25,6 +25,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     public adapter_overview(HashMap<String, HashMap> vehicleList) {
         this.vehicleList.addAll(vehicleList.values());
+        Log.d(TAG,this.vehicleList.toString());
 
     }
 
@@ -47,12 +48,14 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        HashMap<String, HashMap> vehicle = vehicleList.get(i);
-
         if(!DBisEmpty) {
+        HashMap<String, HashMap> vehicle = vehicleList.get(i);
+        Log.d(TAG, vehicleList.toString());
+Log.d(TAG,"ve"+vehicle.toString());
+
             HashMap<String, String> category = vehicle.get("gen");
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(i%5, 0));
-
+Log.d(TAG,"cat"+category.toString());
             adapterViewHolder.vyear.setText(category.get("Year"));
             adapterViewHolder.vmake.setText(category.get("Make"));
             adapterViewHolder.vmodel.setText(category.get("Model"));

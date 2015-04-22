@@ -47,6 +47,8 @@ public class fragment_edit extends Fragment {
     private ArrayAdapter<String> spinnerAdapter;
     private ArrayList<ArrayList> vehicleDataAll = new ArrayList<>();
     private String refID;
+    private HashMap<String, HashMap> roster;
+    public HashMap<String, HashMap> vehicleSent;
 
     public fragment_edit(){
 
@@ -56,8 +58,13 @@ public class fragment_edit extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         refID = getActivity().getIntent().getStringExtra("refID");
-        HashMap<String, HashMap> vehicleSent = (HashMap<String, HashMap>) getActivity().getIntent().getSerializableExtra("vehicleSent");
+
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        vehicleSent = roster.get(refID);
+
         for (String key : vehicleSent.keySet()){
             HashMap<String, String> fieldTemp = vehicleSent.get(key);
             for(String fieldKey : fieldTemp.keySet()) {
@@ -185,11 +192,11 @@ public class fragment_edit extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
-                /*ArrayList<String> temp = new ArrayList<>();
+                ArrayList<String> temp = new ArrayList<>();
                 temp.add("General");
                 temp.add("type");
                 temp.add((String)vehicleSpinner.getSelectedItem());
-                vehicleDataAll.add(temp);*///TODO creates an extra arraylist???
+                vehicleDataAll.add(temp);//TODO creates an extra arraylist???
                 Context context = getActivity().getApplicationContext();
 Log.d(TAG,vehicleDataAll.toString());
                 fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();

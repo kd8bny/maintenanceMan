@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 
 public class fragment_history extends Fragment {
-    private static final String TAG = "fragment_history";
+    private static final String TAG = "frgmnt_hstry";
 
     private Toolbar toolbar, toolbarBottom;
     private SlidingUpPanelLayout addEvent;
@@ -42,6 +42,7 @@ public class fragment_history extends Fragment {
     RecyclerView.Adapter cardListAdapter, histListAdapter;
 
     private String refID;
+    private HashMap<String, HashMap> roster;
     public HashMap<String, HashMap> vehicleSent;
 
     private ArrayList<ArrayList> vehicleHist;
@@ -55,14 +56,17 @@ public class fragment_history extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        refID = getActivity().getIntent().getStringExtra("refID");
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        vehicleSent = roster.get(refID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-        vehicleSent = (HashMap<String, HashMap>) getActivity().getIntent().getSerializableExtra("vehicleSent");
-        refID = getActivity().getIntent().getStringExtra("refID");
+
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -98,8 +102,7 @@ public class fragment_history extends Fragment {
                         return true;
 
                     case R.id.menu_edit:
-                        Intent editIntent = new Intent(getActivity(), activity_edit.class);
-                        editIntent.putExtra("vehicleSent", vehicleSent);
+                        Intent editIntent = new Intent(getActivity(), activity_edit.class);//TODO get parent activity??
                         editIntent.putExtra("refID", refID);
                         getActivity().startActivity(editIntent);
 
