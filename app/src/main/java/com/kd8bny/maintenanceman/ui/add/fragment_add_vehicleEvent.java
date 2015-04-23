@@ -126,7 +126,6 @@ public class fragment_add_vehicleEvent extends Fragment {
 
                 return true;
 
-
             case R.id.menu_cancel:
                 getActivity().finish();
 
