@@ -25,8 +25,6 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
     public adapter_overview(HashMap<String, HashMap> vehicleList) {
         this.vehicleList.addAll(vehicleList.values());
-        Log.d(TAG,this.vehicleList.toString());
-
     }
 
     @Override
@@ -56,20 +54,24 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             adapterViewHolder.vyear.setText(category.get("Year"));
             adapterViewHolder.vmake.setText(category.get("Make"));
             adapterViewHolder.vmodel.setText(category.get("Model"));
-            
+
             switch (category.get("type")){
                 case "Automobile":
                     adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
                     break;
+
                 case "Motorcycle":
                     adapterViewHolder.carPic.setImageResource(R.drawable.motorcycle_md_9);
                     break;
+
                 case "Utility":
                     adapterViewHolder.carPic.setImageResource(R.drawable.utility_md_9);
                     break;
+
                 case "Water": //TODO
                     adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
                     break;
+
                 default:
                     break;
             }

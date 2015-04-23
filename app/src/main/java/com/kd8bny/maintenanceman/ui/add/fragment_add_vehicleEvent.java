@@ -139,19 +139,20 @@ public class fragment_add_vehicleEvent extends Fragment {
     }
 
     public ArrayAdapter<String> setVehicles(){
-
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext())); //TODO fix
-        HashMap<String, String> temp;
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        HashMap<String, HashMap> vehicle;
+        HashMap<String, String> gen;
         ArrayList<String> singleVehicle = new ArrayList<>();
 
-        for(int i=0; i<vehicleList.size(); i++) {
-            temp = (vehicleList.get(i));
-            if(temp.containsKey(null)){
-                Toast.makeText(this.getActivity(), temp.get(null), Toast.LENGTH_SHORT).show();
+        for(String key : roster.keySet()) {
+            vehicle = roster.get(key);
+            if(vehicle.containsKey(null)){
+                Toast.makeText(this.getActivity(), R.string.empty_db, Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }else {
-                String name = temp.get("year") + " " + temp.get("make") + " " + temp.get("model");
+                gen = vehicle.get("General");
+                String name = gen.get("Year") + " " + gen.get("Make") + " " + gen.get("Model");
                 singleVehicle.add(name);
             }
         }
@@ -161,8 +162,9 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     public void getVehicles(){
         int pos = vehicleSpinner.getSelectedItemPosition();
-        HashMap<String, String> temp = vehicleList.get(pos);
-        refID = temp.get("refID");
+        ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
+        refID = rosterKeys.get(pos);
+
         date = ((EditText) getActivity().findViewById(R.id.val_spec_date)).getText().toString();
         task = ((EditText) getActivity().findViewById(R.id.val_spec_event)).getText().toString();
         odo = ((EditText) getActivity().findViewById(R.id.val_spec_odo)).getText().toString();
@@ -171,8 +173,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     public ArrayAdapter<String> getEvents(){
         int pos = vehicleSpinner.getSelectedItemPosition();
         if(pos > -1) {
-            HashMap<String, String> tempVehicle = vehicleList.get(pos);
-            refID = tempVehicle.get("refID");
+            ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
+            refID = rosterKeys.get(pos);
 
             vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
             ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
