@@ -66,8 +66,6 @@ public class fragment_history extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
 
-
-
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);

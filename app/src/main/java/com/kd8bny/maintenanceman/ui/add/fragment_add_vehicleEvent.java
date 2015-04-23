@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
+import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
@@ -46,8 +46,10 @@ public class fragment_add_vehicleEvent extends Fragment {
     private String task;
     private String refID;
 
-    ArrayList<HashMap> vehicleList;
-    ArrayList<String> eventList;
+    private ArrayList<HashMap> vehicleList;
+    private ArrayList<String> eventList;
+
+    private HashMap<String, HashMap> roster;
 
     public fragment_add_vehicleEvent() {
         // Required empty public constructor
@@ -137,8 +139,9 @@ public class fragment_add_vehicleEvent extends Fragment {
     }
 
     public ArrayAdapter<String> setVehicles(){
-        fleetRosterDBHelper fleetDB = new fleetRosterDBHelper(this.getActivity());
-        vehicleList = fleetDB.getEntries(getActivity().getApplicationContext());
+
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext())); //TODO fix
         HashMap<String, String> temp;
         ArrayList<String> singleVehicle = new ArrayList<>();
 

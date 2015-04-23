@@ -11,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;

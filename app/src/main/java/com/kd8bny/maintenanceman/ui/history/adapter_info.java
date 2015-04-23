@@ -48,18 +48,20 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public int getItemViewType(int i){
         switch (keyList.get(i)){
-            case "gen":
+            case "General":
                 return VIEW_GENERAL;
 
-            case "eng":
+            case "Engine":
                 return VIEW_ENGINE;
 
-            case "pwr":
+            case "Power Train":
                 return VIEW_PWR;
 
-            case "other":
+            case "Other":
                 return VIEW_OTHER;
         }
+        
+        Log.e(TAG, "Itemview Type");
         return -1;
     }
 

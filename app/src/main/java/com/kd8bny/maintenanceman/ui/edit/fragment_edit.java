@@ -70,22 +70,7 @@ public class fragment_edit extends Fragment {
             for(String fieldKey : fieldTemp.keySet()) {
                 ArrayList<String> temp = new ArrayList<>();
                 if (!fieldKey.equals("type")){
-                    switch (key) {
-                        case ("gen"):
-                            temp.add("General");
-                            break;
-                        case ("eng"):
-                            temp.add("Engine");
-                            break;
-                        case ("pwr"):
-                            temp.add("Power Train");
-                            break;
-                        case ("other"):
-                            temp.add("Other");
-                            break;
-                        default:
-                            Log.e(TAG, "No case");
-                    }
+                    temp.add(key);
                     temp.add(fieldKey);
                     temp.add(fieldTemp.get(fieldKey));
                     vehicleDataAll.add(temp);
@@ -162,7 +147,7 @@ public class fragment_edit extends Fragment {
         ArrayList<String> result = data.getStringArrayListExtra("fieldData");
 
         switch (data.getStringExtra("action")){
-            case ("edit"): //TODO notify adapter
+            case ("edit"):
                 for (int i =0; i<vehicleDataAll.size(); i++){
                     ArrayList<String> temp = vehicleDataAll.get(i);
                     if (temp.get(1).equals(result.get(1))){
@@ -196,9 +181,9 @@ public class fragment_edit extends Fragment {
                 temp.add("General");
                 temp.add("type");
                 temp.add((String)vehicleSpinner.getSelectedItem());
-                vehicleDataAll.add(temp);//TODO creates an extra arraylist???
+                vehicleDataAll.add(temp);
                 Context context = getActivity().getApplicationContext();
-Log.d(TAG,vehicleDataAll.toString());
+
                 fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
                 fleetDB.deleteEntry(context, refID);
                 fleetDB.saveEntry(context, null, vehicleDataAll);

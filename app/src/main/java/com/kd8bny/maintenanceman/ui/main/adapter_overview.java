@@ -49,16 +49,14 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
         if(!DBisEmpty) {
-        HashMap<String, HashMap> vehicle = vehicleList.get(i);
-        Log.d(TAG, vehicleList.toString());
-Log.d(TAG,"ve"+vehicle.toString());
+            HashMap<String, HashMap> vehicle = vehicleList.get(i);
 
-            HashMap<String, String> category = vehicle.get("gen");
+            HashMap<String, String> category = vehicle.get("General");
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(i%5, 0));
-Log.d(TAG,"cat"+category.toString());
             adapterViewHolder.vyear.setText(category.get("Year"));
             adapterViewHolder.vmake.setText(category.get("Make"));
             adapterViewHolder.vmodel.setText(category.get("Model"));
+            
             switch (category.get("type")){
                 case "Automobile":
                     adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);

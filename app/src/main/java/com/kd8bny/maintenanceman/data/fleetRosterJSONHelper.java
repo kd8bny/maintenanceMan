@@ -33,8 +33,9 @@ public class fleetRosterJSONHelper {
             try {
                 BufferedReader buffReader = new BufferedReader(new FileReader(file));
 
+                String json;
                 StringBuffer stringBuffer = new StringBuffer();
-                String json = null;
+
                 while ((json = buffReader.readLine()) != null) {
                     stringBuffer.append(json);
                 }
@@ -67,7 +68,7 @@ public class fleetRosterJSONHelper {
     public void saveEntry(Context context, String refID, ArrayList<ArrayList> vehicleDataAll) {
 
         String json = openJSON(context);
-Log.d(TAG,vehicleDataAll.toString());
+
         if (refID == null) {
             refID = UUID.randomUUID().toString();
         }
@@ -103,10 +104,10 @@ Log.d(TAG,vehicleDataAll.toString());
                 }
             }
 
-            vehicle.put("gen", gen);
-            vehicle.put("eng", eng);
-            vehicle.put("pwr", pwr);
-            vehicle.put("other", other);
+            vehicle.put("General", gen);
+            vehicle.put("Engine", eng);
+            vehicle.put("Power Train", pwr);
+            vehicle.put("Other", other);
 
             if(json != null) {
                 JSONObject roster = new JSONObject(json);
@@ -150,20 +151,20 @@ Log.d(TAG,vehicleDataAll.toString());
                                 tempSpecMap.put(specs.getString(k), category.getString(specs.getString(k)));
                             }
                             switch (categories.getString(j)) {
-                                case "gen":
-                                    vehicleData.put("gen", tempSpecMap);
+                                case "General":
+                                    vehicleData.put("General", tempSpecMap);
                                     break;
 
-                                case "eng":
-                                    vehicleData.put("eng", tempSpecMap);
+                                case "Engine":
+                                    vehicleData.put("Engine", tempSpecMap);
                                     break;
 
-                                case "pwr":
-                                    vehicleData.put("pwr", tempSpecMap);
+                                case "Power Train":
+                                    vehicleData.put("Power Train", tempSpecMap);
                                     break;
 
-                                case "other":
-                                    vehicleData.put("other", tempSpecMap);
+                                case "Other":
+                                    vehicleData.put("Other", tempSpecMap);
                                     break;
 
                                 default:

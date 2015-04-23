@@ -10,13 +10,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.fleetRosterDBHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
