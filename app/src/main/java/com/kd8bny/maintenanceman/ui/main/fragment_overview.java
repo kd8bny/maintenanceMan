@@ -21,7 +21,9 @@ import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
 import com.kd8bny.maintenanceman.ui.history.activity_history;
-import com.melnykov.fab.FloatingActionButton;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +38,7 @@ public class fragment_overview extends Fragment {
     private RecyclerView.Adapter cardListAdapter;
     private DrawerLayout Drawer;
     private ActionBarDrawerToggle mDrawerToggle;
-    private FloatingActionButton fab;
+    private FloatingActionButton fabAddVehicle, fabAddEvent;
 
     private HashMap<String, HashMap> roster;
     private Boolean DBisEmpty = false;
@@ -79,13 +81,13 @@ public class fragment_overview extends Fragment {
         cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                if(!DBisEmpty) {
+                if (!DBisEmpty) {
                     ArrayList<String> refIDs = new ArrayList<>();
                     refIDs.addAll(roster.keySet());
                     Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_history.class);
                     viewIntent.putExtra("refID", refIDs.get(pos));
                     view.getContext().startActivity(viewIntent);
-                }else{
+                } else {
                     Intent viewAddIntent = new Intent(getActivity().getApplicationContext(), activity_add_fleetRoster.class);
                     view.getContext().startActivity(viewAddIntent);
                 }
@@ -99,9 +101,20 @@ public class fragment_overview extends Fragment {
         cardList.setAdapter(cardListAdapter);
 
         //fab
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.attachToRecyclerView(cardList);
-        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
+        fabAddVehicle = (FloatingActionButton) view.findViewById(R.id.fab_add_vehicle);
+        fabAddEvent = (FloatingActionButton) view.findViewById(R.id.fab_add_event);
+
+        fabMenu.setAnimated(true);
+
+        view.findViewById(R.id.fab_add_vehicle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                startActivity(addIntent);
+            }
+        });
+        view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
@@ -122,13 +135,13 @@ public class fragment_overview extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView){
                 super.onDrawerOpened(drawerView);
-                fab.hide();
+                fabMenu.hideMenuButton(true);
 
             }
             @Override
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
-                fab.show();
+                fabMenu.hideMenuButton(false);
             }
         };
         Drawer.setDrawerListener(mDrawerToggle);

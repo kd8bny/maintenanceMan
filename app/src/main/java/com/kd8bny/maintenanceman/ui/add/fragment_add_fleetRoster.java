@@ -27,7 +27,9 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
-import com.melnykov.fab.FloatingActionButton;
+
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 
 
 public class fragment_add_fleetRoster extends Fragment {
@@ -118,9 +120,8 @@ public class fragment_add_fleetRoster extends Fragment {
         addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
         addList.setAdapter(addListAdapter);
 
-        //fab
+        //menu_overview_fab
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.attachToRecyclerView(addList);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -23,6 +23,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:+'
 
     compile 'com.sothree.slidinguppanel:library:3.0.0'
-    compile 'com.melnykov:floatingactionbutton:1.2.0'
+    compile 'com.github.clans:fab:1.4.0'
     compile 'com.rengwuxian.materialedittext:library:1.8.2'
 }

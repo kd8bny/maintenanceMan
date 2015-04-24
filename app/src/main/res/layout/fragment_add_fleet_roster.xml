@@ -27,7 +27,7 @@
                 android:clickable="true"
                 android:focusable="true"/>
 
-            <com.melnykov.fab.FloatingActionButton
+            <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

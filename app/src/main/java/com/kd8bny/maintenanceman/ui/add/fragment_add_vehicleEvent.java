@@ -143,13 +143,14 @@ public class fragment_add_vehicleEvent extends Fragment {
         HashMap<String, HashMap> vehicle;
         HashMap<String, String> gen;
         ArrayList<String> singleVehicle = new ArrayList<>();
+        Log.d(TAG,roster.keySet().toString());
 
-        for(String key : roster.keySet()) {
-            vehicle = roster.get(key);
-            if(vehicle.containsKey(null)){
-                Toast.makeText(this.getActivity(), R.string.empty_db, Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-            }else {
+        if(roster.containsKey(null)){
+            Toast.makeText(this.getActivity(), R.string.empty_db, Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+        }else {
+            for(String key : roster.keySet()) {
+                vehicle = roster.get(key);
                 gen = vehicle.get("General");
                 String name = gen.get("Year") + " " + gen.get("Make") + " " + gen.get("Model");
                 singleVehicle.add(name);
