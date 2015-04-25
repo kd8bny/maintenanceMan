@@ -26,6 +26,7 @@ public class dialog_addField extends DialogFragment{
     private String fieldName;
     private String fieldVal;
     private Boolean isEdit = false;
+    private Boolean isRequired = false;
 
     public dialog_addField(){
 
@@ -38,6 +39,7 @@ public class dialog_addField extends DialogFragment{
         if (args != null){
             isEdit = true;
             ArrayList<String> fieldData = (ArrayList<String>) args.getSerializable("field");
+            isRequired = args.getBoolean("isRequired");
             fieldName = fieldData.get(1);
             fieldVal = fieldData.get(2);
         }
@@ -57,7 +59,10 @@ public class dialog_addField extends DialogFragment{
 
         final EditText editFieldName = (EditText) view.findViewById(R.id.field_name);
         final EditText editFieldVal = (EditText) view.findViewById(R.id.field_val);
-
+        if(isRequired){
+            editFieldName.setEnabled(false);
+            editFieldVal.requestFocus();
+        }
         if (isEdit){
             editFieldName.setText(fieldName);
             editFieldVal.setText(fieldVal);

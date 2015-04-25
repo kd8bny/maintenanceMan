@@ -114,6 +114,11 @@ public class fragment_edit extends Fragment {
             @Override
             public void onItemClick(View view, int pos) {
                 Bundle args = new Bundle();
+                if(pos > 2){
+                    args.putBoolean("isRequired", false);
+                }else {
+                    args.putBoolean("isRequired", true);
+                }
                 args.putSerializable("field", vehicleDataAll.get(pos));
                 FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
 
