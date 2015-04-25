@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -175,11 +176,12 @@ public class fragment_info extends Fragment {
     public void onResume(){
         super.onResume();
 
-        populateAdapter();
-        histList.setAdapter(histListAdapter);
-
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        vehicleSent = roster.get(refID);
+Log.d(TAG,vehicleSent.toString());
         cardListAdapter = new adapter_info(vehicleSent);
-        cardList.setAdapter(cardListAdapter);
+        cardList.swapAdapter(cardListAdapter, false);
     }
 
     @Override

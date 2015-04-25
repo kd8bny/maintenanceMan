@@ -68,12 +68,12 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
                     adapterViewHolder.carPic.setImageResource(R.drawable.utility_md_9);
                     break;
 
-                case "Marine": //TODO
-                    adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
+                case "Marine":
+                    adapterViewHolder.carPic.setImageResource(R.drawable.boat_md_9);
                     break;
 
-                case "Home and Garden"://TODO
-                    adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
+                case "Lawn and Garden":
+                    adapterViewHolder.carPic.setImageResource(R.drawable.tractor_md_9);
                     break;
 
                 default:
