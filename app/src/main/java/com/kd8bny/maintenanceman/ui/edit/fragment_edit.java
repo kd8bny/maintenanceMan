@@ -188,7 +188,7 @@ public class fragment_edit extends Fragment {
 
                 fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
                 fleetDB.deleteEntry(context, refID);
-                fleetDB.saveEntry(context, null, vehicleDataAll);
+                fleetDB.saveEntry(context, refID, vehicleDataAll);
 
                 Toast.makeText(this.getActivity(), "Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();

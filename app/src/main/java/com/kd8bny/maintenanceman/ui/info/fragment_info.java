@@ -56,15 +56,16 @@ public class fragment_info extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        refID = getActivity().getIntent().getStringExtra("refID");
-        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
-        vehicleSent = roster.get(refID);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
+
+        refID = getActivity().getIntent().getStringExtra("refID");
+        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        vehicleSent = roster.get(refID);
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -172,6 +173,7 @@ public class fragment_info extends Fragment {
         return view;
     }
 
+
     @Override
     public void onResume(){
         super.onResume();
@@ -179,13 +181,13 @@ public class fragment_info extends Fragment {
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
         vehicleSent = roster.get(refID);
-Log.d(TAG,vehicleSent.toString());
         cardListAdapter = new adapter_info(vehicleSent);
-        cardList.swapAdapter(cardListAdapter, false);
+        cardList.setAdapter(cardListAdapter);
     }
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
 
     }
 
