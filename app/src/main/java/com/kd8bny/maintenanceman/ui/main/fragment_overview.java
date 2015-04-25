@@ -112,6 +112,7 @@ public class fragment_overview extends Fragment {
             public void onClick(View v) {
                 Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
                 startActivity(addIntent);
+                fabMenu.close(true);
             }
         });
         view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
@@ -119,6 +120,7 @@ public class fragment_overview extends Fragment {
             public void onClick(View v) {
                 Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
                 startActivity(addIntent);
+                fabMenu.close(true);
             }
         });
 
