@@ -143,7 +143,7 @@ public class fragment_overview extends Fragment {
             @Override
             public void onDrawerClosed(View drawerView){
                 super.onDrawerClosed(drawerView);
-                fabMenu.hideMenuButton(false);
+                fabMenu.showMenuButton(true);
             }
         };
         Drawer.setDrawerListener(mDrawerToggle);
