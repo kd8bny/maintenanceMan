@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.ui.history;
+package com.kd8bny.maintenanceman.ui.info;
 
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.ui.history;
+package com.kd8bny.maintenanceman.ui.info;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -11,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class fragment_history extends Fragment {
+public class fragment_info extends Fragment {
     private static final String TAG = "frgmnt_hstry";
 
     private Toolbar toolbar, toolbarBottom;
@@ -47,7 +46,7 @@ public class fragment_history extends Fragment {
 
     private ArrayList<ArrayList> vehicleHist;
 
-    public fragment_history() {
+    public fragment_info() {
         // Required empty public constructor
     }
 
@@ -64,7 +63,7 @@ public class fragment_history extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_history, container, false);
+        final View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -74,39 +73,20 @@ public class fragment_history extends Fragment {
 
         //Toolbar bottom
         toolbarBottom = (Toolbar) view.findViewById(R.id.tool_bar_bottom);
-        toolbarBottom.setTitle(R.string.title_info);
+        toolbarBottom.setTitle(R.string.title_history);
         toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
         toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.menu_del:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setCancelable(true);
-                        builder.setTitle("Are you sure you would like to delete this vehicle?");
-                        builder.setNegativeButton("No", null);
-                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int which) {
-                                fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-                                fltjson.deleteEntry(getActivity(), refID);
-
-                                getActivity().finish();
-                            }
-                        });
-
-                        builder.show();
-
-                        return true;
-
-                    case R.id.menu_edit:
-                        Intent editIntent = new Intent(getActivity(), activity_edit.class);//TODO get parent activity??
-                        editIntent.putExtra("refID", refID);
-                        getActivity().startActivity(editIntent);
+                    case R.id.menu_add:
+                        Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
+                        getActivity().startActivity(addIntent);
 
                         return true;
 
                     default:
+
                         return false;
                 }
             }
@@ -141,7 +121,7 @@ public class fragment_history extends Fragment {
 
             @Override
             public void onPanelExpanded(View view) {
-                toolbarBottom.inflateMenu(R.menu.menu_info);
+                toolbarBottom.inflateMenu(R.menu.menu_history);
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_down);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.accent_dark));
@@ -210,20 +190,40 @@ public class fragment_history extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_history, menu);
+        inflater.inflate(R.menu.menu_info, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuitem) {
         switch (menuitem.getItemId()) {
-            case R.id.menu_add:
-                Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
-                getActivity().startActivity(addIntent);
+            case R.id.menu_del:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you would like to delete this vehicle?");
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+                        fltjson.deleteEntry(getActivity(), refID);
+
+                        getActivity().finish();
+                    }
+                });
+
+                builder.show();
+
+                return true;
+
+            case R.id.menu_edit:
+                Intent editIntent = new Intent(getActivity(), activity_edit.class);//TODO get parent activity??
+                editIntent.putExtra("refID", refID);
+                getActivity().startActivity(editIntent);
 
                 return true;
 
             default:
-                return super.onOptionsItemSelected(menuitem);
+                return false;
         }
     }
 

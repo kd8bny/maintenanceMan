@@ -34,8 +34,8 @@
                 android:value=".ui.main.activity_main" />
         </activity>
         <activity
-            android:name=".ui.history.activity_history"
-            android:label="@string/title_history"
+            android:name=".ui.info.activity_info"
+            android:label="@string/title_info"
             android:parentActivityName=".ui.main.activity_main" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

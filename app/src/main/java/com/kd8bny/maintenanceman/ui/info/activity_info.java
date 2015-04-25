@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.ui.history;
+package com.kd8bny.maintenanceman.ui.info;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 
 import com.kd8bny.maintenanceman.R;
 
-public class activity_history extends ActionBarActivity {
+public class activity_info extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class activity_history extends ActionBarActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragmentcontainer_history);
 
         if (fragment == null){
-            fragment = new fragment_history();
+            fragment = new fragment_info();
             fm.beginTransaction()
                     .add(R.id.fragmentcontainer_history, fragment)
                     .commit();

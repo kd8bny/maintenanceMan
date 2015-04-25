@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.ui.history;
+package com.kd8bny.maintenanceman.ui.info;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

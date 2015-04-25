@@ -20,7 +20,7 @@ import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
-import com.kd8bny.maintenanceman.ui.history.activity_history;
+import com.kd8bny.maintenanceman.ui.info.activity_info;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -84,7 +84,7 @@ public class fragment_overview extends Fragment {
                 if (!DBisEmpty) {
                     ArrayList<String> refIDs = new ArrayList<>();
                     refIDs.addAll(roster.keySet());
-                    Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_history.class);
+                    Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_info.class);
                     viewIntent.putExtra("refID", refIDs.get(pos));
                     view.getContext().startActivity(viewIntent);
                 } else {
