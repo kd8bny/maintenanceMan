@@ -31,12 +31,12 @@
             android:singleLine="true"
             android:hint="@string/hint_field_name"
 
-            app:baseColor="@color/primary_text"
-            app:primaryColor="@color/accent"
-            app:errorColor="@color/error"
-            app:floatingLabel="highlight"
-            app:floatingLabelText="hint"
-            app:floatingLabelAlwaysShown="true"/>
+            app:met_baseColor="@color/primary_text"
+            app:met_primaryColor="@color/accent"
+            app:met_errorColor="@color/error"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelText="hint"
+            app:met_floatingLabelAlwaysShown="true"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/field_val"
@@ -47,11 +47,11 @@
             android:singleLine="true"
             android:hint="@string/hint_field_value"
 
-            app:baseColor="@color/primary_text"
-            app:primaryColor="@color/accent"
-            app:errorColor="@color/error"
-            app:floatingLabel="highlight"
-            app:floatingLabelText="hint"
-            app:floatingLabelAlwaysShown="true"/>
+            app:met_baseColor="@color/primary_text"
+            app:met_primaryColor="@color/accent"
+            app:met_errorColor="@color/error"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelText="hint"
+            app:met_floatingLabelAlwaysShown="true"/>
     </LinearLayout>
 </RelativeLayout>

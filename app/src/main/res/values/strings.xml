@@ -62,6 +62,10 @@
     <!-- Edit -->
     <string name="title_edit">Edit Vehicle</string>
 
+    <!--fab-->
+    <string name="menu_add_vehicle">Add Vehicle</string>
+    <string name="menu_add_event">Add Event</string>
+
     <!-- History -->
     <string name="title_history">Vehicle History</string>
 
