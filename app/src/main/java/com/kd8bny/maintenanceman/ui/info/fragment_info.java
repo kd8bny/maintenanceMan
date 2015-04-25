@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 
 public class fragment_info extends Fragment {
-    private static final String TAG = "frgmnt_hstry";
+    private static final String TAG = "frgmnt_inf";
 
     private Toolbar toolbar, toolbarBottom;
     private SlidingUpPanelLayout addEvent;
@@ -218,7 +218,7 @@ Log.d(TAG,vehicleSent.toString());
                 return true;
 
             case R.id.menu_edit:
-                Intent editIntent = new Intent(getActivity(), activity_edit.class);//TODO get parent activity??
+                Intent editIntent = new Intent(getActivity(), activity_edit.class);
                 editIntent.putExtra("refID", refID);
                 getActivity().startActivity(editIntent);
 
