@@ -27,7 +27,6 @@ public class dialog_addField extends DialogFragment{
     private String fieldVal;
     private Boolean isEdit = false;
 
-
     public dialog_addField(){
 
     }
