@@ -1,8 +1,10 @@
 package com.kd8bny.maintenanceman.ui.add;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +13,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -111,7 +114,27 @@ public class fragment_add_fleetRoster extends Fragment {
 
             @Override
             public void onItemLongClick(View view, int pos) {
+                final int itemPos = pos;
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you would like to delete this field?");
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(itemPos > 2){
+                            vehicleDataAll.remove(itemPos);
+
+                            addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
+                            addList.swapAdapter(addListAdapter, false);
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(), R.string.error_required, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                builder.show();
             }
         }));
         //RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);

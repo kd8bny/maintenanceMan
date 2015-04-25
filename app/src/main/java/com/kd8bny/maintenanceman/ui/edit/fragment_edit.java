@@ -1,8 +1,10 @@
 package com.kd8bny.maintenanceman.ui.edit;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -75,7 +77,11 @@ public class fragment_edit extends Fragment {
                     temp.add(key);
                     temp.add(fieldKey);
                     temp.add(fieldTemp.get(fieldKey));
-                    vehicleDataAll.add(temp);
+                    if(fieldKey.equals("Make") | fieldKey.equals("Model") | fieldKey.equals("Year")){
+                        vehicleDataAll.add(0, temp);
+                    }else {
+                        vehicleDataAll.add(temp);
+                    }
                 }
             }
         }
@@ -119,7 +125,27 @@ public class fragment_edit extends Fragment {
 
             @Override
             public void onItemLongClick(View view, int pos) {
+                final int itemPos = pos;
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you would like to delete this field?");
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(itemPos > 2){
+                            vehicleDataAll.remove(itemPos);
+
+                            addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
+                            addList.swapAdapter(addListAdapter, false);
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(), R.string.error_required, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                builder.show();
             }
         }));
         //RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
