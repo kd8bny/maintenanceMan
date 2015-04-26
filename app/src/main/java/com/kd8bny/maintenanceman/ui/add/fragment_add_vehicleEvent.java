@@ -119,7 +119,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
                 getVehicles();
                 vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(context);
-                vehicleDB.saveEntry(context, refID, date, odo, task);
+                vehicleDB.saveEntry(context, refID, date, odo, task, null,null);//TODO!!
 
                 Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show();
                 getActivity().finish();
