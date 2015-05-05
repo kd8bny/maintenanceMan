@@ -3,14 +3,13 @@ package com.kd8bny.maintenanceman.ui.main;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import com.kd8bny.maintenanceman.R;
 
 
-public class activity_main extends ActionBarActivity {
+public class activity_main extends AppCompatActivity {
     private static final String TAG = "activity_main";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +26,6 @@ public class activity_main extends ActionBarActivity {
                     .add(R.id.fragmentContainer_main, fragment)
                     .commit();
         }
-
     }
 
     @Override
