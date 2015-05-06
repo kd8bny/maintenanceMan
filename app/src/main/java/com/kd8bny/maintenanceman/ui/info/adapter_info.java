@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
@@ -148,7 +149,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public ViewHolderGeneral(View view, final Map<String, String> cardInfo) {
             super(view);
 
-            View layout = view.findViewById(R.id.card_info_lin);
+            View layout = view.findViewById(R.id.card_info_rel);
 
             DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
             float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
@@ -165,6 +166,15 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             float headersp = view.getResources().getDimension(R.dimen.header_font);
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
+
+            LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            textViewTitleParams.setMarginStart(50);
+            textViewItemParams.setMarginStart(hMargin);
 
             if(cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
@@ -186,21 +196,34 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                 for (String key : cardInfo.keySet()) {
                     if(!cardInfo.get(key).isEmpty() && !key.equals("type")) {
-                        TextView tempTextView = new TextView(view.getContext());
+                        LinearLayout tempLinLay = new LinearLayout(view.getContext());
+                        TextView tempTitleTextView = new TextView(view.getContext());
+                        TextView tempItemTextView = new TextView(view.getContext());
+                        tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
 
-                        tempTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                        tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                        tempTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                        tempTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
 
-                        tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
-                        tempTextView.setGravity(Gravity.START);
+                        tempTitleTextView.setMinEms(5);
+                        tempTitleTextView.setMaxEms(5);
+                        tempTitleTextView.setGravity(Gravity.START);
+                        tempItemTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(key + ":     " + cardInfo.get(key));
+                        tempTitleTextView.setText(key + ": ");
+                        tempItemTextView.setText(cardInfo.get(key));
 
-                        ((LinearLayout) layout).addView(tempTextView);
+                        tempLinLay.addView(tempTitleTextView);
+                        tempLinLay.addView(tempItemTextView);
+                        ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
                     }
                 }
             }
@@ -215,8 +238,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public ViewHolderEngine(View view, final Map<String, String> cardInfo) {
             super(view);
 
-            View layout = view.findViewById(R.id.card_info_lin);
-            //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            View layout = view.findViewById(R.id.card_info_rel);
 
             DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
             float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
@@ -233,6 +255,15 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             float headersp = view.getResources().getDimension(R.dimen.header_font);
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
+
+            LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            textViewTitleParams.setMarginStart(50);
+            textViewItemParams.setMarginStart(hMargin);
 
             if(cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
@@ -254,21 +285,34 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                 for (String key : cardInfo.keySet()) {
                     if(!cardInfo.get(key).isEmpty()) {
-                        TextView tempTextView = new TextView(view.getContext());
+                        LinearLayout tempLinLay = new LinearLayout(view.getContext());
+                        TextView tempTitleTextView = new TextView(view.getContext());
+                        TextView tempItemTextView = new TextView(view.getContext());
+                        tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
 
-                        tempTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                        tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                        tempTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                        tempTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
 
-                        tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
-                        tempTextView.setGravity(Gravity.START);
+                        tempTitleTextView.setMinEms(5);
+                        tempTitleTextView.setMaxEms(5);
+                        tempTitleTextView.setGravity(Gravity.START);
+                        tempItemTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(key + ":     " + cardInfo.get(key));
+                        tempTitleTextView.setText(key + ": ");
+                        tempItemTextView.setText(cardInfo.get(key));
 
-                        ((LinearLayout) layout).addView(tempTextView);
+                        tempLinLay.addView(tempTitleTextView);
+                        tempLinLay.addView(tempItemTextView);
+                        ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
                     }
                 }
             }
@@ -283,23 +327,32 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public ViewHolderPWR(View view, final Map<String, String> cardInfo) {
             super(view);
 
-            View layout = view.findViewById(R.id.card_info_lin);
+            View layout = view.findViewById(R.id.card_info_rel);
 
             DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
-            float hMdp = view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
-            float vMdp = view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
+            float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
+            float vMdp =  view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
             float vCSdp = view.getResources().getDimension(R.dimen.content_vertical_space);
             float hCSdp = view.getResources().getDimension(R.dimen.content_horizontal_margin);
 
-            int hMargin = (int) (hMdp / metrics.density + 0.5f);
-            int vMargin = (int) (vMdp / metrics.density + 0.5f);
-            int vcontentSpace = (int) (vCSdp / metrics.density + 0.5f);
-            int hcontentSpace = (int) (hCSdp / metrics.density + 0.5f);
+            int hMargin = (int) (hMdp/metrics.density + 0.5f);
+            int vMargin = (int) (vMdp/metrics.density + 0.5f);
+            int vcontentSpace = (int) (vCSdp/metrics.density + 0.5f);
+            int hcontentSpace = (int) (hCSdp/metrics.density + 0.5f);
 
             float fieldsp = view.getResources().getDimension(R.dimen.field_font);
             float headersp = view.getResources().getDimension(R.dimen.header_font);
-            int fieldSize = (int) (fieldsp / metrics.density + 0.5f);
-            int headerSize = (int) (headersp / metrics.density + 0.5f);
+            int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
+            int headerSize = (int) (headersp/metrics.density + 0.5f);
+
+            LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            textViewTitleParams.setMarginStart(50);
+            textViewItemParams.setMarginStart(hMargin);
 
             if (cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
@@ -321,21 +374,34 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                 for (String key : cardInfo.keySet()) {
                     if (!cardInfo.get(key).isEmpty()) {
-                        TextView tempTextView = new TextView(view.getContext());
+                        LinearLayout tempLinLay = new LinearLayout(view.getContext());
+                        TextView tempTitleTextView = new TextView(view.getContext());
+                        TextView tempItemTextView = new TextView(view.getContext());
+                        tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
 
-                        tempTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                        tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                        tempTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                        tempTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
 
-                        tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
-                        tempTextView.setGravity(Gravity.START);
+                        tempTitleTextView.setMinEms(5);
+                        tempTitleTextView.setMaxEms(5);
+                        tempTitleTextView.setGravity(Gravity.START);
+                        tempItemTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(key + ":     " + cardInfo.get(key));
+                        tempTitleTextView.setText(key + ": ");
+                        tempItemTextView.setText(cardInfo.get(key));
 
-                        ((LinearLayout) layout).addView(tempTextView);
+                        tempLinLay.addView(tempTitleTextView);
+                        tempLinLay.addView(tempItemTextView);
+                        ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
                     }
                 }
             }
@@ -350,7 +416,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         public ViewHolderOther(View view, final Map<String, String> cardInfo) {
             super(view);
 
-            View layout = view.findViewById(R.id.card_info_lin);
+            View layout = view.findViewById(R.id.card_info_rel);
 
             DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
             float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
@@ -367,6 +433,15 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             float headersp = view.getResources().getDimension(R.dimen.header_font);
             int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
             int headerSize = (int) (headersp/metrics.density + 0.5f);
+
+            LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            textViewTitleParams.setMarginStart(50);
+            textViewItemParams.setMarginStart(hMargin);
 
             if(cardInfo.size() > 0) {
                 headerColors = view.getResources().obtainTypedArray(R.array.header_color);
@@ -388,21 +463,34 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                 for (String key : cardInfo.keySet()) {
                     if(!cardInfo.get(key).isEmpty()) {
-                        TextView tempTextView = new TextView(view.getContext());
+                        LinearLayout tempLinLay = new LinearLayout(view.getContext());
+                        TextView tempTitleTextView = new TextView(view.getContext());
+                        TextView tempItemTextView = new TextView(view.getContext());
+                        tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
 
-                        tempTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                        tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                        tempTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                        tempTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                        tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                        tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
 
-                        tempTextView.setPadding(hcontentSpace, vcontentSpace, hcontentSpace, vcontentSpace);
-                        tempTextView.setGravity(Gravity.START);
+                        tempTitleTextView.setMinEms(5);
+                        tempTitleTextView.setMaxEms(5);
+                        tempTitleTextView.setGravity(Gravity.START);
+                        tempItemTextView.setGravity(Gravity.START);
 
-                        tempTextView.setText(key + ":     " + cardInfo.get(key));
+                        tempTitleTextView.setText(key + ": ");
+                        tempItemTextView.setText(cardInfo.get(key));
 
-                        ((LinearLayout) layout).addView(tempTextView);
+                        tempLinLay.addView(tempTitleTextView);
+                        tempLinLay.addView(tempItemTextView);
+                        ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
                     }
                 }
             }
