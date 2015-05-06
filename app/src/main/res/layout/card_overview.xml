@@ -65,7 +65,8 @@
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
                 android:singleLine="true"
-                android:maxWidth="70dp"
+                android:maxEms="3"
+                android:minEms="3"
 
                 android:text="@string/no_data"
                 android:textColor="@color/secondary_text"
