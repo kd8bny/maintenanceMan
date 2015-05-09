@@ -35,6 +35,7 @@
         android:paddingEnd="8dp"
         android:tint="@android:color/white"/>
 
+
     <TextView
         android:id="@+id/event"
         android:layout_width="match_parent"
@@ -50,49 +51,63 @@
         android:textColor="@color/primary_text"
         android:textSize="@dimen/header_sub_font"/>
 
-    <TextView
-        android:id="@+id/date"
+    <LinearLayout
+        android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_gravity="start"
         android:layout_below="@+id/event"
         android:layout_toEndOf="@+id/enginePic"
         android:layout_marginStart="@dimen/header_horizontal_margin"
         android:layout_marginTop="@dimen/content_vertical_space"
-        android:layout_marginBottom="@dimen/content_vertical_space"
+        android:layout_marginBottom="@dimen/content_vertical_space">
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
 
-        android:maxEms="8"
-        android:minEms="8"
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:singleLine="true"
+            android:maxEms="8"
+            android:minEms="8"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
 
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/field_font"/>
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"/>
 
-    <TextView
-        android:id="@+id/val_spec_odo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/content_horizontal_margin"
-        android:layout_marginTop="@dimen/content_vertical_space"
-        android:layout_marginBottom="@dimen/content_vertical_space"
-        android:layout_gravity="center"
-        android:layout_toEndOf="@+id/date"
-        android:layout_below="@+id/event"
+        <TextView
+            android:id="@+id/val_spec_odo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
 
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:singleLine="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
 
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/field_font"/>
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"/>
+
+        <TextView
+            android:id="@+id/val_spec_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
+
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"
+
+            android:text=" mi"/>
+    </LinearLayout>
 
     <View
         android:id="@+id/contentSep"
         android:layout_width="fill_parent"
-        android:layout_below="@+id/date"
+        android:layout_below="@+id/info"
         android:layout_height="1dip"
         android:background="@color/divider" />
 </RelativeLayout>
