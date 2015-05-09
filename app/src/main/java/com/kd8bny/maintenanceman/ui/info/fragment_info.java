@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -174,16 +173,22 @@ public class fragment_info extends Fragment {
         return view;
     }
 
-
     @Override
     public void onResume(){
         super.onResume();
 
+        //Renew Vehicle Data
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
         vehicleSent = roster.get(refID);
         cardListAdapter = new adapter_info(vehicleSent);
         cardList.setAdapter(cardListAdapter);
+
+        //Renew maintenance history
+        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+        histListAdapter = new adapter_history(vehicleHist);
+        histList.setAdapter(histListAdapter);
     }
 
     @Override
