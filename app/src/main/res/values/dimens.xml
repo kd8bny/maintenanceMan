@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Padding -->
+    <dimen name="padding_header">8dp</dimen>
+
     <!-- Horizontal -->
     <dimen name="start_end_horizontal_margin">16dp</dimen>
     <dimen name="content_horizontal_margin">72dp</dimen>

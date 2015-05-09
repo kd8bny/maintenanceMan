@@ -126,7 +126,7 @@ public class fragment_add_vehicleEvent extends Fragment {
             }
         }));
 
-        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
+        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels, false);
         eventList.setAdapter(eventListAdapter);
 
         return view;
@@ -139,7 +139,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         dataSet.put(labelResult, valueResult);
 
-        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
+        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels, true);
         eventList.swapAdapter(eventListAdapter, false);
     }
 

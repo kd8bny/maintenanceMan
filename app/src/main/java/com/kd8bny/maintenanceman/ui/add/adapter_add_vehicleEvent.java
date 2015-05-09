@@ -14,15 +14,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_vehicleEvent.AdapterViewHolder>{
-    private static final String TAG = "adapter_add_vhcl_evnt";
+    private static final String TAG = "adptr_add_vhcl_evnt";
 
     private HashMap<String, String> dataSet = new HashMap<>();
     private ArrayList<String> fields;
     private ArrayList<String> values = new ArrayList<>();
     private TypedArray headerColors;
-    private View itemView;
+    private Boolean isSwaped;
 
-    public adapter_add_vehicleEvent(HashMap<String, String> dataSet, ArrayList<String> fields) {
+    public adapter_add_vehicleEvent(HashMap<String, String> dataSet, ArrayList<String> fields, Boolean isSwaped) {
+        this.isSwaped = isSwaped;
         this.dataSet = dataSet;
         this.fields = fields;
         for (String key : dataSet.keySet()){
@@ -37,9 +38,9 @@ public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_v
 
     @Override
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        itemView = LayoutInflater
+        View itemView = LayoutInflater
                 .from(viewGroup.getContext())
-                .inflate(R.layout.card_add_fleet_roster, viewGroup, false);
+                .inflate(R.layout.card_add_vehicle_event, viewGroup, false);
 
         headerColors = itemView.getResources().obtainTypedArray(R.array.header_color);
 
@@ -50,8 +51,10 @@ public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_v
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
         adapterViewHolder.vfield.setText(fields.get(i));
         adapterViewHolder.vvalue.setText(values.get(i));
+        if(!isSwaped) {
+            adapterViewHolder.vfield.setBackgroundColor(headerColors.getColor(i % 5, 0));
+        }
 
-        //TODO drawable
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
