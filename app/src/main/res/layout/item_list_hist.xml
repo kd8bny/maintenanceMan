@@ -62,6 +62,8 @@
         android:layout_marginTop="@dimen/content_vertical_space"
         android:layout_marginBottom="@dimen/content_vertical_space"
 
+        android:maxEms="8"
+        android:minEms="8"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
