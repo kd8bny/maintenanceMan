@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.ui.add;
 
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +11,28 @@ import android.widget.TextView;
 import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class adapter_add_fleetRoster extends RecyclerView.Adapter<adapter_add_fleetRoster.AdapterViewHolder>{
-    private static final String TAG = "adapter_add_flt_rtr";
+public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_vehicleEvent.AdapterViewHolder>{
+    private static final String TAG = "adapter_add_vhcl_evnt";
 
-    public ArrayList<ArrayList> vehicleData = new ArrayList<>();
+    private HashMap<String, String> dataSet = new HashMap<>();
+    private ArrayList<String> fields;
+    private ArrayList<String> values = new ArrayList<>();
     private TypedArray headerColors;
     private View itemView;
 
-    public adapter_add_fleetRoster(ArrayList vehicleData) {
-        this.vehicleData = vehicleData;
+    public adapter_add_vehicleEvent(HashMap<String, String> dataSet, ArrayList<String> fields) {
+        this.dataSet = dataSet;
+        this.fields = fields;
+        for (String key : dataSet.keySet()){
+            this.values.add(dataSet.get(key));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return vehicleData.size();
+        return dataSet.size();
     }
 
     @Override
@@ -40,23 +48,20 @@ public class adapter_add_fleetRoster extends RecyclerView.Adapter<adapter_add_fl
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        ArrayList<String> tempField = vehicleData.get(i);
-
-        //TODO cat????
-        adapterViewHolder.vcat.setText(tempField.get(1));
-        adapterViewHolder.vvalue.setText(tempField.get(2));
+        adapterViewHolder.vfield.setText(fields.get(i));
+        adapterViewHolder.vvalue.setText(values.get(i));
 
         //TODO drawable
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        protected TextView vcat;
+        protected TextView vfield;
         protected TextView vvalue;
 
         public AdapterViewHolder(View view) {
             super(view);
 
-            vcat = (TextView) view.findViewById(R.id.category);
+            vfield = (TextView) view.findViewById(R.id.category);
             vvalue = (TextView) view.findViewById(R.id.value);
         }
     }

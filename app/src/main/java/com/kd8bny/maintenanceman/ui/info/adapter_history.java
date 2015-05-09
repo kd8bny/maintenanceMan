@@ -76,7 +76,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
 
                             ArrayList<String> temp = vehicleHist.get(pos);
                             vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(view.getContext());
-                            vehicleDB.deleteEntry(view.getContext(), temp.get(1), temp.get(2), temp.get(3));
+                            vehicleDB.deleteEntry(view.getContext(), temp.get(1), temp.get(2), temp.get(3), null,null);//TODO!!
 
                             vehicleHist.remove(pos);
                             notifyDataSetChanged();

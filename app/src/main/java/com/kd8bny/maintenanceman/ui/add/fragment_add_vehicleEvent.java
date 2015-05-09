@@ -1,12 +1,16 @@
 package com.kd8bny.maintenanceman.ui.add;
 
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,52 +18,59 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 
 public class fragment_add_vehicleEvent extends Fragment {
-    private static final String TAG = "f_add_vehicleEvent";
+    private static final String TAG = "frg_add_vhclEvnt";
 
     private Toolbar toolbar;
     private Spinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
-    private ArrayAdapter<String> eventAdapter;
 
+    private RecyclerView eventList;
+    private RecyclerView.LayoutManager eventMan;
+    private RecyclerView.Adapter eventListAdapter;
 
-    private EditText dateEdit;
-    private AutoCompleteTextView eventEdit;
-
-    private String date;
-    private String odo;
-    private String task;
-    private String refID;
-
-    private ArrayList<HashMap> vehicleList;
-    private ArrayList<String> eventList;
-
+    private ArrayList<String> labels = new ArrayList<>();
+    private HashMap<String, String> dataSet = new HashMap<>();
     private HashMap<String, HashMap> roster;
 
+    private Boolean isNew = true;
+
     public fragment_add_vehicleEvent() {
-        // Required empty public constructor
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        labels.add(0, "Date");
+        labels.add(1, "Odometer");
+        labels.add(2, "Event");
+        labels.add(3, "Price");
+        labels.add(4, "Comment");
+        if(isNew) {
+            dataSet.put(labels.get(0), null); //TODO get todays date
+            dataSet.put(labels.get(1), null);
+            dataSet.put(labels.get(2), null);
+            dataSet.put(labels.get(3), null);
+            dataSet.put(labels.get(4), null);
+        }else{
+            //TODO
+        }
     }
 
     @Override
@@ -68,9 +79,9 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
-        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //Spinner
         vehicleSpinner = (Spinner) view.findViewById(R.id.vehicleSpinner);
@@ -78,24 +89,57 @@ public class fragment_add_vehicleEvent extends Fragment {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(spinnerAdapter);
 
-        //Date
-        dateEdit = (EditText) view.findViewById(R.id.val_spec_date);
-        dateEdit.setInputType(InputType.TYPE_NULL);
-        dateEdit.setOnClickListener(new View.OnClickListener() {
+        //Recycler View
+        eventList = (RecyclerView) view.findViewById(R.id.add_vehicle_event);
+        eventMan = new LinearLayoutManager(getActivity());
+        eventList.setHasFixedSize(true);
+        eventList.setItemAnimator(new DefaultItemAnimator());
+        eventList.setLayoutManager(eventMan);
+        eventList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), eventList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                dialog_datePicker datePickerFrag = new dialog_datePicker();
-                datePickerFrag.show(getFragmentManager(), "datePicker");
+            public void onItemClick(View view, int pos) {
+                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                Bundle args = new Bundle();
+                args.putString("label", labels.get(pos));
+                args.putString("value", dataSet.get(labels.get(pos)));
+                if (pos == 0) {
+                    dialog_datePicker datePickerFrag = new dialog_datePicker();
+                    datePickerFrag.setTargetFragment(fragment_add_vehicleEvent.this, 0);
+                    datePickerFrag.setArguments(args);
+                    datePickerFrag.show(getFragmentManager(), "datePicker");
+                } else {
+                    if (pos == 2) {
+                        args.putBoolean("isEvent", true);
+                    } else{
+                        args.putBoolean("isEvent", false);
+                    }
+                    dialog_addVehicleEvent dialog_addVehicleEvent = new dialog_addVehicleEvent();
+                    dialog_addVehicleEvent.setTargetFragment(fragment_add_vehicleEvent.this, 0);
+                    dialog_addVehicleEvent.setArguments(args);
+                    dialog_addVehicleEvent.show(fm, "dialog_addEvent");
+                }
             }
-        });
 
-        //Event
-        eventEdit = (AutoCompleteTextView) view.findViewById(R.id.val_spec_event);
-        if(getEvents() != null) {
-            eventEdit.setAdapter(eventAdapter);
-        }
+            @Override
+            public void onItemLongClick(View view, int pos) {
+            }
+        }));
+
+        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
+        eventList.setAdapter(eventListAdapter);
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        String labelResult = data.getStringExtra("label");
+        String valueResult = data.getStringExtra("value");
+
+        dataSet.put(labelResult, valueResult);
+
+        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
+        eventList.swapAdapter(eventListAdapter, false);
     }
 
     @Override
@@ -108,20 +152,21 @@ public class fragment_add_vehicleEvent extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-
             case R.id.menu_save:
-                Context context = getActivity().getApplicationContext();
+                int pos = vehicleSpinner.getSelectedItemPosition();
+                ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
+                String refID = rosterKeys.get(pos);
 
-                getVehicles();
-                vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(context);
-                vehicleDB.saveEntry(context, refID, date, odo, task, null,null);//TODO!!
+                vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
-                Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show(); //TODO make string
                 getActivity().finish();
 
                 return true;
@@ -143,7 +188,6 @@ public class fragment_add_vehicleEvent extends Fragment {
         HashMap<String, HashMap> vehicle;
         HashMap<String, String> gen;
         ArrayList<String> singleVehicle = new ArrayList<>();
-        Log.d(TAG,roster.keySet().toString());
 
         if(roster.containsKey(null)){
             Toast.makeText(this.getActivity(), R.string.empty_db, Toast.LENGTH_SHORT).show();
@@ -158,52 +202,5 @@ public class fragment_add_vehicleEvent extends Fragment {
         }
 
         return new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_item, singleVehicle);
-    }
-
-    public void getVehicles(){
-        int pos = vehicleSpinner.getSelectedItemPosition();
-        ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
-        refID = rosterKeys.get(pos);
-
-        date = ((EditText) getActivity().findViewById(R.id.val_spec_date)).getText().toString();
-        task = ((EditText) getActivity().findViewById(R.id.val_spec_event)).getText().toString();
-        odo = ((EditText) getActivity().findViewById(R.id.val_spec_odo)).getText().toString();
-    }
-
-    public ArrayAdapter<String> getEvents(){
-        int pos = vehicleSpinner.getSelectedItemPosition();
-        if(pos > -1) {
-            ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
-            refID = rosterKeys.get(pos);
-
-            vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-            ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
-            eventList = new ArrayList<>();
-            ArrayList<String> temp;
-
-            for (int i = 0; i < tempEvents.size(); i++) {
-                temp = tempEvents.get(i);
-                if (temp.get(0) != null) {
-                    eventList.add(temp.get(3));
-                } else {
-                    Log.i(TAG, "nothing to show");
-                    return null;
-                }
-            }
-
-            // Remove dup's
-            HashSet tempHS = new HashSet();
-            tempHS.addAll(eventList);
-            eventList.clear();
-            eventList.addAll(tempHS);
-
-            eventAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, eventList);
-
-            return eventAdapter;
-
-        }else {
-
-            return null;
-        }
     }
 }

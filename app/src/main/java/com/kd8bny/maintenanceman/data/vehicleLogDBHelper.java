@@ -9,12 +9,13 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class vehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
 
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2; // v1 was 29
     public static final String DB_NAME = "vehicleLog.db";
     SQLiteDatabase vehicleLogDB = null;
 
@@ -24,6 +25,8 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     public static final String COLUMN_VEHICLE_DATE = "date";
     public static final String COLUMN_VEHICLE_ODO = "odo";
     public static final String COLUMN_VEHICLE_TASK = "event";
+    public static final String COLUMN_VEHICLE_PRICE = "price";
+    public static final String COLUMN_VEHICLE_COMMENT = "comment";
 
 
     public static final String DATABASE_CREATE = "create table "
@@ -33,7 +36,9 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + COLUMN_VEHICLE_REFID + " text not null, "
         + COLUMN_VEHICLE_DATE + " text not null, "
         + COLUMN_VEHICLE_ODO + " text not null, "
-        + COLUMN_VEHICLE_TASK + " text not null"
+        + COLUMN_VEHICLE_TASK + " text not null, "
+        + COLUMN_VEHICLE_PRICE + " text not null, "
+        + COLUMN_VEHICLE_COMMENT + " text not null"
         + ");";
 
     public vehicleLogDBHelper(Context context){
@@ -42,7 +47,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db){
-        Log.d(TAG,"This is oncreate!!!");
+
     }
 
     @Override
@@ -50,8 +55,24 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         Log.w(vehicleLogDBHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
-        //onCreate(db);
+        db.beginTransaction();
+        String TABLE_VEHICLE_NEW = TABLE_VEHICLE + "_new";
+        try {
+            Log.d(TAG, "trying");
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VEHICLE_NEW + " AS SELECT * FROM " + TABLE_VEHICLE);
+            db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_VEHICLE_PRICE + " text not null default ''");
+            db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_VEHICLE_COMMENT + " text not null default ''");
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
+            db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " RENAME TO " + TABLE_VEHICLE);
+            onCreate(db);
+            db.setTransactionSuccessful();
+        } catch (Exception e){
+            Log.e(TAG,e.toString());
+            Log.e(TAG, "Error updating db");
+        }finally {
+            db.setVersion(DB_VERSION);
+            db.endTransaction();
+        }
     }
 
     public void createDatabase(Context context){
@@ -60,10 +81,10 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
             vehicleLogDB.execSQL(DATABASE_CREATE);
             vehicleLogDB.setVersion(DB_VERSION);
-
-            Log.i(TAG,"vehiclelog created");
         }catch(Exception e){
-            Log.e(TAG,"Error creating db");
+            //e.printStackTrace();
+            Log.e(TAG, "Log probably already exists");
+
         }finally {
             if(vehicleLogDB.getVersion() < DB_VERSION){
                 onUpgrade(vehicleLogDB, vehicleLogDB.getVersion(), DB_VERSION);
@@ -72,7 +93,8 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void saveEntry(Context context, String refID, String date, String odo, String task) {
+    public void saveEntry(Context context, String refID, HashMap<String, String> dataSet) {
+        //String date, String odo, String task, String price, String comment
         File database = context.getDatabasePath("vehicleLog.db");
         if (!database.exists()) {
             this.createDatabase(context);
@@ -80,12 +102,20 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
         else {
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
+            try {
+                vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event, price, comment) VALUES ('"
+                        + refID + "','"
+                        + dataSet.get("Date") + "','"
+                        + dataSet.get("Odometer") + "','"
+                        + dataSet.get("Event") + "','"
+                        + dataSet.get("Price") + "','"
+                        + dataSet.get("Comment") + "');");
 
-            vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event) VALUES ('"
-                            + refID + "','"
-                            + date + "','"
-                            + odo + "','"
-                            + task + "');");
+            }catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG, e.toString());
+                Log.e(TAG, "Error updating db");
+            }
         }
     }
 
@@ -98,20 +128,24 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         int dateCol = cursor.getColumnIndex("date");
         int odoCol = cursor.getColumnIndex("odo");
         int eventCol = cursor.getColumnIndex("event");
+        int priceCol = cursor.getColumnIndex("price");
+        int commentCol = cursor.getColumnIndex("comment");
 
-        ArrayList<ArrayList> vehicleList = new ArrayList<ArrayList>();
+        ArrayList<ArrayList> vehicleList = new ArrayList<>();
 
         cursor.moveToFirst();
 
         if(cursor != null && (cursor.getCount() > 0)) {
             do {
-                ArrayList<String> singleVehicleList = new ArrayList<String>();
+                ArrayList<String> singleVehicleList = new ArrayList<>();
 
                 if(refID.equals(cursor.getString(refIDCol))) {
                     singleVehicleList.add(refID);
                     singleVehicleList.add(cursor.getString(dateCol));
                     singleVehicleList.add(cursor.getString(odoCol));
                     singleVehicleList.add(cursor.getString(eventCol));
+                    singleVehicleList.add(cursor.getString(priceCol));
+                    singleVehicleList.add(cursor.getString(commentCol));
 
                     vehicleList.add(singleVehicleList);
                 }
@@ -120,24 +154,38 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
         }
         else{
-            ArrayList<String> singleVehicleList = new ArrayList<String>();
+            ArrayList<String> singleVehicleList = new ArrayList<>();
             singleVehicleList.add(null);
             singleVehicleList.add("No Vehicle History Given");
             vehicleList.add(singleVehicleList);
         }
 
         return vehicleList;
-
     }
-    public void deleteEntry(Context context, String date,  String odo, String event){
+
+    public void deleteEntry(Context context, String date,  String odo, String event, String price, String comment){
         createDatabase(context);
-
-        //("DELETE FROM grandFleetRoster WHERE refID = '" + refID + "';");
-
-        vehicleLogDB.execSQL("DELETE FROM grandVehicleLog WHERE " +
-                "date = '" + date + "'" +
-                " AND event = '" + event +
-                "' AND odo = '" + odo + "';");
+        try {
+            vehicleLogDB.execSQL("DELETE FROM grandVehicleLog WHERE " +
+                    "date = '" + date + "'" +
+                    " AND event = '" + event +
+                    "' AND odo = '" + odo +
+                    "' AND price = '" + price +
+                    "' AND comment = '" + comment + "';");
+        }catch (Exception e) {
+            Log.e(TAG, e.toString());
+            Log.e(TAG, "Error updating db");
+        }
     }
 
+    public void purgeHistory(Context context, String refID){
+        createDatabase(context);
+        try{
+            vehicleLogDB.execSQL("DELETE FROM grandVehicleLog WHERE " +
+                "refID = '" + refID + "';");
+        }catch (Exception e) {
+            Log.e(TAG, e.toString());
+            Log.e(TAG, "Error updating db");
+        }
+    }
 }

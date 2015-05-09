@@ -211,6 +211,9 @@ public class fragment_info extends Fragment {
                         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
                         fltjson.deleteEntry(getActivity(), refID);
 
+                        vehicleLogDBHelper vhclDBHlpr = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                        vhclDBHlpr.purgeHistory(getActivity().getApplicationContext(), refID);
+
                         getActivity().finish();
                     }
                 });

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -83,9 +84,9 @@ public class fragment_add_fleetRoster extends Fragment {
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
-        ((ActionBarActivity)getActivity()).setSupportActionBar(toolbar);
-        ((ActionBarActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((ActionBarActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //Spinner
         vehicleSpinner = (Spinner) view.findViewById(R.id.spinner_vehicle_type);
@@ -142,8 +143,6 @@ public class fragment_add_fleetRoster extends Fragment {
                 builder.show();
             }
         }));
-        //RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        //recyclerView.addItemDecoration(itemDecoration);
 
         addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
         addList.setAdapter(addListAdapter);
