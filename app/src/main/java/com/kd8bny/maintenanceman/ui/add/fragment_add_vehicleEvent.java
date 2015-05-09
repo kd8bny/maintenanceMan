@@ -30,6 +30,7 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 
 public class fragment_add_vehicleEvent extends Fragment {
@@ -44,7 +45,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private RecyclerView.Adapter eventListAdapter;
 
     private ArrayList<String> labels = new ArrayList<>();
-    private HashMap<String, String> dataSet = new HashMap<>();
+    private HashMap<String, String> dataSet = new LinkedHashMap<>();
     private HashMap<String, HashMap> roster;
 
     private Boolean isNew = true;
