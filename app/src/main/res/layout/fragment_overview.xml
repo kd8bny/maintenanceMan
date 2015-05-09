@@ -38,8 +38,11 @@
                 android:paddingRight="10dp"
                 android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
+
                 fab:menu_labels_ellipsize="end"
                 fab:menu_labels_singleLine="true"
+                fab:menu_labels_textColor="@color/secondary_text"
+                fab:menu_labels_colorNormal="@android:color/white"
                 fab:menu_colorNormal="@color/accent"
                 fab:menu_colorPressed="@color/primary_light"
                 fab:menu_colorRipple="@color/primary_dark">
@@ -48,29 +51,33 @@
                     android:id="@+id/fab_add_vehicle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_car"
+
                     fab:fab_size="normal"
                     fab:fab_label="@string/menu_add_vehicle"
                     fab:fab_showAnimation="@anim/fab_scale_up"
                     fab:fab_hideAnimation="@anim/fab_scale_down"
                     fab:fab_colorNormal="@color/accent"
                     fab:fab_colorPressed="@color/primary_light"
-                    fab:fab_colorRipple="@color/primary_dark"/>
+                    fab:fab_colorRipple="@color/primary_dark"
+
+                    android:src="@drawable/ic_action_car"
+                    android:tint="@android:color/white"/>
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_add_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_card"
-                    android:tint="@android:color/white"
+
                     fab:fab_size="normal"
                     fab:fab_label="@string/menu_add_event"
                     fab:fab_showAnimation="@anim/fab_scale_up"
                     fab:fab_hideAnimation="@anim/fab_scale_down"
                     fab:fab_colorNormal="@color/accent"
                     fab:fab_colorPressed="@color/primary_light"
-                    fab:fab_colorRipple="@color/primary_dark"/>
+                    fab:fab_colorRipple="@color/primary_dark"
 
+                    android:src="@drawable/ic_action_card"
+                    android:tint="@android:color/white"/>
             </com.github.clans.fab.FloatingActionMenu>
         </FrameLayout>
 
