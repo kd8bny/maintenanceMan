@@ -1,29 +1,39 @@
 package com.kd8bny.maintenanceman.ui.main;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
-import com.kd8bny.maintenanceman.ui.drawer.adapter_drawer;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.ui.info.activity_info;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,12 +43,9 @@ public class fragment_overview extends Fragment {
     private static final String TAG = "frg_ovrvw";
 
     private Toolbar toolbar;
-    private RecyclerView cardList, drawerList;
-    private RecyclerView.LayoutManager cardMan, drawerMan;
+    private RecyclerView cardList;
+    private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
-    private DrawerLayout Drawer;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private FloatingActionButton fabAddVehicle, fabAddEvent;
 
     private HashMap<String, HashMap> roster;
     private Boolean DBisEmpty = false;
@@ -102,8 +109,6 @@ public class fragment_overview extends Fragment {
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
-        fabAddVehicle = (FloatingActionButton) view.findViewById(R.id.fab_add_vehicle);
-        fabAddEvent = (FloatingActionButton) view.findViewById(R.id.fab_add_event);
 
         fabMenu.setAnimated(true);
 
@@ -124,35 +129,71 @@ public class fragment_overview extends Fragment {
             }
         });
 
-        //drawer_item
-        drawerList = (RecyclerView) view.findViewById(R.id.drawerList);
-        drawerMan = new LinearLayoutManager(getActivity());
-        drawerList.setHasFixedSize(true);
-        drawerList.setItemAnimator(new DefaultItemAnimator());
+        //Material Drawer Header
+        AccountHeader.Result headerResult = new AccountHeader()
+                .withActivity(getActivity())
+                .withHeaderBackground(R.drawable.header_blank)
+                .build();
 
-        drawerList.setLayoutManager(drawerMan);
-        drawerList.setAdapter(populateDrawer());
-        Drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(getActivity(),Drawer,toolbar,R.string.drawer_open,R.string.drawer_close){
-            @Override
-            public void onDrawerOpened(View drawerView){
-                super.onDrawerOpened(drawerView);
-                fabMenu.hideMenuButton(true);
+        //Material Drawer
+        Drawer.Result result = new Drawer()
+            .withActivity(getActivity())
+            .withTranslucentStatusBar(true)
+            .withToolbar(toolbar)
+            .withSelectedItem(-1)
+            .withAccountHeader(headerResult)
+            .addDrawerItems(
+                    new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
+                    new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
+                    new DividerDrawerItem(),
+                    new SecondaryDrawerItem().withName(R.string.title_donate))
+            .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) { //TODO seperate class
+                    switch (i) {
+                        case 0: //Add Vehicle
+                            Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
+                            view.getContext().startActivity(addFleetIntent);
 
-            }
-            @Override
-            public void onDrawerClosed(View drawerView){
-                super.onDrawerClosed(drawerView);
-                fabMenu.showMenuButton(true);
-            }
-        };
-        Drawer.setDrawerListener(mDrawerToggle);
-        mDrawerToggle.syncState();
+                            break;
+
+                        case 1: //Add Event
+                            Intent addEventIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
+                            view.getContext().startActivity(addEventIntent);
+
+                            break;
+
+                        /*case 2: //Settings
+                            Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
+                            view.getContext().startActivity(settingsIntent);
+                            mDrawerLayout.closeDrawers();
+                            break;*/
+
+                        case 3: //Donate
+                            FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+
+                            dialog_donate dialog_donate = new dialog_donate();
+                            dialog_donate.show(fm, "dialog_donate");
+
+                            break;
+
+                        /*case 4:
+                            //Intent aboutIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
+                            //view.getContext().startActivity(aboutIntent);
+                            Toast.makeText(view.getContext(),"Daryl Bennett",Toast.LENGTH_LONG).show();
+                            mDrawerLayout.closeDrawers();
+                            break;*/
+                    }
+                }
+            })
+            .build();
+
+            result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
         return view;
     }
 
-    @Override
+        @Override
     public void onStart(){
         super.onStart();
 
@@ -172,18 +213,5 @@ public class fragment_overview extends Fragment {
 
         cardListAdapter = new adapter_overview(roster);
         cardList.setAdapter(cardListAdapter);
-    }
-
-    public adapter_drawer populateDrawer(){
-        String[] mMenuTitles = getResources().getStringArray(R.array.drawer_items);
-        int[] icons = new int[]{R.drawable.ic_action_add_fleet, R.drawable.ic_action_add_event, R.drawable.ic_action_donate}; //R.drawable.ic_action_settings,
-        ArrayList<String> singleDrawerItems = new ArrayList<>();
-
-        singleDrawerItems.add(mMenuTitles[0]);
-        singleDrawerItems.add(mMenuTitles[1]);
-        //singleDrawerItems.add(mMenuTitles[2]); //TODO add settings back
-        singleDrawerItems.add(mMenuTitles[3]);
-
-        return new adapter_drawer(singleDrawerItems, icons);
     }
 }
