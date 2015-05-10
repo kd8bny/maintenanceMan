@@ -60,8 +60,7 @@
                     fab:fab_colorPressed="@color/primary_light"
                     fab:fab_colorRipple="@color/primary_dark"
 
-                    android:src="@drawable/ic_action_car"
-                    android:tint="@android:color/white"/>
+                    android:src="@drawable/ic_action_add_fleet_white"/>
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_add_event"
@@ -76,8 +75,7 @@
                     fab:fab_colorPressed="@color/primary_light"
                     fab:fab_colorRipple="@color/primary_dark"
 
-                    android:src="@drawable/ic_action_card"
-                    android:tint="@android:color/white"/>
+                    android:src="@drawable/ic_action_add_event_white"/>
             </com.github.clans.fab.FloatingActionMenu>
         </FrameLayout>
 

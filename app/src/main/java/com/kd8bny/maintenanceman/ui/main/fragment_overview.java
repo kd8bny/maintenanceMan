@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -177,7 +176,7 @@ public class fragment_overview extends Fragment {
 
     public adapter_drawer populateDrawer(){
         String[] mMenuTitles = getResources().getStringArray(R.array.drawer_items);
-        int[] icons = new int[]{R.drawable.car_icon_md_9, R.drawable.ic_add_event, R.drawable.ic_action_donate}; //R.drawable.ic_action_settings,
+        int[] icons = new int[]{R.drawable.ic_action_add_fleet, R.drawable.ic_action_add_event, R.drawable.ic_action_donate}; //R.drawable.ic_action_settings,
         ArrayList<String> singleDrawerItems = new ArrayList<>();
 
         singleDrawerItems.add(mMenuTitles[0]);

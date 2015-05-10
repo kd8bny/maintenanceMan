@@ -2,7 +2,6 @@ package com.kd8bny.maintenanceman.ui.main;
 
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,23 +56,23 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
             switch (category.get("type")){
                 case "Automobile":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.car_icon_md_9);
+                    adapterViewHolder.carPic.setImageResource(R.drawable.np_car);
                     break;
 
                 case "Motorcycle":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.motorcycle_md_9);
+                    adapterViewHolder.carPic.setImageResource(R.drawable.np_motorcycle);
                     break;
 
                 case "Utility":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.utility_md_9);
+                    adapterViewHolder.carPic.setImageResource(R.drawable.np_utility);
                     break;
 
                 case "Marine":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.boat_md_9);
+                    adapterViewHolder.carPic.setImageResource(R.drawable.np_marine);
                     break;
 
                 case "Lawn and Garden":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.tractor_md_9);
+                    adapterViewHolder.carPic.setImageResource(R.drawable.np_tractor);
                     break;
 
                 default:
