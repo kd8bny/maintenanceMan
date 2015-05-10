@@ -1,3 +1,25 @@
+V2.0.2
+
+NEW!! Card view for new vehicle event
+Added price and comment fields
+NEW!! Touch history events to see all info
+Navbar and fab fixes
+Cleaned layouts everywhere
+
+V2.0.1
+
+MUST CLEAR DATA!!!
+Im sorry but this will benefit you and I in the near future.
+This release still has minor bugs especially in UI design. However I want everyone to be on the new database system as soon as possible. I apologize for the inconvenience.
+
+NEW FIXES
+Bug and layout fixes EVERYWHERE
+Delete feature for new fields
+NEW floating action button!! Try it out!
+Added a "Lawn and Garden" Category
+Fixed icons for Marine and Motorcycle Categories
+Switched Vehicle Info and History
+
 V1.5.0
 
 Styles and Layout fixes all over

@@ -24,7 +24,7 @@
             android:elevation="50sp"
             android:gravity="start"
             android:layout_alignParentStart="true"
-            android:src="@drawable/car_icon_md_9"
+            android:src="@drawable/np_car"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:background="@color/accent"

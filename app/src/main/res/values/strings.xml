@@ -70,6 +70,8 @@
 
     <!-- History -->
     <string name="title_history">Vehicle History</string>
+    <string name="menu_delete_event">Delete</string>
+    <string name="menu_edit_event">Edit</string>
 
     <!-- Info -->
     <string name="title_info">Vehicle Info</string>

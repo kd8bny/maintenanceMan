@@ -14,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,6 +23,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.PopupMenu;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
@@ -59,12 +63,13 @@ public class fragment_info extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
+        registerForContextMenu(view);
 
         refID = getActivity().getIntent().getStringExtra("refID");
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
@@ -118,24 +123,51 @@ public class fragment_info extends Fragment {
             }
 
             @Override
-            public void onItemLongClick(View view, int pos) {
+            public void onItemLongClick(final View view, int pos) {
                 final ArrayList<String> temp = vehicleHist.get(pos);
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setCancelable(true);
-                builder.setTitle("Delete " + temp.get(3) + "on " + temp.get(1));
-                builder.setNegativeButton("No", null);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                PopupMenu popupMenu = new PopupMenu(getActivity(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.pop_menu_history, popupMenu.getMenu());
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
-                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp.get(1), temp.get(2), temp.get(3), temp.get(4), temp.get(5));
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_edit:
+                                Intent editIntent = new Intent(getActivity(), activity_vehicleEvent.class);
+                                editIntent.putExtra("dataSet", temp);
+                                getActivity().startActivity(editIntent);
 
-                        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
-                        histListAdapter = new adapter_history(vehicleHist);
-                        histList.setAdapter(histListAdapter);
+                                return true;
+
+                            case R.id.menu_delete:
+                                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                                builder.setCancelable(true);
+                                builder.setTitle("Delete Item?");
+                                builder.setMessage(temp.get(3) + " completed on " + temp.get(1));
+                                builder.setNegativeButton("No", null);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp.get(1), temp.get(2), temp.get(3), temp.get(4), temp.get(5));
+
+                                        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+                                        histListAdapter = new adapter_history(vehicleHist);
+                                        histList.setAdapter(histListAdapter);
+                                    }
+                                });
+
+                                builder.show();
+
+                                return true;
+
+                            default:
+                                return false;
+                        }
                     }
                 });
-                builder.show();
+
+                popupMenu.show();
             }
         }));
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
