@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.ui.add;
 
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -11,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +29,7 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -48,8 +49,6 @@ public class fragment_add_vehicleEvent extends Fragment {
     private HashMap<String, String> dataSet = new LinkedHashMap<>();
     private HashMap<String, HashMap> roster;
 
-    private Boolean isNew = true;
-
     public fragment_add_vehicleEvent() {
 
     }
@@ -58,19 +57,31 @@ public class fragment_add_vehicleEvent extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        ArrayList<String> temp = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet");
+
         labels.add(0, "Date");
         labels.add(1, "Odometer");
         labels.add(2, "Event");
         labels.add(3, "Price");
         labels.add(4, "Comment");
-        if(isNew) {
-            dataSet.put(labels.get(0), null); //TODO get todays date
+        if(temp == null) {
+            final Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+
+            dataSet.put(labels.get(0), month + 1 + "/" + day + "/" + year);
             dataSet.put(labels.get(1), null);
             dataSet.put(labels.get(2), null);
             dataSet.put(labels.get(3), null);
             dataSet.put(labels.get(4), null);
         }else{
-            //TODO
+            dataSet.put(labels.get(0), temp.get(1)); //TODO set spinner
+            dataSet.put(labels.get(1), temp.get(2));
+            dataSet.put(labels.get(2), temp.get(3));
+            dataSet.put(labels.get(3), temp.get(4));
+            dataSet.put(labels.get(4), temp.get(5));
         }
     }
 
