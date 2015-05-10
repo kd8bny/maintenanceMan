@@ -2,10 +2,12 @@ package com.kd8bny.maintenanceman.ui.info;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +25,9 @@ import android.view.ViewGroup;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_vehicleHistory;
 import com.kd8bny.maintenanceman.ui.edit.activity_edit;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
@@ -100,7 +104,43 @@ public class fragment_info extends Fragment {
         histList.setHasFixedSize(true);
         histList.setItemAnimator(new DefaultItemAnimator());
         histList.setLayoutManager(histMan);
-        populateAdapter();
+        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), histList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                Bundle args = new Bundle();
+                args.putSerializable("event", vehicleHist.get(pos));
+
+                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                dialog_vehicleHistory dialog_vehicleHistory = new dialog_vehicleHistory();
+                dialog_vehicleHistory.setTargetFragment(fragment_info.this, 0);
+                dialog_vehicleHistory.setArguments(args);
+                dialog_vehicleHistory.show(fm, "dialog_vehicle_history");
+            }
+
+            @Override
+            public void onItemLongClick(View view, int pos) {
+                final ArrayList<String> temp = vehicleHist.get(pos);
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setCancelable(true);
+                builder.setTitle("Delete " + temp.get(3) + "on " + temp.get(1));
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp.get(1), temp.get(2), temp.get(3), temp.get(4), temp.get(5));
+
+                        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+                        histListAdapter = new adapter_history(vehicleHist);
+                        histList.setAdapter(histListAdapter);
+                    }
+                });
+                builder.show();
+            }
+        }));
+        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+        histListAdapter = new adapter_history(vehicleHist);
         histList.setAdapter(histListAdapter);
 
         //Slide-y up menu
@@ -238,12 +278,5 @@ public class fragment_info extends Fragment {
             default:
                 return false;
         }
-    }
-
-    public void populateAdapter(){
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
-
-        histListAdapter = new adapter_history(vehicleHist);
     }
 }

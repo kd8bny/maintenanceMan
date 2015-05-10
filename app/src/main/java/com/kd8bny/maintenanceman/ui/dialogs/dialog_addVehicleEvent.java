@@ -77,7 +77,7 @@ public class dialog_addVehicleEvent extends DialogFragment{
 
         return alertDialog.create();
     }
-
+//TODO
     /*public ArrayAdapter<String> getEvents(){
         int pos = vehicleSpinner.getSelectedItemPosition();
         if(pos > -1) {

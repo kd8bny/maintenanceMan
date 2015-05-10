@@ -54,39 +54,13 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
         histEvent.addAll(vehicleHist.get(i));
 
         if (histEvent.get(0) != null) {
-
             drawable.setColorFilter(iconColor, PorterDuff.Mode.SRC_ATOP);
             (itemView.findViewById(R.id.circle)).setBackground(drawable);
 
             adapterViewHolder.vdate.setText(histEvent.get(1));
             adapterViewHolder.vodo.setText(histEvent.get(2));
             adapterViewHolder.vevent.setText(histEvent.get(3));
-
-            final int pos = i;
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(final View view) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                    builder.setCancelable(true);
-                    builder.setTitle("Delete " + histEvent.get(3) + "on " + histEvent.get(1));
-                    builder.setNegativeButton("No", null);
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            ArrayList<String> temp = vehicleHist.get(pos);
-                            vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(view.getContext());
-                            vehicleDB.deleteEntry(view.getContext(), temp.get(1), temp.get(2), temp.get(3), null,null);//TODO!!
-
-                            vehicleHist.remove(pos);
-                            notifyDataSetChanged();
-                        }
-                    });
-                    builder.show();
-                    return false;
-                }
-
-            });
+            adapterViewHolder.vunit.setText(" mi");
         }else {
             drawable.setColorFilter(iconColorError, PorterDuff.Mode.SRC_ATOP);
             (itemView.findViewById(R.id.circle)).setBackground(drawable);
@@ -98,6 +72,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
         protected TextView vevent;
         protected TextView vodo;
         protected TextView vdate;
+        protected TextView vunit;
 
         public AdapterViewHolder(View view) {
             super(view);
@@ -105,6 +80,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
             vevent = (TextView) view.findViewById(R.id.event);
             vodo = (TextView) view.findViewById(R.id.val_spec_odo);
             vdate = (TextView) view.findViewById(R.id.date);
+            vunit = (TextView) view.findViewById(R.id.val_spec_unit);
         }
     }
 }
