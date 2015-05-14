@@ -233,8 +233,7 @@ public class fragment_info extends Fragment {
         });
 
         //Info Cards
-        View vslideInfo = view.findViewById(R.id.sliding_layout);
-        cardList = (RecyclerView) vslideInfo.findViewById(R.id.info_cardList);
+        cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
