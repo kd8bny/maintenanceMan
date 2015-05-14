@@ -107,7 +107,7 @@ public class fragment_info extends Fragment {
                 final ArrayList<String> temp = vehicleHist.get(pos);
                 if(!temp.get(1).equals(getActivity().getApplicationContext()
                         .getResources().getString(R.string.no_history))) {
-                    
+
                     Bundle args = new Bundle();
                     args.putSerializable("event", vehicleHist.get(pos));
 
