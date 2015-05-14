@@ -14,8 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,9 +21,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.PopupMenu;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
@@ -45,9 +43,10 @@ public class fragment_info extends Fragment {
 
     private Toolbar toolbar, toolbarBottom;
     private SlidingUpPanelLayout addEvent;
-    RecyclerView cardList, histList;
-    RecyclerView.LayoutManager cardMan, histMan;
-    RecyclerView.Adapter cardListAdapter, histListAdapter;
+    private FloatingActionButton fab;
+    private RecyclerView cardList, histList;
+    private RecyclerView.LayoutManager cardMan, histMan;
+    private RecyclerView.Adapter cardListAdapter, histListAdapter;
 
     private String refID;
     private HashMap<String, HashMap> roster;
@@ -86,7 +85,7 @@ public class fragment_info extends Fragment {
         toolbarBottom = (Toolbar) view.findViewById(R.id.tool_bar_bottom);
         toolbarBottom.setTitle(R.string.title_history);
         toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
-        toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        /*toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
@@ -101,7 +100,16 @@ public class fragment_info extends Fragment {
                         return false;
                 }
             }
-        });
+        });*/
+
+        //Info Cards
+        cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
+        cardMan = new LinearLayoutManager(getActivity());
+        cardList.setHasFixedSize(true);
+        cardList.setItemAnimator(new DefaultItemAnimator());
+        cardList.setLayoutManager(cardMan);
+        cardListAdapter = new adapter_info(vehicleSent);
+        cardList.setAdapter(cardListAdapter);
 
         //Task History
         histList = (RecyclerView) view.findViewById(R.id.histList);
@@ -186,7 +194,7 @@ public class fragment_info extends Fragment {
 
             @Override
             public void onPanelCollapsed(View view) {
-                toolbarBottom.getMenu().clear();
+                //toolbarBottom.getMenu().clear();
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));
@@ -195,7 +203,7 @@ public class fragment_info extends Fragment {
 
             @Override
             public void onPanelExpanded(View view) {
-                toolbarBottom.inflateMenu(R.menu.menu_history);
+                //toolbarBottom.inflateMenu(R.menu.menu_history);
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_down);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.accent_dark));
@@ -218,12 +226,12 @@ public class fragment_info extends Fragment {
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if( keyCode == KeyEvent.KEYCODE_BACK ){
-                    if(addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                         addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
                         return true;
-                    }else {
+                    } else {
 
                         return false;
                     }
@@ -232,14 +240,15 @@ public class fragment_info extends Fragment {
             }
         });
 
-        //Info Cards
-        cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
-        cardMan = new LinearLayoutManager(getActivity());
-        cardList.setHasFixedSize(true);
-        cardList.setItemAnimator(new DefaultItemAnimator());
-        cardList.setLayoutManager(cardMan);
-        cardListAdapter = new adapter_info(vehicleSent);
-        cardList.setAdapter(cardListAdapter);
+        //menu_overview_fab
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
+                getActivity().startActivity(addIntent);
+            }
+        });
 
         return view;
     }

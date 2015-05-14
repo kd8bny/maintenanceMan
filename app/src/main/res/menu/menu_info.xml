@@ -8,12 +8,12 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_trash"
         android:paddingLeft="@dimen/header_horizontal_margin"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item android:id="@+id/menu_edit"
         android:title="@string/menu_edit"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_edit"
         android:paddingLeft="@dimen/header_horizontal_margin"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>
