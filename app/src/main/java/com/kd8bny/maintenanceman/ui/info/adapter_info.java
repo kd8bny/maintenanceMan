@@ -186,7 +186,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                tempHeaderTitle.setPadding(hMargin, vMargin, hMargin, hMargin);
+                tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
                 tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
                 tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
                 tempHeaderTitle.setText(R.string.header_general);
@@ -275,7 +275,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                tempHeaderTitle.setPadding(hMargin, vMargin, hMargin, hMargin);
+                tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
                 tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
                 tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
                 tempHeaderTitle.setText(R.string.header_engine);
@@ -364,7 +364,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                tempHeaderTitle.setPadding(hMargin, vMargin, hMargin, hMargin);
+                tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
                 tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
                 tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
                 tempHeaderTitle.setText(R.string.header_power_train);
@@ -453,7 +453,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                tempHeaderTitle.setPadding(hMargin, vMargin, hMargin, hMargin);
+                tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
                 tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
                 tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
                 tempHeaderTitle.setText(R.string.header_other);

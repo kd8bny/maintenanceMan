@@ -85,22 +85,6 @@ public class fragment_info extends Fragment {
         toolbarBottom = (Toolbar) view.findViewById(R.id.tool_bar_bottom);
         toolbarBottom.setTitle(R.string.title_history);
         toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
-        /*toolbarBottom.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.menu_add:
-                        Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
-                        getActivity().startActivity(addIntent);
-
-                        return true;
-
-                    default:
-
-                        return false;
-                }
-            }
-        });*/
 
         //Info Cards
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
@@ -194,7 +178,6 @@ public class fragment_info extends Fragment {
 
             @Override
             public void onPanelCollapsed(View view) {
-                //toolbarBottom.getMenu().clear();
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));
@@ -203,7 +186,6 @@ public class fragment_info extends Fragment {
 
             @Override
             public void onPanelExpanded(View view) {
-                //toolbarBottom.inflateMenu(R.menu.menu_history);
                 toolbarBottom.setNavigationIcon(R.drawable.ic_action_down);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.accent_dark));
