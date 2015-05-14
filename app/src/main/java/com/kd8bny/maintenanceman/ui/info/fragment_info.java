@@ -104,14 +104,19 @@ public class fragment_info extends Fragment {
         histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), histList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                Bundle args = new Bundle();
-                args.putSerializable("event", vehicleHist.get(pos));
+                final ArrayList<String> temp = vehicleHist.get(pos);
+                if(!temp.get(1).equals(getActivity().getApplicationContext()
+                        .getResources().getString(R.string.no_history))) {
+                    
+                    Bundle args = new Bundle();
+                    args.putSerializable("event", vehicleHist.get(pos));
 
-                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
-                dialog_vehicleHistory dialog_vehicleHistory = new dialog_vehicleHistory();
-                dialog_vehicleHistory.setTargetFragment(fragment_info.this, 0);
-                dialog_vehicleHistory.setArguments(args);
-                dialog_vehicleHistory.show(fm, "dialog_vehicle_history");
+                    FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                    dialog_vehicleHistory dialog_vehicleHistory = new dialog_vehicleHistory();
+                    dialog_vehicleHistory.setTargetFragment(fragment_info.this, 0);
+                    dialog_vehicleHistory.setArguments(args);
+                    dialog_vehicleHistory.show(fm, "dialog_vehicle_history");
+                }
             }
 
             @Override
@@ -159,7 +164,10 @@ public class fragment_info extends Fragment {
                     }
                 });
 
-                popupMenu.show();
+                if(!temp.get(1).equals(getActivity().getApplicationContext()
+                        .getResources().getString(R.string.no_history))) {
+                    popupMenu.show();
+                }
             }
         }));
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());

@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.kd8bny.maintenanceman.R;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -156,7 +158,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         else{
             ArrayList<String> singleVehicleList = new ArrayList<>();
             singleVehicleList.add(null);
-            singleVehicleList.add("No Vehicle History Given");
+            singleVehicleList.add(context.getResources().getString(R.string.no_history));
             vehicleList.add(singleVehicleList);
         }
 
