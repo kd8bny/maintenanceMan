@@ -1,9 +1,16 @@
-V2.0.2
+V2.0.3 5-10-15
+
+NEW!!! Material design navigation drawer
+Add event auto-sets current date
+NEW!!! Edit current events (Long press item)
+Layout fixes
+
+V2.0.2 5-9-15
 
 NEW!! Card view for new vehicle event
 Added price and comment fields
 NEW!! Touch history events to see all info
-Navbar and fab fixes
+Navdrawer and fab fixes
 Cleaned layouts everywhere
 
 V2.0.1

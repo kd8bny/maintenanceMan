@@ -46,8 +46,10 @@ public class fragment_add_vehicleEvent extends Fragment {
     private RecyclerView.Adapter eventListAdapter;
 
     private ArrayList<String> labels = new ArrayList<>();
+    private ArrayList<String> editData;
     private HashMap<String, String> dataSet = new LinkedHashMap<>();
     private HashMap<String, HashMap> roster;
+    private Boolean isNew = true;
 
     public fragment_add_vehicleEvent() {
 
@@ -58,14 +60,14 @@ public class fragment_add_vehicleEvent extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        ArrayList<String> temp = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet");
+        editData = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet");
 
         labels.add(0, "Date");
         labels.add(1, "Odometer");
         labels.add(2, "Event");
         labels.add(3, "Price");
         labels.add(4, "Comment");
-        if(temp == null) {
+        if(editData == null) {
             final Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
@@ -77,11 +79,12 @@ public class fragment_add_vehicleEvent extends Fragment {
             dataSet.put(labels.get(3), null);
             dataSet.put(labels.get(4), null);
         }else{
-            dataSet.put(labels.get(0), temp.get(1)); //TODO set spinner
-            dataSet.put(labels.get(1), temp.get(2));
-            dataSet.put(labels.get(2), temp.get(3));
-            dataSet.put(labels.get(3), temp.get(4));
-            dataSet.put(labels.get(4), temp.get(5));
+            isNew = false;
+            dataSet.put(labels.get(0), editData.get(1)); //TODO set spinner
+            dataSet.put(labels.get(1), editData.get(2));
+            dataSet.put(labels.get(2), editData.get(3));
+            dataSet.put(labels.get(3), editData.get(4));
+            dataSet.put(labels.get(4), editData.get(5));
         }
     }
 
@@ -176,6 +179,9 @@ public class fragment_add_vehicleEvent extends Fragment {
                 String refID = rosterKeys.get(pos);
 
                 vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                if(!isNew){
+                    vehicleDB.deleteEntry(getActivity().getApplicationContext(), editData);
+                }
                 vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
                 Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show(); //TODO make string

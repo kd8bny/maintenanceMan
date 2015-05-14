@@ -149,7 +149,7 @@ public class fragment_info extends Fragment {
 
                                     public void onClick(DialogInterface dialog, int which) {
                                         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
-                                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp.get(1), temp.get(2), temp.get(3), temp.get(4), temp.get(5));
+                                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
 
                                         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
                                         histListAdapter = new adapter_history(vehicleHist);
@@ -232,7 +232,7 @@ public class fragment_info extends Fragment {
             }
         });
 
-        //cards
+        //Info Cards
         View vslideInfo = view.findViewById(R.id.sliding_layout);
         cardList = (RecyclerView) vslideInfo.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());

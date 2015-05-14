@@ -163,15 +163,15 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         return vehicleList;
     }
 
-    public void deleteEntry(Context context, String date,  String odo, String event, String price, String comment){
+    public void deleteEntry(Context context, ArrayList<String> dataSet){
         createDatabase(context);
         try {
             vehicleLogDB.execSQL("DELETE FROM grandVehicleLog WHERE " +
-                    "date = '" + date + "'" +
-                    " AND event = '" + event +
-                    "' AND odo = '" + odo +
-                    "' AND price = '" + price +
-                    "' AND comment = '" + comment + "';");
+                    "date = '" + dataSet.get(1) + "'" +
+                    " AND event = '" + dataSet.get(3) +
+                    "' AND odo = '" + dataSet.get(2) +
+                    "' AND price = '" + dataSet.get(4) +
+                    "' AND comment = '" + dataSet.get(5) + "';");
         }catch (Exception e) {
             Log.e(TAG, e.toString());
             Log.e(TAG, "Error updating db");
