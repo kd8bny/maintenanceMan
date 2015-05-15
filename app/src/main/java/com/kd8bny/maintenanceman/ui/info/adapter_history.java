@@ -77,9 +77,9 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
         public AdapterViewHolder(View view) {
             super(view);
 
-            vevent = (TextView) view.findViewById(R.id.event);
+            vevent = (TextView) view.findViewById(R.id.val_spec_event);
             vodo = (TextView) view.findViewById(R.id.val_spec_odo);
-            vdate = (TextView) view.findViewById(R.id.date);
+            vdate = (TextView) view.findViewById(R.id.val_spec_date);
             vunit = (TextView) view.findViewById(R.id.val_spec_unit);
         }
     }

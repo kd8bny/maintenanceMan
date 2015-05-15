@@ -65,6 +65,7 @@ public class fragment_overview extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
+
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
