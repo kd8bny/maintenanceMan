@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/circle"
-        android:layout_height="64dp"
-        android:layout_width="64dp"
+        android:layout_height="56dp"
+        android:layout_width="56dp"
         android:elevation="2sp"
         android:layout_marginStart="@dimen/header_horizontal_margin"
         android:layout_marginEnd="@dimen/header_horizontal_margin"
@@ -24,8 +24,8 @@
         android:layout_marginEnd="@dimen/header_horizontal_margin"
         android:layout_centerVertical="true"
 
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:scaleType="centerInside"
         android:elevation="4sp"
 
@@ -128,9 +128,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
+        android:layout_marginStart="96dp"
         android:layout_alignParentBottom="true"
 
-        android:background="@color/divider"
-
-        android:layout_marginStart="96dp"/>
+        android:background="@color/divider"/>
 </RelativeLayout>
