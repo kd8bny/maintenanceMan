@@ -34,7 +34,12 @@ import com.kd8bny.maintenanceman.ui.edit.activity_edit;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 
@@ -51,7 +56,6 @@ public class fragment_info extends Fragment {
     private String refID;
     private HashMap<String, HashMap> roster;
     public HashMap<String, HashMap> vehicleSent;
-
     private ArrayList<ArrayList> vehicleHist;
 
     public fragment_info() {
@@ -149,6 +153,7 @@ public class fragment_info extends Fragment {
                                         vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
 
                                         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+                                        sort();
                                         histListAdapter = new adapter_history(vehicleHist);
                                         histList.setAdapter(histListAdapter);
                                     }
@@ -172,6 +177,7 @@ public class fragment_info extends Fragment {
         }));
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+        this.sort();
         histListAdapter = new adapter_history(vehicleHist);
         histList.setAdapter(histListAdapter);
 
@@ -257,6 +263,7 @@ public class fragment_info extends Fragment {
         //Renew maintenance history
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
+        this.sort();
         histListAdapter = new adapter_history(vehicleHist);
         histList.setAdapter(histListAdapter);
     }
@@ -307,6 +314,35 @@ public class fragment_info extends Fragment {
 
             default:
                 return false;
+        }
+    }
+
+    public void sort(){
+        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<String> eventPacket;
+        HashMap<String,ArrayList> eventPackets = new HashMap<>();
+
+        for (int i =0; i<vehicleHist.size(); i++){
+            eventPacket = vehicleHist.get(i);
+            dates.add(eventPacket.get(1));
+            eventPackets.put(eventPacket.get(1), eventPacket);
+        }
+
+        Collections.sort(dates, new Comparator<String>() {
+            DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    return f.parse(o2).compareTo(f.parse(o1));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+
+        vehicleHist.clear();
+        for (int i = 0; i<dates.size(); i++){
+            vehicleHist.add(eventPackets.get(dates.get(i)));
         }
     }
 }
