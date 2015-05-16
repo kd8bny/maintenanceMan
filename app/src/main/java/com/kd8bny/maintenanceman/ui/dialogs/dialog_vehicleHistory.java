@@ -34,6 +34,7 @@ public class dialog_vehicleHistory extends DialogFragment{
         Bundle args = getArguments();
         if (args != null){
             event = (ArrayList) args.getSerializable("event");
+
         }
 
     }
@@ -55,6 +56,9 @@ public class dialog_vehicleHistory extends DialogFragment{
         ((TextView)view.findViewById(R.id.val_spec_event)).setText(event.get(3));
         ((TextView)view.findViewById(R.id.val_spec_price)).setText(event.get(4));
         ((TextView)view.findViewById(R.id.val_spec_comment)).setText(event.get(5));
+
+        ((TextView)view.findViewById(R.id.label_date)).setText(getActivity().getApplicationContext().getText(R.string.label_date));
+        ((TextView)view.findViewById(R.id.label_odo)).setText(getActivity().getApplicationContext().getText(R.string.label_odo));
 
         return view;
     }

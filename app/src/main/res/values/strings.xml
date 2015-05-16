@@ -60,6 +60,8 @@
     <!-- History -->
     <string name="title_history">Vehicle History</string>
     <string name="no_history">No Vehicle History Given</string>
+    <string name="label_date">Date: </string>
+    <string name="label_odo">On: </string>
     <string name="menu_delete_event">Delete</string>
     <string name="menu_edit_event">Edit</string>
 
