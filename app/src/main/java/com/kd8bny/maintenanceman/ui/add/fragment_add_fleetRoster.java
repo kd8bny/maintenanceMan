@@ -34,6 +34,7 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField_required;
 
 
 public class fragment_add_fleetRoster extends Fragment {
@@ -103,19 +104,20 @@ public class fragment_add_fleetRoster extends Fragment {
         addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                Bundle args = new Bundle();
-                if(pos > 2){
-                    args.putBoolean("isRequired", false);
-                }else {
-                    args.putBoolean("isRequired", true);
-                }
-                args.putSerializable("field", vehicleDataAll.get(pos));
                 FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
-
-                dialog_addField dialog_addField = new dialog_addField();
-                dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
-                dialog_addField.setArguments(args);
-                dialog_addField.show(fm, "dialog_add_field");
+                Bundle args = new Bundle();
+                args.putSerializable("field", vehicleDataAll.get(pos));
+                if(pos > 2){
+                    dialog_addField dialog_addField = new dialog_addField();
+                    dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
+                    dialog_addField.setArguments(args);
+                    dialog_addField.show(fm, "dialog_add_field");
+                }else {
+                    dialog_addField_required dialog_addField_required = new dialog_addField_required();
+                    dialog_addField_required.setTargetFragment(fragment_add_fleetRoster.this, 0);
+                    dialog_addField_required.setArguments(args);
+                    dialog_addField_required.show(fm, "dialog_addField_required");
+                }
             }
 
             @Override
