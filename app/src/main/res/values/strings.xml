@@ -65,6 +65,10 @@
     <string name="menu_delete_event">Delete</string>
     <string name="menu_edit_event">Edit</string>
 
+    <string name="unit_dist_us"> mi</string>
+    <string name="unit_dist_metric"> Km</string>
+    <string name="unit_time"> hrs</string>
+
     <!-- Info -->
     <string name="title_info">Vehicle Info</string>
     <string name="header_general">General</string>
