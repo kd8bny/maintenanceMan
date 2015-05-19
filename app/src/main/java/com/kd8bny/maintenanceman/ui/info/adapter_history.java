@@ -1,32 +1,34 @@
 package com.kd8bny.maintenanceman.ui.info;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 
 import java.util.ArrayList;
 
 public class adapter_history extends RecyclerView.Adapter<adapter_history.AdapterViewHolder>{
-    private static final String TAG = "adapter_history";
+    private static final String TAG = "adptr_hstry";
 
-    public ArrayList<ArrayList> vehicleHist = new ArrayList<>();
+    private ArrayList<ArrayList> vehicleHist = new ArrayList<>();
+    private String [] vehicleTypes;
+    private String type;
     private View itemView;
-    Resources res;
-    Drawable drawable;
-    int iconColor, iconColorError;
+    private Resources res;
+    private Drawable drawable;
+    private int iconColor, iconColorError;
 
-    public adapter_history(ArrayList vehicleList) {
+    public adapter_history(ArrayList vehicleList, String type) {
         this.vehicleHist = vehicleList;
+        this.type = type;
     }
 
     @Override
@@ -44,6 +46,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
         iconColor = res.getColor(R.color.primary_light);
         iconColorError = res.getColor(R.color.error);
         drawable = res.getDrawable(R.drawable.circle);
+        vehicleTypes = res.getStringArray(R.array.vehicle_type);
 
         return new AdapterViewHolder(itemView);
     }
@@ -60,7 +63,11 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
             adapterViewHolder.vdate.setText(histEvent.get(1));
             adapterViewHolder.vodo.setText(histEvent.get(2));
             adapterViewHolder.vevent.setText(histEvent.get(3));
-            adapterViewHolder.vunit.setText(" mi");
+            if (type.equals(vehicleTypes[0]) | type.equals(vehicleTypes[1])){
+                adapterViewHolder.vunit.setText(res.getString(R.string.unit_dist_us));
+            }else {
+                adapterViewHolder.vunit.setText(res.getString(R.string.unit_time));
+            }
         }else {
             drawable.setColorFilter(iconColorError, PorterDuff.Mode.SRC_ATOP);
             (itemView.findViewById(R.id.circle)).setBackground(drawable);

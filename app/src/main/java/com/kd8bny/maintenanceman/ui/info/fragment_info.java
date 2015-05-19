@@ -109,7 +109,7 @@ public class fragment_info extends Fragment {
             @Override
             public void onItemClick(View view, int pos) {
                 final ArrayList<String> temp = vehicleHist.get(pos);
-                if(!temp.get(1).equals(getActivity().getApplicationContext()
+                if (!temp.get(1).equals(getActivity().getApplicationContext()
                         .getResources().getString(R.string.no_history))) {
 
                     Bundle args = new Bundle();
@@ -154,7 +154,7 @@ public class fragment_info extends Fragment {
 
                                         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
                                         sort();
-                                        histListAdapter = new adapter_history(vehicleHist);
+                                        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString());
                                         histList.setAdapter(histListAdapter);
                                     }
                                 });
@@ -169,7 +169,7 @@ public class fragment_info extends Fragment {
                     }
                 });
 
-                if(!temp.get(1).equals(getActivity().getApplicationContext()
+                if (!temp.get(1).equals(getActivity().getApplicationContext()
                         .getResources().getString(R.string.no_history))) {
                     popupMenu.show();
                 }
@@ -178,7 +178,7 @@ public class fragment_info extends Fragment {
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
         this.sort();
-        histListAdapter = new adapter_history(vehicleHist);
+        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString());
         histList.setAdapter(histListAdapter);
 
         //Slide-y up menu
@@ -264,7 +264,7 @@ public class fragment_info extends Fragment {
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
         this.sort();
-        histListAdapter = new adapter_history(vehicleHist);
+        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString());
         histList.setAdapter(histListAdapter);
     }
 
