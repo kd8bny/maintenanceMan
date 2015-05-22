@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<style name="kd8bny.EditText.Style" parent="">
+        <item name="app:met_baseColor">@color/primary_text</item>
+        <item name="app:met_primaryColor">@color/accent</item>
+        <item name="app:met_errorColor">@color/error</item>
+        <item name="app:met_floatingLabel">highlight</item>
+        <item name="app:met_floatingLabelText">hint</item>
+        <item name="app:met_floatingLabelAlwaysShown">true</item>
+        <item name="android:singleLine">true</item>
+    </style>-->
+</resources>
