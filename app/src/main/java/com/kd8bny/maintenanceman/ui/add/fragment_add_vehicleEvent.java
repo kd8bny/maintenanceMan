@@ -113,7 +113,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         eventList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), eventList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                FragmentManager fm = getFragmentManager();
                 Bundle args = new Bundle();
                 args.putString("label", labels.get(pos));
                 args.putString("value", dataSet.get(labels.get(pos)));

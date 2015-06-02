@@ -171,7 +171,7 @@ public class fragment_overview extends Fragment {
                             break;*/
 
                         case 3: //Donate
-                            FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                            FragmentManager fm = getFragmentManager();
 
                             dialog_donate dialog_donate = new dialog_donate();
                             dialog_donate.show(fm, "dialog_donate");

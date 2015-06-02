@@ -104,7 +104,7 @@ public class fragment_add_fleetRoster extends Fragment {
         addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                FragmentManager fm = getFragmentManager();
                 Bundle args = new Bundle();
                 args.putSerializable("field", vehicleDataAll.get(pos));
                 if(pos > 2){
@@ -154,7 +154,7 @@ public class fragment_add_fleetRoster extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
+                FragmentManager fm = getFragmentManager();
 
                 dialog_addField dialog_addField = new dialog_addField();
                 dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
