@@ -32,6 +32,7 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class fragment_edit extends Fragment {
     private static final String TAG = "frg_edit";
 
     private Toolbar toolbar;
-    private Spinner vehicleSpinner;
+    private MaterialBetterSpinner vehicleSpinner;
 
     private RecyclerView addList;
     private RecyclerView.LayoutManager addMan;
@@ -99,7 +100,7 @@ public class fragment_edit extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //Spinner
-        vehicleSpinner = (Spinner) view.findViewById(R.id.spinner_vehicle_type);
+        vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
         final String [] mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
         spinnerAdapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_dropdown_item, mvehicleTypes);
         vehicleSpinner.setAdapter(spinnerAdapter);
@@ -213,7 +214,7 @@ public class fragment_edit extends Fragment {
                 ArrayList<String> temp = new ArrayList<>();
                 temp.add("General");
                 temp.add("type");
-                temp.add((String)vehicleSpinner.getSelectedItem());
+                temp.add(vehicleSpinner.getText().toString());
                 vehicleDataAll.add(temp);
                 Context context = getActivity().getApplicationContext();
 

@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.ui.main;
 
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,10 +50,14 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             HashMap<String, HashMap> vehicle = vehicleList.get(i);
 
             HashMap<String, String> category = vehicle.get("General");
-            (itemView.findViewById(R.id.carPic)).setBackgroundColor(headerColors.getColor(i%5, 0));
+            int color = headerColors.getColor(i%5, 0);
+            (itemView.findViewById(R.id.carPic)).setBackgroundColor(color);
+            (itemView.findViewById(R.id.year)).setBackgroundColor(color);
+
             adapterViewHolder.vyear.setText(category.get("Year"));
             adapterViewHolder.vmake.setText(category.get("Make"));
             adapterViewHolder.vmodel.setText(category.get("Model"));
+            adapterViewHolder.vtype.setText(category.get("type"));
 
             switch (category.get("type")){
                 case "Automobile":
@@ -95,23 +100,30 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         }else{
             DBisEmpty = false;
 
-            return R.layout.card_overview;
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){//|| Build.VERSION.SDK_INT == Build.VERSION_CODES.x
+                return R.layout.card_overview_v2_19;
+
+            }else{
+                return R.layout.card_overview_v2;
+            }
         }
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder{
-        protected TextView vyear;
+        protected ImageView carPic;
         protected TextView vmake;
         protected TextView vmodel;
-        protected ImageView carPic;
+        protected TextView vtype;
+        protected TextView vyear;
 
         public AdapterViewHolder(View view) {
             super(view);
 
-            vyear = (TextView) view.findViewById(R.id.year);
+            carPic = (ImageView) view.findViewById(R.id.carPic);
             vmake = (TextView) view.findViewById(R.id.make);
             vmodel = (TextView) view.findViewById(R.id.model);
-            carPic = (ImageView) view.findViewById(R.id.carPic);
+            vtype = (TextView) view.findViewById(R.id.type);
+            vyear = (TextView) view.findViewById(R.id.year);
         }
     }
 }
