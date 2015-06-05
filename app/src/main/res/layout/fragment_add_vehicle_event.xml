@@ -26,9 +26,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/field_vertical_margin"
 
-            android:hint="@string/hint_event_spinner"
-            android:theme="@style/Theme.AppCompat.Light"
-            />
+            android:hint="@string/hint_event_spinner"/>
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
