@@ -103,7 +103,6 @@ public class fragment_add_vehicleEvent extends Fragment {
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.vehicleSpinner);
         spinnerAdapter = setVehicles();
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(spinnerAdapter);
 
         //Recycler View
@@ -222,6 +221,6 @@ public class fragment_add_vehicleEvent extends Fragment {
             }
         }
 
-        return new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_item, singleVehicle);
+        return new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, singleVehicle);
     }
 }

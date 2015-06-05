@@ -90,7 +90,7 @@ public class fragment_add_fleetRoster extends Fragment {
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
         final String [] mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
-        spinnerAdapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_dropdown_item, mvehicleTypes);
+        spinnerAdapter = new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes);
         vehicleSpinner.setAdapter(spinnerAdapter);
 
         //Recycler View

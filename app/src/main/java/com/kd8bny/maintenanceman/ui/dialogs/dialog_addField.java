@@ -53,7 +53,7 @@ public class dialog_addField extends DialogFragment{
         //Spinner
         spinnerFieldType = (MaterialBetterSpinner) view.findViewById(R.id.spinner_field_type);
         final String [] mfieldTypes = getActivity().getResources().getStringArray(R.array.field_type);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mfieldTypes);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mfieldTypes);
         spinnerFieldType.setAdapter(spinnerAdapter);
         //TODO set position on edit
 
