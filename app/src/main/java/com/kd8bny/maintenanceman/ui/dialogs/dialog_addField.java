@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.kd8bny.maintenanceman.R;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class dialog_addField extends DialogFragment{
     private static final String TAG = "dlg_add_fld";
 
-    private Spinner spinnerFieldType;
+    private MaterialBetterSpinner spinnerFieldType;
     private String fieldType;
     private String fieldName;
     private String fieldVal;
@@ -51,7 +51,7 @@ public class dialog_addField extends DialogFragment{
         View view = inflater.inflate(R.layout.dialog_add_field, null);
 
         //Spinner
-        spinnerFieldType = (Spinner) view.findViewById(R.id.spinner_field_type);
+        spinnerFieldType = (MaterialBetterSpinner) view.findViewById(R.id.spinner_field_type);
         final String [] mfieldTypes = getActivity().getResources().getStringArray(R.array.field_type);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mfieldTypes);
         spinnerFieldType.setAdapter(spinnerAdapter);
@@ -74,7 +74,7 @@ public class dialog_addField extends DialogFragment{
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             // DO SOMETHING
-                            fieldType = spinnerFieldType.getSelectedItem().toString();
+                            fieldType = spinnerFieldType.getText().toString();
                             fieldName = editFieldName.getText().toString();
                             fieldVal = editFieldVal.getText().toString();
                             sendResult(0);

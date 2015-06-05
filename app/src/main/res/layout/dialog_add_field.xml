@@ -7,11 +7,14 @@
     android:layout_marginStart="@dimen/field_horizontal_margin"
     android:layout_marginEnd="@dimen/field_horizontal_margin">
 
-    <Spinner
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
         android:id="@+id/spinner_field_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/field_vertical_margin"/>
+        android:padding="@dimen/field_vertical_margin"
+
+        android:hint="@string/hint_event_spinner"
+        android:theme="@style/Theme.AppCompat.Light"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"

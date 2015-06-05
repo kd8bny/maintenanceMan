@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -19,14 +20,15 @@
         card_view:cardCornerRadius="5dp"
         android:layout_margin="5dp">
 
-        <Spinner
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
             android:id="@+id/vehicleSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/field_vertical_margin"
 
-            android:paddingTop="@dimen/header_vertical_margin"
-            android:paddingBottom="@dimen/header_vertical_margin"
-            android:layout_gravity="center_horizontal"/>
+            android:hint="@string/hint_event_spinner"
+            android:theme="@style/Theme.AppCompat.Light"
+            />
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
@@ -38,4 +40,3 @@
         android:focusable="true"/>
 
 </RelativeLayout>
-

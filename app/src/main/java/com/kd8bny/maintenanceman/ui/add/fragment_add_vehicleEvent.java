@@ -27,6 +27,7 @@ import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +39,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private static final String TAG = "frg_add_vhclEvnt";
 
     private Toolbar toolbar;
-    private Spinner vehicleSpinner;
+    private MaterialBetterSpinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
 
     private RecyclerView eventList;
@@ -47,6 +48,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     private ArrayList<String> labels = new ArrayList<>();
     private ArrayList<String> editData;
+    private ArrayList<String> singleVehicle;
     private HashMap<String, String> dataSet = new LinkedHashMap<>();
     private HashMap<String, HashMap> roster;
     private Boolean isNew = true;
@@ -99,7 +101,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //Spinner
-        vehicleSpinner = (Spinner) view.findViewById(R.id.vehicleSpinner);
+        vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.vehicleSpinner);
         spinnerAdapter = setVehicles();
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         vehicleSpinner.setAdapter(spinnerAdapter);
@@ -174,7 +176,8 @@ public class fragment_add_vehicleEvent extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
-                int pos = vehicleSpinner.getSelectedItemPosition();
+
+                int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
                 ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
                 String refID = rosterKeys.get(pos);
 
@@ -205,7 +208,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
         HashMap<String, HashMap> vehicle;
         HashMap<String, String> gen;
-        ArrayList<String> singleVehicle = new ArrayList<>();
+        singleVehicle = new ArrayList<>();
 
         if(roster.containsKey(null)){
             Toast.makeText(this.getActivity(), R.string.empty_db, Toast.LENGTH_SHORT).show();
