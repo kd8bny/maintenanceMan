@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/field_vertical_margin"
 
-        android:hint="@string/hint_event_spinner"/>
+        android:hint="@string/hint_spinner_cat"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
