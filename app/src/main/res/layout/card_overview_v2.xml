@@ -69,14 +69,14 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/carPic"
             android:layout_below="@+id/type"
-            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
             android:padding="@dimen/content_vertical_space">
 
             <TextView
                 android:id="@+id/make"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
+                android:gravity="end"
                 android:layout_weight="1"
 
                 android:ellipsize="marquee"
@@ -89,12 +89,17 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/model"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="2"
+                android:gravity="start"
+                android:layout_weight="1"
 
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
