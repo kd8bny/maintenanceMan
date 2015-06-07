@@ -101,6 +101,7 @@ public class fragment_edit extends Fragment {
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
+        vehicleSpinner.setText(vehicleSent.get("General").get("type").toString());
         final String [] mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
         spinnerAdapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_dropdown_item, mvehicleTypes);
         vehicleSpinner.setAdapter(spinnerAdapter);
@@ -111,7 +112,8 @@ public class fragment_edit extends Fragment {
         addList.setHasFixedSize(true);
         addList.setItemAnimator(new DefaultItemAnimator());
         addList.setLayoutManager(addMan);
-        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(),
+                addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 Bundle args = new Bundle();
@@ -154,8 +156,6 @@ public class fragment_edit extends Fragment {
                 builder.show();
             }
         }));
-        //RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        //recyclerView.addItemDecoration(itemDecoration);
         addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
         addList.setAdapter(addListAdapter);
 
