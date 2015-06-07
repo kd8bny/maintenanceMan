@@ -80,7 +80,8 @@
     <string name="header_other">Other</string>
 
     <!-- Overview -->
-    <string name="empty_db">"Please Add Vehicle To Database"</string>
+    <string name="oh_noes">"Oh Noes!!!"</string>
+    <string name="empty_db">"Click to Add Vehicle"</string>
     <string name="no_data">"No Data"</string>
 
     <!-- Settings -->
