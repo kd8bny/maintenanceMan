@@ -112,7 +112,7 @@ public class fragment_overview extends Fragment {
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
-
+        fabMenu.setClosedOnTouchOutside(true);
         fabMenu.setAnimated(true);
 
         view.findViewById(R.id.fab_add_vehicle).setOnClickListener(new View.OnClickListener() {
