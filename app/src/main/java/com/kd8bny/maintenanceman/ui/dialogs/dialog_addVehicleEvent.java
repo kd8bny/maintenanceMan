@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,9 @@ public class dialog_addVehicleEvent extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_vehicle_event, null);
-        final EditText editValue = (AutoCompleteTextView) view.findViewById(R.id.value);
+        final MaterialAutoCompleteTextView editValue = (MaterialAutoCompleteTextView) view.findViewById(R.id.value);
+        editValue.setHint(label);
+        editValue.setFloatingLabelText(label);
 
         /*if (isEvent){
             if(getEvents() != null) {
@@ -56,7 +59,7 @@ public class dialog_addVehicleEvent extends DialogFragment{
         editValue.setText(value);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-            .setTitle(label)
+            .setTitle("Set:")
             .setPositiveButton("OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {

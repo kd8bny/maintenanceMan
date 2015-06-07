@@ -30,15 +30,14 @@
             android:layout_weight="1"
 
             android:inputType="textCapWords"
-            android:hint="@string/hint_field_name"
+            android:hint="@string/label_field_name"
             android:singleLine="true"
 
             app:met_baseColor="@color/primary_text"
             app:met_primaryColor="@color/accent"
             app:met_errorColor="@color/error"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="hint"
-            app:met_floatingLabelAlwaysShown="true"/>
+            app:met_floatingLabelText="@string/label_field_name"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/field_val"
@@ -47,14 +46,13 @@
             android:layout_weight="1"
 
             android:inputType="textCapWords"
-            android:hint="@string/hint_field_value"
+            android:hint="@string/label_field_value"
             android:singleLine="true"
 
             app:met_baseColor="@color/primary_text"
             app:met_primaryColor="@color/accent"
             app:met_errorColor="@color/error"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="hint"
-            app:met_floatingLabelAlwaysShown="true"/>
+            app:met_floatingLabelText="@string/label_field_value"/>
     </LinearLayout>
 </RelativeLayout>

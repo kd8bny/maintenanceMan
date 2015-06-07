@@ -32,9 +32,11 @@
 
     <!-- Add Field -->
     <string name="title_add_field">Add Field</string>
-    <string name="hint_field_name">Entry</string>
-    <string name="hint_field_value">Value</string>
+    <string name="hint_field_name">Oil Filter</string>
+    <string name="hint_field_value">5W30</string>
     <string name="hint_event_spinner">Select Vehicle</string>
+    <string name="label_field_name">Label</string>
+    <string name="label_field_value">Value</string>
     <string-array name="field_type">
         <item>General</item>
         <item>Engine</item>

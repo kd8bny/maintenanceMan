@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.kd8bny.maintenanceman.R;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
 
@@ -45,14 +43,16 @@ public class dialog_addField_required extends DialogFragment{
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_field_required, null);
 
-        final EditText editFieldVal = (EditText) view.findViewById(R.id.field_val);
+        final MaterialEditText editFieldVal = (MaterialEditText) view.findViewById(R.id.field_val);
+        editFieldVal.setHint(fieldName);
+        editFieldVal.setFloatingLabelText(fieldName);
 
         if (isEdit){
             editFieldVal.setText(fieldVal);
         }
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-            .setTitle("Set: " + fieldName)
+            .setTitle("Set:")
             .setPositiveButton("OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
