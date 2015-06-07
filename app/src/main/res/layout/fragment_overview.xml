@@ -43,6 +43,8 @@
                 fab:menu_labels_singleLine="true"
                 fab:menu_labels_textColor="@color/secondary_text"
                 fab:menu_labels_colorNormal="@android:color/white"
+                fab:menu_backgroundColor="@color/background_dim"
+                fab:menu_animationDelayPerItem="50"
                 fab:menu_colorNormal="@color/accent"
                 fab:menu_colorPressed="@color/primary_light"
                 fab:menu_colorRipple="@color/primary_dark">
