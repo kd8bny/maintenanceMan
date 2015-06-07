@@ -40,6 +40,7 @@ public class dialog_addField extends DialogFragment{
             isEdit = true;
             ArrayList<String> fieldData = (ArrayList<String>) args.getSerializable("field");
             isRequired = args.getBoolean("isRequired");
+            fieldType = fieldData.get(0);
             fieldName = fieldData.get(1);
             fieldVal = fieldData.get(2);
         }
@@ -52,10 +53,10 @@ public class dialog_addField extends DialogFragment{
 
         //Spinner
         spinnerFieldType = (MaterialBetterSpinner) view.findViewById(R.id.spinner_field_type);
+        spinnerFieldType.setText(fieldType);
         final String [] mfieldTypes = getActivity().getResources().getStringArray(R.array.field_type);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mfieldTypes);
         spinnerFieldType.setAdapter(spinnerAdapter);
-        //TODO set position on edit
 
         final EditText editFieldName = (EditText) view.findViewById(R.id.field_name);
         final EditText editFieldVal = (EditText) view.findViewById(R.id.field_val);
