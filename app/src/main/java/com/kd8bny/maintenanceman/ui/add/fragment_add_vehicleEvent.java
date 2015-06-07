@@ -4,7 +4,6 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
@@ -46,6 +44,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private RecyclerView.LayoutManager eventMan;
     private RecyclerView.Adapter eventListAdapter;
 
+    private String refID;
     private ArrayList<String> labels = new ArrayList<>();
     private ArrayList<String> editData;
     private ArrayList<String> singleVehicle;
@@ -63,12 +62,14 @@ public class fragment_add_vehicleEvent extends Fragment {
         setHasOptionsMenu(true);
 
         editData = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet");
+        refID = getActivity().getIntent().getStringExtra("refID");
 
         labels.add(0, "Date");
         labels.add(1, "Odometer");
         labels.add(2, "Event");
         labels.add(3, "Price");
         labels.add(4, "Comment");
+
         if(editData == null) {
             final Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
@@ -82,7 +83,7 @@ public class fragment_add_vehicleEvent extends Fragment {
             dataSet.put(labels.get(4), "");
         }else{
             isNew = false;
-            dataSet.put(labels.get(0), editData.get(1)); //TODO set spinner
+            dataSet.put(labels.get(0), editData.get(1));
             dataSet.put(labels.get(1), editData.get(2));
             dataSet.put(labels.get(2), editData.get(3));
             dataSet.put(labels.get(3), editData.get(4));
@@ -102,6 +103,13 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.vehicleSpinner);
+        if(refID != null){
+            fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
+            HashMap<String, HashMap> roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+            HashMap<String, HashMap> vehicle = roster.get(refID);
+            HashMap<String, String> gen = vehicle.get("General");
+            vehicleSpinner.setText(gen.get("Year") + " " + gen.get("Make") + " " + gen.get("Model"));
+        }
         spinnerAdapter = setVehicles();
         vehicleSpinner.setAdapter(spinnerAdapter);
 
@@ -138,6 +146,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
             @Override
             public void onItemLongClick(View view, int pos) {
+
             }
         }));
 

@@ -136,6 +136,7 @@ public class fragment_info extends Fragment {
                             case R.id.menu_edit:
                                 Intent editIntent = new Intent(getActivity(), activity_vehicleEvent.class);
                                 editIntent.putExtra("dataSet", temp);
+                                editIntent.putExtra("refID", refID);
                                 getActivity().startActivity(editIntent);
 
                                 return true;
@@ -242,6 +243,7 @@ public class fragment_info extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
+                addIntent.putExtra("refID", refID);
                 getActivity().startActivity(addIntent);
             }
         });
