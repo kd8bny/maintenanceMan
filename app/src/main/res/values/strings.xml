@@ -45,6 +45,7 @@
     <!-- Add Vehicle Event -->
     <string name="title_add_vehicle_event">Add Event</string>
     <string name="add_vehicle_event">Add Maintenance Task</string>
+    <string name="toast_update">History Updated</string>
     <string name="spec_date">Date</string>
     <string name="spec_odo">Odometer</string>
     <string name="spec_event">Event</string>

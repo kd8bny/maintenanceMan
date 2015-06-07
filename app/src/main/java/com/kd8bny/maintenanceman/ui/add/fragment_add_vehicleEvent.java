@@ -195,7 +195,7 @@ public class fragment_add_vehicleEvent extends Fragment {
                 }
                 vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
-                Toast.makeText(this.getActivity(), "History Updated", Toast.LENGTH_SHORT).show(); //TODO make string
+                Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
                 getActivity().finish();
 
                 return true;

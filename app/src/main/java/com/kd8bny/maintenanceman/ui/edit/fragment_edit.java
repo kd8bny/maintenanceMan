@@ -160,7 +160,7 @@ public class fragment_edit extends Fragment {
         addList.setAdapter(addListAdapter);
 
         //menu_overview_fab
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);//TODO fix in xml
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

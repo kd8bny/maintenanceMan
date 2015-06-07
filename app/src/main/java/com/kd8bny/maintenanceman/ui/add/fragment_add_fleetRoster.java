@@ -168,7 +168,7 @@ public class fragment_add_fleetRoster extends Fragment {
         ArrayList<String> result = data.getStringArrayListExtra("fieldData");
 
         switch (data.getStringExtra("action")){
-            case ("edit"): //TODO notify adapter
+            case ("edit"):
                 for (int i =0; i<vehicleDataAll.size(); i++){
                     ArrayList<String> temp = vehicleDataAll.get(i);
                     if (temp.get(1).equals(result.get(1))){

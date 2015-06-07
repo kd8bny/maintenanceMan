@@ -150,7 +150,7 @@ public class fragment_overview extends Fragment {
                     new SecondaryDrawerItem().withName(R.string.title_donate))
             .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) { //TODO seperate class
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
                     switch (i) {
                         case 0: //Add Vehicle
                             Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
