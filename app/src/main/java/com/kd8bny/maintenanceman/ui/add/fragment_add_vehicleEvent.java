@@ -76,10 +76,10 @@ public class fragment_add_vehicleEvent extends Fragment {
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
             dataSet.put(labels.get(0), month + 1 + "/" + day + "/" + year);
-            dataSet.put(labels.get(1), null);
-            dataSet.put(labels.get(2), null);
-            dataSet.put(labels.get(3), null);
-            dataSet.put(labels.get(4), null);
+            dataSet.put(labels.get(1), "");
+            dataSet.put(labels.get(2), "");
+            dataSet.put(labels.get(3), "");
+            dataSet.put(labels.get(4), "");
         }else{
             isNew = false;
             dataSet.put(labels.get(0), editData.get(1)); //TODO set spinner
