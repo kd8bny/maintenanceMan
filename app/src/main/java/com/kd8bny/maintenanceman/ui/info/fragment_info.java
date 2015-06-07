@@ -228,9 +228,6 @@ public class fragment_info extends Fragment {
                         addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 
                         return true;
-                    } else {
-
-                        return false;
                     }
                 }
                 return false;
