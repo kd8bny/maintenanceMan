@@ -63,7 +63,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
             adapterViewHolder.vdate.setText(histEvent.get(1));
             adapterViewHolder.vodo.setText(histEvent.get(2));
             adapterViewHolder.vevent.setText(histEvent.get(3));
-            if (type.equals(vehicleTypes[0]) | type.equals(vehicleTypes[1])){
+            if (type.equals(vehicleTypes[0]) | type.equals(vehicleTypes[1]) | type.equals(vehicleTypes[5])){
                 adapterViewHolder.vunit.setText(res.getString(R.string.unit_dist_us));
             }else {
                 adapterViewHolder.vunit.setText(res.getString(R.string.unit_time));

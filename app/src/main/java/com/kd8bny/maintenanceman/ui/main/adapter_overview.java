@@ -80,6 +80,10 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
                     adapterViewHolder.carPic.setImageResource(R.drawable.np_tractor);
                     break;
 
+                case "Trailer":
+                    adapterViewHolder.carPic.setImageResource(R.drawable.np_trailer);
+                    break;
+
                 default:
                     break;
             }
