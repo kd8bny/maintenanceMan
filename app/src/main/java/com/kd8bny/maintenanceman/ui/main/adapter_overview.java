@@ -83,10 +83,6 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
                 default:
                     break;
             }
-
-        }else{
-            (itemView.findViewById(R.id.carPic)).setBackgroundColor(errorColor);
-            adapterViewHolder.vyear.setText(R.string.empty_db);
         }
     }
 
