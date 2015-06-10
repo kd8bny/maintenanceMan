@@ -165,6 +165,24 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         return vehicleList;
     }
 
+    public ArrayList<String> getEvents(Context context){
+
+        createDatabase(context);
+        Cursor cursor = vehicleLogDB.rawQuery("SELECT event FROM grandvehicleLog;", null);
+
+        int eventCol = cursor.getColumnIndex("event");
+        ArrayList<String> eventList = new ArrayList<>();
+        cursor.moveToFirst();
+
+        if(cursor.getCount() > 0) {
+            do {
+                eventList.add(cursor.getString(eventCol));
+            } while(cursor.moveToNext());
+        }
+
+        return eventList;
+    }
+
     public void deleteEntry(Context context, ArrayList<String> dataSet){
         createDatabase(context);
         try {

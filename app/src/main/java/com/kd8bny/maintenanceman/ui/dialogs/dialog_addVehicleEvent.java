@@ -10,14 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class dialog_addVehicleEvent extends DialogFragment{
@@ -50,12 +49,19 @@ public class dialog_addVehicleEvent extends DialogFragment{
         editValue.setHint(label);
         editValue.setFloatingLabelText(label);
 
-        /*if (isEvent){
-            if(getEvents() != null) {
-                editValue.setAdapter(eventAdapter);
-            }
+        if (isEvent){
+            vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+            ArrayList<String> eventList = vehicleDB.getEvents(getActivity().getApplicationContext());
+            //TODO add premade lists items
 
-        }*/
+            // Remove dup's
+            HashSet tempHS = new HashSet();
+            tempHS.addAll(eventList);
+            eventList.clear();
+            eventList.addAll(tempHS);
+
+            editValue.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, eventList));
+        }
         editValue.setText(value);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
@@ -80,43 +86,6 @@ public class dialog_addVehicleEvent extends DialogFragment{
 
         return alertDialog.create();
     }
-//TODO
-    /*public ArrayAdapter<String> getEvents(){
-        int pos = vehicleSpinner.getSelectedItemPosition();
-        if(pos > -1) {
-            ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
-            refID = rosterKeys.get(pos);
-
-            vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-            ArrayList<ArrayList> tempEvents = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
-            eventList = new ArrayList<>();
-            ArrayList<String> temp;
-
-            for (int i = 0; i < tempEvents.size(); i++) {
-                temp = tempEvents.get(i);
-                if (temp.get(0) != null) {
-                    eventList.add(temp.get(3));
-                } else {
-                    Log.i(TAG, "nothing to show");
-                    return null;
-                }
-            }
-
-            // Remove dup's
-            HashSet tempHS = new HashSet();
-            tempHS.addAll(eventList);
-            eventList.clear();
-            eventList.addAll(tempHS);
-
-            eventAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, eventList);
-
-            return eventAdapter;
-
-        }else {
-
-            return null;
-        }
-    }*/
 
     private void sendResult(int REQUEST_CODE) {
         Intent intent = new Intent();

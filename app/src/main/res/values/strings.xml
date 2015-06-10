@@ -32,8 +32,6 @@
 
     <!-- Add Field -->
     <string name="title_add_field">Add Field</string>
-    <string name="hint_field_name">Oil Filter</string>
-    <string name="hint_field_value">5W30</string>
     <string name="hint_event_spinner">Select Vehicle</string>
     <string name="label_field_name">Label</string>
     <string name="label_field_value">Value</string>
@@ -51,6 +49,18 @@
     <string name="spec_date">Date</string>
     <string name="spec_odo">Odometer</string>
     <string name="spec_event">Event</string>
+    <!--<string-array name="spec_type">
+        <item> name="spec_engine">Engine</item>
+        <item> name="spec_fuel_filter">Fuel Filter</item>
+        <item> name="spec_oil_filter">Oil Filter</item>
+        <item> name="spec_oil_weight">Oil</item>
+        <item> name="spec_tire_size_winter">Winter Tire Size</item>
+        <item> name="spec_tire_size_summer">Summer Tire Size</item>
+        <item> name="spec_make">Make</item>
+        <item> name="spec_model">Model</item>
+        <item> name="spec_year">Year</item>
+        <item> name="spec_plate">License Plate</item>
+    </string-array>-->
 
     <!-- Donate -->
     <string name="title_donate">Donate</string>
