@@ -5,8 +5,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -54,6 +56,7 @@ public class fragment_info extends Fragment {
     private RecyclerView.Adapter cardListAdapter, histListAdapter;
 
     private String refID;
+    private String prefUnit;
     private HashMap<String, HashMap> roster;
     public HashMap<String, HashMap> vehicleSent;
     private ArrayList<ArrayList> vehicleHist;
@@ -78,6 +81,9 @@ public class fragment_info extends Fragment {
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
         vehicleSent = roster.get(refID);
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        prefUnit = sp.getString("prefUnitDist", getResources().getString(R.string.pref_unit_dist_default));
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -155,7 +161,7 @@ public class fragment_info extends Fragment {
 
                                         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
                                         sort();
-                                        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString());
+                                        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
                                         histList.setAdapter(histListAdapter);
                                     }
                                 });
@@ -179,7 +185,7 @@ public class fragment_info extends Fragment {
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
         this.sort();
-        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString());
+        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
         histList.setAdapter(histListAdapter);
 
         //Slide-y up menu
@@ -263,7 +269,7 @@ public class fragment_info extends Fragment {
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getEntries(getActivity().getApplicationContext(), refID);
         this.sort();
-        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString());
+        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
         histList.setAdapter(histListAdapter);
     }
 

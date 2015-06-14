@@ -12,6 +12,8 @@
     <color name="divider">#B6B6B6</color>
     <color name="background_dim">#a4ffffff</color>
 
+    <color name="toolbar_primary">#002196f3</color>
+
     <color name="error">#d50000</color>
     <color name="header">#FFFFFF</color>
 

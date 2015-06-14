@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,7 +18,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -27,6 +33,7 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.ui.info.activity_info;
 
 import com.github.clans.fab.FloatingActionMenu;
+import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
@@ -45,7 +52,7 @@ public class fragment_overview extends Fragment {
     private static final String TAG = "frg_ovrvw";
 
     private Toolbar toolbar;
-    private RecyclerView cardList;
+    private ObservableRecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
 
@@ -67,7 +74,6 @@ public class fragment_overview extends Fragment {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -78,7 +84,35 @@ public class fragment_overview extends Fragment {
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
 
-        cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
+        cardList = (ObservableRecyclerView) view.findViewById(R.id.overview_cardList);
+        /*cardList.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
+            @Override
+            public void onScrollChanged(int i, boolean b, boolean b1) {
+
+            }
+
+            @Override
+            public void onDownMotionEvent() {
+
+            }
+
+            @Override
+            public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+                Log.d(TAG, "up/cancel");
+                Log.d(TAG, scrollState+"");
+                Log.d(TAG, toolbar.isShown()+"");
+                if (scrollState == ScrollState.UP) {
+                    if (toolbar.isShown()) {
+                        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+                    }
+                } else if (scrollState == ScrollState.DOWN) {
+                    if (!toolbar.isShown()) {
+                        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+                    }
+
+                }
+            }
+        });*/
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
@@ -166,6 +200,7 @@ public class fragment_overview extends Fragment {
                     new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
                     new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
                     new DividerDrawerItem(),
+                    new SecondaryDrawerItem().withName(R.string.title_settings),
                     new SecondaryDrawerItem().withName(R.string.title_donate))
             .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                 @Override
@@ -183,13 +218,13 @@ public class fragment_overview extends Fragment {
 
                             break;
 
-                        /*case 2: //Settings
+                        case 3: //Settings
                             Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
                             view.getContext().startActivity(settingsIntent);
-                            mDrawerLayout.closeDrawers();
-                            break;*/
 
-                        case 3: //Donate
+                            break;
+
+                        case 4: //Donate
                             FragmentManager fm = getFragmentManager();
 
                             dialog_donate dialog_donate = new dialog_donate();

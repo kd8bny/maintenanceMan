@@ -1,9 +1,10 @@
 package com.kd8bny.maintenanceman.ui.info;
 
+import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,14 +22,16 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
     private ArrayList<ArrayList> vehicleHist = new ArrayList<>();
     private String [] vehicleTypes;
     private String type;
+    private String unit;
     private View itemView;
     private Resources res;
     private Drawable drawable;
     private int iconColor, iconColorError;
 
-    public adapter_history(ArrayList vehicleList, String type) {
+    public adapter_history(ArrayList vehicleList, String type, String unit) {
         this.vehicleHist = vehicleList;
         this.type = type;
+        this.unit = unit;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
             adapterViewHolder.vodo.setText(histEvent.get(2));
             adapterViewHolder.vevent.setText(histEvent.get(3));
             if (type.equals(vehicleTypes[0]) | type.equals(vehicleTypes[1]) | type.equals(vehicleTypes[5])){
-                adapterViewHolder.vunit.setText(res.getString(R.string.unit_dist_us));
+                adapterViewHolder.vunit.setText(unit);
             }else {
                 adapterViewHolder.vunit.setText(res.getString(R.string.unit_time));
             }

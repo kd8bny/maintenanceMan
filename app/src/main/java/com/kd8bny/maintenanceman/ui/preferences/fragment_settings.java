@@ -1,10 +1,9 @@
-package com.kd8bny.maintenanceman.ui.settings;
+package com.kd8bny.maintenanceman.ui.preferences;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 import com.kd8bny.maintenanceman.R;
-
 
 
 public class fragment_settings extends PreferenceFragment {
@@ -17,7 +16,7 @@ public class fragment_settings extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.settings);
+        addPreferencesFromResource(R.xml.preferences);
 
     }
 

@@ -32,4 +32,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
+    compile 'com.github.ksoichiro:android-observablescrollview:1.5.+'
 }

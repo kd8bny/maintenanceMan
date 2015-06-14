@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_title_cat_units"
+        android:key="pref_unit_settings">
+
+    <ListPreference
+        android:key="prefUnitDist"
+        android:title="@string/pref_summary_units"
+        android:dialogTitle="@string/pref_summary_units"
+        android:entries="@array/pref_array_entry_unit_dist"
+        android:entryValues="@array/pref_array_values_unit_dist"
+        android:defaultValue="@string/pref_unit_dist_default" />
+    </PreferenceCategory>
+</PreferenceScreen>
