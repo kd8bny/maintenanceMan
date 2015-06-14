@@ -3,6 +3,7 @@ package com.kd8bny.maintenanceman.ui.main;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBar;
@@ -201,7 +202,8 @@ public class fragment_overview extends Fragment {
                     new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
                     new DividerDrawerItem(),
                     new SecondaryDrawerItem().withName(R.string.title_settings),
-                    new SecondaryDrawerItem().withName(R.string.title_donate))
+                    new SecondaryDrawerItem().withName(R.string.title_donate),
+                    new SecondaryDrawerItem().withName(R.string.drawer_view_community))
             .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
@@ -232,12 +234,12 @@ public class fragment_overview extends Fragment {
 
                             break;
 
-                        /*case 4:
-                            //Intent aboutIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
-                            //view.getContext().startActivity(aboutIntent);
-                            Toast.makeText(view.getContext(),"Daryl Bennett",Toast.LENGTH_LONG).show();
-                            mDrawerLayout.closeDrawers();
-                            break;*/
+                        case 5: //Community
+                            Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
+                            Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
+                            startActivity(gplusIntent);
+
+                            break;
                     }
                 }
             })
