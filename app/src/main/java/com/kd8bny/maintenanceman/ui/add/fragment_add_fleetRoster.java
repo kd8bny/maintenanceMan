@@ -31,7 +31,6 @@ import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField_required;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
