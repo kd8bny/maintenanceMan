@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/card_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,21 +29,27 @@
             android:text="title"
             android:background="@android:color/black"/>
 
-        <TextView
+        <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/value"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_gravity="start"
             android:layout_below="@+id/category"
-            android:layout_toEndOf="@+id/enginePic"
-            android:layout_marginStart="@dimen/header_horizontal_margin"
-            android:layout_marginTop="@dimen/content_vertical_space"
-            android:layout_marginBottom="@dimen/content_vertical_space"
+            android:padding="@dimen/content_vertical_space"
 
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:singleLine="true"
+            android:inputType="textCapWords"
+            android:hint="@string/label_field_value"
+
+            app:met_baseColor="@color/primary_text"
+            app:met_primaryColor="@color/accent"
+            app:met_errorColor="@color/error"
+            app:met_floatingLabel="highlight"
+            app:met_floatingLabelText="@string/label_field_value"
+
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
 
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/field_font"/>
