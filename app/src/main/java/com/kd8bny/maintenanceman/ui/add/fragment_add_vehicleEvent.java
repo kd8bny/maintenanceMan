@@ -184,21 +184,24 @@ public class fragment_add_vehicleEvent extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
+                if(!isLegit()){
+                    int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
+                    ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
+                    String refID = rosterKeys.get(pos);
 
-                int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
-                ArrayList<String> rosterKeys = new ArrayList<>(roster.keySet());
-                String refID = rosterKeys.get(pos);
+                    vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                    if(!isNew){
+                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), editData);
+                    }
+                    vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
-                vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
-                if(!isNew){
-                    vehicleDB.deleteEntry(getActivity().getApplicationContext(), editData);
+                    Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+
+                    return true;
                 }
-                vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
-                Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-
-                return true;
+                return false;
 
             case R.id.menu_cancel:
                 getActivity().finish();
@@ -231,5 +234,23 @@ public class fragment_add_vehicleEvent extends Fragment {
         }
 
         return new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, singleVehicle);
+    }
+
+    public boolean isLegit(){
+        Boolean error = false;
+        if (singleVehicle.indexOf(vehicleSpinner.getText().toString()) == -1){
+            Log.d(TAG, "error");
+            vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
+
+            error = true;
+        }
+        //TODO check event card for text
+        /*if (dataSet.get("Event").equals("")){
+            vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
+
+            error = true;
+        }*/
+
+        return error;
     }
 }
