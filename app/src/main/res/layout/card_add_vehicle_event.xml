@@ -38,7 +38,6 @@
             android:padding="@dimen/content_vertical_space"
 
             android:inputType="textCapWords"
-            android:hint="@string/label_field_value"
 
             app:met_baseColor="@color/primary_text"
             app:met_primaryColor="@color/accent"
