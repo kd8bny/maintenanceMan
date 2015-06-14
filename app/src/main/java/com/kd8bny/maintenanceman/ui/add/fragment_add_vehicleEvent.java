@@ -239,7 +239,6 @@ public class fragment_add_vehicleEvent extends Fragment {
     public boolean isLegit(){
         Boolean error = false;
         if (singleVehicle.indexOf(vehicleSpinner.getText().toString()) == -1){
-            Log.d(TAG, "error");
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
 
             error = true;

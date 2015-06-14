@@ -6,6 +6,7 @@
     <!-- Add Fleet Roster -->
     <string name="title_add_fleet_roster">Add Vehicle</string>
     <string name="error_required">This Field is Required</string>
+    <string name="error_set_vehicle_type">Please Select Vehicle</string>
     <string name="hint_spinner">Select Type</string>
     <string name="hint_spinner_cat">Select Category</string>
     <string-array name="spec_type">

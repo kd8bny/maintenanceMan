@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
@@ -48,6 +49,7 @@ public class fragment_add_fleetRoster extends Fragment {
 
     private ArrayAdapter<String> spinnerAdapter;
     public ArrayList<ArrayList> vehicleDataAll = new ArrayList<>();
+    public String [] mvehicleTypes;
 
     public fragment_add_fleetRoster(){
         ArrayList<String> tempYear = new ArrayList<>();
@@ -89,7 +91,7 @@ public class fragment_add_fleetRoster extends Fragment {
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
-        final String [] mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
+        mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
         spinnerAdapter = new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes);
         vehicleSpinner.setAdapter(spinnerAdapter);
 
@@ -198,19 +200,24 @@ public class fragment_add_fleetRoster extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
-                ArrayList<String> temp = new ArrayList<>();
-                temp.add("General");
-                temp.add("type");
-                temp.add(vehicleSpinner.getText().toString());
-                vehicleDataAll.add(temp);
-                Context context = getActivity().getApplicationContext();
+                if(!isLegit()) {
+                    ArrayList<String> temp = new ArrayList<>();
+                    temp.add("General");
+                    temp.add("type");
+                    temp.add(vehicleSpinner.getText().toString());
+                    vehicleDataAll.add(temp);
+                    Context context = getActivity().getApplicationContext();
 
-                fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
-                fleetDB.saveEntry(context, null, vehicleDataAll);
+                    fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
+                    fleetDB.saveEntry(context, null, vehicleDataAll);
 
-                Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
-                getActivity().finish();
-                return true;
+                    Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
+
+                    return true;
+                }
+
+                return false;
 
             case R.id.menu_cancel:
                 getActivity().finish();
@@ -219,6 +226,19 @@ public class fragment_add_fleetRoster extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public boolean isLegit(){
+        Boolean error = false;
+        if (Arrays.asList(mvehicleTypes).indexOf(vehicleSpinner.getText().toString()) == -1){
+            vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle_type));
+
+            error = true;
+        }
+
+        //TODO Big 3 errors
+
+        return error;
     }
 }
 
