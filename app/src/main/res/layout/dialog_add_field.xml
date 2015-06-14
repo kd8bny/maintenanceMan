@@ -39,7 +39,7 @@
             app:met_floatingLabel="highlight"
             app:met_floatingLabelText="@string/label_field_name"/>
 
-        <com.rengwuxian.materialedittext.MaterialEditText
+        <com.rengwuxian.materialedittext.MaterialAutoCompleteTextView
             android:id="@+id/field_val"
             android:layout_width="60dp"
             android:layout_height="wrap_content"

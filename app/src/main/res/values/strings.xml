@@ -33,6 +33,8 @@
 
     <!-- Add Field -->
     <string name="title_add_field">Add Field</string>
+    <string name="error_field_label">Enter Label</string>
+    <string name="error_field_val">Enter Value</string>
     <string name="hint_event_spinner">Select Vehicle</string>
     <string name="label_field_name">Label</string>
     <string name="label_field_value">Value</string>
