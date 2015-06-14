@@ -135,25 +135,26 @@ public class fragment_edit extends Fragment {
             public void onItemLongClick(View view, int pos) {
                 final int itemPos = pos;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setCancelable(true);
-                builder.setTitle("Are you sure you would like to delete this field?");
-                builder.setNegativeButton("No", null);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                if(itemPos > 2){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setCancelable(true);
+                    builder.setTitle("Are you sure you would like to delete this field?");
+                    builder.setNegativeButton("No", null);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(itemPos > 2){
+                        public void onClick(DialogInterface dialog, int which) {
+
                             vehicleDataAll.remove(itemPos);
 
                             addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
                             addList.swapAdapter(addListAdapter, false);
-                        }else{
-                            Toast.makeText(getActivity().getApplicationContext(), R.string.error_required, Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
 
-                builder.show();
+                    builder.show();
+                }else{
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.error_required, Toast.LENGTH_SHORT).show();
+                }
             }
         }));
         addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
