@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
@@ -31,7 +30,9 @@ import com.kd8bny.maintenanceman.ui.add.adapter_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.listeners.EventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class fragment_edit extends Fragment {
     private String refID;
     private HashMap<String, HashMap> roster;
     public HashMap<String, HashMap> vehicleSent;
+    public String [] mvehicleTypes;
 
     public fragment_edit(){
 
@@ -102,7 +104,7 @@ public class fragment_edit extends Fragment {
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
         vehicleSpinner.setText(vehicleSent.get("General").get("type").toString());
-        final String [] mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
+        mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
         spinnerAdapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_spinner_dropdown_item, mvehicleTypes);
         vehicleSpinner.setAdapter(spinnerAdapter);
 
@@ -153,7 +155,42 @@ public class fragment_edit extends Fragment {
 
                     builder.show();
                 }else{
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.error_required, Toast.LENGTH_SHORT).show();
+                    SnackbarManager.show(
+                        Snackbar.with(getActivity().getApplicationContext())
+                            .text(R.string.error_required)
+                            .eventListener(new EventListener() {
+                                @Override
+                                public void onShow(Snackbar snackbar) {
+                                    fab.animate().translationY(-snackbar.getHeight());
+
+                                }
+
+                                @Override
+                                public void onShowByReplace(Snackbar snackbar) {
+
+                                }
+
+                                @Override
+                                public void onShown(Snackbar snackbar) {
+
+                                }
+
+                                @Override
+                                public void onDismiss(Snackbar snackbar) {
+                                    fab.animate().translationY(0);
+
+                                }
+
+                                @Override
+                                public void onDismissByReplace(Snackbar snackbar) {
+
+                                }
+
+                                @Override
+                                public void onDismissed(Snackbar snackbar) {
+
+                                }
+                            }), getActivity());
                 }
             }
         }));

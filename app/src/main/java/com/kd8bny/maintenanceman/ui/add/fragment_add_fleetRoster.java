@@ -32,6 +32,9 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField_required;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.listeners.EventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 
@@ -54,17 +57,17 @@ public class fragment_add_fleetRoster extends Fragment {
         ArrayList<String> tempYear = new ArrayList<>();
             tempYear.add("General");
             tempYear.add("Year");
-            tempYear.add(null);
+            tempYear.add("");
 
         ArrayList<String> tempMake = new ArrayList<>();
             tempMake.add("General");
             tempMake.add("Make");
-            tempMake.add(null);
+            tempMake.add("");
 
         ArrayList<String> tempModel = new ArrayList<>();
             tempModel.add("General");
             tempModel.add("Model");
-            tempModel.add(null);
+            tempModel.add("");
 
         vehicleDataAll.add(tempYear);
         vehicleDataAll.add(tempMake);
@@ -132,16 +135,51 @@ public class fragment_add_fleetRoster extends Fragment {
 
                         public void onClick(DialogInterface dialog, int which) {
 
-                                vehicleDataAll.remove(itemPos);
+                            vehicleDataAll.remove(itemPos);
 
-                                addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
-                                addList.swapAdapter(addListAdapter, false);
+                            addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
+                            addList.swapAdapter(addListAdapter, false);
                         }
                     });
 
                     builder.show();
                 }else{
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.error_required, Toast.LENGTH_SHORT).show();
+                    SnackbarManager.show(
+                        Snackbar.with(getActivity().getApplicationContext())
+                            .text(R.string.error_required)
+                            .eventListener(new EventListener() {
+                                @Override
+                                public void onShow(Snackbar snackbar) {
+                                    fab.animate().translationY(-snackbar.getHeight());
+
+                                }
+
+                                @Override
+                                public void onShowByReplace(Snackbar snackbar) {
+
+                                }
+
+                                @Override
+                                public void onShown(Snackbar snackbar) {
+
+                                }
+
+                                @Override
+                                public void onDismiss(Snackbar snackbar) {
+                                    fab.animate().translationY(0);
+
+                                }
+
+                                @Override
+                                public void onDismissByReplace(Snackbar snackbar) {
+
+                                }
+
+                                @Override
+                                public void onDismissed(Snackbar snackbar) {
+
+                                }
+                            }), getActivity());
                 }
             }
         }));
@@ -235,8 +273,51 @@ public class fragment_add_fleetRoster extends Fragment {
 
             error = true;
         }
+        for (int i = 0; i < 2; i++) {
+            ArrayList<String> temp = vehicleDataAll.get(i);
 
-        //TODO Big 3 errors
+            if(temp.get(2).equals("")) {
+                SnackbarManager.show(
+                    Snackbar.with(getActivity().getApplicationContext())
+                        .text(R.string.error_required_missing)
+                        .eventListener(new EventListener() {
+                            @Override
+                            public void onShow(Snackbar snackbar) {
+                                fab.animate().translationY(-snackbar.getHeight());
+
+                            }
+
+                            @Override
+                            public void onShowByReplace(Snackbar snackbar) {
+
+                            }
+
+                            @Override
+                            public void onShown(Snackbar snackbar) {
+
+                            }
+
+                            @Override
+                            public void onDismiss(Snackbar snackbar) {
+                                fab.animate().translationY(0);
+
+                            }
+
+                            @Override
+                            public void onDismissByReplace(Snackbar snackbar) {
+
+                            }
+
+                            @Override
+                            public void onDismissed(Snackbar snackbar) {
+
+                            }
+                        }), getActivity());
+
+                error = true;
+                break;
+            }
+        }
 
         return error;
     }
