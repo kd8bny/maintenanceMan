@@ -146,6 +146,7 @@ public class fragment_add_fleetRoster extends Fragment {
                 }else{
                     SnackbarManager.show(
                         Snackbar.with(getActivity().getApplicationContext())
+                            .color(getResources().getColor(R.color.error))
                             .text(R.string.error_required)
                             .eventListener(new EventListener() {
                                 @Override

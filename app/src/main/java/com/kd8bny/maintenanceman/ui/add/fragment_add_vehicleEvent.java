@@ -249,6 +249,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         if (dataSet.get("Event").equals("")){
             SnackbarManager.show(
                 Snackbar.with(getActivity().getApplicationContext())
+                    .color(getResources().getColor(R.color.error))
                     .text(R.string.error_field_event), getActivity());
 
             error = true;
