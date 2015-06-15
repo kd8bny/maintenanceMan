@@ -25,6 +25,9 @@ import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
+import com.nispok.snackbar.Snackbar;
+import com.nispok.snackbar.SnackbarManager;
+import com.nispok.snackbar.listeners.EventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -243,12 +246,13 @@ public class fragment_add_vehicleEvent extends Fragment {
 
             error = true;
         }
-        //TODO check event card for text
-        /*if (dataSet.get("Event").equals("")){
-            vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
+        if (dataSet.get("Event").equals("")){
+            SnackbarManager.show(
+                Snackbar.with(getActivity().getApplicationContext())
+                    .text(R.string.error_field_event), getActivity());
 
             error = true;
-        }*/
+        }
 
         return error;
     }
