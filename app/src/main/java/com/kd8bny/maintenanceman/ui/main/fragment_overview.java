@@ -5,9 +5,6 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -39,11 +31,8 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +42,7 @@ public class fragment_overview extends Fragment {
     private static final String TAG = "frg_ovrvw";
 
     private Toolbar toolbar;
-    private ObservableRecyclerView cardList;
+    private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
 
@@ -85,35 +74,7 @@ public class fragment_overview extends Fragment {
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
 
-        cardList = (ObservableRecyclerView) view.findViewById(R.id.overview_cardList);
-        /*cardList.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
-            @Override
-            public void onScrollChanged(int i, boolean b, boolean b1) {
-
-            }
-
-            @Override
-            public void onDownMotionEvent() {
-
-            }
-
-            @Override
-            public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-                Log.d(TAG, "up/cancel");
-                Log.d(TAG, scrollState+"");
-                Log.d(TAG, toolbar.isShown()+"");
-                if (scrollState == ScrollState.UP) {
-                    if (toolbar.isShown()) {
-                        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-                    }
-                } else if (scrollState == ScrollState.DOWN) {
-                    if (!toolbar.isShown()) {
-                        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
-                    }
-
-                }
-            }
-        });*/
+        cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
@@ -193,6 +154,8 @@ public class fragment_overview extends Fragment {
         //Material Drawer
         Drawer.Result result = new Drawer()
             .withActivity(getActivity())
+            .withActionBarDrawerToggle(true)
+            .withActionBarDrawerToggleAnimated(true)
             .withTranslucentStatusBar(true)
             .withToolbar(toolbar)
             .withSelectedItem(-1)
