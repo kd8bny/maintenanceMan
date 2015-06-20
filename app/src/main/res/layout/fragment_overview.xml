@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/overview_cardList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
