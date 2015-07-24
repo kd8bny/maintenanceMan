@@ -40,7 +40,7 @@ public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_v
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater
                 .from(viewGroup.getContext())
-                .inflate(R.layout.card_add_vehicle_event, viewGroup, false);
+                .inflate(R.layout.card_add_vehicle_event_v2, viewGroup, false);
 
         headerColors = itemView.getResources().obtainTypedArray(R.array.header_color);
 
@@ -49,22 +49,18 @@ public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_v
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        adapterViewHolder.vfield.setText(fields.get(i));
+        adapterViewHolder.vvalue.setHint(fields.get(i));
         adapterViewHolder.vvalue.setText(values.get(i));
-        if(!isSwaped) {
-            adapterViewHolder.vfield.setBackgroundColor(headerColors.getColor(i % 5, 0));
-        }
+        //TODO setfloating label
 
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder {
-        protected TextView vfield;
         protected TextView vvalue;
 
         public AdapterViewHolder(View view) {
             super(view);
 
-            vfield = (TextView) view.findViewById(R.id.category);
             vvalue = (TextView) view.findViewById(R.id.value);
         }
     }
