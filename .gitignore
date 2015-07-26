@@ -33,4 +33,4 @@ local.properties
 build/
 
 # private
-keys.xml
+key.xml

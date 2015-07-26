@@ -9,7 +9,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +18,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -27,7 +30,6 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.listeners.EventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private MaterialBetterSpinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
 
-    private RecyclerView eventList;
+    private ObservableRecyclerView eventList;
     private RecyclerView.LayoutManager eventMan;
     private RecyclerView.Adapter eventListAdapter;
 
@@ -96,7 +98,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_vehicle_event, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_vehicle_event_v2, container, false);
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -117,7 +119,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         vehicleSpinner.setAdapter(spinnerAdapter);
 
         //Recycler View
-        eventList = (RecyclerView) view.findViewById(R.id.add_vehicle_event);
+        eventList = (ObservableRecyclerView) view.findViewById(R.id.add_vehicle_event);
         eventMan = new LinearLayoutManager(getActivity());
         eventList.setHasFixedSize(true);
         eventList.setItemAnimator(new DefaultItemAnimator());
@@ -155,6 +157,38 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels, false);
         eventList.setAdapter(eventListAdapter);
+
+        eventList.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
+            @Override
+            public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+
+            }
+
+            @Override
+            public void onDownMotionEvent() {
+
+            }
+
+            @Override
+            public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+
+            }
+        });
+
+       /* eventList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d(TAG, newState+"");
+                if (newState == 0)
+
+            }
+        });*/
 
         return view;
     }
@@ -199,6 +233,10 @@ public class fragment_add_vehicleEvent extends Fragment {
                     vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
                     Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
+
+                    backupRestoreHelper bku = new backupRestoreHelper(getActivity().getApplicationContext(), "backup");
+                    bku.execute();
+
                     getActivity().finish();
 
                     return true;

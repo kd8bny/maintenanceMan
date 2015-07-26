@@ -50,7 +50,6 @@ public class fragment_overview extends Fragment {
     private Boolean DBisEmpty = false;
 
     public fragment_overview() {
-        // Required empty public constructor
     }
 
 

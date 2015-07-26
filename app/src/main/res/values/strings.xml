@@ -110,6 +110,15 @@
     <string name="pref_summary_units">Select Distance Units</string>
     <string name="pref_unit_dist_default">mi</string>
 
+    <string name="pref_title_cat_cloud">Cloud Backup</string>
+    <string name="pref_summary_cloud">Press to Set Up</string>
+    <string name="pref_title_cat_dropbox">Dropbox</string>
+    <string name="pref_summary_dropbox">Press to Restore Data</string>
+    <string name="pref_key_dropbox">Dropbox</string>
+    <string name="pref_toast_drobox">Data Restored</string>
+
+    <string name="pref_title_cat_drive">Google Drive</string>
+
     <string name="title_cat_about">About</string>
 
     <!-- Toolbar -->
