@@ -2,7 +2,9 @@ package com.kd8bny.maintenanceman.ui.main;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -49,6 +52,8 @@ public class fragment_overview extends Fragment {
 
     private HashMap<String, HashMap> roster;
     private Boolean DBisEmpty = false;
+
+    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
 
     public fragment_overview() {
     }
@@ -211,13 +216,21 @@ public class fragment_overview extends Fragment {
             result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
         //Snackbar
-        Snackbar.make(view.findViewById(R.id.snackbar), "hello", Snackbar.LENGTH_LONG)
-                .setAction("ds", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            Log.d(TAG, "meh");
-            }
-        }).show();
+        int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);
+        if (BuildConfig.VERSION_CODE > oldAppVersion) {
+            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
+            SharedPreferences.Editor editor= sharedPreferences.edit();
+            editor.putInt("appVersion", BuildConfig.VERSION_CODE);
+            editor.apply();
+
+            Snackbar.make(view.findViewById(R.id.snackbar), "hello", Snackbar.LENGTH_LONG)
+                    .setAction("ds", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.d(TAG, "meh");
+                        }
+                    }).show();
+        }
 
         return view;
     }

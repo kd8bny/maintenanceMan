@@ -73,7 +73,7 @@ public class fragment_settings extends PreferenceFragment {
                 mDBApi.getSession().finishAuthentication();
 
                 String accessToken = mDBApi.getSession().getOAuth2AccessToken();
-                SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences("com.kd8bny.maintenanceman_preferences", 0);
+                SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
                 SharedPreferences.Editor editor= sharedPreferences.edit();
                 editor.putString(getString(R.string.pref_key_dropbox), accessToken);
                 editor.commit();
