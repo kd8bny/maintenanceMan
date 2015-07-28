@@ -32,6 +32,13 @@ public class fragment_settings extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
+        final String APP_KEY = getActivity().getApplicationContext().getResources().getString(R.string.dropboxKey);
+        final String APP_SECRET = getActivity().getApplicationContext().getResources().getString(R.string.dropboxSecret);
+
+        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
+        AndroidAuthSession session = new AndroidAuthSession(appKeys);
+        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+
         final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString("Dropbox", null) != null) {
             dropboxButton.setSummary(R.string.pref_summary_dropbox);
@@ -41,26 +48,20 @@ public class fragment_settings extends PreferenceFragment {
         dropboxButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (!action.equals("restore")) {
-                    final String APP_KEY = getActivity().getApplicationContext().getResources().getString(R.string.dropboxKey);
-                    final String APP_SECRET = getActivity().getApplicationContext().getResources().getString(R.string.dropboxSecret);
+            if (!action.equals("restore")) {
+                mDBApi.getSession().startOAuth2Authentication(getActivity());
 
-                    AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-                    AndroidAuthSession session = new AndroidAuthSession(appKeys);
-                    mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-                    mDBApi.getSession().startOAuth2Authentication(getActivity());
+                return false;
 
-                    return false;
+            } else {
+                backupRestoreHelper backupRestoreHelper = new backupRestoreHelper(getActivity(), action);
+                backupRestoreHelper.execute();
 
-                } else {
-                    backupRestoreHelper backupRestoreHelper = new backupRestoreHelper(getActivity(), action);
-                    backupRestoreHelper.execute();
+                SnackbarManager.show(Snackbar.with(getActivity().getApplicationContext())
+                                .text(R.string.pref_toast_drobox), getActivity());
 
-                    SnackbarManager.show(Snackbar.with(getActivity().getApplicationContext())
-                                    .text(R.string.pref_toast_drobox), getActivity());
-
-                    return false;
-                }
+                return false;
+            }
             }
         });
     }
@@ -69,7 +70,6 @@ public class fragment_settings extends PreferenceFragment {
     @Override
     public void onResume(){
         super.onResume();
-
         if(mDBApi.getSession().authenticationSuccessful()){
             try{
                 mDBApi.getSession().finishAuthentication();
