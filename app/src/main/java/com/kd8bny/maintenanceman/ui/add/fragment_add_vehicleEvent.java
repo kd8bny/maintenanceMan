@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,8 +29,6 @@ import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -285,10 +284,8 @@ public class fragment_add_vehicleEvent extends Fragment {
             error = true;
         }
         if (dataSet.get("Event").equals("")){
-            SnackbarManager.show(
-                Snackbar.with(getActivity().getApplicationContext())
-                    .color(getResources().getColor(R.color.error))
-                    .text(R.string.error_field_event), getActivity());
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(R.color.error).show();
 
             error = true;
         }

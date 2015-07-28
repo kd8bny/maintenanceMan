@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,9 +35,6 @@ import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField_required;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-import com.nispok.snackbar.listeners.EventListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 
@@ -145,43 +144,8 @@ public class fragment_add_fleetRoster extends Fragment {
 
                     builder.show();
                 }else{
-                    SnackbarManager.show(
-                        Snackbar.with(getActivity().getApplicationContext())
-                            .color(getResources().getColor(R.color.error))
-                            .text(R.string.error_required)
-                            .eventListener(new EventListener() {
-                                @Override
-                                public void onShow(Snackbar snackbar) {
-                                    fab.animate().translationY(-snackbar.getHeight());
-
-                                }
-
-                                @Override
-                                public void onShowByReplace(Snackbar snackbar) {
-
-                                }
-
-                                @Override
-                                public void onShown(Snackbar snackbar) {
-
-                                }
-
-                                @Override
-                                public void onDismiss(Snackbar snackbar) {
-                                    fab.animate().translationY(0);
-
-                                }
-
-                                @Override
-                                public void onDismissByReplace(Snackbar snackbar) {
-
-                                }
-
-                                @Override
-                                public void onDismissed(Snackbar snackbar) {
-
-                                }
-                            }), getActivity());
+                    Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
+                            .setActionTextColor(R.color.error).show();
                 }
             }
         }));
@@ -283,44 +247,9 @@ public class fragment_add_fleetRoster extends Fragment {
             ArrayList<String> temp = vehicleDataAll.get(i);
 
             if(temp.get(2).equals("")) {
-                SnackbarManager.show(
-                    Snackbar.with(getActivity().getApplicationContext())
-                        .text(R.string.error_required_missing)
-                        .eventListener(new EventListener() {
-                            @Override
-                            public void onShow(Snackbar snackbar) {
-                                fab.animate().translationY(-snackbar.getHeight());
-
-                            }
-
-                            @Override
-                            public void onShowByReplace(Snackbar snackbar) {
-
-                            }
-
-                            @Override
-                            public void onShown(Snackbar snackbar) {
-
-                            }
-
-                            @Override
-                            public void onDismiss(Snackbar snackbar) {
-                                fab.animate().translationY(0);
-
-                            }
-
-                            @Override
-                            public void onDismissByReplace(Snackbar snackbar) {
-
-                            }
-
-                            @Override
-                            public void onDismissed(Snackbar snackbar) {
-
-                            }
-                        }), getActivity());
-
+                Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_required_missing), Snackbar.LENGTH_SHORT).show();
                 error = true;
+
                 break;
             }
         }

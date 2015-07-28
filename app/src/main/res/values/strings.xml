@@ -115,7 +115,7 @@
     <string name="pref_title_cat_dropbox">Dropbox</string>
     <string name="pref_summary_dropbox">Press to Restore Data</string>
     <string name="pref_key_dropbox">Dropbox</string>
-    <string name="pref_toast_drobox">Data Restored</string>
+    <string name="pref_toast_dropbox">Data Restored</string>
 
     <string name="pref_title_cat_drive">Google Drive</string>
 
@@ -131,4 +131,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_activity_billing">activity_billing</string>
+
+    <!-- Whats New -->
+    <string name="title_whats_new">Whats New!!</string>
 </resources>

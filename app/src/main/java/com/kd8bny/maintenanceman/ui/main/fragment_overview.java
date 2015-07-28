@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -208,6 +209,15 @@ public class fragment_overview extends Fragment {
             .build();
 
             result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+
+        //Snackbar
+        Snackbar.make(view.findViewById(R.id.snackbar), "hello", Snackbar.LENGTH_LONG)
+                .setAction("ds", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            Log.d(TAG, "meh");
+            }
+        }).show();
 
         return view;
     }

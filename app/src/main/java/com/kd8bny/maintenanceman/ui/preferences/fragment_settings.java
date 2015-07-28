@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
@@ -12,8 +13,6 @@ import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.backupRestoreHelper;
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
 
 
 public class fragment_settings extends PreferenceFragment {
@@ -57,8 +56,7 @@ public class fragment_settings extends PreferenceFragment {
                 backupRestoreHelper backupRestoreHelper = new backupRestoreHelper(getActivity(), action);
                 backupRestoreHelper.execute();
 
-                SnackbarManager.show(Snackbar.with(getActivity().getApplicationContext())
-                                .text(R.string.pref_toast_drobox), getActivity());
+                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox), Snackbar.LENGTH_SHORT).show();
 
                 return false;
             }
