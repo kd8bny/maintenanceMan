@@ -13,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +26,7 @@ import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_donate;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.ui.info.activity_info;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -223,11 +223,14 @@ public class fragment_overview extends Fragment {
             editor.putInt("appVersion", BuildConfig.VERSION_CODE);
             editor.apply();
 
-            Snackbar.make(view.findViewById(R.id.snackbar), "hello", Snackbar.LENGTH_LONG)
-                    .setAction("ds", new View.OnClickListener() {
+            Snackbar.make(view.findViewById(R.id.snackbar), getString(R.string.title_whats_new), Snackbar.LENGTH_LONG)
+                    .setAction(getResources().getString(R.string.button_whats_new), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Log.d(TAG, "meh");
+                            FragmentManager fm = getFragmentManager();
+
+                            dialog_whatsNew dialog_whatsNew = new dialog_whatsNew();
+                            dialog_whatsNew.show(fm, "dialog_whatsNew");
                         }
                     }).show();
         }

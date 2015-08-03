@@ -134,4 +134,22 @@
 
     <!-- Whats New -->
     <string name="title_whats_new">Whats New!!</string>
+    <string name="button_whats_new">Read</string>
+    <string name="whatsNew">
+        V2.0.7 14JUNE2015\n\n
+
+        NEW!! Added settings again\n
+        - US and Metric unit support\n
+        Add error check for new data. Preventing null fields.\n
+        Layout cleaning\n\n
+
+        V2.0.6 9JUNE2015\n\n
+
+        Added back auto-complete for events\n\n
+
+        V2.0.6 6JUNE2015\n\n
+
+        NEW!!! Option to log RV\'s or even utility trailer\'s!\n
+        Many many many layout and UI improvements\n
+    </string>
 </resources>
