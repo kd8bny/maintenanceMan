@@ -9,4 +9,13 @@
         <item>mi</item>
         <item>Km</item>
     </string-array>
+
+    <string-array name="pref_array_entry_cloud">
+        <item>Dropbox</item>
+        <item>Google Drive</item>
+    </string-array>
+    <string-array name="pref_array_values_cloud">
+        <item>dropbox</item>
+        <item>gdrive</item>
+    </string-array>
 </resources>

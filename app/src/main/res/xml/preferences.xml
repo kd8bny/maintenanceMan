@@ -16,8 +16,28 @@
     <PreferenceCategory
         android:title="@string/pref_title_cat_cloud">
 
+        <ListPreference
+            android:key="prefCloudDefault"
+            android:title="@string/pref_title_cat_cloud_default"
+            android:dialogTitle="@string/pref_title_cat_cloud_default"
+            android:entries="@array/pref_array_entry_cloud"
+            android:entryValues="@array/pref_array_values_cloud"
+            android:defaultValue="@string/pref_cloud_default" />
+
         <Preference android:title="@string/pref_title_cat_dropbox"
             android:key="@string/pref_key_dropbox"
-            android:summary="@string/pref_summary_cloud"/>
+            android:summary="@string/pref_summary_cloud_new"/>
+
+        <Preference android:title="@string/pref_title_cat_gdrive"
+            android:key="@string/pref_key_dropbox"
+            android:summary="@string/pref_summary_cloud_new"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_title_cat_about">
+        <Preference
+            android:title="@string/app_name"
+            android:icon="@mipmap/ic_launcher">
+        </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

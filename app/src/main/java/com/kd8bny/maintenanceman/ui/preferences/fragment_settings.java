@@ -16,7 +16,7 @@ import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 
 
 public class fragment_settings extends PreferenceFragment {
-    private static final String TAG = "fragment_settings";
+    private static final String TAG = "frgmnt_sttngs";
 
     private DropboxAPI<AndroidAuthSession> mDBApi;
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
@@ -40,7 +40,7 @@ public class fragment_settings extends PreferenceFragment {
 
         final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString("Dropbox", null) != null) {
-            dropboxButton.setSummary(R.string.pref_summary_dropbox);
+            dropboxButton.setSummary(R.string.pref_summary_cloud_restore);
             action = "restore";
         }
 
@@ -56,7 +56,7 @@ public class fragment_settings extends PreferenceFragment {
                 backupRestoreHelper backupRestoreHelper = new backupRestoreHelper(getActivity(), action);
                 backupRestoreHelper.execute();
 
-                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
 
                 return false;
             }

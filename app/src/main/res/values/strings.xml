@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Maintenance Man</string>
 
     <!-- Add Fleet Roster -->
@@ -111,15 +110,19 @@
     <string name="pref_unit_dist_default">mi</string>
 
     <string name="pref_title_cat_cloud">Cloud Backup</string>
-    <string name="pref_summary_cloud">Press to Set Up</string>
+    <string name="pref_summary_cloud_new">Press to Set Up</string>
+    <string name="pref_summary_cloud_restore">Press to Restore Data</string>
+    <string name="pref_toast_cloud_restore">Data Restored</string>
+    <string name="pref_title_cat_cloud_default">Default Cloud Back Up</string>
+    <string name="pref_cloud_default">dropbox</string>
+
     <string name="pref_title_cat_dropbox">Dropbox</string>
-    <string name="pref_summary_dropbox">Press to Restore Data</string>
     <string name="pref_key_dropbox">Dropbox</string>
-    <string name="pref_toast_dropbox">Data Restored</string>
 
-    <string name="pref_title_cat_drive">Google Drive</string>
+    <string name="pref_title_cat_gdrive">Google Drive</string>
+    <string name="pref_key_gdrive">Google Drive</string>
 
-    <string name="title_cat_about">About</string>
+    <string name="pref_title_cat_about">About</string>
 
     <!-- Toolbar -->
     <string name="menu_add">Add</string>
