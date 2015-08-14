@@ -32,9 +32,12 @@ import com.kd8bny.maintenanceman.ui.info.activity_info;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
 import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
+import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -150,70 +153,73 @@ public class fragment_overview extends Fragment {
             }
         });
 
-        //Material Drawer Header
-        AccountHeader.Result headerResult = new AccountHeader()
-                .withActivity(getActivity())
-                .withHeaderBackground(R.drawable.header_blank)
-                .build();
-
         //Material Drawer
-        Drawer.Result result = new Drawer()
-            .withActivity(getActivity())
-            .withActionBarDrawerToggle(true)
-            .withActionBarDrawerToggleAnimated(true)
-            .withTranslucentStatusBar(true)
-            .withToolbar(toolbar)
-            .withSelectedItem(-1)
-            .withAccountHeader(headerResult)
-            .addDrawerItems(
-                    new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
-                    new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
-                    new DividerDrawerItem(),
-                    new SecondaryDrawerItem().withName(R.string.title_settings),
-                    new SecondaryDrawerItem().withName(R.string.title_donate),
-                    new SecondaryDrawerItem().withName(R.string.drawer_view_community))
-            .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-                    switch (i) {
-                        case 0: //Add Vehicle
-                            Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
-                            view.getContext().startActivity(addFleetIntent);
+        AccountHeaderBuilder accountHeaderBuilder = new AccountHeaderBuilder();
+        accountHeaderBuilder.withActivity(getActivity())
+                .withHeaderBackground(R.drawable.header_blank);
+                /*.addProfiles( //TODO
+                        new ProfileDrawerItem().withEmail(getString(R.string.app_name))
+                );*/
 
-                            break;
+        final DrawerBuilder drawerBuilder = new DrawerBuilder(getActivity());
+        drawerBuilder.withActionBarDrawerToggle(true)
+                .withActionBarDrawerToggleAnimated(true)
+                .withTranslucentStatusBar(true)
+                .withToolbar(toolbar)
+                .withCloseOnClick(true)
+                .withAnimateDrawerItems(true)
+                .withSelectedItem(-1)
+                .withAccountHeader(accountHeaderBuilder.build())
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
+                        new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName(R.string.title_settings),
+                        new SecondaryDrawerItem().withName(R.string.title_donate),
+                        new SecondaryDrawerItem().withName(R.string.drawer_view_community))
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
+                        switch (i) {
+                            case 0: //Add Vehicle
+                                Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
+                                view.getContext().startActivity(addFleetIntent);
 
-                        case 1: //Add Event
-                            Intent addEventIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
-                            view.getContext().startActivity(addEventIntent);
+                                return true;
 
-                            break;
+                            case 1: //Add Event
+                                Intent addEventIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
+                                view.getContext().startActivity(addEventIntent);
 
-                        case 3: //Settings
-                            Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
-                            view.getContext().startActivity(settingsIntent);
+                                return true;
 
-                            break;
+                            case 3: //Settings
+                                Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
+                                view.getContext().startActivity(settingsIntent);
 
-                        case 4: //Donate
-                            FragmentManager fm = getFragmentManager();
+                                return true;
 
-                            dialog_donate dialog_donate = new dialog_donate();
-                            dialog_donate.show(fm, "dialog_donate");
+                            case 4: //Donate
+                                FragmentManager fm = getFragmentManager();
 
-                            break;
+                                dialog_donate dialog_donate = new dialog_donate();
+                                dialog_donate.show(fm, "dialog_donate");
 
-                        case 5: //Community
-                            Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
-                            Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
-                            startActivity(gplusIntent);
+                                return true;
 
-                            break;
+                            case 5: //Community
+                                Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
+                                Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
+                                startActivity(gplusIntent);
+
+                                return true;
+                        }
+
+                        return false;
                     }
-                }
-            })
-            .build();
-
-            result.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+                });
+            Drawer drawer = drawerBuilder.build();
+            drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
         //Snackbar
         int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);

@@ -22,11 +22,12 @@ dependencies {
     compile 'com.android.support:cardview-v7:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:design:22.2.0'
+    compile 'com.google.android.gms:play-services-drive:7.5.0'
 
     compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile 'com.github.clans:fab:1.5.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.3'
-    compile('com.mikepenz:materialdrawer:2.9.8@aar') {
+    compile('com.mikepenz:materialdrawer:+') {
         transitive = true
     }
     compile ('com.weiwangcn.betterspinner:library-material:1.1.0') {
@@ -34,4 +35,5 @@ dependencies {
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
+    compile 'com.github.lecho:hellocharts-library:1.5.5@aar'
 }
