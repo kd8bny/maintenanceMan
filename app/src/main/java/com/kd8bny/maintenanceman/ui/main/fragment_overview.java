@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,11 +32,9 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
 import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -221,7 +218,7 @@ public class fragment_overview extends Fragment {
             Drawer drawer = drawerBuilder.build();
             drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
-        //Snackbar
+        //Whats New!!!
         int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);
         if (BuildConfig.VERSION_CODE > oldAppVersion) {
             SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
@@ -229,16 +226,10 @@ public class fragment_overview extends Fragment {
             editor.putInt("appVersion", BuildConfig.VERSION_CODE);
             editor.apply();
 
-            Snackbar.make(view.findViewById(R.id.snackbar), getString(R.string.title_whats_new), Snackbar.LENGTH_LONG)
-                    .setAction(getResources().getString(R.string.button_whats_new), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getFragmentManager();
 
-                            dialog_whatsNew dialog_whatsNew = new dialog_whatsNew();
-                            dialog_whatsNew.show(fm, "dialog_whatsNew");
-                        }
-                    }).show();
+            dialog_whatsNew dialog_whatsNew = new dialog_whatsNew();
+            dialog_whatsNew.show(fm, "dialog_whatsNew");
         }
 
         return view;

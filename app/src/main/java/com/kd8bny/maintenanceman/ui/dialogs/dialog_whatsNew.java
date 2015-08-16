@@ -1,10 +1,12 @@
 package com.kd8bny.maintenanceman.ui.dialogs;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -13,8 +15,6 @@ import com.kd8bny.maintenanceman.R;
 
 public class dialog_whatsNew extends DialogFragment{
     private static final String TAG = "dlg_whts_nw";
-
-    private String WHATS_NEW_FILNAME = "/whatsNew.txt";
 
     public dialog_whatsNew(){
 
@@ -27,13 +27,25 @@ public class dialog_whatsNew extends DialogFragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_whats_new, container, false);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_add_field, null);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         TextView whatsNew = (TextView) view.findViewById(R.id.whats_new);
         whatsNew.setText(getResources().getString(R.string.whatsNew));
 
-        return view;
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.title_whats_new)
+                .setNegativeButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dismiss();
+                            }
+                        });
+
+        alertDialog.setView(view);
+
+        return alertDialog.create();
     }
 }
