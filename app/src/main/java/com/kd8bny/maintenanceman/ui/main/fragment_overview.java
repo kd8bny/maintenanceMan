@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.backupHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
@@ -68,6 +69,10 @@ public class fragment_overview extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
+
+        //Data
+        backupHelper backupHelper = new backupHelper();
+        backupHelper.backupHelper(getActivity().getApplicationContext(), "restore");
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
