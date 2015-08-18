@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/pref_key_about"
+        android:title="@string/app_name"
+        android:icon="@mipmap/ic_launcher">
+    </Preference>
     <PreferenceCategory
         android:title="@string/pref_title_cat_units"
         android:key="pref_unit_settings">
@@ -28,16 +33,8 @@
             android:key="@string/pref_key_dropbox"
             android:summary="@string/pref_summary_cloud_new"/>
 
-        <Preference android:title="@string/pref_title_cat_gdrive"
-            android:key="@string/pref_key_dropbox"
-            android:summary="@string/pref_summary_cloud_new"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/pref_title_cat_about">
-        <Preference
-            android:title="@string/app_name"
-            android:icon="@mipmap/ic_launcher">
-        </Preference>
+        <!--<Preference android:title="@string/pref_title_cat_gdrive"
+            android:key="@string/pref_key_gdrive"
+            android:summary="@string/pref_summary_cloud_new"/>-->
     </PreferenceCategory>
 </PreferenceScreen>
