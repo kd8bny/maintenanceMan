@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
@@ -29,14 +28,12 @@ public class dialog_whatsNew extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_field, null);
-        getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        View view = inflater.inflate(R.layout.dialog_whats_new, null);
 
         TextView whatsNew = (TextView) view.findViewById(R.id.whats_new);
         whatsNew.setText(getResources().getString(R.string.whatsNew));
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.title_whats_new)
                 .setNegativeButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
