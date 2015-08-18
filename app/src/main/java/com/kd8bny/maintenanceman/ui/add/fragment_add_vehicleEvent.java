@@ -19,11 +19,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.backupRestoreHelper;
+import com.kd8bny.maintenanceman.data.dropboxHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -44,7 +41,7 @@ public class fragment_add_vehicleEvent extends Fragment {
     private MaterialBetterSpinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
 
-    private ObservableRecyclerView eventList;
+    private RecyclerView eventList;
     private RecyclerView.LayoutManager eventMan;
     private RecyclerView.Adapter eventListAdapter;
 
@@ -118,7 +115,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         vehicleSpinner.setAdapter(spinnerAdapter);
 
         //Recycler View
-        eventList = (ObservableRecyclerView) view.findViewById(R.id.add_vehicle_event);
+        eventList = (RecyclerView) view.findViewById(R.id.add_vehicle_event);
         eventMan = new LinearLayoutManager(getActivity());
         eventList.setHasFixedSize(true);
         eventList.setItemAnimator(new DefaultItemAnimator());
@@ -156,23 +153,6 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels, false);
         eventList.setAdapter(eventListAdapter);
-
-        eventList.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
-            @Override
-            public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-
-            }
-
-            @Override
-            public void onDownMotionEvent() {
-
-            }
-
-            @Override
-            public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-
-            }
-        });
 
        /* eventList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -233,7 +213,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
                     Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
 
-                    backupRestoreHelper bku = new backupRestoreHelper(getActivity().getApplicationContext(), "backup");
+                    dropboxHelper bku = new dropboxHelper(getActivity().getApplicationContext(), "backup");
                     bku.execute();
 
                     getActivity().finish();
