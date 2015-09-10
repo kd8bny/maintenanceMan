@@ -1,5 +1,7 @@
 package com.kd8bny.maintenanceman.ui.main;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -31,11 +33,13 @@ import com.kd8bny.maintenanceman.ui.info.activity_info;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
+import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -159,9 +163,11 @@ public class fragment_overview extends Fragment {
         AccountHeaderBuilder accountHeaderBuilder = new AccountHeaderBuilder();
         accountHeaderBuilder.withActivity(getActivity())
                 .withHeaderBackground(R.drawable.header_blank);
-                /*.addProfiles( //TODO
-                        new ProfileDrawerItem().withEmail(getString(R.string.app_name))
-                );*/
+        final AccountHeader accountHeader = accountHeaderBuilder.build();
+        Account accounts [] = AccountManager.get(getActivity().getApplicationContext()).getAccountsByType("com.google");
+        for (int i = 0; i < accounts.length; i++) {
+            accountHeader.addProfile(new ProfileDrawerItem().withEmail(accounts[i].name), i); //TODO with icon
+        }
 
         final DrawerBuilder drawerBuilder = new DrawerBuilder(getActivity());
         drawerBuilder.withActionBarDrawerToggle(true)
@@ -171,7 +177,7 @@ public class fragment_overview extends Fragment {
                 .withCloseOnClick(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withSelectedItem(-1)
-                .withAccountHeader(accountHeaderBuilder.build())
+                .withAccountHeader(accountHeader)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
                         new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
@@ -180,11 +186,11 @@ public class fragment_overview extends Fragment {
                         new SecondaryDrawerItem().withName(R.string.title_donate),
                         new SecondaryDrawerItem().withName(R.string.drawer_view_community));
 
-                //});
-            final Drawer drawer = drawerBuilder.build();
-            drawer.setOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                @Override
-                public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+        final Drawer drawer = drawerBuilder.build();
+        drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+        drawer.setOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+            @Override
+            public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
                 switch (i) {
                     case 1: //Add Vehicle
                         Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
@@ -227,7 +233,7 @@ public class fragment_overview extends Fragment {
                 return false;
                 }
             });
-            drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+
 
         //Whats New!!!
         int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);
