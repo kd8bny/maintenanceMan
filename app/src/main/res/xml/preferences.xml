@@ -18,7 +18,7 @@
             android:defaultValue="@string/pref_unit_dist_default" />
     </PreferenceCategory>
 
-    <PreferenceCategory
+    <!--<PreferenceCategory
         android:title="@string/pref_title_cat_cloud">
 
         <ListPreference
@@ -33,8 +33,8 @@
             android:key="@string/pref_key_dropbox"
             android:summary="@string/pref_summary_cloud_new"/>
 
-        <!--<Preference android:title="@string/pref_title_cat_gdrive"
+        <Preference android:title="@string/pref_title_cat_gdrive"
             android:key="@string/pref_key_gdrive"
-            android:summary="@string/pref_summary_cloud_new"/>-->
-    </PreferenceCategory>
+            android:summary="@string/pref_summary_cloud_new"/>
+    </PreferenceCategory>-->
 </PreferenceScreen>

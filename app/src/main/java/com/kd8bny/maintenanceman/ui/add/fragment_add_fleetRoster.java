@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
@@ -217,8 +216,8 @@ public class fragment_add_fleetRoster extends Fragment {
 
                     Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
 
-                    backupRestoreHelper bku = new backupRestoreHelper(getActivity().getApplicationContext(), "backup");
-                    bku.execute();
+                    /*dropboxHelper bku = new dropboxHelper(getActivity().getApplicationContext(), "backup");
+                    bku.execute();*/
 
                     getActivity().finish();
 

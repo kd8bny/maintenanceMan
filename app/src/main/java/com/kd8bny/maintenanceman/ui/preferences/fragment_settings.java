@@ -22,8 +22,6 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.drive.Drive;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.dropboxHelper;
-import com.kd8bny.maintenanceman.data.gdriveHelper;
 
 
 public class fragment_settings extends PreferenceFragment{
@@ -49,12 +47,12 @@ public class fragment_settings extends PreferenceFragment{
         final String APP_SECRET = context.getResources().getString(R.string.dropboxSecret);
 
         final Preference appVersion = findPreference(getString(R.string.pref_key_about));
-        final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
-        final Preference gdriveButton = findPreference(getString(R.string.pref_key_gdrive));
+        //final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
+        //final Preference gdriveButton = findPreference(getString(R.string.pref_key_gdrive));
         appVersion.setSummary(BuildConfig.VERSION_NAME);
 
         //Dropbox
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
+        /*AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_dropbox), null) != null) {
@@ -80,7 +78,7 @@ public class fragment_settings extends PreferenceFragment{
             }
         });
 
-        /*//gdrive
+        //gdrive
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_gdrive), null) != null) {
             gdriveButton.setSummary(R.string.pref_summary_cloud_restore);
             action = "restore";
@@ -128,7 +126,7 @@ public class fragment_settings extends PreferenceFragment{
     public void onResume(){
         super.onResume();
         //Dropbox
-        if(mDBApi.getSession().authenticationSuccessful()){
+        /*if(mDBApi.getSession().authenticationSuccessful()){
             try{
                 mDBApi.getSession().finishAuthentication();
 
@@ -141,7 +139,7 @@ public class fragment_settings extends PreferenceFragment{
             } catch (IllegalStateException e) {
                 Log.i("DbAuthLog", "DROPBOX: Error authenticating", e);
             }
-        }
+        }*/
     }
 
     @Override

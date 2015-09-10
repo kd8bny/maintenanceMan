@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.dropboxHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -213,8 +212,8 @@ public class fragment_add_vehicleEvent extends Fragment {
 
                     Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
 
-                    dropboxHelper bku = new dropboxHelper(getActivity().getApplicationContext(), "backup");
-                    bku.execute();
+                    /*dropboxHelper bku = new dropboxHelper(getActivity().getApplicationContext(), "backup");
+                    bku.execute();*/
 
                     getActivity().finish();
 
