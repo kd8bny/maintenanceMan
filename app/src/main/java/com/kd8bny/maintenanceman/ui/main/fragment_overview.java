@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,9 +32,9 @@ import com.kd8bny.maintenanceman.ui.info.activity_info;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
@@ -71,8 +72,8 @@ public class fragment_overview extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         //Data
-        backupHelper backupHelper = new backupHelper();
-        backupHelper.backupHelper(getActivity().getApplicationContext(), "restore");
+        //backupHelper backupHelper = new backupHelper();
+        //backupHelper.backupHelper(getActivity().getApplicationContext(), "restore");
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -169,7 +170,7 @@ public class fragment_overview extends Fragment {
                 .withTranslucentStatusBar(true)
                 .withToolbar(toolbar)
                 .withCloseOnClick(true)
-                .withAnimateDrawerItems(true)
+                .withActionBarDrawerToggleAnimated(true)
                 .withSelectedItem(-1)
                 .withAccountHeader(accountHeaderBuilder.build())
                 .addDrawerItems(
@@ -178,49 +179,55 @@ public class fragment_overview extends Fragment {
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(R.string.title_settings),
                         new SecondaryDrawerItem().withName(R.string.title_donate),
-                        new SecondaryDrawerItem().withName(R.string.drawer_view_community))
-                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                    @Override
-                    public boolean onItemClick(AdapterView<?> adapterView, View view, int i, long l, IDrawerItem iDrawerItem) {
-                        switch (i) {
-                            case 0: //Add Vehicle
-                                Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
-                                view.getContext().startActivity(addFleetIntent);
+                        new SecondaryDrawerItem().withName(R.string.drawer_view_community));
 
-                                return true;
+                //});
+            final Drawer drawer = drawerBuilder.build();
+            drawer.setOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                @Override
+                public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+                switch (i) {
+                    case 1: //Add Vehicle
+                        Intent addFleetIntent = new Intent(view.getContext(), activity_add_fleetRoster.class);
+                        view.getContext().startActivity(addFleetIntent);
+                        drawer.closeDrawer();
 
-                            case 1: //Add Event
-                                Intent addEventIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
-                                view.getContext().startActivity(addEventIntent);
+                        return true;
 
-                                return true;
+                    case 2: //Add Event
+                        Intent addEventIntent = new Intent(view.getContext(), activity_vehicleEvent.class);
+                        view.getContext().startActivity(addEventIntent);
+                        drawer.closeDrawer();
 
-                            case 3: //Settings
-                                Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
-                                view.getContext().startActivity(settingsIntent);
+                        return true;
 
-                                return true;
+                    case 4: //Settings
+                        Intent settingsIntent = new Intent(view.getContext(), activity_settings.class);
+                        view.getContext().startActivity(settingsIntent);
+                        drawer.closeDrawer();
 
-                            case 4: //Donate
-                                FragmentManager fm = getFragmentManager();
+                        return true;
 
-                                dialog_donate dialog_donate = new dialog_donate();
-                                dialog_donate.show(fm, "dialog_donate");
+                    case 5: //Donate
+                        FragmentManager fm = getFragmentManager();
 
-                                return true;
+                        dialog_donate dialog_donate = new dialog_donate();
+                        dialog_donate.show(fm, "dialog_donate");
+                        drawer.closeDrawer();
 
-                            case 5: //Community
-                                Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
-                                Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
-                                startActivity(gplusIntent);
+                        return true;
 
-                                return true;
-                        }
+                    case 6: //Community
+                        Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
+                        Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
+                        startActivity(gplusIntent);
+                        drawer.closeDrawer();
 
-                        return false;
-                    }
-                });
-            Drawer drawer = drawerBuilder.build();
+                        return true;
+                }
+                return false;
+                }
+            });
             drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
 
         //Whats New!!!
@@ -252,12 +259,9 @@ public class fragment_overview extends Fragment {
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
 
-        if (roster.containsKey(null)){
-            DBisEmpty = true;
-        }else{
+        if (!roster.containsKey(null)){
             DBisEmpty = false;
         }
-
         cardListAdapter = new adapter_overview(roster);
         cardList.setAdapter(cardListAdapter);
     }
