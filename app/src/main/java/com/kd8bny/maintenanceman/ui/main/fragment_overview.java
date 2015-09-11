@@ -162,7 +162,8 @@ public class fragment_overview extends Fragment {
         //Material Drawer
         AccountHeaderBuilder accountHeaderBuilder = new AccountHeaderBuilder();
         accountHeaderBuilder.withActivity(getActivity())
-                .withHeaderBackground(R.drawable.header_blank);
+                .withHeaderBackground(R.drawable.header_blank)
+                .withOnlyMainProfileImageVisible(true);
         final AccountHeader accountHeader = accountHeaderBuilder.build();
         Account accounts [] = AccountManager.get(getActivity().getApplicationContext()).getAccountsByType("com.google");
         for (int i = 0; i < accounts.length; i++) {
