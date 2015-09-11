@@ -101,6 +101,7 @@
     <string name="oh_noes">"Oh Noes!!!"</string>
     <string name="empty_db">"Click to Add Vehicle"</string>
     <string name="no_data">"No Data"</string>
+    <string name="drawer_sec_options">Options</string>
     <string name="drawer_view_community">View Community</string>
 
     <!-- Preferences -->

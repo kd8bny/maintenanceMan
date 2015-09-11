@@ -30,7 +30,7 @@ dependencies {
 
     compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile 'com.github.clans:fab:1.6.0'
-    compile 'com.rengwuxian.materialedittext:library:2.1.3'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile('com.mikepenz:materialdrawer:4.0.8@aar') {
         transitive = true
     }
