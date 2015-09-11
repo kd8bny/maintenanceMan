@@ -44,7 +44,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + ");";
 
     public vehicleLogDBHelper(Context context){
-        super(context,DB_NAME,null,DB_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
@@ -90,13 +90,15 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         }finally {
             if(vehicleLogDB.getVersion() < DB_VERSION){
                 onUpgrade(vehicleLogDB, vehicleLogDB.getVersion(), DB_VERSION);
-                Log.i(TAG,(vehicleLogDB.getVersion())+"");
+                Log.i(TAG, (vehicleLogDB.getVersion()) + "");
             }
         }
     }
 
     public void saveEntry(Context context, String refID, HashMap<String, String> dataSet) {
-        //String date, String odo, String task, String price, String comment
+        /* Data incoming format
+        *String date, String odo, String task, String price, String comment
+        */
         File database = context.getDatabasePath("vehicleLog.db");
         if (!database.exists()) {
             this.createDatabase(context);
@@ -115,13 +117,13 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
             }catch (Exception e) {
                 e.printStackTrace();
-                Log.e(TAG, e.toString());
-                Log.e(TAG, "Error updating db");
+            }finally {
+                vehicleLogDB.close();
             }
         }
     }
 
-    public ArrayList<ArrayList> getEntries(Context context, String refID){
+    public ArrayList<ArrayList> getEntries(Context context, String refID) {
 
         createDatabase(context);
         Cursor cursor = vehicleLogDB.rawQuery("SELECT * FROM grandvehicleLog WHERE refID = '" + refID + "';", null);
@@ -137,29 +139,37 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
         cursor.moveToFirst();
 
-        if(cursor != null && (cursor.getCount() > 0)) {
-            do {
+        try {
+            if (cursor.getCount() > 0) {
+                do {
+                    ArrayList<String> singleVehicleList = new ArrayList<>();
+
+                    if (refID.equals(cursor.getString(refIDCol))) {
+                        singleVehicleList.add(refID);
+                        singleVehicleList.add(cursor.getString(dateCol));
+                        singleVehicleList.add(cursor.getString(odoCol));
+                        singleVehicleList.add(cursor.getString(eventCol));
+                        singleVehicleList.add(cursor.getString(priceCol));
+                        singleVehicleList.add(cursor.getString(commentCol));
+
+                        vehicleList.add(singleVehicleList);
+                    }
+
+                } while (cursor.moveToNext());
+
+            } else {
                 ArrayList<String> singleVehicleList = new ArrayList<>();
-
-                if(refID.equals(cursor.getString(refIDCol))) {
-                    singleVehicleList.add(refID);
-                    singleVehicleList.add(cursor.getString(dateCol));
-                    singleVehicleList.add(cursor.getString(odoCol));
-                    singleVehicleList.add(cursor.getString(eventCol));
-                    singleVehicleList.add(cursor.getString(priceCol));
-                    singleVehicleList.add(cursor.getString(commentCol));
-
-                    vehicleList.add(singleVehicleList);
-                }
-
-            } while(cursor.moveToNext());
-
-        }
-        else{
-            ArrayList<String> singleVehicleList = new ArrayList<>();
-            singleVehicleList.add(null);
-            singleVehicleList.add(context.getResources().getString(R.string.no_history));
-            vehicleList.add(singleVehicleList);
+                singleVehicleList.add(null);
+                singleVehicleList.add(context.getResources().getString(R.string.no_history));
+                vehicleList.add(singleVehicleList);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                vehicleLogDB.close();
+            }
         }
 
         return vehicleList;
@@ -174,10 +184,19 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         ArrayList<String> eventList = new ArrayList<>();
         cursor.moveToFirst();
 
-        if(cursor.getCount() > 0) {
-            do {
-                eventList.add(cursor.getString(eventCol));
-            } while(cursor.moveToNext());
+        try {
+            if (cursor.getCount() > 0) {
+                do {
+                    eventList.add(cursor.getString(eventCol));
+                } while (cursor.moveToNext());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                vehicleLogDB.close();
+            }
         }
 
         return eventList;
@@ -193,8 +212,9 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
                     "' AND price = '" + dataSet.get(4) +
                     "' AND comment = '" + dataSet.get(5) + "';");
         }catch (Exception e) {
-            Log.e(TAG, e.toString());
-            Log.e(TAG, "Error updating db");
+            e.printStackTrace();
+        }finally {
+            vehicleLogDB.close();
         }
     }
 
@@ -204,8 +224,9 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
             vehicleLogDB.execSQL("DELETE FROM grandVehicleLog WHERE " +
                 "refID = '" + refID + "';");
         }catch (Exception e) {
-            Log.e(TAG, e.toString());
-            Log.e(TAG, "Error updating db");
+            e.printStackTrace();
+        }finally {
+            vehicleLogDB.close();
         }
     }
 }
