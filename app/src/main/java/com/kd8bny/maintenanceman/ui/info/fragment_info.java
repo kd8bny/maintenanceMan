@@ -151,8 +151,8 @@ public class fragment_info extends Fragment {
                                         vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
 
                                         vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
-                                        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
-                                        histList.setAdapter(histListAdapter);
+                                        Log.d(TAG, vehicleSent.toString());
+                                        onResume();
                                     }
                                 }).show();
 
@@ -182,7 +182,6 @@ public class fragment_info extends Fragment {
         cardList.setHasFixedSize(true);
         cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
-        //cardListAdapter = new adapter_info(vehicleSent, vehicleHist);
         cardList.setAdapter(cardListAdapter);
 
         //Slide-y up menu
@@ -254,13 +253,15 @@ public class fragment_info extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-
-
     }
 
     @Override
     public void onResume(){
         super.onResume();
+
+        //Renew maintenance history
+        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
 
         //Renew Vehicle Data
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
@@ -269,9 +270,7 @@ public class fragment_info extends Fragment {
         cardListAdapter = new adapter_info(vehicleSent, vehicleHist);
         cardList.setAdapter(cardListAdapter);
 
-        //Renew maintenance history
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
+        //Cont update maintenance history
         histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
         histList.setAdapter(histListAdapter);
     }
