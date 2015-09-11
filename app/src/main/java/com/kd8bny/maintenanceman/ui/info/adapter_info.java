@@ -535,73 +535,83 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
     public ViewHolderChart(View view, final ArrayList<ArrayList> vehicleHist) {
         super(view);
 
+        final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
         final Calendar cal = Calendar.getInstance();
         final int month = cal.get(Calendar.MONTH) + 1;
         final int endMonth = (month - 3) % 12;
-
         final String[] months = view.getResources().getStringArray(R.array.spec_month);
+
         ArrayList<BarEntry> yvals = new ArrayList<>();
         ArrayList<String> xvals = new ArrayList<>();
         ArrayList<Integer> xvalsNum = new ArrayList<>();
         ArrayList<Float> yvalsNum = new ArrayList<>();
 
         if (vehicleHist != null) {
+            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
+            tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
             view.animate();
 
             HorizontalBarChart mchart = (HorizontalBarChart) view.findViewById(R.id.chart);
             mchart.setDrawValueAboveBar(true);
-            mchart.setDescription("TDO");
+            mchart.setDrawHighlightArrow(true);
+            mchart.setDescription(null);
+            mchart.getLegend().setEnabled(false);
+            mchart.getAxisLeft().setEnabled(false);
+            mchart.getAxisRight().setEnabled(false);
 
-            XAxis xl = mchart.getXAxis();
-            xl.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xl.setDrawAxisLine(true);
-            xl.setDrawGridLines(false);
-            xl.setGridLineWidth(0.3f);
+            XAxis xAxis = mchart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setDrawAxisLine(false);
+            xAxis.setDrawGridLines(false);
+            xAxis.setGridLineWidth(0.3f);
+            xAxis.setTextColor(view.getResources().getColor(R.color.secondary_text));
+            xAxis.setTextSize(view.getResources().getDimension(R.dimen.field_font));
 
-            YAxis yprices = mchart.getAxisLeft();
-            yprices.setDrawAxisLine(true);
-            yprices.setDrawGridLines(false);
-            yprices.setGridLineWidth(0.3f);
+            try {
+                for (int i = 0; i < vehicleHist.size(); i++) {
+                    ArrayList<String> tempEvent = vehicleHist.get(i);
+                    String[] dateArray = tempEvent.get(1).split("/");
+                    int monthLog = Integer.parseInt(dateArray[0]);
 
-            for (int i = 0; i < vehicleHist.size(); i++) {
-                ArrayList<String> tempEvent = vehicleHist.get(i);
-                String[] dateArray = tempEvent.get(1).split("/");
-                int monthLog = Integer.parseInt(dateArray[0]); //TODO if null!!??
-
-                if (monthLog <= month & monthLog >= endMonth) {
-                    if (!tempEvent.get(4).isEmpty()) {
-                        if (xvalsNum.size() > 0){
-                            if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
-                                yvalsNum.add(
-                                        yvalsNum.size()-1,
-                                        yvalsNum.get(yvalsNum.size()-1) +
-                                                Float.parseFloat(tempEvent.get(4)));
+                    if (monthLog <= month & monthLog >= endMonth) {
+                        if (!tempEvent.get(4).isEmpty()) {
+                            if (xvalsNum.size() > 0){
+                                if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
+                                    yvalsNum.add(
+                                            yvalsNum.size()-1,
+                                            yvalsNum.get(yvalsNum.size()-1) +
+                                                    Float.parseFloat(tempEvent.get(4)));
+                                }else {
+                                    xvalsNum.add(monthLog);
+                                    yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                                }
                             }else {
                                 xvalsNum.add(monthLog);
                                 yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
                             }
-                        }else {
-                            xvalsNum.add(monthLog);
-                            yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
                         }
                     }
                 }
+
+                if (xvalsNum.size() > 0) {
+                    for (int i = 0; i < xvalsNum.size(); i++) {
+                        xvals.add(months[xvalsNum.get(i) - 1]);
+                        yvals.add(new BarEntry(yvalsNum.get(i), i));
+                    }
+
+                    BarDataSet set1 = new BarDataSet(yvals, null);
+                    ArrayList<BarDataSet> dataSets = new ArrayList<>();
+                    dataSets.add(set1);
+
+                    BarData data = new BarData(xvals, dataSets);
+                    data.setValueTextSize(10f);
+
+                    mchart.setData(data);
+                    mchart.animateY(2500);
+                }
+            }catch (NumberFormatException e){
+                Log.i(TAG, "No date found");
             }
-
-            for (int i = 0; i < xvalsNum.size(); i++) {
-                xvals.add(months[xvalsNum.get(i)-1]);
-                yvals.add(new BarEntry(yvalsNum.get(i), i));
-            }
-
-            BarDataSet set1 = new BarDataSet(yvals, "set 1?");
-            ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
-            dataSets.add(set1);
-
-            BarData data = new BarData(xvals, dataSets);
-            data.setValueTextSize(10f);
-
-            mchart.setData(data);
-            mchart.animateY(2500);
         }
     }
 }
