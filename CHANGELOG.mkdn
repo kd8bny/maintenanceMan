@@ -1,3 +1,19 @@
+V2.0.9 09Sept2015
+
+Temporarily removed dropbox and gdrive
+NEW!! Added a chart to provide cost history of events
+NEW!! Whats new dialog
+Info card reordering
+SQL bug fixes
+Email account headers
+API 23 support
+
+V2.0.8 26JULY2015
+
+NEW!!! Dropbox backup and restore
+Layout fixes
+GDrive is next
+
 V2.0.7 14JUNE2015
 
 NEW!! Added settings again
