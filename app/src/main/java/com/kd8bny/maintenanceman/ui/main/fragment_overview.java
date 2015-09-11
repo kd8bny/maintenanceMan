@@ -1,7 +1,5 @@
 package com.kd8bny.maintenanceman.ui.main;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
@@ -14,7 +12,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +26,14 @@ import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.ui.info.activity_info;
+import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
 
 import com.github.clans.fab.FloatingActionMenu;
-import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
@@ -158,17 +153,6 @@ public class fragment_overview extends Fragment {
             }
         });
 
-        //Material Drawer
-        AccountHeaderBuilder accountHeaderBuilder = new AccountHeaderBuilder();
-        accountHeaderBuilder.withActivity(getActivity())
-                .withHeaderBackground(R.drawable.header_blank)
-                .withOnlyMainProfileImageVisible(true);
-        final AccountHeader accountHeader = accountHeaderBuilder.build();
-        Account accounts [] = AccountManager.get(getActivity().getApplicationContext()).getAccountsByType("com.google");
-        for (int i = 0; i < accounts.length; i++) {
-            accountHeader.addProfile(new ProfileDrawerItem().withEmail(accounts[i].name), i); //TODO with icon
-        }
-
         final DrawerBuilder drawerBuilder = new DrawerBuilder(getActivity());
         drawerBuilder.withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
@@ -177,7 +161,7 @@ public class fragment_overview extends Fragment {
                 .withCloseOnClick(true)
                 .withActionBarDrawerToggleAnimated(true)
                 .withSelectedItem(-1)
-                .withAccountHeader(accountHeader)
+                .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
                         new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
@@ -233,7 +217,6 @@ public class fragment_overview extends Fragment {
                 return false;
                 }
             });
-
 
         //Whats New!!!
         int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);
