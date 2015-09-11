@@ -18,7 +18,8 @@
             android:id="@+id/chart_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/start_end_horizontal_margin"
+            android:paddingStart="@dimen/padding_header"
+            android:paddingEnd="@dimen/padding_header"
             android:textColor="@color/header"
             android:textSize="@dimen/header_font"
             android:text="@string/header_chart"/>
