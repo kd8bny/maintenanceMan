@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.ui.info;
 
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -23,8 +24,10 @@ import com.kd8bny.maintenanceman.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -41,24 +44,25 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected View itemViewOther;
     protected View itemViewChart;
 
-    private static final int VIEW_GENERAL = 0;
-    private static final int VIEW_ENGINE = 1;
-    private static final int VIEW_PWR = 2;
-    private static final int VIEW_OTHER = 3;
-    private static final int VIEW_CHART = 4;
+    private static final int VIEW_CHART = 0;
+    private static final int VIEW_GENERAL = 1;
+    private static final int VIEW_ENGINE = 2;
+    private static final int VIEW_PWR = 3;
+    private static final int VIEW_OTHER = 4;
 
     public adapter_info(HashMap<String, HashMap> vehicleInfo, ArrayList<ArrayList> vehicleHist) {
         //info
         for (String key : vehicleInfo.keySet()) {
             if (vehicleInfo.get(key) != null) {
-                this.vehicleInfoArray.add(vehicleInfo.get(key));
-                this.keyList.add(key); //todo reverse keylist
+                this.vehicleInfoArray.add(0, vehicleInfo.get(key));
+                this.keyList.add(0, key);
             }
         }
+
         //hist
         this.vehicleHist = vehicleHist;
-        this.vehicleInfoArray.add(null);
-        this.keyList.add("Chart");
+        this.vehicleInfoArray.add(0, new HashMap());
+        this.keyList.add(0, "Chart");
     }
 
     @Override
@@ -171,6 +175,97 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
+class ViewHolderChart extends RecyclerView.ViewHolder {
+    private static final String TAG = "adptr_info_VwHldr_chrt";
+
+    private TypedArray headerColors;
+
+    public ViewHolderChart(View view, final ArrayList<ArrayList> vehicleHist) {
+        super(view);
+
+        final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
+        final Calendar cal = Calendar.getInstance();
+        final int month = cal.get(Calendar.MONTH) + 1;
+        final int endMonth = (month - 3) % 12;
+        final String[] months = view.getResources().getStringArray(R.array.spec_month);
+
+        ArrayList<BarEntry> yvals = new ArrayList<>();
+        ArrayList<String> xvals = new ArrayList<>();
+        ArrayList<Integer> xvalsNum = new ArrayList<>();
+        ArrayList<Float> yvalsNum = new ArrayList<>();
+
+        if (vehicleHist != null) {
+            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
+            tempHeaderTitle.setBackgroundColor(headerColors.getColor(0, 0));
+            view.animate();
+
+            HorizontalBarChart mchart = (HorizontalBarChart) view.findViewById(R.id.chart);
+            mchart.setDrawValueAboveBar(true);
+            mchart.setDrawHighlightArrow(true);
+            mchart.setDescription(null);
+            mchart.getLegend().setEnabled(false);
+            mchart.getAxisLeft().setEnabled(false);
+            mchart.getAxisRight().setEnabled(false);
+            mchart.setGridBackgroundColor(Color.TRANSPARENT);
+
+            XAxis xAxis = mchart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setDrawAxisLine(false);
+            xAxis.setDrawGridLines(false);
+            xAxis.setGridLineWidth(0.3f);
+            xAxis.setTextColor(view.getResources().getColor(R.color.secondary_text));
+            xAxis.setTextSize(view.getResources().getDimension(R.dimen.field_font));
+
+            try {
+                for (int i = 0; i < vehicleHist.size(); i++) {
+                    ArrayList<String> tempEvent = vehicleHist.get(i);
+                    String[] dateArray = tempEvent.get(1).split("/");
+                    int monthLog = Integer.parseInt(dateArray[0]);
+
+                    if (monthLog <= month & monthLog >= endMonth) {
+                        if (!tempEvent.get(4).isEmpty()) {
+                            if (xvalsNum.size() > 0){
+                                if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
+                                    yvalsNum.add(
+                                            yvalsNum.size()-1,
+                                            yvalsNum.get(yvalsNum.size()-1) +
+                                                    Float.parseFloat(tempEvent.get(4)));
+                                }else {
+                                    xvalsNum.add(monthLog);
+                                    yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                                }
+                            }else {
+                                xvalsNum.add(monthLog);
+                                yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                            }
+                        }
+                    }
+                }
+
+                if (xvalsNum.size() > 0) {
+                    for (int i = 0; i < xvalsNum.size(); i++) {
+                        xvals.add(months[xvalsNum.get(i) - 1]);
+                        yvals.add(new BarEntry(yvalsNum.get(i), i));
+                    }
+
+                    BarDataSet barDataSet = new BarDataSet(yvals, null);
+                    barDataSet.setColor(headerColors.getColor(6, 0));
+                    ArrayList<BarDataSet> dataSets = new ArrayList<>();
+                    dataSets.add(barDataSet);
+
+                    BarData data = new BarData(xvals, dataSets);
+                    data.setValueTextSize(10f);
+
+                    mchart.setData(data);
+                    mchart.animateY(2500);
+                }
+            }catch (NumberFormatException e){
+                Log.i(TAG, "No date found");
+            }
+        }
+    }
+}
+
 class ViewHolderGeneral extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_info_VwHldr_gen";
 
@@ -220,7 +315,7 @@ class ViewHolderGeneral extends RecyclerView.ViewHolder {
             tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
             tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
             tempHeaderTitle.setText(R.string.header_general);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(0, 0));
+            tempHeaderTitle.setBackgroundColor(headerColors.getColor(1, 0));
 
             ((LinearLayout) layout).addView(tempHeaderTitle);
 
@@ -309,7 +404,7 @@ class ViewHolderEngine extends RecyclerView.ViewHolder {
             tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
             tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
             tempHeaderTitle.setText(R.string.header_engine);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(1, 0));
+            tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
 
             ((LinearLayout) layout).addView(tempHeaderTitle);
 
@@ -398,7 +493,7 @@ class ViewHolderPWR extends RecyclerView.ViewHolder {
             tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
             tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
             tempHeaderTitle.setText(R.string.header_power_train);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
+            tempHeaderTitle.setBackgroundColor(headerColors.getColor(3, 0));
 
             ((LinearLayout) layout).addView(tempHeaderTitle);
 
@@ -487,7 +582,7 @@ class ViewHolderOther extends RecyclerView.ViewHolder {
             tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
             tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
             tempHeaderTitle.setText(R.string.header_other);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
+            tempHeaderTitle.setBackgroundColor(headerColors.getColor(4, 0));
 
             ((LinearLayout) layout).addView(tempHeaderTitle);
 
@@ -522,95 +617,6 @@ class ViewHolderOther extends RecyclerView.ViewHolder {
                     tempLinLay.addView(tempItemTextView);
                     ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
                 }
-            }
-        }
-    }
-}
-
-class ViewHolderChart extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_chrt";
-
-    private TypedArray headerColors;
-
-    public ViewHolderChart(View view, final ArrayList<ArrayList> vehicleHist) {
-        super(view);
-
-        final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
-        final Calendar cal = Calendar.getInstance();
-        final int month = cal.get(Calendar.MONTH) + 1;
-        final int endMonth = (month - 3) % 12;
-        final String[] months = view.getResources().getStringArray(R.array.spec_month);
-
-        ArrayList<BarEntry> yvals = new ArrayList<>();
-        ArrayList<String> xvals = new ArrayList<>();
-        ArrayList<Integer> xvalsNum = new ArrayList<>();
-        ArrayList<Float> yvalsNum = new ArrayList<>();
-
-        if (vehicleHist != null) {
-            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
-            view.animate();
-
-            HorizontalBarChart mchart = (HorizontalBarChart) view.findViewById(R.id.chart);
-            mchart.setDrawValueAboveBar(true);
-            mchart.setDrawHighlightArrow(true);
-            mchart.setDescription(null);
-            mchart.getLegend().setEnabled(false);
-            mchart.getAxisLeft().setEnabled(false);
-            mchart.getAxisRight().setEnabled(false);
-
-            XAxis xAxis = mchart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setDrawAxisLine(false);
-            xAxis.setDrawGridLines(false);
-            xAxis.setGridLineWidth(0.3f);
-            xAxis.setTextColor(view.getResources().getColor(R.color.secondary_text));
-            xAxis.setTextSize(view.getResources().getDimension(R.dimen.field_font));
-
-            try {
-                for (int i = 0; i < vehicleHist.size(); i++) {
-                    ArrayList<String> tempEvent = vehicleHist.get(i);
-                    String[] dateArray = tempEvent.get(1).split("/");
-                    int monthLog = Integer.parseInt(dateArray[0]);
-
-                    if (monthLog <= month & monthLog >= endMonth) {
-                        if (!tempEvent.get(4).isEmpty()) {
-                            if (xvalsNum.size() > 0){
-                                if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
-                                    yvalsNum.add(
-                                            yvalsNum.size()-1,
-                                            yvalsNum.get(yvalsNum.size()-1) +
-                                                    Float.parseFloat(tempEvent.get(4)));
-                                }else {
-                                    xvalsNum.add(monthLog);
-                                    yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
-                                }
-                            }else {
-                                xvalsNum.add(monthLog);
-                                yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
-                            }
-                        }
-                    }
-                }
-
-                if (xvalsNum.size() > 0) {
-                    for (int i = 0; i < xvalsNum.size(); i++) {
-                        xvals.add(months[xvalsNum.get(i) - 1]);
-                        yvals.add(new BarEntry(yvalsNum.get(i), i));
-                    }
-
-                    BarDataSet set1 = new BarDataSet(yvals, null);
-                    ArrayList<BarDataSet> dataSets = new ArrayList<>();
-                    dataSets.add(set1);
-
-                    BarData data = new BarData(xvals, dataSets);
-                    data.setValueTextSize(10f);
-
-                    mchart.setData(data);
-                    mchart.animateY(2500);
-                }
-            }catch (NumberFormatException e){
-                Log.i(TAG, "No date found");
             }
         }
     }

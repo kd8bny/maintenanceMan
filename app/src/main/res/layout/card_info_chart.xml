@@ -21,11 +21,11 @@
             android:paddingStart="@dimen/start_end_horizontal_margin"
             android:textColor="@color/header"
             android:textSize="@dimen/header_font"
-            android:text="@string/header_other"/>
+            android:text="@string/header_chart"/>
         <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="125dp" />
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -95,6 +95,7 @@
     <string name="header_engine">Engine</string>
     <string name="header_power_train">Power Train</string>
     <string name="header_other">Other</string>
+    <string name="header_chart">Cost</string>
 
     <!-- Overview -->
     <string name="oh_noes">"Oh Noes!!!"</string>
