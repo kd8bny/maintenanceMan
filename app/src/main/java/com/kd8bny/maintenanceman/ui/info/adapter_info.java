@@ -12,6 +12,12 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;
@@ -20,13 +26,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import lecho.lib.hellocharts.model.Column;
-import lecho.lib.hellocharts.model.ColumnChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.SubcolumnValue;
-import lecho.lib.hellocharts.util.ChartUtils;
-import lecho.lib.hellocharts.view.ColumnChartView;
 
 public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
@@ -128,7 +127,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                return new ViewHolderOther(itemViewOther, cardInfo);
 
            case VIEW_CHART:
-               Log.d(TAG, "create");
                itemViewChart = LayoutInflater
                        .from(viewGroup.getContext())
                        .inflate(R.layout.card_info_chart, viewGroup, false);
@@ -166,7 +164,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 new ViewHolderOther(itemViewOther, cardInfo);
 
             case VIEW_CHART:
-                Log.d(TAG,"bound");
                 new ViewHolderChart(itemViewChart, vehicleHist);
 
                 break;
@@ -537,44 +534,74 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
 
     public ViewHolderChart(View view, final ArrayList<ArrayList> vehicleHist) {
         super(view);
-        Log.d(TAG, "made");
-        View layout = view.findViewById(R.id.card_info_chart);
+
+        final Calendar cal = Calendar.getInstance();
+        final int month = cal.get(Calendar.MONTH) + 1;
+        final int endMonth = (month - 3) % 12;
+
+        final String[] months = view.getResources().getStringArray(R.array.spec_month);
+        ArrayList<BarEntry> yvals = new ArrayList<>();
+        ArrayList<String> xvals = new ArrayList<>();
+        ArrayList<Integer> xvalsNum = new ArrayList<>();
+        ArrayList<Float> yvalsNum = new ArrayList<>();
 
         if (vehicleHist != null) {
-            layout.animate();
+            view.animate();
 
-            ColumnChartView chart = (ColumnChartView) layout.findViewById(R.id.chart);
+            HorizontalBarChart mchart = (HorizontalBarChart) view.findViewById(R.id.chart);
+            mchart.setDrawValueAboveBar(true);
+            mchart.setDescription("TDO");
 
+            XAxis xl = mchart.getXAxis();
+            xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xl.setDrawAxisLine(true);
+            xl.setDrawGridLines(false);
+            xl.setGridLineWidth(0.3f);
 
-            final Calendar cal = Calendar.getInstance();
-            int month = cal.get(Calendar.MONTH) + 1;
+            YAxis yprices = mchart.getAxisLeft();
+            yprices.setDrawAxisLine(true);
+            yprices.setDrawGridLines(false);
+            yprices.setGridLineWidth(0.3f);
+
             for (int i = 0; i < vehicleHist.size(); i++) {
-                ArrayList<String> temp = vehicleHist.get(i);
-                String[] dateArray = temp.get(1).split("/");
-                int monthLog = Integer.parseInt(dateArray[0]);
-                if (monthLog <= month - 3) {
-                    break;
-                }
-                if (!temp.get(4).isEmpty()) {
-                    int price = Integer.parseInt(temp.get(4));
+                ArrayList<String> tempEvent = vehicleHist.get(i);
+                String[] dateArray = tempEvent.get(1).split("/");
+                int monthLog = Integer.parseInt(dateArray[0]); //TODO if null!!??
 
+                if (monthLog <= month & monthLog >= endMonth) {
+                    if (!tempEvent.get(4).isEmpty()) {
+                        if (xvalsNum.size() > 0){
+                            if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
+                                yvalsNum.add(
+                                        yvalsNum.size()-1,
+                                        yvalsNum.get(yvalsNum.size()-1) +
+                                                Float.parseFloat(tempEvent.get(4)));
+                            }else {
+                                xvalsNum.add(monthLog);
+                                yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                            }
+                        }else {
+                            xvalsNum.add(monthLog);
+                            yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                        }
+                    }
                 }
-
             }
-            Log.d(TAG,"col");
-            ArrayList<SubcolumnValue> subcol = new ArrayList<>();
-            subcol.add(new SubcolumnValue(5));
-            subcol.add(new SubcolumnValue(10));
-            subcol.add(new SubcolumnValue(2));
-            ArrayList<Column> columns = new ArrayList<>();
-            Column column = new Column();
-            column.setValues(subcol);
-            columns.add(column);
 
-            ColumnChartData data = new ColumnChartData(columns);
-            chart.setColumnChartData(data);
+            for (int i = 0; i < xvalsNum.size(); i++) {
+                xvals.add(months[xvalsNum.get(i)-1]);
+                yvals.add(new BarEntry(yvalsNum.get(i), i));
+            }
 
-            chart.startDataAnimation();
+            BarDataSet set1 = new BarDataSet(yvals, "set 1?");
+            ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(xvals, dataSets);
+            data.setValueTextSize(10f);
+
+            mchart.setData(data);
+            mchart.animateY(2500);
         }
     }
 }
