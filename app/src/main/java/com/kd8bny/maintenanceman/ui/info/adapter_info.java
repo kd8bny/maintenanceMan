@@ -184,9 +184,6 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
         super(view);
 
         final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
-        final Calendar cal = Calendar.getInstance();
-        final int month = cal.get(Calendar.MONTH) + 1;
-        final int endMonth = (month - 3) % 12;
         final String[] months = view.getResources().getStringArray(R.array.spec_month);
 
         ArrayList<BarEntry> yvals = new ArrayList<>();
@@ -207,6 +204,7 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
             mchart.getAxisLeft().setEnabled(false);
             mchart.getAxisRight().setEnabled(false);
             mchart.setGridBackgroundColor(Color.TRANSPARENT);
+            mchart.setTouchEnabled(false);
 
             XAxis xAxis = mchart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -222,30 +220,30 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
                     String[] dateArray = tempEvent.get(1).split("/");
                     int monthLog = Integer.parseInt(dateArray[0]);
 
-                    if (monthLog <= month & monthLog >= endMonth) {
-                        if (!tempEvent.get(4).isEmpty()) {
-                            if (xvalsNum.size() > 0){
-                                if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
-                                    yvalsNum.add(
-                                            yvalsNum.size()-1,
-                                            yvalsNum.get(yvalsNum.size()-1) +
-                                                    Float.parseFloat(tempEvent.get(4)));
-                                }else {
-                                    xvalsNum.add(monthLog);
-                                    yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
-                                }
+                    if (!tempEvent.get(4).isEmpty()) {
+                        if (xvalsNum.size() > 0){
+                            if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
+                                yvalsNum.add(
+                                        yvalsNum.size()-1,
+                                        yvalsNum.get(yvalsNum.size()-1) +
+                                                Float.parseFloat(tempEvent.get(4)));
                             }else {
                                 xvalsNum.add(monthLog);
                                 yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
                             }
+                        }else {
+                            xvalsNum.add(monthLog);
+                            yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
                         }
                     }
                 }
 
-                if (xvalsNum.size() > 0) {
-                    for (int i = 0; i < xvalsNum.size(); i++) {
+                if(xvalsNum.size() > 0) {
+                    int i = 0;
+                    while (i < xvalsNum.size() && i < 4) {
                         xvals.add(months[xvalsNum.get(i) - 1]);
                         yvals.add(new BarEntry(yvalsNum.get(i), i));
+                        i++;
                     }
 
                     BarDataSet barDataSet = new BarDataSet(yvals, null);
@@ -259,6 +257,7 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
                     mchart.setData(data);
                     mchart.animateY(2500);
                 }
+
             }catch (NumberFormatException e){
                 Log.i(TAG, "No date found");
             }
@@ -544,7 +543,7 @@ class ViewHolderOther extends RecyclerView.ViewHolder {
         View layout = view.findViewById(R.id.card_info_rel);
 
         DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
-        float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
+        float hMdp = view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
         float vMdp =  view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
         float vCSdp = view.getResources().getDimension(R.dimen.content_vertical_space);
         float hCSdp = view.getResources().getDimension(R.dimen.content_horizontal_margin);
