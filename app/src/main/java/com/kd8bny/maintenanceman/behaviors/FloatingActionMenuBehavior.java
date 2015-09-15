@@ -100,14 +100,24 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
                                int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
                 dyUnconsumed);
-        FloatingActionMenu fabMenu = (FloatingActionMenu) child;
-        FloatingActionButton fabButton = (FloatingActionButton) child;
-        if (dyConsumed > 0 && !fabMenu.isMenuButtonHidden()) {
-            fabMenu.hideMenuButton(true);
-            fabButton.hide(true);
-        } else if (dyConsumed < 0 && fabMenu.isMenuButtonHidden()) {
-            fabMenu.showMenuButton(true);
-            fabButton.show(true);
+
+        if (child.getClass().toString().equals("com.github.clans.fab.FloatingActionMenu")){
+            FloatingActionMenu fabMenu = (FloatingActionMenu) child;
+
+            if (dyConsumed > 0 && !fabMenu.isMenuButtonHidden()) {
+                fabMenu.hideMenuButton(true);
+            } else if (dyConsumed < 0 && fabMenu.isMenuButtonHidden()) {
+                fabMenu.showMenuButton(true);
+            }
+        }
+        if (child.getClass().toString().equals("com.github.clans.fab.FloatingActionButton")){
+            FloatingActionButton fabButton = (FloatingActionButton) child;
+
+            if (dyConsumed > 0 && !fabButton.isHidden()) {
+                fabButton.hide(true);
+            } else if (dyConsumed < 0 && fabButton.isHidden()) {
+                fabButton.show(true);
+            }
         }
     }
 }
