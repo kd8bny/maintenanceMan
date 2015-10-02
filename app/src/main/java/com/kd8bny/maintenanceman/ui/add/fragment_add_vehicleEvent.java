@@ -264,7 +264,7 @@ public class fragment_add_vehicleEvent extends Fragment {
         }
         if (dataSet.get("Event").equals("")){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(R.color.error).show();
+                    .setActionTextColor(getResources().getColor(R.color.error)).show();
 
             error = true;
         }

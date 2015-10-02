@@ -62,7 +62,7 @@ public class fragment_info extends Fragment {
     private ArrayList<ArrayList> vehicleHist;
 
     public fragment_info() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -327,16 +327,17 @@ public class fragment_info extends Fragment {
     public ArrayList<ArrayList> sort(ArrayList<ArrayList> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<String> eventPacket;
-        HashMap<String,ArrayList> eventPackets = new HashMap<>();
+        HashMap<String, ArrayList> eventPackets = new HashMap<>();
 
-        for (int i =0; i<vehicleHist.size(); i++){
+        for (int i = 0; i < vehicleHist.size(); i++){
             eventPacket = vehicleHist.get(i);
-            dates.add(eventPacket.get(1));
-            eventPackets.put(eventPacket.get(1), eventPacket);
+            String date = eventPacket.get(1) + ":" + i + "";
+            dates.add(date);
+            eventPackets.put(date, eventPacket);
         }
 
         Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy");
+            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
             @Override
             public int compare(String o1, String o2) {
                 try {
@@ -348,9 +349,10 @@ public class fragment_info extends Fragment {
         });
 
         vehicleHist.clear();
-        for (int i = 0; i<dates.size(); i++){
-            vehicleHist.add(eventPackets.get(dates.get(i)));
+        for (String date : dates) {
+            vehicleHist.add(eventPackets.get(date));
         }
+
         return vehicleHist;
     }
 }
