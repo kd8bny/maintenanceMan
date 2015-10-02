@@ -1,3 +1,13 @@
+V2.0.9.1 1Oct2015
+
+Bug Fixes
+
+V2.0.9 15Sept2015
+
+Fix scrolling FC
+Show 4 months of cost in info
+Show months with cost data
+
 V2.0.9 09Sept2015
 
 Temporarily removed dropbox and gdrive

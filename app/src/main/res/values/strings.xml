@@ -142,6 +142,10 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V2.0.9.1 1Oct2015\n\n
+
+        Bug Fixes\n\n
+
         V2.0.9 09Sept2015\n\n
 
         Temporarily removed dropbox and gdrive\n
@@ -151,11 +155,5 @@
         SQL bug fixes\n
         Email account headers\n
         API 23 support\n\n
-
-        V2.0.8 26JULY2015\n\n
-
-        NEW!!! Dropbox backup and restore\n
-        Layout fixes\n
-        GDrive is next\n
     </string>
 </resources>
