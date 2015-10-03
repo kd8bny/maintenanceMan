@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
@@ -69,8 +70,8 @@ public class fragment_overview extends Fragment {
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         //Data
-        //backupHelper backupHelper = new backupHelper();
-        //backupHelper.backupHelper(getActivity().getApplicationContext(), "restore");
+        backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore");
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);

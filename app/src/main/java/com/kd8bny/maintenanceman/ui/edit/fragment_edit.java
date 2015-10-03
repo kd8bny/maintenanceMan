@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.adapter_add_fleetRoster;
@@ -223,6 +224,9 @@ public class fragment_edit extends Fragment {
                 fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
                 fleetDB.deleteEntry(context, refID);
                 fleetDB.saveEntry(context, refID, vehicleDataAll);
+
+                backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
 
                 Toast.makeText(this.getActivity(), "Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();

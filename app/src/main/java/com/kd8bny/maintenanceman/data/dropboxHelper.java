@@ -39,7 +39,6 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params){
-        Log.d(TAG, action);
         if(action.equals("restore")) {
             requestRestore();
         }else {
@@ -55,12 +54,12 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
             Date remoteFileDate = dbxDateFormat.parse(remoteFile);
 
             if (localFileDate.after(remoteFileDate) & action.equals("backup")){
-                Log.i(TAG, "Replacing remote" + localFileDate + " >> " + remoteFileDate);
+                Log.i(TAG, "Replacing remote " + localFileDate + " >> " + remoteFileDate);
 
                 return true;
             }
             if (localFileDate.before(remoteFileDate) & action.equals("restore")){
-                Log.i(TAG, "Replacing remote" + localFileDate + " >> " + remoteFileDate);
+                Log.i(TAG, "Replacing local " + localFileDate + " >> " + remoteFileDate);
 
                 return true;
             }

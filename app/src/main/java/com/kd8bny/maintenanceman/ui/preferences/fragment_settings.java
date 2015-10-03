@@ -26,7 +26,6 @@ public class fragment_settings extends PreferenceFragment{
         final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
         appVersion.setSummary(BuildConfig.VERSION_NAME);
 
-
         dropboxButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {

@@ -3,8 +3,7 @@
     <Preference
         android:key="@string/pref_key_about"
         android:title="@string/app_name"
-        android:icon="@mipmap/ic_launcher"
-        android:summary=" ">
+        android:icon="@mipmap/ic_launcher">
     </Preference>
     <PreferenceCategory
         android:title="@string/pref_title_cat_units"

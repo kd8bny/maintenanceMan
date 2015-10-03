@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.ui.preferences;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -12,7 +11,6 @@ import android.util.Log;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
-import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 
@@ -60,8 +58,8 @@ public class fragment_settings_dbx extends PreferenceFragment{
         backupButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                backupRestoreHelper backupRestoreHelper = new backupRestoreHelper();
-                backupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
 
                 return true;
             }
@@ -69,21 +67,18 @@ public class fragment_settings_dbx extends PreferenceFragment{
         restoreButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                backupRestoreHelper backupRestoreHelper = new backupRestoreHelper();
-                backupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore");
+                backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore");
 
                 Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
                 return true;
             }
         });
-
-
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        //Dropbox
         if(mDBApi.getSession().authenticationSuccessful()){
             try{
                 mDBApi.getSession().finishAuthentication();
