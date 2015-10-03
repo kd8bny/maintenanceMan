@@ -13,7 +13,7 @@ public class backupRestoreHelper {
 
     public void startAction(Context context, String action){
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        String cloudDefault = context.getString(R.string.pref_cloud_default);//sharedPreferences.getString(context.getString(R.string.pref_cloud_default), "");
+        String cloudDefault = sharedPreferences.getString(context.getString(R.string.pref_cloud_default), "");
 
         if (!cloudDefault.isEmpty()){
         switch (cloudDefault) {
@@ -28,6 +28,7 @@ public class backupRestoreHelper {
                 break;
 
             default:
+                Log.i(TAG, "Cloud source not set up");
 
                 break;
             }
