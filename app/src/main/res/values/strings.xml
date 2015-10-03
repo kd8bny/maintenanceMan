@@ -111,12 +111,13 @@
     <string name="pref_summary_units">Select Distance Units</string>
     <string name="pref_unit_dist_default">mi</string>
 
-    <string name="pref_title_cat_cloud">Cloud Backup</string>
-    <string name="pref_summary_cloud_new">Press to Set Up</string>
-    <string name="pref_summary_cloud_restore">Press to Restore Data</string>
-    <string name="pref_toast_cloud_restore">Data Restored</string>
-    <string name="pref_title_cat_cloud_default">Default Cloud Back Up</string>
     <string name="pref_cloud_default">dropbox</string>
+    <string name="pref_title_cat_cloud">Cloud Backup</string>
+    <string name="pref_title_cat_cloud_default">Default Cloud Back Up</string>
+    <string name="pref_title_cloud_init">Set Up</string>
+    <string name="pref_title_cloud_restore">Restore Data</string>
+    <string name="pref_title_cloud_backup">Backup Data</string>
+    <string name="pref_toast_cloud_restore">Data Restored</string>
 
     <string name="pref_title_cat_dropbox">Dropbox</string>
     <string name="pref_key_dropbox">dropbox</string>

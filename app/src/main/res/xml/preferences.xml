@@ -3,7 +3,8 @@
     <Preference
         android:key="@string/pref_key_about"
         android:title="@string/app_name"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:summary=" ">
     </Preference>
     <PreferenceCategory
         android:title="@string/pref_title_cat_units"
@@ -30,8 +31,7 @@
             android:defaultValue="@string/pref_cloud_default" />-->
 
         <Preference android:title="@string/pref_title_cat_dropbox"
-            android:key="@string/pref_key_dropbox"
-            android:summary="@string/pref_summary_cloud_new"/>
+            android:key="@string/pref_key_dropbox"/>
 
         <!--<Preference android:title="@string/pref_title_cat_gdrive"
             android:key="@string/pref_key_gdrive"

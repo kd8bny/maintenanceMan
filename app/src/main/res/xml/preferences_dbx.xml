@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="@string/pref_title_cat_dropbox"
+        android:title="@string/pref_title_cat_dropbox"
+        android:icon="@drawable/dropbox_android">
+    </Preference>
+    <Preference
+        android:title="@string/pref_title_cloud_init"
+        android:key="@string/pref_title_cloud_init"/>
+    <Preference
+        android:title="@string/pref_title_cloud_backup"
+        android:key="@string/pref_title_cloud_backup"/>
+    <Preference
+        android:title="@string/pref_title_cloud_restore"
+        android:key="@string/pref_title_cloud_restore"/>
+</PreferenceScreen>
