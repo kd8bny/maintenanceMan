@@ -2,7 +2,6 @@ package com.kd8bny.maintenanceman.ui.preferences;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -13,15 +12,9 @@ import android.util.Log;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.drive.Drive;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 
 
 public class fragment_settings extends PreferenceFragment{
@@ -47,12 +40,12 @@ public class fragment_settings extends PreferenceFragment{
         final String APP_SECRET = context.getResources().getString(R.string.dropboxSecret);
 
         final Preference appVersion = findPreference(getString(R.string.pref_key_about));
-        //final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
+        final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
         //final Preference gdriveButton = findPreference(getString(R.string.pref_key_gdrive));
         appVersion.setSummary(BuildConfig.VERSION_NAME);
 
         //Dropbox
-        /*AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
+        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_dropbox), null) != null) {
@@ -68,10 +61,11 @@ public class fragment_settings extends PreferenceFragment{
                 return false;
 
             } else {
-                dropboxHelper backupRestoreHelper = new dropboxHelper(getActivity(), action);
-                backupRestoreHelper.execute();
+                action = "backup";
+                backupRestoreHelper backupRestoreHelper = new backupRestoreHelper();
+                backupRestoreHelper.startAction(getActivity().getApplicationContext(), action);
 
-                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
+                //Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
 
                 return false;
             }
@@ -79,7 +73,7 @@ public class fragment_settings extends PreferenceFragment{
         });
 
         //gdrive
-        if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_gdrive), null) != null) {
+        /*if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_gdrive), null) != null) {
             gdriveButton.setSummary(R.string.pref_summary_cloud_restore);
             action = "restore";
         }
@@ -126,7 +120,7 @@ public class fragment_settings extends PreferenceFragment{
     public void onResume(){
         super.onResume();
         //Dropbox
-        /*if(mDBApi.getSession().authenticationSuccessful()){
+        if(mDBApi.getSession().authenticationSuccessful()){
             try{
                 mDBApi.getSession().finishAuthentication();
 
@@ -139,7 +133,7 @@ public class fragment_settings extends PreferenceFragment{
             } catch (IllegalStateException e) {
                 Log.i("DbAuthLog", "DROPBOX: Error authenticating", e);
             }
-        }*/
+        }
     }
 
     @Override
