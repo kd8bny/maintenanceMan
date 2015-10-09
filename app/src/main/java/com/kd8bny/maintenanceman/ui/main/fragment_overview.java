@@ -71,7 +71,7 @@ public class fragment_overview extends Fragment {
 
         //Data
         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore");
+        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", false);
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);

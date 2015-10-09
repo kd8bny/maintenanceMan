@@ -154,8 +154,8 @@ public class fragment_info extends Fragment {
                                         vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
 
                                         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
-                                        
+                                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
+
                                         onResume();
                                     }
                                 }).show();
@@ -309,7 +309,7 @@ public class fragment_info extends Fragment {
                         vhclDBHlpr.purgeHistory(getActivity().getApplicationContext(), refID);
 
                         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                         getActivity().finish();
                     }

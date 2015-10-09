@@ -155,7 +155,7 @@ public class fragment_edit extends Fragment {
                     builder.show();
                 }else{
                     Snackbar.make(view.findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(R.color.error).show();
+                            .setActionTextColor(getContext().getColor(R.color.error)).show();
                 }
             }
         }));
@@ -226,7 +226,7 @@ public class fragment_edit extends Fragment {
                 fleetDB.saveEntry(context, refID, vehicleDataAll);
 
                 backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                 Toast.makeText(this.getActivity(), "Vehicle Saved", Toast.LENGTH_SHORT).show();
                 getActivity().finish();

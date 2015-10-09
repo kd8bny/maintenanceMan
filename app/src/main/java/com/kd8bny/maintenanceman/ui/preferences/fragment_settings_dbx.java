@@ -43,7 +43,6 @@ public class fragment_settings_dbx extends PreferenceFragment{
 
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
 
-
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_dropbox), null) != null) {
         }
 
@@ -59,7 +58,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", true);
 
                 return true;
             }
@@ -68,7 +67,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore");
+                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", true);
 
                 Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
                 return true;

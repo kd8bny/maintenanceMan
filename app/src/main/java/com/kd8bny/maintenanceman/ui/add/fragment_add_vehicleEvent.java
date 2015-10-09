@@ -214,7 +214,7 @@ public class fragment_add_vehicleEvent extends Fragment {
                     Toast.makeText(this.getActivity(), getResources().getString(R.string.toast_update), Toast.LENGTH_SHORT).show();
 
                     backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                     getActivity().finish();
 

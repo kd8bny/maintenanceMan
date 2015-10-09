@@ -217,7 +217,7 @@ public class fragment_add_fleetRoster extends Fragment {
                     Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
 
                     backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                     getActivity().finish();
 
