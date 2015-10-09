@@ -27,6 +27,7 @@ import android.widget.PopupMenu;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -151,7 +152,10 @@ public class fragment_info extends Fragment {
                                         vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
 
                                         vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
-                                        Log.d(TAG, vehicleSent.toString());
+
+                                        backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
+                                        
                                         onResume();
                                     }
                                 }).show();
@@ -303,6 +307,9 @@ public class fragment_info extends Fragment {
 
                         vehicleLogDBHelper vhclDBHlpr = new vehicleLogDBHelper(getActivity().getApplicationContext());
                         vhclDBHlpr.purgeHistory(getActivity().getApplicationContext(), refID);
+
+                        backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup");
 
                         getActivity().finish();
                     }
