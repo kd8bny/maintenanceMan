@@ -173,9 +173,11 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
     }
 
     public void forceRestore(DropboxAPI<AndroidAuthSession> mDBApi, File fleetRoster, File vehicleLog) {
+        vehicleLogDBHelper mvehicleLogDBHelper = new vehicleLogDBHelper(context);
+        mvehicleLogDBHelper.createDatabase(context);
         try {
-            FileOutputStream outputStream1 = new FileOutputStream(fleetRoster);
-            FileOutputStream outputStream2 = new FileOutputStream(vehicleLog);
+            FileOutputStream outputStream1 = new FileOutputStream(fleetRoster.getPath());
+            FileOutputStream outputStream2 = new FileOutputStream(vehicleLog.getAbsolutePath());
             mDBApi.getFile("/" + FLEETROSTER_FILENAME, null, outputStream1, null);
             mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
             Log.i(TAG, "Forced restore");
