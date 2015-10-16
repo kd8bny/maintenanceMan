@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
@@ -42,7 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class fragment_overview extends Fragment {
+public class fragment_overview extends Fragment implements UpdateUI{
     private static final String TAG = "frg_ovrvw";
 
     private Toolbar toolbar;
@@ -56,6 +58,7 @@ public class fragment_overview extends Fragment {
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
 
     public fragment_overview() {
+
     }
 
 
@@ -71,6 +74,7 @@ public class fragment_overview extends Fragment {
 
         //Data
         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+        mbackupRestoreHelper.updateUI = this;
         mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", false);
 
         //Toolbar
@@ -253,5 +257,9 @@ public class fragment_overview extends Fragment {
         }
         cardListAdapter = new adapter_overview(roster);
         cardList.setAdapter(cardListAdapter);
+    }
+
+    public void onUpdate(){
+        onResume();
     }
 }

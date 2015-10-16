@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -10,6 +9,7 @@ import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AppKeyPair;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.interfaces.AsyncResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,6 +24,7 @@ import java.util.Locale;
 public class dropboxHelper extends AsyncTask<String, Void, String> {
     private static final String TAG = "dbxHlpr";
 
+    public AsyncResponse listener = null;
     private DropboxAPI<AndroidAuthSession> mDBApi;
 
     private final String FLEETROSTER_FILENAME = "fleetRoster.json";
@@ -48,6 +49,11 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
         }
 
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(String results){
+        listener.onDownloadComplete(results);
     }
 
     public boolean actionRequired(Date localFileDate, String remoteFile){
@@ -151,12 +157,6 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
             } catch (IOException | DropboxException e) {
                 e.printStackTrace();
             }
-
-            //Restore old token
-            /*SharedPreferences sharedPreferences = context.getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(context.getString(R.string.pref_key_dropbox), dropboxTokenNew);
-            editor.apply();*/
         }
     }
 
