@@ -1,8 +1,19 @@
+<<<<<<< bf9f2494a4fbf85bb9f8480658c4a7934f253eee
 V2.0.10 15Oct2015
 
 New!! Dropbox sync
 Log into dropbox to support full syncronization between your devices and the cloud
 
+=======
+<<<<<<< Updated upstream
+=======
+V2.0.10 15Oct2015
+
+New!! Dropbox sync
+Log into Dropbox to support full synchronization between multiple devices and the cloud
+
+>>>>>>> Stashed changes
+>>>>>>> updated changelog
 V2.0.9.1 1Oct2015
 
 Bug Fixes
