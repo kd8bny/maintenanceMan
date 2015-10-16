@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -259,7 +260,10 @@ public class fragment_overview extends Fragment implements UpdateUI{
         cardList.setAdapter(cardListAdapter);
     }
 
-    public void onUpdate(){
-        onResume();
+    public void onUpdate(Boolean doUpdate){
+        if (doUpdate) {
+            onResume();
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

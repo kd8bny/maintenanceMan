@@ -33,6 +33,7 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
     private Context context;
     private String action;
     private Boolean force;
+    private Boolean filesUpdated = false;
 
     public dropboxHelper(Context context, String action, Boolean force) {
         this.context = context;
@@ -53,7 +54,7 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String results){
-        listener.onDownloadComplete(results);
+        listener.onDownloadComplete(filesUpdated);
     }
 
     public boolean actionRequired(Date localFileDate, String remoteFile){
@@ -149,6 +150,7 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
                 if (actionRequired(localFleetRoster, remoteFleetRoster)) {
                     FileOutputStream outputStream1 = new FileOutputStream(fleetRoster);
                     DropboxAPI.DropboxFileInfo info1 = mDBApi.getFile("/" + FLEETROSTER_FILENAME, null, outputStream1, null);
+                    filesUpdated = true;
                 }
                 if (actionRequired(localVehicleLog, remoteVehicleLog)) {
                     FileOutputStream outputStream2 = new FileOutputStream(vehicleLog);
@@ -180,6 +182,7 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
             FileOutputStream outputStream2 = new FileOutputStream(vehicleLog.getAbsolutePath());
             mDBApi.getFile("/" + FLEETROSTER_FILENAME, null, outputStream1, null);
             mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
+            filesUpdated = true;
             Log.i(TAG, "Forced restore");
         } catch (IOException | DropboxException e) {
             e.printStackTrace();

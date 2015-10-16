@@ -45,7 +45,9 @@ public class backupRestoreHelper implements AsyncResponse {
         }
     }
 
-    public void onDownloadComplete(String results){
-        updateUI.onUpdate();
+    public void onDownloadComplete(Boolean isComplete){
+        if (updateUI != null) {
+            updateUI.onUpdate(isComplete);
+        }
     }
 }
