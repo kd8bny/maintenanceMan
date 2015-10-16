@@ -118,7 +118,8 @@
     <string name="pref_title_cloud_init">Set Up</string>
     <string name="pref_title_cloud_restore">Restore Data</string>
     <string name="pref_title_cloud_backup">Backup Data</string>
-    <string name="pref_toast_cloud_restore">Data Restored</string>
+    <string name="pref_toast_dropbox_restore">Restoring</string>
+    <string name="pref_toast_dropbox_backup">Backing Up</string>
 
     <string name="pref_title_cat_dropbox">Dropbox</string>
     <string name="pref_key_dropbox">dropbox</string>

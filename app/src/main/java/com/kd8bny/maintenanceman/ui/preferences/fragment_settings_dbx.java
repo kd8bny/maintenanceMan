@@ -63,7 +63,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
                 backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
                 mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", true);
 
-                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox_backup), Snackbar.LENGTH_SHORT).show();
 
                 return true;
             }
@@ -74,7 +74,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
                 backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
                 mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", true);
 
-                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_cloud_restore), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox_restore), Snackbar.LENGTH_SHORT).show();
                 return true;
             }
         });
