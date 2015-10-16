@@ -146,18 +146,19 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V2.0.10 15Oct2015\n\n
+
+        New!! Dropbox sync\n
+        Log into Dropbox to support full synchronization between multiple devices and the cloud\n
+
         V2.0.9.1 1Oct2015\n\n
-
-        Bug Fixes\n\n
-
-        V2.0.9 09Sept2015\n\n
 
         Temporarily removed dropbox and gdrive\n
         NEW!! Added a chart to provide cost history of events\n
         NEW!! Whats new dialog\n
         Info card reordering\n
-        SQL bug fixes\n
         Email account headers\n
+        Bug Fixes\n
         API 23 support\n\n
     </string>
 </resources>
