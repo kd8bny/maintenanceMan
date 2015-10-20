@@ -18,6 +18,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
@@ -119,6 +121,8 @@ public class fragment_overview extends Fragment implements UpdateUI{
             }
         }));
         cardList.setAdapter(cardListAdapter);
+        Animation cardListAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_left_fade_in);
+        cardList.setAnimation(cardListAnim);
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
@@ -241,7 +245,7 @@ public class fragment_overview extends Fragment implements UpdateUI{
         return view;
     }
 
-        @Override
+    @Override
     public void onStart(){
         super.onStart();
 
@@ -260,7 +264,7 @@ public class fragment_overview extends Fragment implements UpdateUI{
         cardList.setAdapter(cardListAdapter);
     }
 
-    public void onUpdate(Boolean doUpdate){
+    public void onUpdate(Boolean doUpdate) {
         if (doUpdate) {
             onResume();
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
