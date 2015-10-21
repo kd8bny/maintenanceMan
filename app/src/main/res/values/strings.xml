@@ -97,6 +97,9 @@
     <string name="header_other">Other</string>
     <string name="header_chart">Cost</string>
 
+    <!-- Intro -->
+    <string name="title_intro">intro</string>
+
     <!-- Overview -->
     <string name="oh_noes">"Oh Noes!!!"</string>
     <string name="empty_db">"Click to Add Vehicle"</string>
@@ -117,6 +120,7 @@
     <string name="pref_title_cat_cloud">Cloud Backup</string>
     <string name="pref_title_cat_cloud_default">Default Cloud Back Up</string>
     <string name="pref_title_cloud_init">Set Up</string>
+    <string name="pref_title_cat_man">Manual Sync</string>
     <string name="pref_title_cloud_restore">Restore Data</string>
     <string name="pref_title_cloud_backup">Backup Data</string>
     <string name="pref_toast_dropbox_restore">Restoring</string>
