@@ -9,18 +9,6 @@
     <string name="error_set_vehicle_type">Please Select Vehicle</string>
     <string name="hint_spinner">Select Type</string>
     <string name="hint_spinner_cat">Select Category</string>
-    <!--<string-array name="spec_type">   WRONG item<>
-        <item> name="spec_engine">Engine</item>
-        <item> name="spec_fuel_filter">Fuel Filter</item>
-        <item> name="spec_oil_filter">Oil Filter</item>
-        <item> name="spec_oil_weight">Oil</item>
-        <item> name="spec_tire_size_winter">Winter Tire Size</item>
-        <item> name="spec_tire_size_summer">Summer Tire Size</item>
-        <item> name="spec_make">Make</item>
-        <item> name="spec_model">Model</item>
-        <item> name="spec_year">Year</item>
-        <item> name="spec_plate">License Plate</item>
-    </string-array>-->
 
     <string-array name="vehicle_type">
         <item>Automobile</item>
@@ -54,18 +42,6 @@
     <string name="spec_date">Date</string>
     <string name="spec_odo">Odometer</string>
     <string name="spec_event">Event</string>
-    <!--<string-array name="spec_type">
-        <item> name="spec_engine">Engine</item>
-        <item> name="spec_fuel_filter">Fuel Filter</item>
-        <item> name="spec_oil_filter">Oil Filter</item>
-        <item> name="spec_oil_weight">Oil</item>
-        <item> name="spec_tire_size_winter">Winter Tire Size</item>
-        <item> name="spec_tire_size_summer">Summer Tire Size</item>
-        <item> name="spec_make">Make</item>
-        <item> name="spec_model">Model</item>
-        <item> name="spec_year">Year</item>
-        <item> name="spec_plate">License Plate</item>
-    </string-array>-->
 
     <!-- Donate -->
     <string name="title_donate">Donate</string>
@@ -99,6 +75,14 @@
 
     <!-- Intro -->
     <string name="title_intro">intro</string>
+    <string name="summary_mm">Thank you for downloading Maintenance Man :)</string>
+    <string name="summary_dbx">Register with Dropbox to support full cloud synchronization</string>
+    <string name="subtitle_add">Add Vehicles</string>
+    <string name="summary_add">Add you multiple vehicles and track your maintenance events.
+        This includes oil changes, tune ups, or even tire rotations.</string>
+    <string name="subtitle_specs">View Details</string>
+    <string name="summary_specs">Store specifications of your vehicle for easy lookup.
+        Store items such as filter numbers, tag number, and even tire size.</string>
 
     <!-- Overview -->
     <string name="oh_noes">"Oh Noes!!!"</string>

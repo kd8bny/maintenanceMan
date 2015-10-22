@@ -32,6 +32,7 @@ import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.ui.info.activity_info;
+import com.kd8bny.maintenanceman.ui.intro.activity_intro;
 import com.kd8bny.maintenanceman.ui.preferences.activity_settings;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -228,6 +229,18 @@ public class fragment_overview extends Fragment implements UpdateUI{
                 }
             });
 
+
+        //Intro
+        Boolean isFirstRun = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getBoolean("firstRun", true);
+        if (isFirstRun) {
+            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
+            SharedPreferences.Editor editor= sharedPreferences.edit();
+            editor.putBoolean("firstRun", false);
+            editor.apply();
+
+            Intent introIntent = new Intent(view.getContext(), activity_intro.class);
+            view.getContext().startActivity(introIntent);
+        }
         //Whats New!!!
         int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);
         if (BuildConfig.VERSION_CODE > oldAppVersion) {

@@ -33,4 +33,17 @@
         <item>dropbox</item>
         <item>gdrive</item>
     </string-array>
+
+    <!--<string-array name="spec_type">   WRONG item<>
+        <item> name="spec_engine">Engine</item>
+        <item> name="spec_fuel_filter">Fuel Filter</item>
+        <item> name="spec_oil_filter">Oil Filter</item>
+        <item> name="spec_oil_weight">Oil</item>
+        <item> name="spec_tire_size_winter">Winter Tire Size</item>
+        <item> name="spec_tire_size_summer">Summer Tire Size</item>
+        <item> name="spec_make">Make</item>
+        <item> name="spec_model">Model</item>
+        <item> name="spec_year">Year</item>
+        <item> name="spec_plate">License Plate</item>
+    </string-array>-->
 </resources>

@@ -50,6 +50,11 @@
                 android:value=".ui.main.activity_main" />
         </activity>
         <activity
+            android:name=".ui.intro.activity_intro"
+            android:label="@string/title_intro"
+            android:parentActivityName=".ui.main.activity_main" >
+        </activity>
+        <activity
             android:name=".ui.preferences.activity_settings"
             android:label="@string/title_settings"
             android:parentActivityName=".ui.main.activity_main" >
