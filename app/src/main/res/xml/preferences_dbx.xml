@@ -3,14 +3,15 @@
     <Preference
         android:key="@string/pref_title_cat_dropbox"
         android:title="@string/pref_title_cat_dropbox"
-        android:icon="@drawable/dropbox_android">
-    </Preference>
-    <Preference
-        android:title="@string/pref_title_cloud_init"
-        android:key="@string/pref_title_cloud_init"/>
+        android:icon="@drawable/np_dbx"/>
+
+    <PreferenceCategory>
+        <Preference
+            android:title="@string/pref_title_cloud_init"
+            android:key="@string/pref_title_cloud_init"/>
+    </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_title_cat_man">
-
         <Preference
             android:title="@string/pref_title_cloud_backup"
             android:key="@string/pref_title_cloud_backup"/>
