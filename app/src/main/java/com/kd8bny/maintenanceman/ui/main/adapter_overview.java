@@ -101,10 +101,10 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             DBisEmpty = false;
 
             if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){//|| Build.VERSION.SDK_INT == Build.VERSION_CODES.x
-                return R.layout.card_overview_v2_19;
+                return R.layout.card_overview_v19;
 
             }else{
-                return R.layout.card_overview_v2;
+                return R.layout.card_overview;
             }
         }
     }

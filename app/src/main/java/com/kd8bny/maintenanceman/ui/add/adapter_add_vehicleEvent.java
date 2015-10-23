@@ -2,7 +2,6 @@ package com.kd8bny.maintenanceman.ui.add;
 
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,7 @@ public class adapter_add_vehicleEvent extends RecyclerView.Adapter<adapter_add_v
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater
                 .from(viewGroup.getContext())
-                .inflate(R.layout.card_add_vehicle_event_v2, viewGroup, false);
+                .inflate(R.layout.card_add_vehicle_event, viewGroup, false);
 
         headerColors = itemView.getResources().obtainTypedArray(R.array.header_color);
 

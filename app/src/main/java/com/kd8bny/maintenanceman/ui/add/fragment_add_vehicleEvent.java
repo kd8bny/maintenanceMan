@@ -94,7 +94,7 @@ public class fragment_add_vehicleEvent extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_vehicle_event_v2, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_vehicle_event, container, false);
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
