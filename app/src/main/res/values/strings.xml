@@ -75,14 +75,14 @@
 
     <!-- Intro -->
     <string name="title_intro">intro</string>
-    <string name="summary_mm">Thank you for downloading Maintenance Man :)</string>
-    <string name="summary_dbx">Register with Dropbox to support full cloud synchronization</string>
-    <string name="subtitle_add">Add Vehicles</string>
-    <string name="summary_add">Add you multiple vehicles and track your maintenance events.
-        This includes oil changes, tune ups, or even tire rotations.</string>
+    <string name="subtitle_add">Vehicle Log</string>
     <string name="subtitle_specs">View Details</string>
-    <string name="summary_specs">Store specifications of your vehicle for easy lookup.
-        Store items such as filter numbers, tag number, and even tire size.</string>
+    <string name="summary_mm">Thank you for downloading Maintenance Man :)</string>
+    <string name="summary_add">Add multiple vehicles, motorcycles, boats, and trailers\n
+        \nTrack maintenance such as oil changes, tune ups, and tire rotations</string>
+    <string name="summary_dbx">Register with Dropbox to support full cloud synchronization</string>
+    <string name="summary_specs">Store your vehicle\'s specifications for easy retrieval\n
+        \nItems can be filter numbers, tag number, or even tire sizes</string>
 
     <!-- Overview -->
     <string name="oh_noes">"Oh Noes!!!"</string>

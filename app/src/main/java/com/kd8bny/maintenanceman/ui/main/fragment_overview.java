@@ -122,8 +122,6 @@ public class fragment_overview extends Fragment implements UpdateUI{
             }
         }));
         cardList.setAdapter(cardListAdapter);
-        Animation cardListAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_left_fade_in);
-        cardList.setAnimation(cardListAnim);
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);

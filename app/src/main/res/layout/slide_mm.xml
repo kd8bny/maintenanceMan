@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_weight="5"
         android:fontFamily="sans-serif-thin"
         android:layout_gravity="center"
         android:gravity="center"
@@ -29,7 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="5"
         android:layout_gravity="bottom"
-        android:padding="@dimen/header_horizontal_margin"
+        android:paddingTop="32dp"
+        android:paddingStart="@dimen/header_horizontal_margin"
+        android:paddingEnd="@dimen/header_horizontal_margin"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:text="@string/summary_mm"/>
