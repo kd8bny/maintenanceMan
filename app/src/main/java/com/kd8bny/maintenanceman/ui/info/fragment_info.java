@@ -143,7 +143,7 @@ public class fragment_info extends Fragment {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                 builder.setCancelable(true);
                                 builder.setTitle("Delete Item?");
-                                builder.setMessage(temp.get(3) + " completed on " + temp.get(1));
+                                builder.setMessage(temp.get(4) + " completed on " + temp.get(2));
                                 builder.setNegativeButton("No", null);
                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 

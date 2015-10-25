@@ -54,7 +54,7 @@ public class adapter_history extends RecyclerView.Adapter<RecyclerView.ViewHolde
 class AdapterViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_hstry";
 
-    public AdapterViewHolder(View view, ArrayList<String> histEvent, String type, String unit, int positon) {
+    public AdapterViewHolder(View view, ArrayList<String> histEvent, String type, String unit, int position) {
         super(view);
 
         TypedArray icons = view.getResources().obtainTypedArray(R.array.icon_event);
@@ -68,12 +68,18 @@ class AdapterViewHolder extends RecyclerView.ViewHolder {
         TextView vdate = (TextView) view.findViewById(R.id.val_spec_date);
         TextView vunit = (TextView) view.findViewById(R.id.val_spec_unit);
 
+
+
         if (histEvent != null) {
             if (histEvent.get(0) != null) {
-                int color = headerColors.getColor(positon % 8, 0);
+                if (histEvent.get(1).isEmpty()) {
+                    vIcon.setImageResource(icons.getResourceId(0, 0));
+                }else{
+                    vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(1)), 0));
+                }
+                int color = headerColors.getColor(position % 8, 0);
                 vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-                vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(1)), 0));
                 vdate.setText(histEvent.get(2));
                 vodo.setText(histEvent.get(3));
                 vevent.setText(histEvent.get(4));
