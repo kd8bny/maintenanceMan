@@ -10,6 +10,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addVehicleEvent;
+import com.kd8bny.maintenanceman.ui.dialogs.dialog_iconPicker;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_datePicker;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -42,7 +44,6 @@ public class fragment_add_vehicleEvent extends Fragment {
     private ArrayAdapter<String> spinnerAdapter;
 
     private RecyclerView eventList;
-    private RecyclerView.LayoutManager eventMan;
     private RecyclerView.Adapter eventListAdapter;
 
     private String refID;
@@ -65,11 +66,12 @@ public class fragment_add_vehicleEvent extends Fragment {
         editData = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet");
         refID = getActivity().getIntent().getStringExtra("refID");
 
-        labels.add(0, "Date");
-        labels.add(1, "Odometer");
-        labels.add(2, "Event");
-        labels.add(3, "Price");
-        labels.add(4, "Comment");
+        labels.add(0, "icon");
+        labels.add(1, "Date");
+        labels.add(2, "Odometer");
+        labels.add(3, "Event");
+        labels.add(4, "Price");
+        labels.add(5, "Comment");
 
         if(editData == null) {
             final Calendar cal = Calendar.getInstance();
@@ -77,11 +79,13 @@ public class fragment_add_vehicleEvent extends Fragment {
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            dataSet.put(labels.get(0), month + 1 + "/" + day + "/" + year);
-            dataSet.put(labels.get(1), "");
+            dataSet.put(labels.get(0), "");
+            dataSet.put(labels.get(1), month + 1 + "/" + day + "/" + year);
             dataSet.put(labels.get(2), "");
             dataSet.put(labels.get(3), "");
             dataSet.put(labels.get(4), "");
+            dataSet.put(labels.get(5), "");
+
         }else{
             isNew = false;
             dataSet.put(labels.get(0), editData.get(1));
@@ -89,6 +93,7 @@ public class fragment_add_vehicleEvent extends Fragment {
             dataSet.put(labels.get(2), editData.get(3));
             dataSet.put(labels.get(3), editData.get(4));
             dataSet.put(labels.get(4), editData.get(5));
+            dataSet.put(labels.get(5), editData.get(6));
         }
     }
 
@@ -116,10 +121,9 @@ public class fragment_add_vehicleEvent extends Fragment {
 
         //Recycler View
         eventList = (RecyclerView) view.findViewById(R.id.add_vehicle_event);
-        eventMan = new LinearLayoutManager(getActivity());
+        eventList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventList.setHasFixedSize(true);
         eventList.setItemAnimator(new DefaultItemAnimator());
-        eventList.setLayoutManager(eventMan);
         eventList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), eventList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -127,21 +131,41 @@ public class fragment_add_vehicleEvent extends Fragment {
                 Bundle args = new Bundle();
                 args.putString("label", labels.get(pos));
                 args.putString("value", dataSet.get(labels.get(pos)));
-                if (pos == 0) {
-                    dialog_datePicker datePickerFrag = new dialog_datePicker();
-                    datePickerFrag.setTargetFragment(fragment_add_vehicleEvent.this, 0);
-                    datePickerFrag.setArguments(args);
-                    datePickerFrag.show(getFragmentManager(), "datePicker");
-                } else {
-                    if (pos == 2) {
+
+                switch (pos){
+                    case 0:
+                        dialog_iconPicker dialogIconPicker = new dialog_iconPicker();
+                        dialogIconPicker.setTargetFragment(fragment_add_vehicleEvent.this, 0);
+                        dialogIconPicker.show(fm, "dialogIconPicker");
+
+                        break;
+
+                    case 1:
+                        dialog_datePicker datePickerFrag = new dialog_datePicker();
+                        datePickerFrag.setTargetFragment(fragment_add_vehicleEvent.this, 1);
+                        datePickerFrag.setArguments(args);
+                        datePickerFrag.show(fm, "datePicker");
+
+                        break;
+
+                    case 3:
                         args.putBoolean("isEvent", true);
-                    } else{
+
+                        dialog_addVehicleEvent dialog_addVehicleisEvent = new dialog_addVehicleEvent();
+                        dialog_addVehicleisEvent.setTargetFragment(fragment_add_vehicleEvent.this, 1);
+                        dialog_addVehicleisEvent.setArguments(args);
+                        dialog_addVehicleisEvent.show(fm, "dialog_addisEvent");
+
+                        break;
+
+                    default:
                         args.putBoolean("isEvent", false);
-                    }
-                    dialog_addVehicleEvent dialog_addVehicleEvent = new dialog_addVehicleEvent();
-                    dialog_addVehicleEvent.setTargetFragment(fragment_add_vehicleEvent.this, 0);
-                    dialog_addVehicleEvent.setArguments(args);
-                    dialog_addVehicleEvent.show(fm, "dialog_addEvent");
+                        dialog_addVehicleEvent dialog_addVehicleEvent = new dialog_addVehicleEvent();
+                        dialog_addVehicleEvent.setTargetFragment(fragment_add_vehicleEvent.this, 1);
+                        dialog_addVehicleEvent.setArguments(args);
+                        dialog_addVehicleEvent.show(fm, "dialog_addEvent");
+
+                        break;
                 }
             }
 
@@ -151,49 +175,40 @@ public class fragment_add_vehicleEvent extends Fragment {
             }
         }));
 
-        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels, false);
+        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
         eventList.setAdapter(eventListAdapter);
-
-       /* eventList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.d(TAG, newState+"");
-                if (newState == 0)
-
-            }
-        });*/
 
         return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        String labelResult = data.getStringExtra("label");
-        String valueResult = data.getStringExtra("value");
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 0:
+                dataSet.put("icon", data.getStringExtra("icon"));
+                eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
+                eventList.setAdapter(eventListAdapter);
 
-        dataSet.put(labelResult, valueResult);
+                break;
 
-        eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels, true);
-        eventList.swapAdapter(eventListAdapter, false);
-    }
+            case 1:
+                String labelResult = data.getStringExtra("label");
+                String valueResult = data.getStringExtra("value");
 
-    @Override
-    public void onResume(){
-        super.onResume();
+                dataSet.put(labelResult, valueResult);
 
+                eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
+                eventList.setAdapter(eventListAdapter);
+
+                break;
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_add_fleet_roster, menu);
-
     }
 
     @Override

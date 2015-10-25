@@ -22,12 +22,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -84,7 +80,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 return VIEW_CHART;
 
             default:
-                Log.e(TAG, "Itemview Type");
+                Log.wtf(TAG, "Itemview Type");
 
                 return -1;
         }
@@ -167,13 +163,15 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             case VIEW_OTHER:
                 new ViewHolderOther(itemViewOther, cardInfo);
 
+                break;
+
             case VIEW_CHART:
                 new ViewHolderChart(itemViewChart, vehicleHist);
 
                 break;
-            }
         }
     }
+}
 
 class ViewHolderChart extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_info_VwHldr_chrt";
@@ -217,10 +215,10 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
             try {
                 for (int i = 0; i < vehicleHist.size(); i++) {
                     ArrayList<String> tempEvent = vehicleHist.get(i);
-                    String[] dateArray = tempEvent.get(1).split("/");
+                    String[] dateArray = tempEvent.get(2).split("/");
                     int monthLog = Integer.parseInt(dateArray[0]);
 
-                    if (!tempEvent.get(4).isEmpty()) {
+                    if (!tempEvent.get(5).isEmpty()) {
                         if (xvalsNum.size() > 0){
                             if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
                                 yvalsNum.add(

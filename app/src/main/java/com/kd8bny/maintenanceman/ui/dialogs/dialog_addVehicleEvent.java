@@ -22,6 +22,7 @@ import java.util.HashSet;
 public class dialog_addVehicleEvent extends DialogFragment{
     private static final String TAG = "dlg_add_evnt";
 
+    private int REQUEST_CODE = 1;
     private String label;
     private String value;
     private Boolean isEvent;
@@ -70,7 +71,7 @@ public class dialog_addVehicleEvent extends DialogFragment{
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             value = editValue.getText().toString();
-                            sendResult(0);
+                            sendResult();
                         }
                     }
             )
@@ -87,7 +88,7 @@ public class dialog_addVehicleEvent extends DialogFragment{
         return alertDialog.create();
     }
 
-    private void sendResult(int REQUEST_CODE) {
+    private void sendResult() {
         Intent intent = new Intent();
         intent.putExtra("label", label);
         intent.putExtra("value", value);

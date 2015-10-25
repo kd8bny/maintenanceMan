@@ -107,7 +107,7 @@ public class fragment_info extends Fragment {
             @Override
             public void onItemClick(View view, int pos) {
                 final ArrayList<String> temp = vehicleHist.get(pos);
-                if (!temp.get(1).equals(getActivity().getApplicationContext()
+                if (!temp.get(2).equals(getActivity().getApplicationContext()
                         .getResources().getString(R.string.no_history))) {
 
                     Bundle args = new Bundle();
@@ -169,7 +169,7 @@ public class fragment_info extends Fragment {
                     }
                 });
 
-                if (!temp.get(1).equals(getActivity().getApplicationContext()
+                if (!temp.get(2).equals(getActivity().getApplicationContext()
                         .getResources().getString(R.string.no_history))) {
                     popupMenu.show();
                 }
@@ -338,7 +338,7 @@ public class fragment_info extends Fragment {
 
         for (int i = 0; i < vehicleHist.size(); i++){
             eventPacket = vehicleHist.get(i);
-            String date = eventPacket.get(1) + ":" + i + "";
+            String date = eventPacket.get(2) + ":" + i + "";
             dates.add(date);
             eventPackets.put(date, eventPacket);
         }

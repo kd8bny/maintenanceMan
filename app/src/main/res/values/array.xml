@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Add Event Note! Do Not touch order-->
+    <string-array name="icon_event">
+        <item>@drawable/ic_event</item>
+        <item>@drawable/np_battery</item>
+        <item>@drawable/np_wrench</item>
+        <item>@drawable/np_wrench_single</item>
+        <item>@drawable/np_add_event</item>
+        <item>@drawable/np_filter</item>
+        <item>@drawable/np_rotor</item>
+        <item>@drawable/np_oil_drop</item>
+    </string-array>
+
     <!-- Info -->
     <string-array name="spec_month">
         <item>Jan</item>
@@ -15,6 +27,7 @@
         <item>Nov</item>
         <item>Dec</item>
     </string-array>
+
     <!-- Preferences -->
     <string-array name="pref_array_entry_unit_dist">
         <item>US</item>
@@ -23,8 +36,7 @@
     <string-array name="pref_array_values_unit_dist">
         <item>mi</item>
         <item>Km</item>
-    </string-array>
-
+    </string-array>w
     <string-array name="pref_array_entry_cloud">
         <item>Dropbox</item>
         <item>Google Drive</item>
@@ -34,16 +46,12 @@
         <item>gdrive</item>
     </string-array>
 
-    <!--<string-array name="spec_type">   WRONG item<>
-        <item> name="spec_engine">Engine</item>
-        <item> name="spec_fuel_filter">Fuel Filter</item>
-        <item> name="spec_oil_filter">Oil Filter</item>
-        <item> name="spec_oil_weight">Oil</item>
-        <item> name="spec_tire_size_winter">Winter Tire Size</item>
-        <item> name="spec_tire_size_summer">Summer Tire Size</item>
-        <item> name="spec_make">Make</item>
-        <item> name="spec_model">Model</item>
-        <item> name="spec_year">Year</item>
-        <item> name="spec_plate">License Plate</item>
-    </string-array>-->
+    <string-array name="spec_type">
+        <item>Engine</item>
+        <item>Fuel Filter</item>
+        <item>Oil Filter</item>
+        <item>Oil</item>
+        <item>Tire Size</item>
+        <item>License Plate</item>
+    </string-array>
 </resources>

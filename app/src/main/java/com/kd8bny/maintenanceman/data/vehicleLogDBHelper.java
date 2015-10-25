@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class vehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
 
-    public static final int DB_VERSION = 2; // v1 was 29
+    public static final int DB_VERSION = 3; // v2 was 50
     public static final String DB_NAME = "vehicleLog.db";
     SQLiteDatabase vehicleLogDB = null;
 
@@ -29,6 +29,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
     public static final String COLUMN_VEHICLE_TASK = "event";
     public static final String COLUMN_VEHICLE_PRICE = "price";
     public static final String COLUMN_VEHICLE_COMMENT = "comment";
+    public static final String COLUMN_ICON = "icon";
 
 
     public static final String DATABASE_CREATE = "create table "
@@ -41,6 +42,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + COLUMN_VEHICLE_TASK + " text not null, "
         + COLUMN_VEHICLE_PRICE + " text not null, "
         + COLUMN_VEHICLE_COMMENT + " text not null"
+        + COLUMN_ICON + " text not null default '0'"
         + ");";
 
     public vehicleLogDBHelper(Context context){
@@ -60,14 +62,14 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         db.beginTransaction();
         String TABLE_VEHICLE_NEW = TABLE_VEHICLE + "_new";
         try {
-            Log.d(TAG, "trying");
+            Log.i(TAG, "trying");
             db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VEHICLE_NEW + " AS SELECT * FROM " + TABLE_VEHICLE);
-            db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_VEHICLE_PRICE + " text not null default ''");
-            db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_VEHICLE_COMMENT + " text not null default ''");
+            db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_ICON + " text not null default '0'");
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
             db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " RENAME TO " + TABLE_VEHICLE);
             onCreate(db);
             db.setTransactionSuccessful();
+            Log.i(TAG, "success");
         } catch (Exception e){
             Log.e(TAG,e.toString());
             Log.e(TAG, "Error updating db");
@@ -85,7 +87,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
             vehicleLogDB.setVersion(DB_VERSION);
         }catch(Exception e){
             //e.printStackTrace();
-            Log.e(TAG, "Log probably already exists");
+            Log.w(TAG, "Log probably already exists");
 
         }finally {
             if(vehicleLogDB.getVersion() < DB_VERSION){
@@ -97,7 +99,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     public void saveEntry(Context context, String refID, HashMap<String, String> dataSet) {
         /* Data incoming format
-        *String date, String odo, String task, String price, String comment
+        *String date, String odo, String task, String price, String comment, String icon
         */
         File database = context.getDatabasePath("vehicleLog.db");
         if (!database.exists()) {
@@ -107,13 +109,15 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         else {
             vehicleLogDB = context.openOrCreateDatabase(DB_NAME, context.MODE_PRIVATE, null);
             try {
-                vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event, price, comment) VALUES ('"
+                vehicleLogDB.execSQL("INSERT INTO grandVehicleLog (refid, date, odo, event, price, comment, icon) " +
+                        "VALUES ('"
                         + refID + "','"
                         + dataSet.get("Date") + "','"
                         + dataSet.get("Odometer") + "','"
                         + dataSet.get("Event") + "','"
                         + dataSet.get("Price") + "','"
-                        + dataSet.get("Comment") + "');");
+                        + dataSet.get("Comment") + "','"
+                        + dataSet.get("icon") + "');");
 
             }catch (Exception e) {
                 e.printStackTrace();
@@ -134,9 +138,9 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         int eventCol = cursor.getColumnIndex("event");
         int priceCol = cursor.getColumnIndex("price");
         int commentCol = cursor.getColumnIndex("comment");
+        int iconCol = cursor.getColumnIndex("icon");
 
         ArrayList<ArrayList> vehicleList = new ArrayList<>();
-
         cursor.moveToFirst();
 
         try {
@@ -146,6 +150,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
                     if (refID.equals(cursor.getString(refIDCol))) {
                         singleVehicleList.add(refID);
+                        singleVehicleList.add(cursor.getString(iconCol));
                         singleVehicleList.add(cursor.getString(dateCol));
                         singleVehicleList.add(cursor.getString(odoCol));
                         singleVehicleList.add(cursor.getString(eventCol));
@@ -159,6 +164,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
             } else {
                 ArrayList<String> singleVehicleList = new ArrayList<>();
+                singleVehicleList.add(null);
                 singleVehicleList.add(null);
                 singleVehicleList.add(context.getResources().getString(R.string.no_history));
                 vehicleList.add(singleVehicleList);

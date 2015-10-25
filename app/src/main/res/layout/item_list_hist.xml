@@ -15,11 +15,11 @@
         android:layout_marginStart="@dimen/header_horizontal_margin"
         android:layout_marginEnd="@dimen/header_horizontal_margin"
         android:layout_centerVertical="true"
-        android:background="@drawable/circle">
+        android:src="@drawable/circle">
     </ImageView>
 
     <ImageView
-        android:id="@+id/enginePic"
+        android:id="@+id/icon"
         android:layout_marginStart="@dimen/header_horizontal_margin"
         android:layout_marginEnd="@dimen/header_horizontal_margin"
         android:layout_centerVertical="true"
@@ -39,7 +39,7 @@
         android:id="@+id/val_spec_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/enginePic"
+        android:layout_toEndOf="@+id/icon"
         android:layout_gravity="end"
         android:layout_alignParentTop="true"
 
@@ -55,7 +55,7 @@
         android:layout_below="@+id/val_spec_event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/enginePic"
+        android:layout_toEndOf="@+id/icon"
         android:layout_marginStart="@dimen/header_horizontal_margin">
 
         <TextView
@@ -86,7 +86,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date"
-        android:layout_toEndOf="@+id/enginePic"
+        android:layout_toEndOf="@+id/icon"
         android:layout_marginStart="@dimen/header_horizontal_margin">
 
         <TextView

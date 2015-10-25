@@ -50,7 +50,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             HashMap<String, HashMap> vehicle = vehicleList.get(i);
 
             HashMap<String, String> category = vehicle.get("General");
-            int color = headerColors.getColor(i%5, 0);
+            int color = headerColors.getColor(i % 8, 0);
             (itemView.findViewById(R.id.carPic)).setBackgroundColor(color);
             (itemView.findViewById(R.id.year)).setBackgroundColor(color);
 

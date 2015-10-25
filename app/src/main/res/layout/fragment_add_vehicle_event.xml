@@ -24,7 +24,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
                 <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                     android:id="@+id/vehicleSpinner"
                     android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/add_vehicle_event"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_below="@+id/vehicleSpinner"
                     android:clickable="true"
                     android:focusable="true"/>
