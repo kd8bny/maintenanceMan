@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.ui.info;
 
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +15,13 @@ import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;
 
-public class adapter_history extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class adapter_history extends RecyclerView.Adapter<adapter_history.AdapterViewHolder> {
     private static final String TAG = "adptr_hstry";
+
+    private TypedArray icons;
+    private TypedArray headerColors;
+    private String[] vehicleTypes;
+    private Resources res;
 
     private ArrayList<ArrayList> mVehicleHist = new ArrayList<>();
     private String mType;
@@ -34,69 +40,72 @@ public class adapter_history extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        res = viewGroup.getResources();
+        icons = res.obtainTypedArray(R.array.icon_event);
+        headerColors = res.obtainTypedArray(R.array.header_color);
+        vehicleTypes = res.getStringArray(R.array.vehicle_type);
+
         itemView = LayoutInflater
                 .from(viewGroup.getContext())
                 .inflate(R.layout.item_list_hist, viewGroup, false);
 
-        return new AdapterViewHolder(itemView, null, mType, mUnit, i);
+        return new AdapterViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(final AdapterViewHolder viewHolder, int i) {
         final ArrayList<String> histEvent = new ArrayList<>();
         histEvent.addAll(mVehicleHist.get(i));
-
-        new AdapterViewHolder(itemView, histEvent, mType, mUnit, i);
-    }
-}
-
-class AdapterViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_hstry";
-
-    public AdapterViewHolder(View view, ArrayList<String> histEvent, String type, String unit, int position) {
-        super(view);
-
-        TypedArray icons = view.getResources().obtainTypedArray(R.array.icon_event);
-        TypedArray headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-        String [] vehicleTypes = view.getResources().getStringArray(R.array.vehicle_type);
-
-        ImageView vIcon = (ImageView) view.findViewById(R.id.icon);
-        ImageView vIconBackground = (ImageView) view.findViewById(R.id.circle);
-        TextView vevent = (TextView) view.findViewById(R.id.val_spec_event);
-        TextView vodo = (TextView) view.findViewById(R.id.val_spec_odo);
-        TextView vdate = (TextView) view.findViewById(R.id.val_spec_date);
-        TextView vunit = (TextView) view.findViewById(R.id.val_spec_unit);
-
-
 
         if (histEvent != null) {
             if (histEvent.get(0) != null) {
                 if (histEvent.get(1).isEmpty()) {
-                    vIcon.setImageResource(icons.getResourceId(0, 0));
-                }else{
-                    vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(1)), 0));
-                }
-                int color = headerColors.getColor(position % 8, 0);
-                vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-
-                vdate.setText(histEvent.get(2));
-                vodo.setText(histEvent.get(3));
-                vevent.setText(histEvent.get(4));
-                if (type.equals(vehicleTypes[0]) | type.equals(vehicleTypes[1]) | type.equals(vehicleTypes[5])) {
-                    vunit.setText(unit);
+                    viewHolder.vIcon.setImageResource(icons.getResourceId(0, 0));
                 } else {
-                    vunit.setText(view.getResources().getString(R.string.unit_time));
+                    viewHolder.vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(1)), 0));
+                }
+                int color = headerColors.getColor(i % 8, 0);
+                viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+
+                viewHolder.vdate.setText(histEvent.get(2));
+                viewHolder.vodo.setText(histEvent.get(3));
+                viewHolder.vevent.setText(histEvent.get(4));
+                if (mType.equals(vehicleTypes[0]) | mType.equals(vehicleTypes[1]) | mType.equals(vehicleTypes[5])) {
+                    viewHolder.vunit.setText(mUnit);
+                } else {
+                    viewHolder.vunit.setText(res.getString(R.string.unit_time));
                 }
             } else {
-                vIconBackground.getDrawable().setColorFilter(view.getResources().getColor(R.color.error), PorterDuff.Mode.SRC_ATOP);
+                viewHolder.vIconBackground.getDrawable().setColorFilter(res.getColor(R.color.error), PorterDuff.Mode.SRC_ATOP);
 
-                vevent.setText(histEvent.get(2));
+                viewHolder.vevent.setText(histEvent.get(2));
             }
         }
     }
 
+    public static class AdapterViewHolder extends RecyclerView.ViewHolder {
+        private static final String TAG = "adptr_hstry";
 
+        protected ImageView vIcon;
+        protected ImageView vIconBackground;
+        protected TextView vevent;
+        protected TextView vodo;
+        protected TextView vdate;
+        protected TextView vunit;
+
+        public AdapterViewHolder(View view) {
+            super(view);
+
+            vIcon = (ImageView) view.findViewById(R.id.icon);
+            vIconBackground = (ImageView) view.findViewById(R.id.circle);
+            vevent = (TextView) view.findViewById(R.id.val_spec_event);
+            vodo = (TextView) view.findViewById(R.id.val_spec_odo);
+            vdate = (TextView) view.findViewById(R.id.val_spec_date);
+            vunit = (TextView) view.findViewById(R.id.val_spec_unit);
+
+        }
+    }
 }
 
 
