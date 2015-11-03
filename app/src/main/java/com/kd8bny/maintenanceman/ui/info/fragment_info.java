@@ -100,8 +100,6 @@ public class fragment_info extends Fragment {
         //Task History
         histList = (RecyclerView) view.findViewById(R.id.histList);
         histMan = new LinearLayoutManager(getActivity());
-        histList.setHasFixedSize(true);
-        histList.setItemAnimator(new DefaultItemAnimator());
         histList.setLayoutManager(histMan);
         histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), histList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
@@ -184,7 +182,6 @@ public class fragment_info extends Fragment {
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setHasFixedSize(true);
-        cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
         cardList.setAdapter(cardListAdapter);
 

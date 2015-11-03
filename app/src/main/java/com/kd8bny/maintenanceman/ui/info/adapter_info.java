@@ -224,14 +224,14 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
                                 yvalsNum.add(
                                         yvalsNum.size()-1,
                                         yvalsNum.get(yvalsNum.size()-1) +
-                                                Float.parseFloat(tempEvent.get(4)));
+                                                Float.parseFloat(tempEvent.get(5)));
                             }else {
                                 xvalsNum.add(monthLog);
-                                yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                                yvalsNum.add(Float.parseFloat(tempEvent.get(5)));
                             }
                         }else {
                             xvalsNum.add(monthLog);
-                            yvalsNum.add(Float.parseFloat(tempEvent.get(4)));
+                            yvalsNum.add(Float.parseFloat(tempEvent.get(5)));
                         }
                     }
                 }
@@ -257,6 +257,7 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
                 }
 
             }catch (NumberFormatException e){
+                //e.printStackTrace();
                 Log.i(TAG, "No date found");
             }
         }
