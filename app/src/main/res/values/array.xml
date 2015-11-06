@@ -9,6 +9,7 @@
         <item>@drawable/np_oilpan</item>
         <item>@drawable/np_filter</item>
         <item>@drawable/np_oil_drop</item>
+        <item>@drawable/np_tire</item>
         <item>@drawable/np_rotor</item>
     </string-array>
 
