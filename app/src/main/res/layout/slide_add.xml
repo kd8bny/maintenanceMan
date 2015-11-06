@@ -26,7 +26,7 @@
         android:paddingRight="32dp"
         android:scaleType="fitCenter"
         android:tint="@android:color/white"
-        android:src="@drawable/np_wrench"/>
+        android:src="@drawable/np_scwdrvr_wrnch"/>
 
     <TextView
         android:layout_width="match_parent"

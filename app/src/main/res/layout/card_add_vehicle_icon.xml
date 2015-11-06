@@ -23,10 +23,9 @@
         android:id="@+id/eventIcon"
         android:layout_width="56dp"
         android:layout_height="56dp"
-
+        android:layout_centerVertical="true"
         android:scaleType="centerInside"
         android:elevation="4sp"
-
 
         android:src="@drawable/ic_event"
         android:paddingStart="8dp"

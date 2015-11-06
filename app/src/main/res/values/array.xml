@@ -4,12 +4,12 @@
     <string-array name="icon_event">
         <item>@drawable/ic_event</item>
         <item>@drawable/np_battery</item>
-        <item>@drawable/np_wrench</item>
+        <item>@drawable/np_scwdrvr_wrnch</item>
         <item>@drawable/np_wrench_single</item>
-        <item>@drawable/np_add_event</item>
+        <item>@drawable/np_oilpan</item>
         <item>@drawable/np_filter</item>
-        <item>@drawable/np_rotor</item>
         <item>@drawable/np_oil_drop</item>
+        <item>@drawable/np_rotor</item>
     </string-array>
 
     <!-- Info -->
