@@ -4,7 +4,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +47,7 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
 
         itemView = LayoutInflater
                 .from(viewGroup.getContext())
-                .inflate(R.layout.item_list_hist, viewGroup, false);
+                .inflate(R.layout.card_hist, viewGroup, false);
 
         return new AdapterViewHolder(itemView);
     }

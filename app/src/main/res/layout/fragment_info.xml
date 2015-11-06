@@ -27,15 +27,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tool_bar"
+                android:paddingTop="8dp"
+                android:paddingBottom="64dp"
+                android:clipToPadding="false"
 
                 android:clickable="false"
                 android:focusable="true"/>
-
         </RelativeLayout>
 
         <include
             android:id="@+id/slide_bar"
             layout="@layout/slide_hist"/>
-
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 </RelativeLayout>
