@@ -14,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 
@@ -100,7 +101,7 @@ public class fleetRosterJSONHelper {
                         break;
 
                     default:
-                        Log.e(TAG, "NOT GOOD: category is missing");
+                        Log.wtf(TAG, "NOT GOOD: category is missing");
                 }
             }
 
@@ -139,7 +140,7 @@ public class fleetRosterJSONHelper {
                 for (int i = 0; i < vehicles.length(); i++) {
                     JSONObject vehicle = roster.getJSONObject(vehicles.getString(i));
                     JSONArray categories = vehicle.names();
-                    HashMap<String, HashMap> vehicleData = new HashMap<>();
+                    LinkedHashMap<String, HashMap> vehicleData = new LinkedHashMap<>();
                     for (int j = 0; j < categories.length(); j++) {
                         JSONObject category = vehicle.getJSONObject(categories.getString(j));
                         JSONArray specs = category.names();
@@ -165,9 +166,6 @@ public class fleetRosterJSONHelper {
 
                                 case "Other":
                                     vehicleData.put("Other", tempSpecMap);
-                                    break;
-
-                                default:
                                     break;
                             }
                             vehicleDataAll.put(vehicles.getString(i), vehicleData);

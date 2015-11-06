@@ -50,8 +50,8 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         //info
         for (String key : vehicleInfo.keySet()) {
             if (vehicleInfo.get(key) != null) {
-                this.vehicleInfoArray.add(0, vehicleInfo.get(key));
-                this.keyList.add(0, key);
+                this.vehicleInfoArray.add(vehicleInfo.get(key));
+                this.keyList.add(key);
             }
         }
 
@@ -64,6 +64,9 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public int getItemViewType(int i){
         switch (keyList.get(i)){
+            case "Chart":
+                return VIEW_CHART;
+
             case "General":
                 return VIEW_GENERAL;
 
@@ -75,9 +78,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             case "Other":
                 return VIEW_OTHER;
-
-            case "Chart":
-                return VIEW_CHART;
 
             default:
                 Log.wtf(TAG, "Itemview Type");
@@ -94,6 +94,13 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
        switch(i) {
+           case VIEW_CHART:
+               itemViewChart = LayoutInflater
+                       .from(viewGroup.getContext())
+                       .inflate(R.layout.card_info_chart, viewGroup, false);
+
+               return new ViewHolderChart(itemViewChart, null);
+
            case VIEW_GENERAL:
                itemViewGeneral = LayoutInflater
                        .from(viewGroup.getContext())
@@ -126,13 +133,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
                return new ViewHolderOther(itemViewOther, cardInfo);
 
-           case VIEW_CHART:
-               itemViewChart = LayoutInflater
-                       .from(viewGroup.getContext())
-                       .inflate(R.layout.card_info_chart, viewGroup, false);
-
-               return new ViewHolderChart(itemViewChart, null);
-
            default:
                Log.e(TAG, "No view");
 
@@ -145,6 +145,11 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         cardInfo = vehicleInfoArray.get(i);
 
         switch (getItemViewType(i)) {
+            case VIEW_CHART:
+                new ViewHolderChart(itemViewChart, vehicleHist);
+
+                break;
+
             case VIEW_GENERAL:
                 new ViewHolderGeneral(itemViewGeneral, cardInfo);
 
@@ -162,11 +167,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             case VIEW_OTHER:
                 new ViewHolderOther(itemViewOther, cardInfo);
-
-                break;
-
-            case VIEW_CHART:
-                new ViewHolderChart(itemViewChart, vehicleHist);
 
                 break;
         }

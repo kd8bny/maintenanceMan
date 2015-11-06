@@ -178,6 +178,7 @@ public class fragment_info extends Fragment {
         histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
         histList.setAdapter(histListAdapter);
 
+
         //Info Cards
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());
