@@ -134,18 +134,16 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V2.0.11 6Nov2015\n\n
+
+        New!! Icon picker for your maintenance tasks\n
+        Bug fixes and code cleaning\n
+
         V2.0.10 22Oct2015\n\n
 
         New!! Dropbox sync\n
         Log into Dropbox to support full synchronization between multiple devices and the cloud\n
 
         New!! Intro slides you just saw :)\n\n
-
-        V2.0.9.1 1Oct2015\n\n
-
-        NEW!! Added a chart to provide cost history of events\n
-        NEW!! Whats new dialog\n
-        Info card reordering\n
-        Bug Fixes\n\n
     </string>
 </resources>
