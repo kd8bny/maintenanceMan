@@ -41,7 +41,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + COLUMN_VEHICLE_ODO + " text not null, "
         + COLUMN_VEHICLE_TASK + " text not null, "
         + COLUMN_VEHICLE_PRICE + " text not null, "
-        + COLUMN_VEHICLE_COMMENT + " text not null"
+        + COLUMN_VEHICLE_COMMENT + " text not null,"
         + COLUMN_ICON + " text not null default '0'"
         + ");";
 
