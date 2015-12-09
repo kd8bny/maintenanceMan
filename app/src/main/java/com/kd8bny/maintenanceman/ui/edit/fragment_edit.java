@@ -124,6 +124,7 @@ public class fragment_edit extends Fragment {
                     args.putBoolean("isRequired", true);
                 }
                 args.putSerializable("field", vehicleDataAll.get(pos));
+                args.putInt("pos", pos);
                 FragmentManager fm = ((FragmentActivity) view.getContext()).getFragmentManager();
 
                 dialog_addField dialog_addField = new dialog_addField();
@@ -155,7 +156,7 @@ public class fragment_edit extends Fragment {
                     builder.show();
                 }else{
                     Snackbar.make(view.findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(getContext().getColor(R.color.error)).show();
+                            .setActionTextColor(getActivity().getApplicationContext().getColor(R.color.error)).show();
                 }
             }
         }));
@@ -182,16 +183,14 @@ public class fragment_edit extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         ArrayList<String> result = data.getStringArrayListExtra("fieldData");
+        int pos = data.getIntExtra("pos", -1);
 
         switch (data.getStringExtra("action")){
             case ("edit"):
-                for (int i =0; i<vehicleDataAll.size(); i++){
-                    ArrayList<String> temp = vehicleDataAll.get(i);
-                    if (temp.get(1).equals(result.get(1))){
-                        vehicleDataAll.set(i, result);
-                        break;
-                    }
+                if (pos != -1) {
+                    vehicleDataAll.set(pos,result);
                 }
+
                 break;
 
             default: //new

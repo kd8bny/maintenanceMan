@@ -32,6 +32,7 @@ public class dialog_addField extends DialogFragment{
     public Boolean isEdit = false;
     public Boolean isRequired = false;
     public String [] mfieldTypes;
+    public Integer recyclerPosition;
 
     public dialog_addField(){
 
@@ -43,8 +44,9 @@ public class dialog_addField extends DialogFragment{
         Bundle args = getArguments();
         if (args != null){
             isEdit = true;
-            ArrayList<String> fieldData = (ArrayList<String>) args.getSerializable("field");
             isRequired = args.getBoolean("isRequired");
+            recyclerPosition = args.getInt("pos");
+            ArrayList<String> fieldData = (ArrayList<String>) args.getSerializable("field");
             fieldType = fieldData.get(0);
             fieldName = fieldData.get(1);
             fieldVal = fieldData.get(2);
@@ -134,6 +136,7 @@ public class dialog_addField extends DialogFragment{
         }
 
         intent.putExtra("fieldData", temp);
+        intent.putExtra("pos", recyclerPosition);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
     }
