@@ -40,8 +40,8 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected View itemViewOther;
     protected View itemViewChart;
 
-    private static final int VIEW_CHART = 0;
-    private static final int VIEW_GENERAL = 1;
+    private static final int VIEW_GENERAL = 0;
+    private static final int VIEW_CHART = 1;
     private static final int VIEW_ENGINE = 2;
     private static final int VIEW_PWR = 3;
     private static final int VIEW_OTHER = 4;
@@ -57,8 +57,8 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         //hist
         this.vehicleHist = vehicleHist;
-        this.vehicleInfoArray.add(0, new HashMap());
-        this.keyList.add(0, "Chart");
+        this.vehicleInfoArray.add(1, new HashMap());
+        this.keyList.add(1, "Chart");
     }
 
     @Override
