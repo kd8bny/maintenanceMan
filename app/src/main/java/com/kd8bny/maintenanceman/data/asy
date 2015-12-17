@@ -1,0 +1,185 @@
+/*public class gdriveAsync extends AsyncTask<>{
+
+        @Override
+        protected String doInBackground(String... params){
+            if(action.equals("restore")) {
+                //requestRestore();
+            }else {
+                requestBackup();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String results){
+            listener.onDownloadComplete(filesUpdated);
+        }
+    public boolean actionRequired(Date localFileDate, String remoteFile){
+        try {
+            SimpleDateFormat dbxDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
+            Date remoteFileDate = dbxDateFormat.parse(remoteFile);
+
+            if (localFileDate.after(remoteFileDate) & action.equals("backup")){
+                Log.i(TAG, "Replacing remote " + localFileDate + " >> " + remoteFileDate);
+
+                return true;
+            }
+            if (localFileDate.before(remoteFileDate) & action.equals("restore")){
+                Log.i(TAG, "Replacing local " + remoteFileDate + " >> " + localFileDate);
+
+                return true;
+            }
+
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+
+
+    public void requestBackup(){
+            final java.io.File fleetRoster = new java.io.File(context.getFilesDir() + "/" + FLEETROSTER_FILENAME);
+            final java.io.File vehicleLog = new java.io.File(context.getDatabasePath(VEHICLELOG_FILENAME).toString());
+            final FileInputStream inputStream1;
+            final FileInputStream inputStream2;
+
+
+        File gFleetRoster = new File();
+        gFleetRoster.setTitle(FLEETROSTER_FILENAME);
+        gFleetRoster.setDescription("Your Fleet");
+        gFleetRoster.setMimeType("application/json");
+        gFleetRoster.setParents(Arrays.asList(new ParentReference().setId("appfolder")));
+
+
+        FileContent mediaContent = new FileContent("application/json", fleetRoster);
+        try{
+            //Intent intent = new Intent(context, mCredential.newChooseAccountIntent())
+            ((Activity) context).startActivity(mCredential.newChooseAccountIntent());
+            //Log.d(TAG, AccountManager.KEY_ACCOUNTS);
+            File file = mService.files().insert(gFleetRoster,mediaContent).execute();
+
+        }catch (IOException e){
+            e.printStackTrace();
+
+        }
+
+            if (force) {
+                //forceBackup(mDBApi, fleetRoster, vehicleLog);
+            } else {
+                try {
+                    Date localFleetRoster = new Date(fleetRoster.lastModified());
+                    Date localVehicleLog = new Date(vehicleLog.lastModified());
+                    //String remoteFleetRoster = mDBApi.metadata("/" + FLEETROSTER_FILENAME, 1, null, false, null).modified;
+                    //String remoteVehicleLog = mDBApi.metadata("/" + VEHICLELOG_FILENAME, 1, null, false, null).modified;
+
+
+                    if (actionRequired(localFleetRoster, remoteFleetRoster)) {
+                        inputStream1 = new FileInputStream(fleetRoster);
+                        //mDBApi.putFileOverwrite("/" + FLEETROSTER_FILENAME, inputStream1, fleetRoster.length(), null);
+                    }
+                    if (actionRequired(localVehicleLog, remoteVehicleLog)) {
+                        inputStream2 = new FileInputStream(vehicleLog);
+                        //mDBApi.putFileOverwrite("/" + VEHICLELOG_FILENAME, inputStream2, vehicleLog.length(), null);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    //forceBackup(mDBApi, fleetRoster, vehicleLog);
+                }
+            }
+        }
+
+    public void requestRestore(){
+        final String APP_KEY = context.getResources().getString(R.string.dropboxKey);
+        final String APP_SECRET = context.getResources().getString(R.string.dropboxSecret);
+        final File fleetRoster = new File(context.getFilesDir() + "/" + FLEETROSTER_FILENAME);
+        final File vehicleLog = new File(context.getDatabasePath(VEHICLELOG_FILENAME).toString());
+        final String dropboxTokenNew = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                .getString(context.getString(R.string.pref_key_dropbox), null);
+
+        if (force) {
+            forceRestore(mDBApi, fleetRoster, vehicleLog);
+        } else {
+            try {
+                Date localFleetRoster = new Date(fleetRoster.lastModified());
+                Date localVehicleLog = new Date(vehicleLog.lastModified());
+                String remoteFleetRoster = mDBApi.metadata("/" + FLEETROSTER_FILENAME, 1, null, false, null).modified;
+                String remoteVehicleLog = mDBApi.metadata("/" + VEHICLELOG_FILENAME, 1, null, false, null).modified;
+
+                if (actionRequired(localFleetRoster, remoteFleetRoster)) {
+                    FileOutputStream outputStream1 = new FileOutputStream(fleetRoster);
+                    //DropboxAPI.DropboxFileInfo info1 = mDBApi.getFile("/" + FLEETROSTER_FILENAME, null, outputStream1, null);
+                    filesUpdated = true;
+                }
+                if (actionRequired(localVehicleLog, remoteVehicleLog)) {
+                    FileOutputStream outputStream2 = new FileOutputStream(vehicleLog);
+                    //DropboxAPI.DropboxFileInfo info2 = mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
+                }
+            } catch (IOException | DropboxException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void forceBackup(DropboxAPI<AndroidAuthSession> mDBApi, File fleetRoster, File vehicleLog) {
+       try {
+            FileInputStream inputStream1 = new FileInputStream(fleetRoster);
+            FileInputStream inputStream2 = new FileInputStream(vehicleLog);
+            mDBApi.putFileOverwrite("/" + FLEETROSTER_FILENAME, inputStream1, fleetRoster.length(), null);
+            mDBApi.putFileOverwrite("/" + VEHICLELOG_FILENAME, inputStream2, vehicleLog.length(), null);
+            Log.i(TAG, "Forced backup");
+        } catch (IOException | DropboxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void forceRestore(DropboxAPI<AndroidAuthSession> mDBApi, File fleetRoster, File vehicleLog) {
+        vehicleLogDBHelper mvehicleLogDBHelper = new vehicleLogDBHelper(context);
+        mvehicleLogDBHelper.createDatabase(context);
+        try {
+            FileOutputStream outputStream1 = new FileOutputStream(fleetRoster.getPath());
+            FileOutputStream outputStream2 = new FileOutputStream(vehicleLog.getAbsolutePath());
+            mDBApi.getFile("/" + FLEETROSTER_FILENAME, null, outputStream1, null);
+            mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
+            filesUpdated = true;
+            Log.i(TAG, "Forced restore");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+final private ResultCallback<DriveApi.DriveContentsResult> contentsCallback =
+            new ResultCallback<DriveApi.DriveContentsResult>() {
+                @Override
+                public void onResult(DriveApi.DriveContentsResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        Log.e(TAG, "Error while trying to create new file contents");
+                        return;
+                    }
+
+                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                            .setTitle("appconfig.txt")
+                            .setMimeType("text/plain")
+                            .build();
+                    Drive.DriveApi.getAppFolder(mGoogleApiClient)
+                            .createFile(mGoogleApiClient, changeSet, result.getDriveContents())
+                            .setResultCallback(fileCallback);
+                }
+            };
+
+    final private ResultCallback<DriveFolder.DriveFileResult> fileCallback = new
+            ResultCallback<DriveFolder.DriveFileResult>() {
+                @Override
+                public void onResult(DriveFolder.DriveFileResult result) {
+                    if (!result.getStatus().isSuccess()) {
+                        Log.e(TAG, "Error while trying to create the file");
+                        return;
+                    }
+                    Log.e(TAG, "Created a file in App Folder: "
+                            + result.getDriveFile().getDriveId());
+                }
+            };
+                }*/
