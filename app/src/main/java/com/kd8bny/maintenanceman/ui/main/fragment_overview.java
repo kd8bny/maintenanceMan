@@ -25,6 +25,7 @@ import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
@@ -57,6 +58,8 @@ public class fragment_overview extends Fragment implements UpdateUI{
     private RecyclerView.Adapter cardListAdapter;
 
     private HashMap<String, HashMap> roster;
+    private ArrayList<ArrayList> eventData;
+    private String mUnit;
     private Boolean DBisEmpty = false;
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
@@ -88,8 +91,24 @@ public class fragment_overview extends Fragment implements UpdateUI{
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //cards
+        mUnit = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0).getString("prefUnitDist", "");
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        vehicleLogDBHelper vehicleLogDBHelper = new vehicleLogDBHelper(getActivity().getApplicationContext());
+        eventData = new ArrayList<>();
+        for (String key: roster.keySet()) {
+            ArrayList<ArrayList> temp = vehicleLogDBHelper.getEntries(getActivity().getApplicationContext(), key);
+            ArrayList<String> event = temp.get(0);
+            ArrayList<String> datam = new ArrayList<>();
+            if(event.get(0) != null) {
+                datam.add(event.get(3)); //odo
+                datam.add(event.get(4)); //event
+            }else{
+                datam.add(""); //odo
+                datam.add(""); //event
+            }
+            eventData.add(datam);
+        }
 
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
@@ -97,10 +116,10 @@ public class fragment_overview extends Fragment implements UpdateUI{
         cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
 
-        if (roster.containsKey(null)){
+        if (roster.containsKey(null)){//TODO clean the hell up
              DBisEmpty = true;
         }
-        cardListAdapter = new adapter_overview(roster);
+        cardListAdapter = new adapter_overview(getActivity().getApplicationContext(), roster, eventData, mUnit);
         cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -267,11 +286,26 @@ public class fragment_overview extends Fragment implements UpdateUI{
         super.onResume();
         fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
         roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
+        vehicleLogDBHelper vehicleLogDBHelper = new vehicleLogDBHelper(getActivity().getApplicationContext());
+        eventData = new ArrayList<>();
+        for (String key: roster.keySet()) {
+            ArrayList<ArrayList> temp = vehicleLogDBHelper.getEntries(getActivity().getApplicationContext(), key);
+            ArrayList<String> event = temp.get(0);
+            ArrayList<String> datam = new ArrayList<>();
+            if(event.get(0) != null) {
+                datam.add(event.get(3)); //odo
+                datam.add(event.get(4)); //event
+            }else{
+                datam.add(""); //odo
+                datam.add(""); //event
+            }
+            eventData.add(datam);
+        }
 
         if (!roster.containsKey(null)){
             DBisEmpty = false;
         }
-        cardListAdapter = new adapter_overview(roster);
+        cardListAdapter = new adapter_overview(getActivity().getApplicationContext(), roster, eventData, mUnit);
         cardList.setAdapter(cardListAdapter);
     }
 

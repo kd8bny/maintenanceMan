@@ -1,8 +1,12 @@
 package com.kd8bny.maintenanceman.ui.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,19 +16,27 @@ import android.widget.TextView;
 import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
     private static final String TAG = "adptr_ovrvw";
 
-    public ArrayList<HashMap> vehicleList = new ArrayList<>();
+    private Context context;
+    private final ArrayList<HashMap> vehicleList = new ArrayList<>();
+    private final ArrayList<ArrayList> lastEvent;
+    //private final Arrays[] vehicleTypes;
+    private final String mUnit;
     private boolean DBisEmpty;
     private TypedArray headerColors;
     private int errorColor;
     private View itemView;
 
-    public adapter_overview(HashMap<String, HashMap> vehicleList) {
+    public adapter_overview(Context context, HashMap<String, HashMap> vehicleList, ArrayList<ArrayList> lastEvent, String unit) {
+        this.context = context;
         this.vehicleList.addAll(vehicleList.values());
+        this.lastEvent = lastEvent;
+        this.mUnit = unit;
     }
 
     @Override
@@ -50,14 +62,22 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             HashMap<String, HashMap> vehicle = vehicleList.get(i);
 
             HashMap<String, String> category = vehicle.get("General");
+            ArrayList<String> event = lastEvent.get(i);
             int color = headerColors.getColor(i % 8, 0);
-            (itemView.findViewById(R.id.carPic)).setBackgroundColor(color);
-            (itemView.findViewById(R.id.year)).setBackgroundColor(color);
+
+            adapterViewHolder.rect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            adapterViewHolder.circle.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
             adapterViewHolder.vyear.setText(category.get("Year"));
             adapterViewHolder.vmake.setText(category.get("Make"));
             adapterViewHolder.vmodel.setText(category.get("Model"));
-            adapterViewHolder.vtype.setText(category.get("type"));
+            adapterViewHolder.vevent.setText(event.get(1));
+            String mType = category.get("type");
+            /*if (mType.equals(vehicleTypes[0]) | mType.equals(vehicleTypes[1]) | mType.equals(vehicleTypes[5])) {
+                adapterViewHolder.vodo.setText(event.get(0) + " " + mUnit); //odo
+            } else {
+                adapterViewHolder.vodo.setText(event.get(0) + " " + mUnit); //odo
+            }*/
 
             switch (category.get("type")){
                 case "Automobile":
@@ -110,20 +130,31 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder{
+        protected ImageView rect;
+        protected ImageView circle;
         protected ImageView carPic;
         protected TextView vmake;
         protected TextView vmodel;
         protected TextView vtype;
         protected TextView vyear;
 
+        protected TextView vevent;
+        protected TextView vodo;
+
         public AdapterViewHolder(View view) {
             super(view);
 
+            rect = (ImageView) view.findViewById(R.id.rect);
+            circle = (ImageView) view.findViewById(R.id.circle);
             carPic = (ImageView) view.findViewById(R.id.carPic);
             vmake = (TextView) view.findViewById(R.id.make);
             vmodel = (TextView) view.findViewById(R.id.model);
             vtype = (TextView) view.findViewById(R.id.type);
             vyear = (TextView) view.findViewById(R.id.year);
+
+            vevent = (TextView) view.findViewById(R.id.event);
+            vodo = (TextView) view.findViewById(R.id.odo);
+            vevent.setSelected(true);
         }
     }
 }

@@ -4,79 +4,70 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     card_view:cardCornerRadius="5dp"
     android:layout_margin="5dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/carPic"
-            android:layout_width="140dp"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
 
-            android:gravity="start"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/np_car"
-            android:padding="8dp"
-            android:background="@color/accent"
-            android:tint="@android:color/white"/>
-
-        <TextView
-            android:id="@+id/year"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
 
-            android:layout_toEndOf="@+id/carPic"
-            android:gravity="center_horizontal"
+            <ImageView
+                android:id="@+id/rect"
+                android:layout_height="36dp"
+                android:layout_width="match_parent"
+                android:elevation="2sp"
 
-            android:singleLine="true"
+                android:src="@drawable/rect">
+            </ImageView>
 
-            android:background="@color/accent"
-            android:text="@string/no_data"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/header_font"/>
+            <ImageView
+                android:id="@+id/circle"
+                android:layout_height="72dp"
+                android:layout_width="72dp"
+                android:elevation="4sp"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/circle">
+            </ImageView>
 
-        <TextView
-            android:id="@+id/type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/year"
-            android:layout_toEndOf="@+id/carPic"
-            android:gravity="center_horizontal"
-            android:padding="@dimen/content_vertical_space"
+            <ImageView
+                android:id="@+id/carPic"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:elevation="6sp"
+                android:scaleType="fitCenter"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/np_car"
+                android:padding="12dp"
+                android:tint="@android:color/white"/>
 
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:singleLine="true"
-            android:maxEms="3"
-            android:minEms="3"
+            <TextView
+                android:id="@+id/year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rect"
+                android:layout_toEndOf="@+id/carPic"
+                android:paddingStart="@dimen/content_vertical_space"
+                android:paddingEnd="@dimen/content_vertical_space"
 
-            android:text="type"
-            android:textColor="@color/secondary_text"
-            android:textSize="@dimen/field_font"/>
+                android:singleLine="true"
 
-        <LinearLayout
-            android:id="@+id/linlay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/carPic"
-            android:layout_below="@+id/type"
-            android:gravity="center_horizontal"
-            android:padding="@dimen/content_vertical_space">
+                android:text="@string/no_data"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/field_font"/>
 
             <TextView
                 android:id="@+id/make"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:layout_weight="1"
+                android:layout_below="@+id/rect"
+                android:layout_toEndOf="@+id/year"
+                android:paddingStart="@dimen/content_vertical_space"
+                android:paddingEnd="@dimen/content_vertical_space"
 
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
@@ -87,28 +78,80 @@
                 android:text="@string/no_data"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/model"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="start"
-                android:layout_weight="1"
+                android:layout_below="@+id/rect"
+                android:layout_toEndOf="@+id/make"
+                android:paddingStart="@dimen/content_vertical_space"
+                android:paddingEnd="@dimen/content_vertical_space"
 
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
                 android:singleLine="true"
-                android:maxEms="3"
-                android:minEms="3"
+                android:maxEms="7"
+                android:minEms="7"
 
                 android:text="@string/no_data"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
-        </LinearLayout>
-    </RelativeLayout>
+
+            <TextView
+                android:id="@+id/odo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/year"
+                android:layout_toEndOf="@+id/carPic"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="@dimen/content_vertical_space"
+                android:paddingEnd="@dimen/content_vertical_space"
+
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:singleLine="true"
+                android:maxEms="7"
+                android:minEms="7"
+
+                android:text="666666 mi"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/field_font"/>
+
+            <TextView
+                android:id="@+id/last_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/odo"
+                android:layout_toEndOf="@+id/carPic"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="@dimen/content_vertical_space"
+                android:paddingEnd="@dimen/content_vertical_space"
+
+                android:text="Last Event"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/field_font"/>
+
+            <TextView
+                android:id="@+id/event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/year"
+                android:layout_toEndOf="@+id/odo"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="@dimen/content_vertical_space"
+                android:paddingEnd="@dimen/content_vertical_space"
+
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:fadingEdge="horizontal"
+                android:singleLine="true"
+                android:maxEms="7"
+                android:minEms="7"
+
+                android:text="Oil Change"
+                android:textColor="@color/secondary_text"
+                android:textSize="@dimen/field_font"/>
+        </RelativeLayout>
+
 </android.support.v7.widget.CardView>
