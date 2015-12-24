@@ -79,6 +79,9 @@ public class fragment_overview extends Fragment implements UpdateUI{
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
+        Animation anim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fade_in);
+        view.setAnimation(anim);
+
         //Data
         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
         mbackupRestoreHelper.updateUI = this;
@@ -141,6 +144,8 @@ public class fragment_overview extends Fragment implements UpdateUI{
             }
         }));
         cardList.setAdapter(cardListAdapter);
+        Animation cardListAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_left_fade_in);
+        cardList.setAnimation(cardListAnim);
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
@@ -309,10 +314,24 @@ public class fragment_overview extends Fragment implements UpdateUI{
         cardList.setAdapter(cardListAdapter);
     }
 
+<<<<<<< Updated upstream
     public void onUpdate(Boolean doUpdate) {
+=======
+<<<<<<< Updated upstream
+    public void onUpdate(Boolean doUpdate){
+>>>>>>> Stashed changes
         if (doUpdate) {
             onResume();
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
         }
+=======
+    public void onPause(){
+        super.onPause();
+        View view = getView();
+
+        Animation anim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fade_out);
+        view.startAnimation(anim);
+        anim.reset();
+>>>>>>> Stashed changes
     }
 }

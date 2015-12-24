@@ -65,8 +65,8 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             ArrayList<String> event = lastEvent.get(i);
             int color = headerColors.getColor(i % 8, 0);
 
-            adapterViewHolder.rect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            adapterViewHolder.circle.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+//            adapterViewHolder.rect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+//            adapterViewHolder.circle.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
             adapterViewHolder.vyear.setText(category.get("Year"));
             adapterViewHolder.vmake.setText(category.get("Make"));
@@ -154,7 +154,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
             vevent = (TextView) view.findViewById(R.id.event);
             vodo = (TextView) view.findViewById(R.id.odo);
-            vevent.setSelected(true);
+            //vevent.setSelected(true);
         }
     }
 }

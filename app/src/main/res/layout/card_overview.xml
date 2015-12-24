@@ -8,91 +8,54 @@
     android:clickable="true"
     android:focusable="true"
     card_view:cardCornerRadius="5dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:cardElevation="5sp">
 
 
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
 
             <ImageView
                 android:id="@+id/rect"
                 android:layout_height="36dp"
                 android:layout_width="match_parent"
-                android:elevation="2sp"
+                android:elevation="10sp"
 
-                android:src="@drawable/rect">
-            </ImageView>
-
-            <ImageView
-                android:id="@+id/circle"
-                android:layout_height="72dp"
-                android:layout_width="72dp"
-                android:elevation="4sp"
-                android:layout_marginStart="32dp"
-                android:src="@drawable/circle">
+                android:background="@drawable/rect">
             </ImageView>
 
             <ImageView
                 android:id="@+id/carPic"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:elevation="6sp"
-                android:scaleType="fitCenter"
+                android:layout_height="64dp"
+                android:layout_width="64dp"
+                android:layout_marginTop="8dp"
+                android:elevation="12sp"
                 android:layout_marginStart="32dp"
+                android:background="@drawable/circle"
+
                 android:src="@drawable/np_car"
-                android:padding="12dp"
-                android:tint="@android:color/white"/>
+                android:tint="@android:color/white"
+                android:padding="10dp">
+            </ImageView>
 
             <TextView
-                android:id="@+id/year"
+                android:id="@+id/vehicle_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rect"
+                android:layout_below="@+id/rect"
                 android:layout_toEndOf="@+id/carPic"
                 android:paddingStart="@dimen/content_vertical_space"
                 android:paddingEnd="@dimen/content_vertical_space"
 
-                android:singleLine="true"
-
-                android:text="@string/no_data"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"/>
-
-            <TextView
-                android:id="@+id/make"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/rect"
-                android:layout_toEndOf="@+id/year"
-                android:paddingStart="@dimen/content_vertical_space"
-                android:paddingEnd="@dimen/content_vertical_space"
-
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
                 android:singleLine="true"
-                android:maxEms="3"
-                android:minEms="3"
-
-                android:text="@string/no_data"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"/>
-
-            <TextView
-                android:id="@+id/model"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/rect"
-                android:layout_toEndOf="@+id/make"
-                android:paddingStart="@dimen/content_vertical_space"
-                android:paddingEnd="@dimen/content_vertical_space"
-
-                android:ellipsize="marquee"
-                android:fadingEdge="horizontal"
-                android:singleLine="true"
-                android:maxEms="7"
-                android:minEms="7"
+                android:maxEms="10"
+                android:minEms="10"
 
                 android:text="@string/no_data"
                 android:textColor="@color/secondary_text"

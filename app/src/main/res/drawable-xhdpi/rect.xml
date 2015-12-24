@@ -8,6 +8,6 @@
         android:right="8dp"
         android:bottom="8dp" />
     <solid
-        android:color="@color/primary">
+        android:color="#ff2196F3">
     </solid>
 </shape>
