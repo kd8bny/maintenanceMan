@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kd8bny.maintenanceman"
     android:versionCode="54"
-    android:versionName="2.0.11.2" >
+    android:versionName="3.0.0.0" >
 
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.INTERNET"/>
