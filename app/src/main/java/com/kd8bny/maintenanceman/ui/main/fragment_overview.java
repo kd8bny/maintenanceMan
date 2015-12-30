@@ -9,23 +9,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.backupRestoreHelper;
-import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
-import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
@@ -46,23 +42,24 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class fragment_overview extends Fragment implements UpdateUI{
     private static final String TAG = "frg_ovrvw";
 
+    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+
     private Toolbar toolbar;
+    private Context context;
+    private SharedPreferences sharedPreferences;
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
 
-    private HashMap<String, HashMap> roster;
-    private ArrayList<ArrayList> eventData;
+    private ArrayList<Vehicle> roster;
     private String mUnit;
-    private Boolean DBisEmpty = false;
 
-    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+
 
     public fragment_overview() {
 
@@ -78,14 +75,13 @@ public class fragment_overview extends Fragment implements UpdateUI{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-
-        Animation anim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fade_in);
-        view.setAnimation(anim);
+        context = getActivity().getApplicationContext();
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
 
         //Data
         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
         mbackupRestoreHelper.updateUI = this;
-        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", false);
+        mbackupRestoreHelper.startAction(context, "restore", false);
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -94,58 +90,26 @@ public class fragment_overview extends Fragment implements UpdateUI{
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         //cards
-        mUnit = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0).getString("prefUnitDist", "");
-        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
-        vehicleLogDBHelper vehicleLogDBHelper = new vehicleLogDBHelper(getActivity().getApplicationContext());
-        eventData = new ArrayList<>();
-        for (String key: roster.keySet()) {
-            ArrayList<ArrayList> temp = vehicleLogDBHelper.getEntries(getActivity().getApplicationContext(), key);
-            ArrayList<String> event = temp.get(0);
-            ArrayList<String> datam = new ArrayList<>();
-            if(event.get(0) != null) {
-                datam.add(event.get(3)); //odo
-                datam.add(event.get(4)); //event
-            }else{
-                datam.add(""); //odo
-                datam.add(""); //event
-            }
-            eventData.add(datam);
-        }
+        mUnit = sharedPreferences.getString("prefUnitDist", "");
 
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
-        cardList.setHasFixedSize(true);
-        cardList.setItemAnimator(new DefaultItemAnimator());
         cardList.setLayoutManager(cardMan);
-
-        if (roster.containsKey(null)){//TODO clean the hell up
-             DBisEmpty = true;
-        }
-        cardListAdapter = new adapter_overview(getActivity().getApplicationContext(), roster, eventData, mUnit);
-        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                if (!DBisEmpty) {
-                    ArrayList<String> refIDs = new ArrayList<>();
-                    refIDs.addAll(roster.keySet());
+                if (!roster.isEmpty()) {
                     Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_info.class);
-                    viewIntent.putExtra("refID", refIDs.get(pos));
-                    view.getContext().startActivity(viewIntent);
+                    viewIntent.putExtra("vehicle", roster.get(pos)); //TODO prepare for object rx
+                    context.startActivity(viewIntent);//view.getcontext
                 } else {
                     Intent viewAddIntent = new Intent(getActivity().getApplicationContext(), activity_add_fleetRoster.class);
-                    view.getContext().startActivity(viewAddIntent);
+                    context.startActivity(viewAddIntent);
                 }
             }
 
             @Override
-            public void onItemLongClick(View view, int pos) {
-
-            }
-        }));
-        cardList.setAdapter(cardListAdapter);
-        Animation cardListAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.slide_left_fade_in);
-        cardList.setAnimation(cardListAnim);
+            public void onItemLongClick(View view, int pos) {}}));
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
@@ -181,11 +145,10 @@ public class fragment_overview extends Fragment implements UpdateUI{
                         return true;
                     }
                 }
-
-                return false;
-            }
+                return false;}
         });
 
+        //Drawer
         final DrawerBuilder drawerBuilder = new DrawerBuilder(getActivity());
         drawerBuilder.withActionBarDrawerToggle(true)
                 .withActionBarDrawerToggleAnimated(true)
@@ -253,25 +216,24 @@ public class fragment_overview extends Fragment implements UpdateUI{
 
 
         //Intro
-        Boolean isFirstRun = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getBoolean("firstRun", true);
+        Boolean isFirstRun = sharedPreferences.getBoolean("firstRun", true);
         if (isFirstRun) {
-            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
             SharedPreferences.Editor editor= sharedPreferences.edit();
             editor.putBoolean("firstRun", false);
             editor.apply();
 
-            Intent introIntent = new Intent(view.getContext(), activity_intro.class);
+            Intent introIntent = new Intent(context, activity_intro.class);
             view.getContext().startActivity(introIntent);
         }
+
         //Whats New!!!
-        int oldAppVersion = getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getInt("appVersion", -1);
+        int oldAppVersion = sharedPreferences.getInt("appVersion", -1);
         if (BuildConfig.VERSION_CODE > oldAppVersion) {
-            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
             SharedPreferences.Editor editor= sharedPreferences.edit();
             editor.putInt("appVersion", BuildConfig.VERSION_CODE);
             editor.apply();
 
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getFragmentManager();//TODO marqee view
 
             dialog_whatsNew dialog_whatsNew = new dialog_whatsNew();
             dialog_whatsNew.show(fm, "dialog_whatsNew");
@@ -283,55 +245,24 @@ public class fragment_overview extends Fragment implements UpdateUI{
     @Override
     public void onStart(){
         super.onStart();
+        SaveLoadHelper saveLoadHelper = new SaveLoadHelper();
+        roster = saveLoadHelper.load();
 
+        cardListAdapter = new adapter_overview(context, roster, mUnit);
+        cardList.setAdapter(cardListAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
-        vehicleLogDBHelper vehicleLogDBHelper = new vehicleLogDBHelper(getActivity().getApplicationContext());
-        eventData = new ArrayList<>();
-        for (String key: roster.keySet()) {
-            ArrayList<ArrayList> temp = vehicleLogDBHelper.getEntries(getActivity().getApplicationContext(), key);
-            ArrayList<String> event = temp.get(0);
-            ArrayList<String> datam = new ArrayList<>();
-            if(event.get(0) != null) {
-                datam.add(event.get(3)); //odo
-                datam.add(event.get(4)); //event
-            }else{
-                datam.add(""); //odo
-                datam.add(""); //event
-            }
-            eventData.add(datam);
-        }
-
-        if (!roster.containsKey(null)){
-            DBisEmpty = false;
-        }
-        cardListAdapter = new adapter_overview(getActivity().getApplicationContext(), roster, eventData, mUnit);
-        cardList.setAdapter(cardListAdapter);
+        cardListAdapter = new adapter_overview(context, roster, mUnit);
+        cardList.swapAdapter(cardListAdapter, false);
     }
 
-<<<<<<< Updated upstream
-    public void onUpdate(Boolean doUpdate) {
-=======
-<<<<<<< Updated upstream
     public void onUpdate(Boolean doUpdate){
->>>>>>> Stashed changes
         if (doUpdate) {
             onResume();
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
         }
-=======
-    public void onPause(){
-        super.onPause();
-        View view = getView();
-
-        Animation anim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.fade_out);
-        view.startAnimation(anim);
-        anim.reset();
->>>>>>> Stashed changes
     }
 }

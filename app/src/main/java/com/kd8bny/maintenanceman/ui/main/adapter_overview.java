@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.ui.main;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -14,115 +13,88 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
     private static final String TAG = "adptr_ovrvw";
 
     private Context context;
-    private final ArrayList<HashMap> vehicleList = new ArrayList<>();
-    private final ArrayList<ArrayList> lastEvent;
-    //private final Arrays[] vehicleTypes;
     private final String mUnit;
-    private boolean DBisEmpty;
+    private ArrayList<Vehicle> roster;
     private TypedArray headerColors;
-    private int errorColor;
-    private View itemView;
 
-    public adapter_overview(Context context, HashMap<String, HashMap> vehicleList, ArrayList<ArrayList> lastEvent, String unit) {
+    public adapter_overview(Context context, ArrayList<Vehicle> roster, String unit) {
         this.context = context;
-        this.vehicleList.addAll(vehicleList.values());
-        this.lastEvent = lastEvent;
+        this.roster = roster;
         this.mUnit = unit;
     }
 
     @Override
     public int getItemCount() {
-        return vehicleList.size();
+        if(roster.isEmpty()) {
+            return 1;
+        }
+
+        return roster.size();
     }
 
     @Override
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        itemView = LayoutInflater
+        View itemView = LayoutInflater
                 .from(viewGroup.getContext())
                 .inflate(determineLayout(), viewGroup, false);
 
         headerColors = itemView.getResources().obtainTypedArray(R.array.header_color);
-        errorColor = itemView.getResources().getColor(R.color.error);
 
         return new AdapterViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        if(!DBisEmpty) {
-            HashMap<String, HashMap> vehicle = vehicleList.get(i);
-
-            HashMap<String, String> category = vehicle.get("General");
-            ArrayList<String> event = lastEvent.get(i);
+        if(!roster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
+            Vehicle vehicle = roster.get(i);
 
-//            adapterViewHolder.rect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-//            adapterViewHolder.circle.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            adapterViewHolder.vTitle.setText(vehicle.getTitle());
+            adapterViewHolder.vRect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            adapterViewHolder.vCarPic.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-            adapterViewHolder.vyear.setText(category.get("Year"));
-            adapterViewHolder.vmake.setText(category.get("Make"));
-            adapterViewHolder.vmodel.setText(category.get("Model"));
-            adapterViewHolder.vevent.setText(event.get(1));
-            String mType = category.get("type");
-            /*if (mType.equals(vehicleTypes[0]) | mType.equals(vehicleTypes[1]) | mType.equals(vehicleTypes[5])) {
-                adapterViewHolder.vodo.setText(event.get(0) + " " + mUnit); //odo
-            } else {
-                adapterViewHolder.vodo.setText(event.get(0) + " " + mUnit); //odo
-            }*/
-
-            switch (category.get("type")){
+            switch (vehicle.getVehicleType()){
                 case "Automobile":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.np_car);
+                    adapterViewHolder.vCarPic.setImageResource(R.drawable.np_car);
                     break;
 
                 case "Motorcycle":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.np_motorcycle);
+                    adapterViewHolder.vCarPic.setImageResource(R.drawable.np_motorcycle);
                     break;
 
                 case "Utility":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.np_utility);
+                    adapterViewHolder.vCarPic.setImageResource(R.drawable.np_utility);
                     break;
 
                 case "Marine":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.np_marine);
+                    adapterViewHolder.vCarPic.setImageResource(R.drawable.np_marine);
                     break;
 
                 case "Lawn and Garden":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.np_tractor);
+                    adapterViewHolder.vCarPic.setImageResource(R.drawable.np_tractor);
                     break;
 
                 case "Trailer":
-                    adapterViewHolder.carPic.setImageResource(R.drawable.np_trailer);
-                    break;
-
-                default:
+                    adapterViewHolder.vCarPic.setImageResource(R.drawable.np_trailer);
                     break;
             }
         }
     }
 
     public int determineLayout(){
-        HashMap<String, HashMap> vehicle = vehicleList.get(0);
-
-        if(vehicle == null) {
-            DBisEmpty = true;
-
+        if(roster.isEmpty()) {
             return R.layout.card_overview_empty;
         }else{
-            DBisEmpty = false;
-
             if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){//|| Build.VERSION.SDK_INT == Build.VERSION_CODES.x
                 return R.layout.card_overview_v19;
-
             }else{
                 return R.layout.card_overview;
             }
@@ -130,30 +102,21 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder{
-        protected ImageView rect;
-        protected ImageView circle;
-        protected ImageView carPic;
-        protected TextView vmake;
-        protected TextView vmodel;
-        protected TextView vtype;
-        protected TextView vyear;
-
+        protected ImageView vRect;
+        protected ImageView vCarPic;
+        protected TextView vTitle;
         protected TextView vevent;
         protected TextView vodo;
 
         public AdapterViewHolder(View view) {
             super(view);
 
-            rect = (ImageView) view.findViewById(R.id.rect);
-            circle = (ImageView) view.findViewById(R.id.circle);
-            carPic = (ImageView) view.findViewById(R.id.carPic);
-            vmake = (TextView) view.findViewById(R.id.make);
-            vmodel = (TextView) view.findViewById(R.id.model);
-            vtype = (TextView) view.findViewById(R.id.type);
-            vyear = (TextView) view.findViewById(R.id.year);
+            vRect = (ImageView) view.findViewById(R.id.rect);
+            vCarPic = (ImageView) view.findViewById(R.id.carPic);
+            vTitle = (TextView) view.findViewById(R.id.vehicle_title);
 
-            vevent = (TextView) view.findViewById(R.id.event);
-            vodo = (TextView) view.findViewById(R.id.odo);
+            //vevent = (TextView) view.findViewById(R.id.event);
+            //vodo = (TextView) view.findViewById(R.id.odo);
             //vevent.setSelected(true);
         }
     }
