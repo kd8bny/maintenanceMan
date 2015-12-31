@@ -56,11 +56,6 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         if(!roster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
             Vehicle vehicle = roster.get(i);
-
-            adapterViewHolder.vTitle.setText(vehicle.getTitle());
-            //adapterViewHolder.vRect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP); //TODO set background tinit
-            adapterViewHolder.vCarPic.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-
             switch (vehicle.getVehicleType()){
                 case "Automobile":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_car);
@@ -86,6 +81,9 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_trailer);
                     break;
             }
+            adapterViewHolder.vTitle.setText(vehicle.getTitle());
+            adapterViewHolder.vRect.setBackgroundColor(color);
+            adapterViewHolder.vCarPic.setBackgroundColor(color);
         }
     }
 

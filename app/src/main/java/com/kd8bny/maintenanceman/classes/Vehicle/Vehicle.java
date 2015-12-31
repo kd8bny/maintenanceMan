@@ -7,7 +7,6 @@ import java.util.UUID;
 public class Vehicle implements Serializable{
     public String vehicleType;
     public String refID;
-
     public String title;
 
     public HashMap<String, String> reservedSpecs;

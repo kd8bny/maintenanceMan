@@ -243,7 +243,6 @@ public class fragment_overview extends Fragment implements UpdateUI{
         super.onStart();
         SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
         roster = saveLoadHelper.load();
-
         cardListAdapter = new adapter_overview(context, roster, mUnit);
         cardList.setAdapter(cardListAdapter);
     }

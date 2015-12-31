@@ -20,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
@@ -87,6 +88,11 @@ public class fragment_add_fleetRoster extends Fragment {
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
         mvehicleTypes = context.getResources().getStringArray(R.array.vehicle_type);
+        vehicleSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                vehicle.setVehicleType(vehicleSpinner.getText().toString());
+            }});
         vehicleSpinner.setAdapter(new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes));
 
         //Recycler View
