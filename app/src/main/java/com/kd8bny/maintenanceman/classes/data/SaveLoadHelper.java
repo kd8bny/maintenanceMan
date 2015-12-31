@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.classes.data;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
@@ -19,9 +20,12 @@ import java.util.ArrayList;
 public class SaveLoadHelper {
     private static final String TAG = "svLdHlpr";
 
-    private static final String FILE_NAME = "roster.ser";
+    private static String FILE_NAME;
+    private Context context;
 
-    public SaveLoadHelper(){
+    public SaveLoadHelper(Context context){
+        this.context = context;
+        FILE_NAME = context.getFilesDir() + "/" + "roster.ser";
     }
 
     public Boolean save(ArrayList<Vehicle> l){
@@ -34,6 +38,9 @@ public class SaveLoadHelper {
                 objectOutputStream.writeObject(v);
             }
             objectOutputStream.close();
+
+            backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+            mbackupRestoreHelper.startAction(context, "backup", false);
         }catch (IOException e){
             e.printStackTrace();
             return false;

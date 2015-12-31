@@ -8,8 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,14 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.backupRestoreHelper;
-import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_addField;
 
@@ -41,48 +41,42 @@ public class fragment_add_fleetRoster extends Fragment {
     private static final String TAG = "frg_add_fltRstr";
 
     private Toolbar toolbar;
-    private MaterialBetterSpinner vehicleSpinner;
+    private Context context;
 
+    private MaterialBetterSpinner vehicleSpinner;
     private RecyclerView addList;
     private RecyclerView.LayoutManager addMan;
     private RecyclerView.Adapter addListAdapter;
     private FloatingActionButton fab;
 
-    private ArrayAdapter<String> spinnerAdapter;
-    public ArrayList<ArrayList> vehicleDataAll = new ArrayList<>();
-    public String [] mvehicleTypes;
+    private Vehicle vehicle;
+    private ArrayList<Vehicle> roster;
+    private ArrayList<ArrayList> allSpecs = new ArrayList<>();
+    private HashMap<String, String> generalSpecs;
+    private HashMap<String, String> engineSpecs;
+    private HashMap<String, String> powerTrainSpecs;
+    private HashMap<String, String> otherSpecs;
+    private String [] mvehicleTypes;
 
     public fragment_add_fleetRoster(){
-        ArrayList<String> tempYear = new ArrayList<>();
-            tempYear.add("General");
-            tempYear.add("Year");
-            tempYear.add("");
-
-        ArrayList<String> tempMake = new ArrayList<>();
-            tempMake.add("General");
-            tempMake.add("Make");
-            tempMake.add("");
-
-        ArrayList<String> tempModel = new ArrayList<>();
-            tempModel.add("General");
-            tempModel.add("Model");
-            tempModel.add("");
-
-        vehicleDataAll.add(tempYear);
-        vehicleDataAll.add(tempMake);
-        vehicleDataAll.add(tempModel);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        roster = (ArrayList<Vehicle>) getActivity().getIntent().getSerializableExtra("roster");
+
+        FragmentManager fm = getFragmentManager();
+        dialog_addField_required dialog = new dialog_addField_required();
+        dialog.setTargetFragment(fragment_add_fleetRoster.this, 0);
+        dialog.show(fm, "dialog_add_field");
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
+        context = getActivity().getApplicationContext();
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -92,28 +86,27 @@ public class fragment_add_fleetRoster extends Fragment {
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
-        mvehicleTypes = getActivity().getResources().getStringArray(R.array.vehicle_type);
-        spinnerAdapter = new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes);
-        vehicleSpinner.setAdapter(spinnerAdapter);
+        mvehicleTypes = context.getResources().getStringArray(R.array.vehicle_type);
+        vehicleSpinner.setAdapter(new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes));
 
         //Recycler View
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
         addMan = new LinearLayoutManager(getActivity());
-        addList.setHasFixedSize(true);
-        addList.setItemAnimator(new DefaultItemAnimator());
         addList.setLayoutManager(addMan);
         addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int pos) {
+            public void onItemClick(View view, int i) {
                 FragmentManager fm = getFragmentManager();
                 Bundle args = new Bundle();
-                args.putSerializable("field", vehicleDataAll.get(pos));
-                if(pos > 2){
+
+                if(i > 0){
+                    args.putSerializable("field", allSpecs.get(i));
                     dialog_addField dialog_addField = new dialog_addField();
                     dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
                     dialog_addField.setArguments(args);
                     dialog_addField.show(fm, "dialog_add_field");
                 }else {
+                    args.putSerializable("year", vehicle.getReservedSpecs());
                     dialog_addField_required dialog_addField_required = new dialog_addField_required();
                     dialog_addField_required.setTargetFragment(fragment_add_fleetRoster.this, 0);
                     dialog_addField_required.setArguments(args);
@@ -122,35 +115,25 @@ public class fragment_add_fleetRoster extends Fragment {
             }
 
             @Override
-            public void onItemLongClick(View view, int pos) {
-                final int itemPos = pos;
+            public void onItemLongClick(View view, int i) {
+                final int pos = i;
 
-                if(itemPos > 2){
+                if(i > 0){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setCancelable(true);
                     builder.setTitle("Are you sure you would like to delete this field?");
                     builder.setNegativeButton("No", null);
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
                         public void onClick(DialogInterface dialog, int which) {
-
-                            vehicleDataAll.remove(itemPos);
-
-                            addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
-                            addList.swapAdapter(addListAdapter, false);
-                        }
-                    });
+                            removeEntry(pos);
+                        }});
 
                     builder.show();
                 }else{
                     Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(R.color.error).show();
+                            .setActionTextColor(ContextCompat.getColor(context, R.color.error)).show();
                 }
-            }
-        }));
-
-        addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
-        addList.setAdapter(addListAdapter);
+            }}));
 
         //menu_overview_fab
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -165,31 +148,55 @@ public class fragment_add_fleetRoster extends Fragment {
             }
         });
 
+
+
         return view;
+    }
+
+    public void onStart(){
+        super.onStart();
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
         ArrayList<String> result = data.getStringArrayListExtra("fieldData");
 
-        switch (data.getStringExtra("action")){
-            case ("edit"):
-                for (int i =0; i<vehicleDataAll.size(); i++){
-                    ArrayList<String> temp = vehicleDataAll.get(i);
-                    if (temp.get(1).equals(result.get(1))){
-                        vehicleDataAll.set(i, result);
+        switch (resultCode){
+            case (0):
+                Log.d(TAG, result.toString());
+                allSpecs.add(result);
+                vehicle = new Vehicle(vehicleSpinner.getText().toString(), result.get(0),
+                        result.get(1), result.get(2));
+
+                addListAdapter = new adapter_add_fleetRoster(allSpecs);
+                addList.setAdapter(addListAdapter);
+                break;
+
+            case (1):
+                allSpecs.add(result);
+                switch (result.get(0)){
+                    case "General":
+                        generalSpecs.put(result.get(1), result.get(2));
                         break;
-                    }
+                    case "Engine":
+                        engineSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Power Train":
+                        powerTrainSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Other":
+                        otherSpecs.put(result.get(1), result.get(2));
+                        break;
                 }
                 break;
 
-            default: //new
-                vehicleDataAll.add(result);
-
+            default:
                 break;
         }
 
-        addListAdapter = new adapter_add_fleetRoster(vehicleDataAll);
+        addListAdapter = new adapter_add_fleetRoster(allSpecs);
         addList.swapAdapter(addListAdapter, false);
     }
 
@@ -204,27 +211,13 @@ public class fragment_add_fleetRoster extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()) {
-                    ArrayList<String> temp = new ArrayList<>();
-                    temp.add("General");
-                    temp.add("type");
-                    temp.add(vehicleSpinner.getText().toString());
-                    vehicleDataAll.add(temp);
-                    Context context = getActivity().getApplicationContext();
-
-                    fleetRosterJSONHelper fleetDB = new fleetRosterJSONHelper();
-                    fleetDB.saveEntry(context, null, vehicleDataAll);
-
-                    Toast.makeText(this.getActivity(), "New Vehicle Saved", Toast.LENGTH_SHORT).show();
-
-                    backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
-
+                    roster.add(vehicle);
+                    SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
+                    saveLoadHelper.save(roster);
                     getActivity().finish();
-
-                    return true;
                 }
 
-                return false;
+                return true;
 
             case R.id.menu_cancel:
                 getActivity().finish();
@@ -235,25 +228,31 @@ public class fragment_add_fleetRoster extends Fragment {
         }
     }
 
-    public boolean isLegit(){
-        Boolean error = false;
+
+
+    private boolean isLegit(){
         if (Arrays.asList(mvehicleTypes).indexOf(vehicleSpinner.getText().toString()) == -1){
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle_type));
-
-            error = true;
+            return true;
         }
-        for (int i = 0; i < 2; i++) {
-            ArrayList<String> temp = vehicleDataAll.get(i);
+        return false;
+    }
 
-            if(temp.get(2).equals("")) {
-                Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_required_missing), Snackbar.LENGTH_SHORT).show();
-                error = true;
-
-                break;
-            }
+    private void removeEntry(int i){
+        ArrayList<String> temp = allSpecs.get(i);
+        if(generalSpecs.containsKey(temp.get(1))){
+            generalSpecs.remove(temp.get(1));
+        }else if(engineSpecs.containsKey(temp.get(1))){
+            engineSpecs.remove(temp.get(1));
+        }else if(powerTrainSpecs.containsKey(temp.get(1))){
+            powerTrainSpecs.remove(temp.get(1));
+        }else if(otherSpecs.containsKey(temp.get(1))){
+            otherSpecs.remove(temp.get(1));
         }
+        allSpecs.remove(i);
 
-        return error;
+        addListAdapter = new adapter_add_fleetRoster(allSpecs);
+        addList.swapAdapter(addListAdapter, false);
     }
 }
 

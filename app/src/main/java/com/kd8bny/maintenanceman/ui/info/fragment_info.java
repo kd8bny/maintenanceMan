@@ -3,20 +3,16 @@ package com.kd8bny.maintenanceman.ui.info;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,15 +23,14 @@ import android.widget.PopupMenu;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.backupRestoreHelper;
-import com.kd8bny.maintenanceman.data.fleetRosterJSONHelper;
-import com.kd8bny.maintenanceman.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.fleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_vehicleHistory;
 import com.kd8bny.maintenanceman.ui.edit.activity_edit;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,17 +44,20 @@ import java.util.HashMap;
 public class fragment_info extends Fragment {
     private static final String TAG = "frgmnt_inf";
 
-    private Toolbar toolbar, toolbarBottom;
-    private SlidingUpPanelLayout addEvent;
+    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+
+    private Toolbar toolbar;
     private FloatingActionButton fab;
     private RecyclerView cardList, histList;
     private RecyclerView.LayoutManager cardMan, histMan;
     private RecyclerView.Adapter cardListAdapter, histListAdapter;
 
+    private Context context;
+    private SharedPreferences sharedPreferences;
+
+    private Vehicle vehicle;
     private String refID;
     private String prefUnit;
-    private HashMap<String, HashMap> roster;
-    public HashMap<String, HashMap> vehicleSent;
     private ArrayList<ArrayList> vehicleHist;
 
     public fragment_info() {
@@ -78,13 +76,11 @@ public class fragment_info extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
         registerForContextMenu(view);
 
-        refID = getActivity().getIntent().getStringExtra("refID");
-        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
-        vehicleSent = roster.get(refID);
-
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
-        prefUnit = sp.getString("prefUnitDist", getResources().getString(R.string.pref_unit_dist_default));
+        vehicle = (Vehicle) getActivity().getIntent().getSerializableExtra("vehicle");
+        refID = vehicle.getRefID();
+        context = getActivity().getApplicationContext();
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
+        prefUnit = sharedPreferences.getString("prefUnitDist", getResources().getString(R.string.pref_unit_dist_default));
 
         //Toolbar top
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -92,16 +88,12 @@ public class fragment_info extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
-        //Toolbar bottom
-        toolbarBottom = (Toolbar) view.findViewById(R.id.tool_bar_bottom);
-        toolbarBottom.setTitle(R.string.title_history);
-        toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
 
         //Task History
         histList = (RecyclerView) view.findViewById(R.id.histList);
         histMan = new LinearLayoutManager(getActivity());
         histList.setLayoutManager(histMan);
-        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), histList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, histList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 final ArrayList<String> temp = vehicleHist.get(pos);
@@ -149,7 +141,7 @@ public class fragment_info extends Fragment {
                                         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
                                         vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
 
-                                        vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
+                                        //vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
 
                                         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
                                         mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
@@ -161,82 +153,16 @@ public class fragment_info extends Fragment {
                                 return true;
 
                             default:
+                                return false;}}});
 
-                                return false;
-                        }
-                    }
-                });
-
-                if (!temp.get(2).equals(getActivity().getApplicationContext()
-                        .getResources().getString(R.string.no_history))) {
+                if (!temp.get(2).equals(context.getResources().getString(R.string.no_history))) {
                     popupMenu.show();
-                }
-            }
-        }));
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        vehicleHist = this.sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
-        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
-        histList.setAdapter(histListAdapter);
-
+                }}}));
 
         //Info Cards
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());
-        cardList.setHasFixedSize(true);
         cardList.setLayoutManager(cardMan);
-        cardList.setAdapter(cardListAdapter);
-
-        //Slide-y up menu
-        addEvent = (SlidingUpPanelLayout) view.findViewById(R.id.sliding_layout);
-        addEvent.setPanelSlideListener(new PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View view, float slideOffset) {
-                toolbarBottom.getMenu().clear();
-
-            }
-
-            @Override
-            public void onPanelCollapsed(View view) {
-                toolbarBottom.setNavigationIcon(R.drawable.ic_action_up);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));
-                }
-            }
-
-            @Override
-            public void onPanelExpanded(View view) {
-                toolbarBottom.setNavigationIcon(R.drawable.ic_action_down);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    getActivity().getWindow().setStatusBarColor(getResources().getColor(R.color.accent_dark));
-                }
-            }
-
-            @Override
-            public void onPanelAnchored(View view) {
-
-            }
-
-            @Override
-            public void onPanelHidden(View view) {
-
-            }
-        });
-
-        view.setFocusableInTouchMode(true);
-        view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (addEvent.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                        addEvent.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
 
         //menu_overview_fab
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -246,8 +172,7 @@ public class fragment_info extends Fragment {
                 Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
                 addIntent.putExtra("refID", refID);
                 getActivity().startActivity(addIntent);
-            }
-        });
+            }});
 
         return view;
     }
@@ -255,32 +180,26 @@ public class fragment_info extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+
+        cardListAdapter = new adapter_info(vehicle, vehicleHist);
+        cardList.setAdapter(cardListAdapter);
+
+        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        //vehicleHist = this.sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));//TODO have SQL sort by date
+        histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), prefUnit);
+        histList.setAdapter(histListAdapter);
     }
 
     @Override
     public void onResume(){
         super.onResume();
 
-        //Renew maintenance history
         vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
-        vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
-
-        //Renew Vehicle Data
-        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-        roster = new HashMap<>(fltjson.getEntries(getActivity().getApplicationContext()));
-        vehicleSent = roster.get(refID);
-        cardListAdapter = new adapter_info(vehicleSent, vehicleHist);
-        cardList.setAdapter(cardListAdapter);
-
-        //Cont update maintenance history
-        histListAdapter = new adapter_history(vehicleHist, vehicleSent.get("General").get("type").toString(), prefUnit);
-        histList.setAdapter(histListAdapter);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-
+        //vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
+        cardListAdapter = new adapter_info(vehicle, vehicleHist);
+        cardList.swapAdapter(cardListAdapter, false);
+        //histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), prefUnit);
+        histList.swapAdapter(histListAdapter, false);
     }
 
     @Override
@@ -310,8 +229,7 @@ public class fragment_info extends Fragment {
                         mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                         getActivity().finish();
-                    }
-                });
+                    }});
 
                 builder.show();
 
@@ -347,11 +265,8 @@ public class fragment_info extends Fragment {
             public int compare(String o1, String o2) {
                 try {
                     return f.parse(o2).compareTo(f.parse(o1));
-                } catch (ParseException e) {
-                    throw new IllegalArgumentException(e);
-                }
-            }
-        });
+                }catch (ParseException e) {throw new IllegalArgumentException(e);}
+            }});
 
         vehicleHist.clear();
         for (String date : dates) {

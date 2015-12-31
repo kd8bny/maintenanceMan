@@ -9,6 +9,9 @@
     <string name="error_set_vehicle_type">Please Select Vehicle</string>
     <string name="hint_spinner">Select Type</string>
     <string name="hint_spinner_cat">Select Category</string>
+    <string name="hint_year">Year</string>
+    <string name="hint_make">Make</string>
+    <string name="hint_model">Model</string>
 
     <string-array name="vehicle_type">
         <item>Automobile</item>

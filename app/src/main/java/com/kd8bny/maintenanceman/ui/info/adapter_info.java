@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,19 +47,24 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final int VIEW_PWR = 3;
     private static final int VIEW_OTHER = 4;
 
-    public adapter_info(HashMap<String, HashMap> vehicleInfo, ArrayList<ArrayList> vehicleHist) {
+    public adapter_info(Vehicle vehicle, ArrayList<ArrayList> vehicleHist) {
         //info
-        for (String key : vehicleInfo.keySet()) {
+        /*for (String key : vehicleInfo.keySet()) {
             if (vehicleInfo.get(key) != null) {
                 this.vehicleInfoArray.add(vehicleInfo.get(key));
                 this.keyList.add(key);
             }
-        }
-
-        //hist
-        this.vehicleHist = vehicleHist;
+        }*/
+        this.vehicleInfoArray.add(vehicle.getGeneralSpecs());
         this.vehicleInfoArray.add(1, new HashMap());
-        this.keyList.add(1, "Chart");
+        this.vehicleInfoArray.add(vehicle.getEngineSpecs());
+        this.vehicleInfoArray.add(vehicle.getPowerTrainSpecs());
+        this.vehicleInfoArray.add(vehicle.getOtherSpecs());
+
+        /*//hist
+        this.vehicleHist = vehicleHist;
+
+        this.keyList.add(1, "Chart");*/
     }
 
     @Override
@@ -81,7 +87,6 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             default:
                 Log.wtf(TAG, "Itemview Type");
-
                 return -1;
         }
     }

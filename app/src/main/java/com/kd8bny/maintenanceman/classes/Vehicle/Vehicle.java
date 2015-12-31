@@ -16,20 +16,14 @@ public class Vehicle implements Serializable{
     public HashMap<String, String> powerTrainSpecs;
     public HashMap<String, String> otherSpecs;
 
-    public Vehicle(String year, String make, String model){
-        refID = UUID.randomUUID().toString();
-        title = year + " " + make + " " + model;
-        reservedSpecs.put("year", year);
-        reservedSpecs.put("make", make);
-        reservedSpecs.put("model", model);
-    }
-
-    public String getVehicleType() {
-        return vehicleType;
-    }
-
-    public void setVehicleType(String type) {
-        this.vehicleType = type;
+    public Vehicle(String vehicleType, String year, String make, String model){
+        this.refID = UUID.randomUUID().toString();
+        this.title = year + " " + make + " " + model;
+        this.vehicleType = vehicleType;
+        this.reservedSpecs = new HashMap<>();
+        this.reservedSpecs.put("year", year);
+        this.reservedSpecs.put("make", make);
+        this.reservedSpecs.put("model", model);
     }
 
     public String getRefID() {
@@ -38,6 +32,14 @@ public class Vehicle implements Serializable{
 
     public String getTitle() {
         return title;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String type) {
+        this.vehicleType = type;
     }
 
     public HashMap<String, String> getReservedSpecs() {

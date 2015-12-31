@@ -8,10 +8,40 @@
     android:layout_marginEnd="@dimen/field_horizontal_margin">
 
     <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/field_val"
+        android:id="@+id/year_val"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/field_vertical_margin"
+
+        android:inputType="textCapWords"
+        android:singleLine="true"
+
+        app:met_baseColor="@color/primary_text"
+        app:met_primaryColor="@color/accent"
+        app:met_errorColor="@color/error"
+        app:met_floatingLabel="highlight"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/make_val"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/field_vertical_margin"
+        android:layout_below="@id/year_val"
+
+        android:inputType="textCapWords"
+        android:singleLine="true"
+
+        app:met_baseColor="@color/primary_text"
+        app:met_primaryColor="@color/accent"
+        app:met_errorColor="@color/error"
+        app:met_floatingLabel="highlight"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/model_val"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/field_vertical_margin"
+        android:layout_below="@id/make_val"
 
         android:inputType="textCapWords"
         android:singleLine="true"

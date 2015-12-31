@@ -18,9 +18,11 @@ import java.util.ArrayList;
 public class dialog_addField_required extends DialogFragment{
     private static final String TAG = "dlg_add_fld";
 
-    private String fieldName;
-    private String fieldVal;
-    private Boolean isEdit = false;
+    private static final int REQUEST_CODE = 0;
+
+    private String YEAR;
+    private String MAKE;
+    private String MODEL;
 
     public dialog_addField_required(){
 
@@ -31,10 +33,9 @@ public class dialog_addField_required extends DialogFragment{
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null){
-            isEdit = true;
-            ArrayList<String> fieldData = (ArrayList<String>) args.getSerializable("field");
-            fieldName = fieldData.get(1);
-            fieldVal = fieldData.get(2);
+            YEAR = args.getString("year");
+            MAKE = args.getString("make");
+            MODEL = args.getString("model");
         }
     }
 
@@ -43,21 +44,27 @@ public class dialog_addField_required extends DialogFragment{
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_field_required, null);
 
-        final MaterialEditText editFieldVal = (MaterialEditText) view.findViewById(R.id.field_val);
-        editFieldVal.setHint(fieldName);
-        editFieldVal.setFloatingLabelText(fieldName);
+        final MaterialEditText yearVal = (MaterialEditText) view.findViewById(R.id.year_val);
+        yearVal.setHint(view.getResources().getString(R.string.hint_year));
+        yearVal.setFloatingLabelText(view.getResources().getString(R.string.hint_year));
 
-        if (isEdit){
-            editFieldVal.setText(fieldVal);
-        }
+        final MaterialEditText makeVal = (MaterialEditText) view.findViewById(R.id.make_val);
+        makeVal.setHint(view.getResources().getString(R.string.hint_make));
+        makeVal.setFloatingLabelText(view.getResources().getString(R.string.hint_make));
+
+        final MaterialEditText modelVal = (MaterialEditText) view.findViewById(R.id.model_val);
+        modelVal.setHint(view.getResources().getString(R.string.hint_model));
+        modelVal.setFloatingLabelText(view.getResources().getString(R.string.hint_model));
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
             .setTitle("Set:")
             .setPositiveButton("OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            fieldVal = editFieldVal.getText().toString();
-                            sendResult(0);
+                            YEAR = yearVal.getText().toString();
+                            MAKE = makeVal.getText().toString();
+                            MODEL = modelVal.getText().toString();
+                            sendResult();
                         }
                     }
             )
@@ -74,19 +81,12 @@ public class dialog_addField_required extends DialogFragment{
         return alertDialog.create();
     }
 
-    private void sendResult(int REQUEST_CODE) {
+    private void sendResult() {
         Intent intent = new Intent();
         ArrayList<String> temp = new ArrayList<>();
-        temp.add("General");
-        temp.add(fieldName);
-        temp.add(fieldVal);
-
-        if (isEdit){
-            intent.putExtra("action", "edit");
-        }else{
-            intent.putExtra("action", "new");
-        }
-
+        temp.add(YEAR);
+        temp.add(MAKE);
+        temp.add(MODEL);
         intent.putExtra("fieldData", temp);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);

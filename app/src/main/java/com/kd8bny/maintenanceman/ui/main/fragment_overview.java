@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,20 +60,12 @@ public class fragment_overview extends Fragment implements UpdateUI{
     private ArrayList<Vehicle> roster;
     private String mUnit;
 
-
-
     public fragment_overview() {
 
     }
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
         context = getActivity().getApplicationContext();
@@ -99,12 +92,14 @@ public class fragment_overview extends Fragment implements UpdateUI{
             @Override
             public void onItemClick(View view, int pos) {
                 if (!roster.isEmpty()) {
-                    Intent viewIntent = new Intent(getActivity().getApplicationContext(), activity_info.class);
-                    viewIntent.putExtra("vehicle", roster.get(pos)); //TODO prepare for object rx
-                    context.startActivity(viewIntent);//view.getcontext
+                    Intent viewIntent = new Intent(context, activity_info.class);
+                    viewIntent.putExtra("roster", roster.get(pos)); //TODO prepare for object rx
+                    view.getContext().startActivity(viewIntent);
                 } else {
-                    Intent viewAddIntent = new Intent(getActivity().getApplicationContext(), activity_add_fleetRoster.class);
-                    context.startActivity(viewAddIntent);
+                    Intent addIntent = new Intent(context, activity_add_fleetRoster.class);
+                    Log.d(TAG, roster.toString());
+                    addIntent.putExtra("roster", roster);
+                    view.getContext().startActivity(addIntent);
                 }
             }
 
@@ -120,6 +115,7 @@ public class fragment_overview extends Fragment implements UpdateUI{
             @Override
             public void onClick(View v) {
                 Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                addIntent.putExtra("roster", roster);
                 startActivity(addIntent);
                 fabMenu.close(true);
             }
@@ -245,7 +241,7 @@ public class fragment_overview extends Fragment implements UpdateUI{
     @Override
     public void onStart(){
         super.onStart();
-        SaveLoadHelper saveLoadHelper = new SaveLoadHelper();
+        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
         roster = saveLoadHelper.load();
 
         cardListAdapter = new adapter_overview(context, roster, mUnit);

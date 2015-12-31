@@ -65,7 +65,7 @@
                 android:id="@+id/odo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/year"
+                android:layout_below="@id/vehicle_title"
                 android:layout_toEndOf="@+id/carPic"
                 android:layout_alignParentEnd="true"
                 android:paddingStart="@dimen/content_vertical_space"
@@ -99,7 +99,7 @@
                 android:id="@+id/event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/year"
+                android:layout_below="@id/vehicle_title"
                 android:layout_toEndOf="@+id/odo"
                 android:layout_alignParentEnd="true"
                 android:paddingStart="@dimen/content_vertical_space"
@@ -116,5 +116,4 @@
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
         </RelativeLayout>
-
 </android.support.v7.widget.CardView>

@@ -12,7 +12,7 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.data.backupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
 
 
 public class fragment_settings_dbx extends PreferenceFragment{

@@ -58,7 +58,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             Vehicle vehicle = roster.get(i);
 
             adapterViewHolder.vTitle.setText(vehicle.getTitle());
-            adapterViewHolder.vRect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            //adapterViewHolder.vRect.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP); //TODO set background tinit
             adapterViewHolder.vCarPic.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
             switch (vehicle.getVehicleType()){

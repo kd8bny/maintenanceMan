@@ -11,20 +11,22 @@ import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;
 
-public class adapter_add_fleetRoster extends RecyclerView.Adapter<adapter_add_fleetRoster.AdapterViewHolder>{
+public class adapter_add_fleetRoster extends RecyclerView.Adapter<adapter_add_fleetRoster.AdapterViewHolder> {
     private static final String TAG = "adapter_add_flt_rtr";
 
-    public ArrayList<ArrayList> vehicleData = new ArrayList<>();
-    private TypedArray headerColors;
     private View itemView;
 
-    public adapter_add_fleetRoster(ArrayList vehicleData) {
-        this.vehicleData = vehicleData;
+    private ArrayList<ArrayList> allSpecs;
+    private TypedArray headerColors;
+
+
+    public adapter_add_fleetRoster(ArrayList<ArrayList> allSpecs) {
+        this.allSpecs = allSpecs;
     }
 
     @Override
     public int getItemCount() {
-        return vehicleData.size();
+        return allSpecs.size();
     }
 
     @Override
@@ -38,9 +40,17 @@ public class adapter_add_fleetRoster extends RecyclerView.Adapter<adapter_add_fl
         return new AdapterViewHolder(itemView);
     }
 
+
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        ArrayList<String> tempField = vehicleData.get(i);
+        ArrayList<String> tempField = allSpecs.get(i);
+
+        if(i == 0){
+
+        }else{
+            adapterViewHolder.vcat.setText(tempField.get(1));
+            adapterViewHolder.vvalue.setText(tempField.get(2));
+        }
 
         //TODO cat????
         adapterViewHolder.vcat.setText(tempField.get(1));
