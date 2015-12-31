@@ -114,7 +114,7 @@ public class dialog_addField extends DialogFragment{
                     fieldVal = editFieldVal.getText().toString();
 
                     if(!isLegit()) {
-                        sendResult(0);
+                        sendResult(1);
                         alertDialog.dismiss();
                     }
                 }

@@ -50,14 +50,15 @@ public class fragment_add_fleetRoster extends Fragment {
     private RecyclerView.Adapter addListAdapter;
     private FloatingActionButton fab;
 
+    private String [] mvehicleTypes;
     private Vehicle vehicle;
     private ArrayList<Vehicle> roster;
     private ArrayList<ArrayList> allSpecs = new ArrayList<>();
-    private HashMap<String, String> generalSpecs;
-    private HashMap<String, String> engineSpecs;
-    private HashMap<String, String> powerTrainSpecs;
-    private HashMap<String, String> otherSpecs;
-    private String [] mvehicleTypes;
+    private HashMap<String, String> generalSpecs = new HashMap<>();
+    private HashMap<String, String> engineSpecs = new HashMap<>();
+    private HashMap<String, String> powerTrainSpecs = new HashMap<>();
+    private HashMap<String, String> otherSpecs = new HashMap<>();
+
 
     public fragment_add_fleetRoster(){
     }
@@ -99,7 +100,7 @@ public class fragment_add_fleetRoster extends Fragment {
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
         addMan = new LinearLayoutManager(getActivity());
         addList.setLayoutManager(addMan);
-        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int i) {
                 FragmentManager fm = getFragmentManager();
@@ -108,15 +109,15 @@ public class fragment_add_fleetRoster extends Fragment {
                 if(i > 0){
                     args.putSerializable("field", allSpecs.get(i));
                     dialog_addField dialog_addField = new dialog_addField();
-                    dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
+                    dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 1);
                     dialog_addField.setArguments(args);
                     dialog_addField.show(fm, "dialog_add_field");
                 }else {
                     args.putSerializable("year", vehicle.getReservedSpecs());
-                    dialog_addField_required dialog_addField_required = new dialog_addField_required();
-                    dialog_addField_required.setTargetFragment(fragment_add_fleetRoster.this, 0);
-                    dialog_addField_required.setArguments(args);
-                    dialog_addField_required.show(fm, "dialog_addField_required");
+                    dialog_addField_required dialog = new dialog_addField_required();
+                    dialog.setTargetFragment(fragment_add_fleetRoster.this, 0);
+                    dialog.setArguments(args);
+                    dialog.show(fm, "dialog_addField_required");
                 }
             }
 
@@ -171,7 +172,6 @@ public class fragment_add_fleetRoster extends Fragment {
 
         switch (resultCode){
             case (0):
-                Log.d(TAG, result.toString());
                 allSpecs.add(result);
                 vehicle = new Vehicle(vehicleSpinner.getText().toString(), result.get(0),
                         result.get(1), result.get(2));
@@ -217,6 +217,10 @@ public class fragment_add_fleetRoster extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()) {
+                    vehicle.setGeneralSpecs(generalSpecs);
+                    vehicle.setEngineSpecs(engineSpecs);
+                    vehicle.setPowerTrainSpecs(powerTrainSpecs);
+                    vehicle.setOtherSpecs(otherSpecs);
                     roster.add(vehicle);
                     SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
                     saveLoadHelper.save(roster);
