@@ -59,6 +59,8 @@ public class fragment_add_fleetRoster extends Fragment {
     private HashMap<String, String> powerTrainSpecs = new HashMap<>();
     private HashMap<String, String> otherSpecs = new HashMap<>();
 
+    private Boolean isEditMode = false;
+
 
     public fragment_add_fleetRoster(){
     }
@@ -67,12 +69,19 @@ public class fragment_add_fleetRoster extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        roster = (ArrayList<Vehicle>) getActivity().getIntent().getSerializableExtra("roster");
 
-        FragmentManager fm = getFragmentManager();
-        dialog_addField_required dialog = new dialog_addField_required();
-        dialog.setTargetFragment(fragment_add_fleetRoster.this, 0);
-        dialog.show(fm, "dialog_add_field");
+        roster = (ArrayList<Vehicle>) getActivity().getIntent().getSerializableExtra("roster");
+        int vehiclePos = getActivity().getIntent().getIntExtra("vehiclePos", -1);
+        if (vehiclePos != -1){
+            isEditMode = true;
+            vehicle = roster.get(vehiclePos);
+            prepEdit();
+        }else{
+            FragmentManager fm = getFragmentManager();
+            dialog_addField_required dialog = new dialog_addField_required();
+            dialog.setTargetFragment(fragment_add_fleetRoster.this, 0);
+            dialog.show(fm, "dialog_add_field");
+        }
     }
 
     @Override
@@ -124,12 +133,15 @@ public class fragment_add_fleetRoster extends Fragment {
             @Override
             public void onItemLongClick(View view, int i) {
                 final int pos = i;
-
                 if(i > 0){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setCancelable(true);
                     builder.setTitle("Are you sure you would like to delete this field?");
-                    builder.setNegativeButton("No", null);
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().finish();
+                        }
+                    });
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             removeEntry(pos);
@@ -154,14 +166,15 @@ public class fragment_add_fleetRoster extends Fragment {
             }
         });
 
-
-
         return view;
     }
 
     public void onStart(){
         super.onStart();
-
+        if (isEditMode){
+            addListAdapter = new adapter_add_fleetRoster(allSpecs);
+            addList.setAdapter(addListAdapter);
+        }
     }
 
     @Override
@@ -181,7 +194,7 @@ public class fragment_add_fleetRoster extends Fragment {
 
             case (1):
                 allSpecs.add(result);
-                switch (result.get(0)){
+                switch (result.get(0)){//TODO replace changed key
                     case "General":
                         generalSpecs.put(result.get(1), result.get(2));
                         break;
@@ -195,9 +208,6 @@ public class fragment_add_fleetRoster extends Fragment {
                         otherSpecs.put(result.get(1), result.get(2));
                         break;
                 }
-                break;
-
-            default:
                 break;
         }
 
@@ -216,11 +226,20 @@ public class fragment_add_fleetRoster extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()) {
-                    vehicle.setGeneralSpecs(generalSpecs);
-                    vehicle.setEngineSpecs(engineSpecs);
-                    vehicle.setPowerTrainSpecs(powerTrainSpecs);
-                    vehicle.setOtherSpecs(otherSpecs);
-                    roster.add(vehicle);
+                    if (isEditMode){
+                        int pos = roster.indexOf(vehicle);
+                        vehicle.setGeneralSpecs(generalSpecs);
+                        vehicle.setEngineSpecs(engineSpecs);
+                        vehicle.setPowerTrainSpecs(powerTrainSpecs);
+                        vehicle.setOtherSpecs(otherSpecs);
+                        roster.add(pos, vehicle);
+                    }else {
+                        vehicle.setGeneralSpecs(generalSpecs);
+                        vehicle.setEngineSpecs(engineSpecs);
+                        vehicle.setPowerTrainSpecs(powerTrainSpecs);
+                        vehicle.setOtherSpecs(otherSpecs);
+                        roster.add(vehicle);
+                    }
                     SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
                     saveLoadHelper.save(roster);
                     getActivity().finish();
@@ -237,7 +256,41 @@ public class fragment_add_fleetRoster extends Fragment {
         }
     }
 
+    private void prepEdit(){
+        generalSpecs = vehicle.getGeneralSpecs();
+        engineSpecs = vehicle.getEngineSpecs();
+        powerTrainSpecs = vehicle.getPowerTrainSpecs();
+        otherSpecs = vehicle.getOtherSpecs();
 
+        for (String key : generalSpecs.keySet()) {
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add("General");
+            temp.add(key);
+            temp.add(generalSpecs.get(key));
+            allSpecs.add(temp);
+        }
+        for (String key : engineSpecs.keySet()) {
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add("Engine");
+            temp.add(key);
+            temp.add(engineSpecs.get(key));
+            allSpecs.add(temp);
+        }
+        for (String key : powerTrainSpecs.keySet()) {
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add("Power Train");
+            temp.add(key);
+            temp.add(powerTrainSpecs.get(key));
+            allSpecs.add(temp);
+        }
+        for (String key : otherSpecs.keySet()) {
+            ArrayList<String> temp = new ArrayList<>();
+            temp.add("Other");
+            temp.add(key);
+            temp.add(otherSpecs.get(key));
+            allSpecs.add(temp);
+        }
+    }
 
     private boolean isLegit(){
         if (Arrays.asList(mvehicleTypes).indexOf(vehicleSpinner.getText().toString()) == -1){
@@ -259,9 +312,6 @@ public class fragment_add_fleetRoster extends Fragment {
             otherSpecs.remove(temp.get(1));
         }
         allSpecs.remove(i);
-
-        addListAdapter = new adapter_add_fleetRoster(allSpecs);
-        addList.swapAdapter(addListAdapter, false);
     }
 }
 

@@ -25,7 +25,6 @@ import com.kd8bny.maintenanceman.classes.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
-import com.kd8bny.maintenanceman.ui.edit.activity_edit;
 
 import java.util.ArrayList;
 
@@ -146,8 +145,9 @@ public class fragment_info extends Fragment {
                 return true;
 
             case R.id.menu_edit:
-                Intent editIntent = new Intent(getActivity(), activity_edit.class);
-                editIntent.putExtra("refID", refID);
+                Intent editIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                editIntent.putExtra("roster", roster);
+                editIntent.putExtra("vehiclePos", roster.indexOf(vehicle));
                 getActivity().startActivity(editIntent);
 
                 return true;

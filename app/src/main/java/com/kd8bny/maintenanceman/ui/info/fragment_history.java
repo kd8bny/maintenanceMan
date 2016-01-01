@@ -168,7 +168,7 @@ public class fragment_history extends Fragment {
         histList.swapAdapter(histListAdapter, false);
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_info, menu);
@@ -211,7 +211,7 @@ public class fragment_history extends Fragment {
             default:
                 return false;
         }
-    }
+    }*/
 
     public ArrayList<ArrayList> sort(ArrayList<ArrayList> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
