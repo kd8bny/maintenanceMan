@@ -31,12 +31,11 @@ public class SaveLoadHelper {
     public Boolean save(ArrayList<Vehicle> l){
         /**
          * Saves objects returns true is successful
+         * Auto saves to cloud source
          */
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
-            for (Vehicle v : l) {
-                objectOutputStream.writeObject(v);
-            }
+            objectOutputStream.writeObject(l);
             objectOutputStream.close();
 
             backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
@@ -55,10 +54,9 @@ public class SaveLoadHelper {
             FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-            while (true){
-                temp.add((Vehicle) objectInputStream.readObject());
-            }
-        }catch (EOFException | FileNotFoundException e){
+            temp = (ArrayList) objectInputStream.readObject();
+
+        }catch (FileNotFoundException e){
         }catch (IOException | ClassNotFoundException e){e.printStackTrace();}
 
         return temp;
