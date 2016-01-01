@@ -6,10 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,70 +24,47 @@ import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
 
-    public ArrayList<HashMap> vehicleInfoArray = new ArrayList<>();
-    public ArrayList<String> keyList = new ArrayList<>();
-    public Map<String, String> cardInfo = new LinkedHashMap<>();
-    public ArrayList<ArrayList> vehicleHist = new ArrayList<>();
+    private ArrayList<HashMap> vehicleInfoArray = new ArrayList<>();
+    private ArrayList<Integer> itemPos = new ArrayList<>();
+    private HashMap<String, String> cardInfo = new HashMap<>();
+    private ArrayList<ArrayList> vehicleHist = new ArrayList<>();
 
-    protected View itemViewGeneral;
-    protected View itemViewEngine;
-    protected View itemViewPWR;
-    protected View itemViewOther;
-    protected View itemViewChart;
-
-    private static final int VIEW_GENERAL = 0;
+    private static final int VIEW_SPECS = 0;
     private static final int VIEW_CHART = 1;
-    private static final int VIEW_ENGINE = 2;
-    private static final int VIEW_PWR = 3;
-    private static final int VIEW_OTHER = 4;
+    private int chartPos = 1;
 
-    public adapter_info(Vehicle vehicle, ArrayList<ArrayList> vehicleHist) {
-        //info
-        /*for (String key : vehicleInfo.keySet()) {
-            if (vehicleInfo.get(key) != null) {
-                this.vehicleInfoArray.add(vehicleInfo.get(key));
-                this.keyList.add(key);
-            }
-        }*/
-        this.vehicleInfoArray.add(vehicle.getGeneralSpecs());
-        this.vehicleInfoArray.add(1, new HashMap());
-        this.vehicleInfoArray.add(vehicle.getEngineSpecs());
-        this.vehicleInfoArray.add(vehicle.getPowerTrainSpecs());
-        this.vehicleInfoArray.add(vehicle.getOtherSpecs());
+    protected View vSpecs;
+    protected View vChart;
 
-        /*//hist
-        this.vehicleHist = vehicleHist;
-
-        this.keyList.add(1, "Chart");*/
+    public adapter_info(Vehicle vehicle) {
+        ArrayList<HashMap> temp = new ArrayList<>();
+        temp.add(vehicle.getGeneralSpecs());
+        temp.add(1, new HashMap());//TODO package here
+        temp.add(vehicle.getEngineSpecs());
+        temp.add(vehicle.getPowerTrainSpecs());
+        temp.add(vehicle.getOtherSpecs());
+        vehicleInfoArray = temp;
+        for (int i = temp.size()-1; i >= 0 ; i--) {
+            if (temp.get(i).isEmpty()){
+                vehicleInfoArray.remove(i);
+                if (i == 0){
+                    chartPos = 0;
+                }else if (i == 1){
+                    chartPos = -1;
+                }
+            }else{itemPos.add(0, i);}
+        }
     }
 
-    @Override
     public int getItemViewType(int i){
-        switch (keyList.get(i)){
-            case "Chart":
-                return VIEW_CHART;
-
-            case "General":
-                return VIEW_GENERAL;
-
-            case "Engine":
-                return VIEW_ENGINE;
-
-            case "Power Train":
-                return VIEW_PWR;
-
-            case "Other":
-                return VIEW_OTHER;
-
-            default:
-                Log.wtf(TAG, "Itemview Type");
-                return -1;
+        if(i == chartPos) {
+            return VIEW_CHART;
+        }else{
+            return VIEW_SPECS;
         }
     }
 
@@ -100,43 +77,19 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
        switch(i) {
            case VIEW_CHART:
-               itemViewChart = LayoutInflater
+               vChart = LayoutInflater
                        .from(viewGroup.getContext())
                        .inflate(R.layout.card_info_chart, viewGroup, false);
 
-               return new ViewHolderChart(itemViewChart, null);
+               return new vhChart(vChart, null);
 
-           case VIEW_GENERAL:
-               itemViewGeneral = LayoutInflater
+           case VIEW_SPECS:
+               vSpecs = LayoutInflater
                        .from(viewGroup.getContext())
                        .inflate(R.layout.card_info, viewGroup, false);
                cardInfo.clear();
 
-               return new ViewHolderGeneral(itemViewGeneral, cardInfo);
-
-           case VIEW_ENGINE:
-                itemViewEngine = LayoutInflater
-                        .from(viewGroup.getContext())
-                        .inflate(R.layout.card_info, viewGroup, false);
-                cardInfo.clear();
-
-                return new ViewHolderEngine(itemViewEngine, cardInfo);
-
-           case VIEW_PWR:
-                itemViewPWR = LayoutInflater
-                        .from(viewGroup.getContext())
-                        .inflate(R.layout.card_info, viewGroup, false);
-                cardInfo.clear();
-
-                return new ViewHolderPWR(itemViewPWR, cardInfo);
-
-           case VIEW_OTHER:
-                itemViewOther = LayoutInflater
-                       .from(viewGroup.getContext())
-                       .inflate(R.layout.card_info, viewGroup, false);
-                cardInfo.clear();
-
-               return new ViewHolderOther(itemViewOther, cardInfo);
+               return new vhSpecs(vSpecs, cardInfo, null, i);
 
            default:
                Log.e(TAG, "No view");
@@ -148,42 +101,100 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         cardInfo = vehicleInfoArray.get(i);
-
         switch (getItemViewType(i)) {
             case VIEW_CHART:
-                new ViewHolderChart(itemViewChart, vehicleHist);
-
+                new vhChart(vChart, vehicleHist);
                 break;
 
-            case VIEW_GENERAL:
-                new ViewHolderGeneral(itemViewGeneral, cardInfo);
-
-                break;
-
-            case VIEW_ENGINE:
-                new ViewHolderEngine(itemViewEngine, cardInfo);
-
-                break;
-
-            case VIEW_PWR:
-                new ViewHolderPWR(itemViewPWR, cardInfo);
-
-                break;
-
-            case VIEW_OTHER:
-                new ViewHolderOther(itemViewOther, cardInfo);
-
+            case VIEW_SPECS:
+                new vhSpecs(vSpecs, cardInfo, itemPos, i);
                 break;
         }
     }
 }
 
-class ViewHolderChart extends RecyclerView.ViewHolder {
+class vhSpecs extends RecyclerView.ViewHolder {
+    private static final String TAG = "adptr_info_VwHldr_gen";
+
+    private TypedArray headerColors;
+
+    public vhSpecs(View view, final HashMap<String, String> cardInfo, ArrayList<Integer> itemPos, int i) {
+        super(view);
+        View relLayout = view.findViewById(R.id.card_info_rel);
+        View linLayout = relLayout.findViewById(R.id.card_info_lin);
+
+        DisplayMetrics metrics = linLayout.getContext().getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        float fieldsp = view.getResources().getDimension(R.dimen.field_font);
+        int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
+
+        LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        if(cardInfo.size() > 0) {
+            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
+            TextView vHeader = (TextView) view.findViewById(R.id.card_info_title);
+            vHeader.setText(getTitle(itemPos, i));
+            ImageView imageView = (ImageView) view.findViewById(R.id.card_info_iv);
+            imageView.setBackgroundColor(headerColors.getColor(i, 0));
+
+            for (String key : cardInfo.keySet()) {
+                if(!cardInfo.get(key).isEmpty() && !key.equals("type")) {
+                    LinearLayout tempLinLay = new LinearLayout(view.getContext());
+                    TextView vTitle = new TextView(view.getContext());
+                    TextView vItem = new TextView(view.getContext());
+                    tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
+
+                    vTitle.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    vItem.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                    vTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                    vTitle.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                    vTitle.setMinWidth(width/3);
+                    vTitle.setMaxWidth(width/2);
+                    vItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+                    vItem.setTextColor(view.getResources().getColor(R.color.secondary_text));
+
+                    vTitle.setText(key + ": ");
+                    vItem.setText(cardInfo.get(key));
+
+                    tempLinLay.addView(vTitle);
+                    tempLinLay.addView(vItem);
+                    ((LinearLayout) linLayout).addView(tempLinLay, textViewItemParams);
+                }
+            }
+        }
+    }
+
+    private int getTitle(ArrayList<Integer> itemPos, int i){
+        switch (itemPos.get(i)){
+            case 0:
+                return R.string.header_general;
+            case 1:
+                return R.string.header_chart;
+            case 2:
+                return R.string.header_engine;
+            case 3:
+                return R.string.header_power_train;
+            case 4:
+                return R.string.header_other;
+            default:
+                return -1;
+        }
+    }
+}
+
+class vhChart extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_info_VwHldr_chrt";
 
     private TypedArray headerColors;
 
-    public ViewHolderChart(View view, final ArrayList<ArrayList> vehicleHist) {
+    public vhChart(View view, final ArrayList<ArrayList> vehicleHist) {
         super(view);
 
         final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
@@ -264,362 +275,6 @@ class ViewHolderChart extends RecyclerView.ViewHolder {
             }catch (NumberFormatException e){
                 //e.printStackTrace();
                 Log.i(TAG, "No date found");
-            }
-        }
-    }
-}
-
-class ViewHolderGeneral extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_gen";
-
-    private TypedArray headerColors;
-
-    public ViewHolderGeneral(View view, final Map<String, String> cardInfo) {
-        super(view);
-
-        View layout = view.findViewById(R.id.card_info_rel);
-
-        DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
-        float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
-        float vMdp =  view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
-        float vCSdp = view.getResources().getDimension(R.dimen.content_vertical_space);
-        float hCSdp = view.getResources().getDimension(R.dimen.content_horizontal_margin);
-
-        int hMargin = (int) (hMdp/metrics.density + 0.5f);
-        int vMargin = (int) (vMdp/metrics.density + 0.5f);
-        int vcontentSpace = (int) (vCSdp/metrics.density + 0.5f);
-        int hcontentSpace = (int) (hCSdp/metrics.density + 0.5f);
-
-        float fieldsp = view.getResources().getDimension(R.dimen.field_font);
-        float headersp = view.getResources().getDimension(R.dimen.header_font);
-        int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
-        int headerSize = (int) (headersp/metrics.density + 0.5f);
-
-        LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        textViewTitleParams.setMarginStart(50);
-        textViewItemParams.setMarginStart(hMargin);
-
-        if(cardInfo.size() > 0) {
-            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-
-            //Header
-            TextView tempHeaderTitle = new TextView(view.getContext());
-
-            tempHeaderTitle.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
-            tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
-            tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
-            tempHeaderTitle.setText(R.string.header_general);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(1, 0));
-
-            ((LinearLayout) layout).addView(tempHeaderTitle);
-
-            for (String key : cardInfo.keySet()) {
-                if(!cardInfo.get(key).isEmpty() && !key.equals("type")) {
-                    LinearLayout tempLinLay = new LinearLayout(view.getContext());
-                    TextView tempTitleTextView = new TextView(view.getContext());
-                    TextView tempItemTextView = new TextView(view.getContext());
-                    tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
-
-                    tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                    tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-                    tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-
-                    tempTitleTextView.setMinEms(5);
-                    tempTitleTextView.setMaxEms(5);
-                    tempTitleTextView.setGravity(Gravity.START);
-                    tempItemTextView.setGravity(Gravity.START);
-
-                    tempTitleTextView.setText(key + ": ");
-                    tempItemTextView.setText(cardInfo.get(key));
-
-                    tempLinLay.addView(tempTitleTextView);
-                    tempLinLay.addView(tempItemTextView);
-                    ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
-                }
-            }
-        }
-    }
-}
-
-class ViewHolderEngine extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_eng";
-
-    private TypedArray headerColors;
-
-    public ViewHolderEngine(View view, final Map<String, String> cardInfo) {
-        super(view);
-
-        View layout = view.findViewById(R.id.card_info_rel);
-
-        DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
-        float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
-        float vMdp =  view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
-        float vCSdp = view.getResources().getDimension(R.dimen.content_vertical_space);
-        float hCSdp = view.getResources().getDimension(R.dimen.content_horizontal_margin);
-
-        int hMargin = (int) (hMdp/metrics.density + 0.5f);
-        int vMargin = (int) (vMdp/metrics.density + 0.5f);
-        int vcontentSpace = (int) (vCSdp/metrics.density + 0.5f);
-        int hcontentSpace = (int) (hCSdp/metrics.density + 0.5f);
-
-        float fieldsp = view.getResources().getDimension(R.dimen.field_font);
-        float headersp = view.getResources().getDimension(R.dimen.header_font);
-        int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
-        int headerSize = (int) (headersp/metrics.density + 0.5f);
-
-        LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        textViewTitleParams.setMarginStart(50);
-        textViewItemParams.setMarginStart(hMargin);
-
-        if(cardInfo.size() > 0) {
-            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-
-            //Header
-            TextView tempHeaderTitle = new TextView(view.getContext());
-
-            tempHeaderTitle.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
-            tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
-            tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
-            tempHeaderTitle.setText(R.string.header_engine);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(2, 0));
-
-            ((LinearLayout) layout).addView(tempHeaderTitle);
-
-            for (String key : cardInfo.keySet()) {
-                if(!cardInfo.get(key).isEmpty()) {
-                    LinearLayout tempLinLay = new LinearLayout(view.getContext());
-                    TextView tempTitleTextView = new TextView(view.getContext());
-                    TextView tempItemTextView = new TextView(view.getContext());
-                    tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
-
-                    tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                    tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-                    tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-
-                    tempTitleTextView.setMinEms(5);
-                    tempTitleTextView.setMaxEms(5);
-                    tempTitleTextView.setGravity(Gravity.START);
-                    tempItemTextView.setGravity(Gravity.START);
-
-                    tempTitleTextView.setText(key + ": ");
-                    tempItemTextView.setText(cardInfo.get(key));
-
-                    tempLinLay.addView(tempTitleTextView);
-                    tempLinLay.addView(tempItemTextView);
-                    ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
-                }
-            }
-        }
-    }
-}
-
-class ViewHolderPWR extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_pwr";
-
-    private TypedArray headerColors;
-
-    public ViewHolderPWR(View view, final Map<String, String> cardInfo) {
-        super(view);
-
-        View layout = view.findViewById(R.id.card_info_rel);
-
-        DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
-        float hMdp =  view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
-        float vMdp =  view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
-        float vCSdp = view.getResources().getDimension(R.dimen.content_vertical_space);
-        float hCSdp = view.getResources().getDimension(R.dimen.content_horizontal_margin);
-
-        int hMargin = (int) (hMdp/metrics.density + 0.5f);
-        int vMargin = (int) (vMdp/metrics.density + 0.5f);
-        int vcontentSpace = (int) (vCSdp/metrics.density + 0.5f);
-        int hcontentSpace = (int) (hCSdp/metrics.density + 0.5f);
-
-        float fieldsp = view.getResources().getDimension(R.dimen.field_font);
-        float headersp = view.getResources().getDimension(R.dimen.header_font);
-        int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
-        int headerSize = (int) (headersp/metrics.density + 0.5f);
-
-        LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        textViewTitleParams.setMarginStart(50);
-        textViewItemParams.setMarginStart(hMargin);
-
-        if (cardInfo.size() > 0) {
-            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-
-            //Header
-            TextView tempHeaderTitle = new TextView(view.getContext());
-
-            tempHeaderTitle.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
-            tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
-            tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
-            tempHeaderTitle.setText(R.string.header_power_train);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(3, 0));
-
-            ((LinearLayout) layout).addView(tempHeaderTitle);
-
-            for (String key : cardInfo.keySet()) {
-                if (!cardInfo.get(key).isEmpty()) {
-                    LinearLayout tempLinLay = new LinearLayout(view.getContext());
-                    TextView tempTitleTextView = new TextView(view.getContext());
-                    TextView tempItemTextView = new TextView(view.getContext());
-                    tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
-
-                    tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                    tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-                    tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-
-                    tempTitleTextView.setMinEms(5);
-                    tempTitleTextView.setMaxEms(5);
-                    tempTitleTextView.setGravity(Gravity.START);
-                    tempItemTextView.setGravity(Gravity.START);
-
-                    tempTitleTextView.setText(key + ": ");
-                    tempItemTextView.setText(cardInfo.get(key));
-
-                    tempLinLay.addView(tempTitleTextView);
-                    tempLinLay.addView(tempItemTextView);
-                    ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
-                }
-            }
-        }
-    }
-}
-
-class ViewHolderOther extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_othr";
-
-    private TypedArray headerColors;
-
-    public ViewHolderOther(View view, final Map<String, String> cardInfo) {
-        super(view);
-
-        View layout = view.findViewById(R.id.card_info_rel);
-
-        DisplayMetrics metrics = layout.getContext().getResources().getDisplayMetrics();
-        float hMdp = view.getResources().getDimension(R.dimen.start_end_horizontal_margin);
-        float vMdp =  view.getResources().getDimension(R.dimen.heading_sub_vertical_margin);
-        float vCSdp = view.getResources().getDimension(R.dimen.content_vertical_space);
-        float hCSdp = view.getResources().getDimension(R.dimen.content_horizontal_margin);
-
-        int hMargin = (int) (hMdp/metrics.density + 0.5f);
-        int vMargin = (int) (vMdp/metrics.density + 0.5f);
-        int vcontentSpace = (int) (vCSdp/metrics.density + 0.5f);
-        int hcontentSpace = (int) (hCSdp/metrics.density + 0.5f);
-
-        float fieldsp = view.getResources().getDimension(R.dimen.field_font);
-        float headersp = view.getResources().getDimension(R.dimen.header_font);
-        int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
-        int headerSize = (int) (headersp/metrics.density + 0.5f);
-
-        LinearLayout.LayoutParams textViewTitleParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout.LayoutParams textViewItemParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        textViewTitleParams.setMarginStart(50);
-        textViewItemParams.setMarginStart(hMargin);
-
-        if(cardInfo.size() > 0) {
-            headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-
-            //Header
-            TextView tempHeaderTitle = new TextView(view.getContext());
-
-            tempHeaderTitle.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            tempHeaderTitle.setPadding(hMargin, 0, 0, 0);
-            tempHeaderTitle.setTextColor(view.getResources().getColor(R.color.header));
-            tempHeaderTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, headerSize);
-            tempHeaderTitle.setText(R.string.header_other);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(4, 0));
-
-            ((LinearLayout) layout).addView(tempHeaderTitle);
-
-            for (String key : cardInfo.keySet()) {
-                if(!cardInfo.get(key).isEmpty()) {
-                    LinearLayout tempLinLay = new LinearLayout(view.getContext());
-                    TextView tempTitleTextView = new TextView(view.getContext());
-                    TextView tempItemTextView = new TextView(view.getContext());
-                    tempLinLay.setOrientation(LinearLayout.HORIZONTAL);
-
-                    tempTitleTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    tempItemTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                    tempTitleTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempTitleTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-                    tempItemTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    tempItemTextView.setTextColor(view.getResources().getColor(R.color.secondary_text));
-
-                    tempTitleTextView.setMinEms(5);
-                    tempTitleTextView.setMaxEms(5);
-                    tempTitleTextView.setGravity(Gravity.START);
-                    tempItemTextView.setGravity(Gravity.START);
-
-                    tempTitleTextView.setText(key + ": ");
-                    tempItemTextView.setText(cardInfo.get(key));
-
-                    tempLinLay.addView(tempTitleTextView);
-                    tempLinLay.addView(tempItemTextView);
-                    ((LinearLayout) layout).addView(tempLinLay, textViewItemParams);
-                }
             }
         }
     }

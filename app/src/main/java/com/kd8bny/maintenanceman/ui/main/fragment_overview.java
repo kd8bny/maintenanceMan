@@ -93,11 +93,11 @@ public class fragment_overview extends Fragment implements UpdateUI{
             public void onItemClick(View view, int pos) {
                 if (!roster.isEmpty()) {
                     Intent viewIntent = new Intent(context, activity_info.class);
-                    viewIntent.putExtra("roster", roster.get(pos)); //TODO prepare for object rx
+                    viewIntent.putExtra("roster", roster);
+                    viewIntent.putExtra("pos", pos);
                     view.getContext().startActivity(viewIntent);
                 } else {
                     Intent addIntent = new Intent(context, activity_add_fleetRoster.class);
-                    Log.d(TAG, roster.toString());
                     addIntent.putExtra("roster", roster);
                     view.getContext().startActivity(addIntent);
                 }

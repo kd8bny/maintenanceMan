@@ -148,7 +148,6 @@ public class fragment_add_fleetRoster extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
-
                 dialog_addField dialog_addField = new dialog_addField();
                 dialog_addField.setTargetFragment(fragment_add_fleetRoster.this, 0);
                 dialog_addField.show(fm, "dialog_add_field");

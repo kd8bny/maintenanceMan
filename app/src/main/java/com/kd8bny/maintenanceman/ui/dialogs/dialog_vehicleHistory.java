@@ -1,7 +1,7 @@
 package com.kd8bny.maintenanceman.ui.dialogs;
 
-import android.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -18,7 +18,7 @@ import com.kd8bny.maintenanceman.R;
 import java.util.ArrayList;
 
 
-public class dialog_vehicleHistory extends DialogFragment{
+public class dialog_vehicleHistory extends DialogFragment {
     private static final String TAG = "dlg_vhcl_hstry";
 
     public ArrayList<String> event;
