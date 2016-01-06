@@ -155,8 +155,8 @@ public class fragment_edit extends Fragment {
 
                     builder.show();
                 }else{
-                    Snackbar.make(view.findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(getActivity().getApplicationContext().getColor(R.color.error)).show();
+                    Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
+                            .setActionTextColor(getResources().getColor(R.color.error)).show();
                 }
             }
         }));

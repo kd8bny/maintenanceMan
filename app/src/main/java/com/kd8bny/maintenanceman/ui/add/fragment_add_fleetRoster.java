@@ -144,7 +144,7 @@ public class fragment_add_fleetRoster extends Fragment {
                     builder.show();
                 }else{
                     Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(R.color.error).show();
+                            .setActionTextColor(getResources().getColor(R.color.error)).show();
                 }
             }
         }));
