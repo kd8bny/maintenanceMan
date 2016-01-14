@@ -53,6 +53,7 @@ public class fragment_add_fleetRoster extends Fragment {
     private String [] mvehicleTypes;
     private Vehicle vehicle;
     private ArrayList<Vehicle> roster;
+
     private ArrayList<ArrayList> allSpecs = new ArrayList<>();
     private HashMap<String, String> generalSpecs = new HashMap<>();
     private HashMap<String, String> engineSpecs = new HashMap<>();
@@ -70,8 +71,10 @@ public class fragment_add_fleetRoster extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        roster = (ArrayList<Vehicle>) getActivity().getIntent().getSerializableExtra("roster");
-        int vehiclePos = getActivity().getIntent().getIntExtra("vehiclePos", -1);
+        roster = new SaveLoadHelper(getActivity().getApplicationContext()).load();
+        Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
+        int vehiclePos = bundle.getInt("pos", -1);
+
         if (vehiclePos != -1){
             isEditMode = true;
             vehicle = roster.get(vehiclePos);
@@ -86,6 +89,7 @@ public class fragment_add_fleetRoster extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.fragment_add_fleet_roster, container, false);
         context = getActivity().getApplicationContext();
 
@@ -109,6 +113,9 @@ public class fragment_add_fleetRoster extends Fragment {
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
         addMan = new LinearLayoutManager(getActivity());
         addList.setLayoutManager(addMan);
+        addListAdapter = new adapter_add_fleetRoster(allSpecs);
+        addList.setAdapter(addListAdapter);
+
         addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int i) {
@@ -172,8 +179,7 @@ public class fragment_add_fleetRoster extends Fragment {
     public void onStart(){
         super.onStart();
         if (isEditMode){
-            addListAdapter = new adapter_add_fleetRoster(allSpecs);
-            addList.setAdapter(addListAdapter);
+
         }
     }
 
@@ -232,8 +238,10 @@ public class fragment_add_fleetRoster extends Fragment {
                         vehicle.setEngineSpecs(engineSpecs);
                         vehicle.setPowerTrainSpecs(powerTrainSpecs);
                         vehicle.setOtherSpecs(otherSpecs);
-                        roster.add(pos, vehicle);
+                        roster.set(pos, vehicle);
+                        //RosterHolder.getInstance().getRoster(context).set(pos, vehicle); TODO
                     }else {
+                        Log.d(TAG,"save" + generalSpecs + engineSpecs + powerTrainSpecs + otherSpecs);
                         vehicle.setGeneralSpecs(generalSpecs);
                         vehicle.setEngineSpecs(engineSpecs);
                         vehicle.setPowerTrainSpecs(powerTrainSpecs);
@@ -262,6 +270,7 @@ public class fragment_add_fleetRoster extends Fragment {
         powerTrainSpecs = vehicle.getPowerTrainSpecs();
         otherSpecs = vehicle.getOtherSpecs();
 
+        vehicleSpinner.setText(vehicle.getVehicleType());
         for (String key : generalSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
             temp.add("General");
@@ -290,6 +299,7 @@ public class fragment_add_fleetRoster extends Fragment {
             temp.add(otherSpecs.get(key));
             allSpecs.add(temp);
         }
+        Log.d(TAG, generalSpecs.toString());
     }
 
     private boolean isLegit(){

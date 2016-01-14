@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,16 +64,22 @@ public class fragment_overview extends Fragment implements UpdateUI{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_overview, container, false);
         context = getActivity().getApplicationContext();
+        roster = new ArrayList<>(new SaveLoadHelper(context).load());
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
 
         //Data
         backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
         mbackupRestoreHelper.updateUI = this;
         mbackupRestoreHelper.startAction(context, "restore", false);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
         //Toolbar
         toolbar = (Toolbar) view.findViewById(R.id.tool_bar);
@@ -84,21 +89,30 @@ public class fragment_overview extends Fragment implements UpdateUI{
 
         //cards
         mUnit = sharedPreferences.getString("prefUnitDist", "");
-
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
+        cardListAdapter = new adapter_overview(context, roster, mUnit);
+        cardList.setAdapter(cardListAdapter);
         cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 if (!roster.isEmpty()) {
-                    Intent viewIntent = new Intent(context, activity_info.class);
-                    viewIntent.putExtra("roster", roster);
-                    viewIntent.putExtra("pos", pos);
+                    Intent viewIntent = new Intent(getActivity(), activity_info.class);
+                    //Intent viewIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                    //Intent viewIntent = new Intent(getActivity(), test.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("roster", roster);
+                    //bundle.putParcelable("ve", roster.get(pos));
+                    bundle.putInt("pos", pos);
+                    viewIntent.putExtra("bundle", bundle);
                     view.getContext().startActivity(viewIntent);
                 } else {
-                    Intent addIntent = new Intent(context, activity_add_fleetRoster.class);
-                    addIntent.putExtra("roster", roster);
+                    Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                    Bundle bundle = new Bundle();
+                    //bundle.putParcelableArrayList("roster", roster);
+
+                    addIntent.putExtra("bundle", bundle);
                     view.getContext().startActivity(addIntent);
                 }
             }
@@ -239,13 +253,7 @@ public class fragment_overview extends Fragment implements UpdateUI{
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
-        roster = saveLoadHelper.load();
-        cardListAdapter = new adapter_overview(context, roster, mUnit);
-        cardList.setAdapter(cardListAdapter);
-    }
+    public void onStart(){super.onStart();}
 
     @Override
     public void onResume() {

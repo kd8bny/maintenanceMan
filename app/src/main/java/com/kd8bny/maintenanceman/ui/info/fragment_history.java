@@ -22,12 +22,10 @@ import android.view.ViewGroup;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
-import com.kd8bny.maintenanceman.classes.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 import com.kd8bny.maintenanceman.ui.dialogs.dialog_vehicleHistory;
-import com.kd8bny.maintenanceman.ui.edit.activity_edit;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -63,14 +61,16 @@ public class fragment_history extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        roster = (ArrayList) getActivity().getIntent().getSerializableExtra("roster");
-        int pos = getActivity().getIntent().getIntExtra("pos", -1);
-        vehicle = roster.get(pos);
-        refID = vehicle.getRefID();
         context = getActivity().getApplicationContext();
+
+        Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
+        roster = bundle.getParcelableArrayList("roster");
+        int vehiclePos = bundle.getInt("pos", -1);
+
+        vehicle = roster.get(vehiclePos);
+        refID = vehicle.getRefID();
+
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
-        prefUnit = sharedPreferences.getString("prefUnitDist", getResources().getString(R.string.pref_unit_dist_default));
     }
 
     @Override

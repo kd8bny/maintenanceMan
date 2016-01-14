@@ -32,6 +32,7 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private ArrayList<Integer> itemPos = new ArrayList<>();
     private HashMap<String, String> cardInfo = new HashMap<>();
     private ArrayList<ArrayList> vehicleHist = new ArrayList<>();
+    private Vehicle mVehicle;
 
     private static final int VIEW_SPECS = 0;
     private static final int VIEW_CHART = 1;
@@ -41,12 +42,13 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected View vChart;
 
     public adapter_info(Vehicle vehicle) {
+        mVehicle = vehicle;
         ArrayList<HashMap> temp = new ArrayList<>();
-        temp.add(vehicle.getGeneralSpecs());
+        temp.add(mVehicle.getGeneralSpecs());
         temp.add(1, new HashMap());//TODO package here
-        temp.add(vehicle.getEngineSpecs());
-        temp.add(vehicle.getPowerTrainSpecs());
-        temp.add(vehicle.getOtherSpecs());
+        temp.add(mVehicle.getEngineSpecs());
+        temp.add(mVehicle.getPowerTrainSpecs());
+        temp.add(mVehicle.getOtherSpecs());
         vehicleInfoArray = temp;
         for (int i = temp.size()-1; i >= 0 ; i--) {
             if (temp.get(i).isEmpty()){
@@ -58,6 +60,8 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 }
             }else{itemPos.add(0, i);}
         }
+        Log.e(TAG, temp.toString());
+        Log.e(TAG, vehicleInfoArray.toString());
     }
 
     public int getItemViewType(int i){

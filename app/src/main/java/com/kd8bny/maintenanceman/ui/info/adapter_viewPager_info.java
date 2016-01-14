@@ -1,9 +1,11 @@
 package com.kd8bny.maintenanceman.ui.info;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import com.kd8bny.maintenanceman.R;
 
@@ -14,7 +16,6 @@ public class adapter_viewPager_info extends FragmentPagerAdapter {
     private static int NUM_ITEMS = 2;
 
     private Context context;
-
     public adapter_viewPager_info(FragmentManager fm, Context context) {
         super(fm);
         this.context = context;

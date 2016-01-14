@@ -17,14 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.classes.data.fleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.ui.add.activity_add_fleetRoster;
-import com.kd8bny.maintenanceman.ui.add.activity_vehicleEvent;
 
 import java.util.ArrayList;
 
@@ -40,8 +38,9 @@ public class fragment_info extends Fragment {
     private Context context;
     private SharedPreferences sharedPreferences;
 
-    private Vehicle vehicle;
     private ArrayList<Vehicle> roster;
+    private int vehiclePos;
+    private Vehicle vehicle;
     private String refID;
 
     public fragment_info() {
@@ -52,17 +51,21 @@ public class fragment_info extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
-        roster = (ArrayList) getActivity().getIntent().getSerializableExtra("roster");
-        int pos = getActivity().getIntent().getIntExtra("pos", -1);
-        vehicle = roster.get(pos);
-        refID = vehicle.getRefID();
         context = getActivity().getApplicationContext();
+
+        Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
+        roster = bundle.getParcelableArrayList("roster");
+        vehiclePos = bundle.getInt("pos", -1);
+
+        vehicle = roster.get(vehiclePos);
+        refID = vehicle.getRefID();
+
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.d(TAG, "create view");
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
         registerForContextMenu(view);
 
@@ -70,29 +73,8 @@ public class fragment_info extends Fragment {
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
-
-        //menu_overview_fab
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) getActivity().findViewById(R.id.fabmenu);
-        fabMenu.setClosedOnTouchOutside(true);
-        fabMenu.setAnimated(true);
-
-        getActivity().findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
-                addIntent.putExtra("vehicle", roster);
-                startActivity(addIntent);
-                fabMenu.close(true);
-            }
-        });
-        getActivity().findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent addIntent = new Intent(getActivity(), activity_vehicleEvent.class);
-                startActivity(addIntent);
-                fabMenu.close(true);
-            }
-        });
+        cardListAdapter = new adapter_info(vehicle);
+        cardList.setAdapter(cardListAdapter);
 
         return view;
     }
@@ -100,15 +82,13 @@ public class fragment_info extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        cardListAdapter = new adapter_info(vehicle);
-        cardList.setAdapter(cardListAdapter);
+
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        cardListAdapter = new adapter_info(vehicle);
-        cardList.swapAdapter(cardListAdapter, false);
+
     }
 
     @Override
@@ -145,11 +125,12 @@ public class fragment_info extends Fragment {
                 return true;
 
             case R.id.menu_edit:
-                Intent editIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
-                editIntent.putExtra("roster", roster);
-                editIntent.putExtra("vehiclePos", roster.indexOf(vehicle));
-                getActivity().startActivity(editIntent);
-
+                Intent viewIntent = new Intent(getActivity(), activity_add_fleetRoster.class);
+                Bundle bundle = new Bundle();
+                //bundle.putParcelableArrayList("roster", roster);
+                bundle.putInt("pos", roster.indexOf(vehicle));
+                viewIntent.putExtra("bundle", bundle);
+                startActivity(viewIntent);
                 return true;
 
             default:

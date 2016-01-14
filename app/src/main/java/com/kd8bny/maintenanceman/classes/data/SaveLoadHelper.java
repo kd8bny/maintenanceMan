@@ -25,7 +25,7 @@ public class SaveLoadHelper {
 
     public SaveLoadHelper(Context context){
         this.context = context;
-        FILE_NAME = context.getFilesDir() + "/" + "roster.ser";
+        FILE_NAME = this.context.getFilesDir() + "/" + "roster.ser";
     }
 
     public Boolean save(ArrayList<Vehicle> l){

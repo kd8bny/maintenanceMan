@@ -149,4 +149,6 @@
         New!! Icon picker for your maintenance tasks\n
         Bug fixes and code cleaning\n\n
     </string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_test">test</string>
 </resources>

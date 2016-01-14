@@ -29,6 +29,7 @@
     <dimen name="header_height">120dp</dimen>
     <dimen name="action_bar_height">56dp</dimen>
     <dimen name="toolbar_left_margin">72dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 
 </resources>

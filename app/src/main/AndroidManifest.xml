@@ -1,85 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kd8bny.maintenanceman"
-    android:versionCode="54"
-    android:versionName="3.0.0.0" >
+<manifest package="com.kd8bny.maintenanceman"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:versionCode="54"
+          android:versionName="3.0.0.0">
 
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.main.activity_main"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.add.activity_add_fleetRoster"
             android:label="@string/title_add_fleet_roster"
-            android:parentActivityName=".ui.main.activity_main" >
+            android:parentActivityName=".ui.main.activity_main">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.main.activity_main"/>
         </activity>
         <activity
             android:name=".ui.add.activity_vehicleEvent"
             android:label="@string/title_add_vehicle_event"
-            android:parentActivityName=".ui.main.activity_main" >
+            android:parentActivityName=".ui.main.activity_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.activity_main" />
+                android:value=".ui.main.activity_main"/>
         </activity>
         <activity
             android:name=".ui.info.activity_info"
             android:label="@string/title_info"
-            android:parentActivityName=".ui.main.activity_main" >
+            android:parentActivityName=".ui.main.activity_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.activity_main" />
-        </activity>
-        <activity
-            android:name=".ui.edit.activity_edit"
-            android:label="@string/title_edit"
-            android:parentActivityName=".ui.main.activity_main" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.activity_main" />
+                android:value=".ui.main.activity_main"/>
         </activity>
         <activity
             android:name=".ui.intro.activity_intro"
             android:label="@string/title_intro"
-            android:parentActivityName=".ui.main.activity_main" >
-        </activity>
+            android:parentActivityName=".ui.main.activity_main"/>
         <activity
             android:name=".ui.preferences.activity_settings"
             android:label="@string/title_settings"
-            android:parentActivityName=".ui.main.activity_main" >
+            android:parentActivityName=".ui.main.activity_main">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.main.activity_main" />
+                android:value=".ui.main.activity_main"/>
         </activity>
         <activity
             android:name=".ui.preferences.activity_settings_dbx"
             android:label="@string/title_settings_dbx"
-            android:parentActivityName=".ui.preferences.activity_settings" >
+            android:parentActivityName=".ui.preferences.activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.preferences.activity_settings" />
+                android:value=".ui.preferences.activity_settings"/>
         </activity>
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|keyboard">
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
             <intent-filter>
-                <data android:scheme="db-v6cdvhl9x0zay4j" />
-                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="db-v6cdvhl9x0zay4j"/>
+
+                <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
