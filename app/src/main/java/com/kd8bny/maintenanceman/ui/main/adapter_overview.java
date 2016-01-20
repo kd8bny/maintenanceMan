@@ -83,7 +83,8 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             }
             adapterViewHolder.vTitle.setText(vehicle.getTitle());
             adapterViewHolder.vRect.setBackgroundColor(color);
-            adapterViewHolder.vCarPic.setBackgroundColor(color);
+            //adapterViewHolder.vCarPicBack.setBackgroundColor(color);
+            adapterViewHolder.vCarPicBack.setColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY);
         }
     }
 
@@ -102,6 +103,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
     public static class AdapterViewHolder extends RecyclerView.ViewHolder{
         protected ImageView vRect;
         protected ImageView vCarPic;
+        protected ImageView vCarPicBack;
         protected TextView vTitle;
         protected TextView vevent;
         protected TextView vodo;
@@ -111,6 +113,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
 
             vRect = (ImageView) view.findViewById(R.id.rect);
             vCarPic = (ImageView) view.findViewById(R.id.carPic);
+            vCarPicBack = (ImageView) view.findViewById(R.id.carPicBack);
             vTitle = (TextView) view.findViewById(R.id.vehicle_title);
 
             //vevent = (TextView) view.findViewById(R.id.event);

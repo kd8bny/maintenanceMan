@@ -23,8 +23,16 @@
                 android:layout_width="match_parent"
                 android:elevation="10sp"
 
-                android:background="@drawable/rect">
-            </ImageView>
+                android:background="@drawable/rect"/>
+
+            <ImageView
+                android:id="@+id/carPicBack"
+                android:layout_height="64dp"
+                android:layout_width="64dp"
+                android:layout_marginTop="8dp"
+                android:elevation="12sp"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/circle"/>
 
             <ImageView
                 android:id="@+id/carPic"
@@ -33,12 +41,10 @@
                 android:layout_marginTop="8dp"
                 android:elevation="12sp"
                 android:layout_marginStart="32dp"
-                android:background="@drawable/circle"
 
                 android:src="@drawable/np_car"
                 android:tint="@android:color/white"
-                android:padding="10dp">
-            </ImageView>
+                android:padding="10dp"/>
 
             <TextView
                 android:id="@+id/vehicle_title"
