@@ -1,16 +1,17 @@
 package com.kd8bny.maintenanceman.classes.Vehicle;
 
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
-public class Vehicle implements Parcelable, Serializable{
+public class Vehicle implements Parcelable{
     private static final String TAG = "Vehicle";
+
     public String vehicleType;
     public String refID;
     public String title;
@@ -31,7 +32,7 @@ public class Vehicle implements Parcelable, Serializable{
         this.reservedSpecs.put("model", model);
     }
 
-    public Vehicle(Parcel source){
+    private Vehicle(Parcel parcel){
         Log.v(TAG, "ParcelData(Parcel source): time to put back parcel data");
 
         Log.wtf(TAG, "ParcaPutFIRST"
@@ -44,17 +45,69 @@ public class Vehicle implements Parcelable, Serializable{
                 + powerTrainSpecs
                 + otherSpecs);
 
+        vehicleType = parcel.readString();
+        refID = parcel.readString();
+        title = parcel.readString();
 
-        Bundle bundle = source.readBundle(getClass().getClassLoader());
-        vehicleType = bundle.getString("vehicleType");
-        refID = bundle.getString("refID");
-        title = bundle.getString("title");
+        int N = parcel.readInt();
+        if (N > 0) {
+            reservedSpecs = new HashMap<>(N);
+            for (int i = 0; i < N; i++) {
+                String key = parcel.readString();
+                String value = parcel.readString();
+                reservedSpecs.put(key, value);
+            }
+        } else {
+            reservedSpecs = null;
+        }
 
-        reservedSpecs = (HashMap) bundle.getSerializable("reserved");
-        generalSpecs = (HashMap) bundle.getSerializable("general");
-        engineSpecs = (HashMap) bundle.getSerializable("engine");
-        powerTrainSpecs = (HashMap) bundle.getSerializable("power");
-        otherSpecs = (HashMap) bundle.getSerializable("other");
+        N = parcel.readInt();
+        if (N > 0) {
+            generalSpecs = new HashMap<>(N);
+            for (int i = 0; i < N; i++) {
+                String key = parcel.readString();
+                String value = parcel.readString();
+                generalSpecs.put(key, value);
+            }
+        } else {
+            generalSpecs = null;
+        }
+
+        N = parcel.readInt();
+        if (N > 0) {
+            engineSpecs = new HashMap<>(N);
+            for (int i = 0; i < N; i++) {
+                String key = parcel.readString();
+                String value = parcel.readString();
+                engineSpecs.put(key, value);
+            }
+        } else {
+            engineSpecs = null;
+        }
+
+        N = parcel.readInt();
+        if (N > 0) {
+            powerTrainSpecs = new HashMap<>(N);
+            for (int i = 0; i < N; i++) {
+                String key = parcel.readString();
+                String value = parcel.readString();
+                powerTrainSpecs.put(key, value);
+            }
+        } else {
+            powerTrainSpecs = null;
+        }
+
+        N = parcel.readInt();
+        if (N > 0) {
+            otherSpecs = new HashMap<>(N);
+            for (int i = 0; i < N; i++) {
+                String key = parcel.readString();
+                String value = parcel.readString();
+                otherSpecs.put(key, value);
+            }
+        } else {
+            otherSpecs = null;
+        }
 
         Log.wtf(TAG, "ParcaPut"
                 + vehicleType
@@ -68,19 +121,66 @@ public class Vehicle implements Parcelable, Serializable{
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags){
+    public void writeToParcel(Parcel parcel, int flags){
         Log.v(TAG, "write to parcel: " + flags);
-        Bundle bundle = new Bundle();
-        bundle.putString("vehicleType", vehicleType);
-        bundle.putString("refID", refID);
-        bundle.putString("title", title);
-        bundle.putSerializable("reserved", reservedSpecs);
-        bundle.putSerializable("general", generalSpecs);
-        bundle.putSerializable("engine", engineSpecs);
-        bundle.putSerializable("power", powerTrainSpecs);
-        bundle.putSerializable("other", otherSpecs);
+        parcel.writeString(vehicleType);
+        parcel.writeString(refID);
+        parcel.writeString(title);
 
-        dest.writeBundle(bundle);
+        if (reservedSpecs == null){
+            parcel.writeInt(0);
+        }else{
+            Set<Map.Entry<String, String>> entries = reservedSpecs.entrySet();
+            parcel.writeInt(entries.size());
+            for (Map.Entry<String, String> entry : entries) {
+                parcel.writeString(entry.getKey());
+                parcel.writeString(entry.getValue());
+            }
+        }
+
+        if (generalSpecs == null){
+            parcel.writeInt(0);
+        }else{
+            Set<Map.Entry<String, String>> entries = generalSpecs.entrySet();
+            parcel.writeInt(entries.size());
+            for (Map.Entry<String, String> entry : entries) {
+                parcel.writeString(entry.getKey());
+                parcel.writeString(entry.getValue());
+            }
+        }
+
+        if (engineSpecs == null){
+            parcel.writeInt(0);
+        }else{
+            Set<Map.Entry<String, String>> entries = engineSpecs.entrySet();
+            parcel.writeInt(entries.size());
+            for (Map.Entry<String, String> entry : entries) {
+                parcel.writeString(entry.getKey());
+                parcel.writeString(entry.getValue());
+            }
+        }
+
+        if (powerTrainSpecs == null){
+            parcel.writeInt(0);
+        }else{
+            Set<Map.Entry<String, String>> entries = powerTrainSpecs.entrySet();
+            parcel.writeInt(entries.size());
+            for (Map.Entry<String, String> entry : entries) {
+                parcel.writeString(entry.getKey());
+                parcel.writeString(entry.getValue());
+            }
+        }
+
+        if (otherSpecs == null){
+            parcel.writeInt(0);
+        }else{
+            Set<Map.Entry<String, String>> entries = otherSpecs.entrySet();
+            parcel.writeInt(entries.size());
+            for (Map.Entry<String, String> entry : entries) {
+                parcel.writeString(entry.getKey());
+                parcel.writeString(entry.getValue());
+            }
+        }
 
         Log.wtf(TAG, "writeToParcelINST"
                 + vehicleType
@@ -92,7 +192,7 @@ public class Vehicle implements Parcelable, Serializable{
                 + powerTrainSpecs
                 + otherSpecs);
 
-        Log.wtf(TAG, "writeToParcelBUNDLE"
+        /*Log.wtf(TAG, "writeToParcelBUNDLE"
                 + bundle.getString("vehicleType")
                 + bundle.getString("refID")
                 + bundle.getString("title")
@@ -101,7 +201,7 @@ public class Vehicle implements Parcelable, Serializable{
                 + bundle.getSerializable("engine")
                 + bundle.getSerializable("power")
                 + bundle.getSerializable("other")
-        );
+        );*/
     }
 
     @Override
@@ -168,7 +268,7 @@ public class Vehicle implements Parcelable, Serializable{
     /**
     * Creator required for class implementing the parcelable interface.
     */
-    public static final Parcelable.Creator<Vehicle> CREATOR = new Creator<Vehicle>() {
+    public static final Parcelable.Creator<Vehicle> CREATOR = new Parcelable.Creator<Vehicle>() {
 
         @Override
         public Vehicle createFromParcel(Parcel source) {

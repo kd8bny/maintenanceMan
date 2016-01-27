@@ -1,17 +1,16 @@
 package com.kd8bny.maintenanceman.classes.data;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 
-import java.io.EOFException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 /**
@@ -20,12 +19,14 @@ import java.util.ArrayList;
 public class SaveLoadHelper {
     private static final String TAG = "svLdHlpr";
 
-    private static String FILE_NAME;
+
+    private static final String FILE_NAME = "fleetRoster.json";
+    private static String FILE_LOCATION;
     private Context context;
 
     public SaveLoadHelper(Context context){
         this.context = context;
-        FILE_NAME = this.context.getFilesDir() + "/" + "roster.ser";
+        FILE_LOCATION = this.context.getFilesDir() + "/" + FILE_NAME;
     }
 
     public Boolean save(ArrayList<Vehicle> l){
@@ -33,32 +34,48 @@ public class SaveLoadHelper {
          * Saves objects returns true is successful
          * Auto saves to cloud source
          */
+        Gson gson = new Gson();
+        String json = gson.toJson(l);
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
-            objectOutputStream.writeObject(l);
-            objectOutputStream.close();
+            FileWriter fileWriter = new FileWriter(new File(FILE_LOCATION));
 
-            backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-            mbackupRestoreHelper.startAction(context, "backup", false);
+            fileWriter.write(json);
+            fileWriter.flush();
+            fileWriter.close();
+
+            //backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+            //mbackupRestoreHelper.startAction(context, "backup", false);
         }catch (IOException e){
             e.printStackTrace();
-            return false;
         }
 
         return true;
     }
 
     public ArrayList<Vehicle> load(){
-        ArrayList<Vehicle> temp = new ArrayList<>();
-        try {
-            FileInputStream fileInputStream = new FileInputStream(FILE_NAME);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+        File file = new File(FILE_LOCATION);
+        Gson gson = new Gson();
 
-            temp = (ArrayList) objectInputStream.readObject();
+        ArrayList<Vehicle> roster = new ArrayList<>();
+        String json;
 
-        }catch (FileNotFoundException e){
-        }catch (IOException | ClassNotFoundException e){e.printStackTrace();}
+        if (file.isFile() && file.canRead()) {
+            try {
+                BufferedReader buffReader = new BufferedReader(new FileReader(file));
+                StringBuffer stringBuffer = new StringBuffer();
 
-        return temp;
+                while ((json = buffReader.readLine()) != null) {
+                    stringBuffer.append(json);
+                }
+
+                json = stringBuffer.toString();
+                roster = gson.fromJson(json, new TypeToken<ArrayList<Vehicle>>(){}.getType());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return roster;
     }
 }
