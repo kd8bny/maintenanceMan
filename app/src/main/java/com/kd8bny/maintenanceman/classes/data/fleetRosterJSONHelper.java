@@ -1,6 +1,5 @@
 package com.kd8bny.maintenanceman.classes.data;
 
-
 import android.content.Context;
 import android.util.Log;
 import org.json.JSONArray;
@@ -175,11 +174,11 @@ public class fleetRosterJSONHelper {
             }else{
                 vehicleDataAll.put(null, null);
             }
-            }catch(JSONException e){
-                e.printStackTrace();
-            }
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
 
-            return vehicleDataAll;
+        return vehicleDataAll;
     }
 
     public void deleteEntry(Context context, String refID){
@@ -196,3 +195,4 @@ public class fleetRosterJSONHelper {
         }
     }
 }
+

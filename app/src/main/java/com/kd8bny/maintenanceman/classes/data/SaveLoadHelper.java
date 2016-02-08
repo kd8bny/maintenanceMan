@@ -26,7 +26,7 @@ public class SaveLoadHelper {
 
     public SaveLoadHelper(Context context){
         this.context = context;
-        FILE_LOCATION = this.context.getFilesDir() + "/" + FILE_NAME;
+        FILE_LOCATION = context.getFilesDir() + "/" + FILE_NAME;
     }
 
     public Boolean save(ArrayList<Vehicle> l){
@@ -43,7 +43,7 @@ public class SaveLoadHelper {
             fileWriter.flush();
             fileWriter.close();
 
-            //backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+            //backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper(); //TODO
             //mbackupRestoreHelper.startAction(context, "backup", false);
         }catch (IOException e){
             e.printStackTrace();
