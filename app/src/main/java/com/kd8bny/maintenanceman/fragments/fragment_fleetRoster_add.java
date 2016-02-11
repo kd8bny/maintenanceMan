@@ -49,8 +49,8 @@ public class fragment_fleetRoster_add extends Fragment {
     private FloatingActionButton fab;
 
     private String [] mvehicleTypes;
+    private ArrayList<Vehicle> roster;
     private Vehicle vehicle;
-    private ArrayList<Vehicle> roster = new ArrayList<>();
 
     private ArrayList<ArrayList> allSpecs = new ArrayList<>();
     private HashMap<String, String> generalSpecs = new HashMap<>();
@@ -65,6 +65,9 @@ public class fragment_fleetRoster_add extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         context = getActivity().getApplicationContext();
+
+        Bundle bundle = getArguments();
+        roster = bundle.getParcelableArrayList("roster");
 
         FragmentManager fm = getChildFragmentManager();
         dialog_addField_required dialog = new dialog_addField_required();
@@ -210,18 +213,16 @@ public class fragment_fleetRoster_add extends Fragment {
                     vehicle.setPowerTrainSpecs(powerTrainSpecs);
                     vehicle.setOtherSpecs(otherSpecs);
 
-                    SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
-                    ArrayList<Vehicle> roster = saveLoadHelper.load();
                     roster.add(vehicle);
-                    saveLoadHelper.save(roster);
+                    new SaveLoadHelper(context).save(roster);
 
-                    getActivity().finish();
+                    getActivity().getSupportFragmentManager().popBackStack();
                 }
 
                 return true;
 
             case R.id.menu_cancel:
-                getActivity().finish();
+                getActivity().getSupportFragmentManager().popBackStack();
                 return true;
 
             default:

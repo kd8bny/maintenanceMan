@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,8 +44,8 @@ public class fragment_history extends Fragment {
     private Context context;
     private SharedPreferences sharedPreferences;
 
-    private ArrayList<Vehicle> roster;
     private Vehicle vehicle;
+    private int vehiclePos;
     private String refID;
     private String prefUnit;
     private ArrayList<ArrayList> vehicleHist;
@@ -58,10 +59,8 @@ public class fragment_history extends Fragment {
         context = getActivity().getApplicationContext();
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        roster = bundle.getParcelableArrayList("roster");
-        int vehiclePos = bundle.getInt("pos", -1);
-
-        vehicle = roster.get(vehiclePos);
+        vehicle = bundle.getParcelable("vehicle");
+        vehiclePos = bundle.getInt("vehiclePos", -1);
         refID = vehicle.getRefID();
 
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
@@ -69,14 +68,17 @@ public class fragment_history extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_info, container, false);
+        final View view = inflater.inflate(R.layout.fragment_history, container, false);
         registerForContextMenu(view);
 
+
+
         //Task History
-        histList = (RecyclerView) view.findViewById(R.id.info_cardList);
+        histList = (RecyclerView) view.findViewById(R.id.histList);
         histMan = new LinearLayoutManager(getActivity());
         histList.setLayoutManager(histMan);
-        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, histList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, histList,
+                new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 final ArrayList<String> temp = vehicleHist.get(pos);

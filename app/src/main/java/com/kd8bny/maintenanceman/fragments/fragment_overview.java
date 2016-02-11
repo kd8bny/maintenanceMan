@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
+import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.adapter_overview;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
@@ -73,21 +74,23 @@ public class fragment_overview extends Fragment implements UpdateUI{
         cardList.setLayoutManager(cardMan);
         cardListAdapter = new adapter_overview(context, roster, mUnit);
         cardList.setAdapter(cardListAdapter);
-        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList,
+                new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 Bundle bundle = new Bundle();
                 if (roster.isEmpty()) {
                     bundle.putInt("caseID", 0);
                     bundle.putInt("vehiclePos", -1);
+                    view.getContext().startActivity(new Intent(getActivity(), VehicleActivity.class)
+                            .putExtra("bundle", bundle));
                 }else{
+                    bundle.putParcelableArrayList("roster", roster);
                     bundle.putParcelable("vehicle", roster.get(pos));
                     bundle.putInt("vehiclePos", pos);
+                    view.getContext().startActivity(new Intent(getActivity(), ViewPagerActivity.class)
+                            .putExtra("bundle", bundle));
                 }
-
-                Intent intent = new Intent(getActivity(), VehicleActivity.class);
-                intent.putExtra("bundle", bundle);
-                view.getContext().startActivity(intent);
             }
 
             @Override
@@ -103,10 +106,9 @@ public class fragment_overview extends Fragment implements UpdateUI{
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("caseID", 0);
-
-                Intent intent = new Intent(getActivity(), VehicleActivity.class);
-                intent.putExtra("bundle", bundle);
-                startActivity(intent);
+                bundle.putParcelableArrayList("roster", roster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
                 fabMenu.close(true);
             }});
         view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
@@ -118,9 +120,9 @@ public class fragment_overview extends Fragment implements UpdateUI{
                 }else {
                     Bundle bundle = new Bundle();
                     bundle.putInt("caseID", 1);
-
-                    Intent addIntent = new Intent(getActivity(), Vehicle.class);
-                    startActivity(addIntent);
+                    bundle.putParcelableArrayList("roster", roster);
+                    startActivity(new Intent(getActivity(), VehicleActivity.class)
+                            .putExtra("bundle", bundle));
                     fabMenu.close(true);
                 }
             }});
@@ -138,8 +140,6 @@ public class fragment_overview extends Fragment implements UpdateUI{
                 }
                 return false;
             }});
-
-
 
         //Intro
         Boolean isFirstRun = sharedPreferences.getBoolean("firstRun", true);

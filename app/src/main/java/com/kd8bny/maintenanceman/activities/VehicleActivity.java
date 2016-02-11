@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster_add;
-import com.kd8bny.maintenanceman.fragments.fragment_info;
 import com.kd8bny.maintenanceman.fragments.fragment_vehicleEvent_add;
 
 public class VehicleActivity extends AppCompatActivity {
@@ -26,19 +25,18 @@ public class VehicleActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getBundleExtra("bundle");
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment;
-        switch (bundle.getInt("caseID", -1)){
+        Fragment fragment = null;
+        switch (bundle.getInt("caseID", -1)){ //TODO pass fragment??
             case 0:
                 fragment = new fragment_fleetRoster_add();
+                fragment.setArguments(bundle);
                 break;
             case 1:
                 fragment = new fragment_vehicleEvent_add();
+                fragment.setArguments(bundle);
                 break;
-            default:
-                fragment = new fragment_info();
         }
 
-        fragment.setArguments(bundle);
         fm.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

@@ -74,33 +74,17 @@ public class fragment_vehicleEvent_edit extends Fragment {
         labels.add(4, "Price");
         labels.add(5, "Comment");
 
-        if(editData == null) {
-            final Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
-
-            dataSet.put(labels.get(0), "");
-            dataSet.put(labels.get(1), month + 1 + "/" + day + "/" + year);
-            dataSet.put(labels.get(2), "");
-            dataSet.put(labels.get(3), "");
-            dataSet.put(labels.get(4), "");
-            dataSet.put(labels.get(5), "");
-
-        }else{
-            isNew = false;
-            dataSet.put(labels.get(0), editData.get(1));
-            dataSet.put(labels.get(1), editData.get(2));
-            dataSet.put(labels.get(2), editData.get(3));
-            dataSet.put(labels.get(3), editData.get(4));
-            dataSet.put(labels.get(4), editData.get(5));
-            dataSet.put(labels.get(5), editData.get(6));
-        }
+        dataSet.put(labels.get(0), editData.get(1));
+        dataSet.put(labels.get(1), editData.get(2));
+        dataSet.put(labels.get(2), editData.get(3));
+        dataSet.put(labels.get(3), editData.get(4));
+        dataSet.put(labels.get(4), editData.get(5));
+        dataSet.put(labels.get(5), editData.get(6));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_vehicle_event, container, false);
+        final View view = inflater.inflate(R.layout.fragment_vehicle_event, container, false);
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.vehicleSpinner);

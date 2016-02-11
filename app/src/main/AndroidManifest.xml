@@ -20,7 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.VehicleActivity"
-                  android:label="@string/title_intro"
+                  android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.ViewPagerActivity"
+                  android:label="@string/title_view_pager"
                   android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.IntroActivity"

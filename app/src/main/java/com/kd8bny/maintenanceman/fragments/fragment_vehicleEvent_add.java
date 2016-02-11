@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +19,6 @@ import android.widget.ArrayAdapter;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_add_vehicleEvent;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
 import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
@@ -37,7 +35,6 @@ import java.util.LinkedHashMap;
 public class fragment_vehicleEvent_add extends Fragment {
     private static final String TAG = "frg_add_vhclEvnt";
 
-    private Toolbar toolbar;
     private MaterialBetterSpinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
 
@@ -45,15 +42,12 @@ public class fragment_vehicleEvent_add extends Fragment {
     private RecyclerView.Adapter eventListAdapter;
 
     private ArrayList<Vehicle> roster;
-    private int vehiclePos;
     private Vehicle vehicle;
+    private int vehiclePos;
     private String refID;
-    ArrayList<String> singleVehicle = new ArrayList<>();
+    private ArrayList<String> singleVehicle = new ArrayList<>();
     private ArrayList<String> labels = new ArrayList<>();
-    private ArrayList<String> editData;
     private HashMap<String, String> dataSet = new LinkedHashMap<>();
-
-    private Boolean isNew = true;
 
     public fragment_vehicleEvent_add() {}
 
@@ -63,10 +57,10 @@ public class fragment_vehicleEvent_add extends Fragment {
         setHasOptionsMenu(true);
 
         Bundle bundle = getArguments() ;
-        vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = bundle.getParcelable("vehicle");
+        roster = bundle.getParcelableArrayList("roster");
+        vehiclePos = bundle.getInt("vehiclePos");
+        vehicle = roster.get(vehiclePos);
 
-        editData = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet"); //TODO ??
         refID = vehicle.getRefID();
 
         labels.add(0, "icon");
@@ -76,33 +70,22 @@ public class fragment_vehicleEvent_add extends Fragment {
         labels.add(4, "Price");
         labels.add(5, "Comment");
 
-        if(editData == null) {
-            final Calendar cal = Calendar.getInstance();
-            int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
-            int day = cal.get(Calendar.DAY_OF_MONTH);
+        final Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
 
-            dataSet.put(labels.get(0), "");
-            dataSet.put(labels.get(1), month + 1 + "/" + day + "/" + year);
-            dataSet.put(labels.get(2), "");
-            dataSet.put(labels.get(3), "");
-            dataSet.put(labels.get(4), "");
-            dataSet.put(labels.get(5), "");
-
-        }else{
-            isNew = false;
-            dataSet.put(labels.get(0), editData.get(1));
-            dataSet.put(labels.get(1), editData.get(2));
-            dataSet.put(labels.get(2), editData.get(3));
-            dataSet.put(labels.get(3), editData.get(4));
-            dataSet.put(labels.get(4), editData.get(5));
-            dataSet.put(labels.get(5), editData.get(6));
-        }
+        dataSet.put(labels.get(0), "");
+        dataSet.put(labels.get(1), month + 1 + "/" + day + "/" + year);
+        dataSet.put(labels.get(2), "");
+        dataSet.put(labels.get(3), "");
+        dataSet.put(labels.get(4), "");
+        dataSet.put(labels.get(5), "");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_add_vehicle_event, container, false);
+        final View view = inflater.inflate(R.layout.fragment_vehicle_event, container, false);
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.vehicleSpinner);
@@ -183,9 +166,7 @@ public class fragment_vehicleEvent_add extends Fragment {
             case 1:
                 String labelResult = data.getStringExtra("label");
                 String valueResult = data.getStringExtra("value");
-
                 dataSet.put(labelResult, valueResult);
-
                 eventListAdapter = new adapter_add_vehicleEvent(dataSet, labels);
                 eventList.setAdapter(eventListAdapter);
 
@@ -204,22 +185,13 @@ public class fragment_vehicleEvent_add extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()){
-                    int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
-                    String refID = roster.get(pos).getRefID();
-
                     vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
-                    if(!isNew){
-                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), editData);
-                    }
                     vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                             .setActionTextColor(getResources().getColor(R.color.error)).show(); ///TODO snakz w/ right label
 
-                    backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
-
-                    getActivity().finish();
+                    getActivity().getFragmentManager().popBackStack();
 
                     return true;
                 }
@@ -227,7 +199,8 @@ public class fragment_vehicleEvent_add extends Fragment {
                 return false;
 
             case R.id.menu_cancel:
-                getActivity().finish();
+                getActivity().getFragmentManager().popBackStack();
+
                 return true;
 
             default:
@@ -239,7 +212,7 @@ public class fragment_vehicleEvent_add extends Fragment {
         for(Vehicle v : roster) {
             singleVehicle.add(v.getTitle());
         }
-        return new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, singleVehicle);
+        return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, singleVehicle);
     }
 
     public boolean isLegit(){
