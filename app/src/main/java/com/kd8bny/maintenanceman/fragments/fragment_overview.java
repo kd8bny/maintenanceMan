@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,7 @@ import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.adapter_overview;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
@@ -31,7 +30,6 @@ import com.kd8bny.maintenanceman.activities.IntroActivity;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
-
 
 public class fragment_overview extends Fragment implements UpdateUI{
     private static final String TAG = "frg_ovrvw";
@@ -57,7 +55,7 @@ public class fragment_overview extends Fragment implements UpdateUI{
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
 
         //Data
-        backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper(); //TODO update splash screen
+        BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
         mbackupRestoreHelper.updateUI = this;
         mbackupRestoreHelper.startAction(context, "restore", false);
     }

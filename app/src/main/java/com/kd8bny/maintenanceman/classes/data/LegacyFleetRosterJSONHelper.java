@@ -17,12 +17,12 @@ import java.util.LinkedHashMap;
 import java.util.UUID;
 
 
-public class fleetRosterJSONHelper {
+public class LegacyFleetRosterJSONHelper {
     private static final String TAG = "fltRstrJSONHlpr";
 
     public static final String JSON_NAME = "fleetRoster.json";
 
-    public fleetRosterJSONHelper(){
+    public LegacyFleetRosterJSONHelper(){
 
     }
 

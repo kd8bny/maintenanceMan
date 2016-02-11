@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +26,7 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_add_fleetRoster;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField_required;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -46,6 +48,7 @@ public class fragment_fleetRoster_edit extends Fragment {
     private FloatingActionButton fab;
 
     private String [] mvehicleTypes;
+    private ArrayList<Vehicle> roster;
     private Vehicle vehicle;
     private int vehiclePos;
 
@@ -64,8 +67,10 @@ public class fragment_fleetRoster_edit extends Fragment {
         context = getActivity().getApplicationContext();
 
         Bundle bundle = getArguments();
+        Log.d(TAG, bundle.toString());
+        roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = bundle.getParcelable("vehicle");
+        vehicle = roster.get(vehiclePos);
     }
 
     @Override
@@ -197,7 +202,7 @@ public class fragment_fleetRoster_edit extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+        inflater.inflate(R.menu.menu_fleet_roster_edit, menu);
     }
 
     @Override
@@ -210,17 +215,40 @@ public class fragment_fleetRoster_edit extends Fragment {
                 vehicle.setOtherSpecs(otherSpecs);
 
                 SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
-                ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
+                final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
                 if(!vehicle.equals(roster.get(vehiclePos))) {
                     roster.set(vehiclePos, vehicle);
                     saveLoadHelper.save(roster);
                 }
-                getFragmentManager().popBackStack();
+                getActivity().finish();
 
                 return true;
 
             case R.id.menu_cancel:
-                getFragmentManager().popBackStack();
+                getActivity().finish();
+                return true;
+
+            case R.id.menu_del:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you would like to delete " + vehicle.getTitle() + "?");
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        new VehicleLogDBHelper(context)
+                                .purgeHistory(context, vehicle.getRefID());
+
+                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
+                        ArrayList<Vehicle> temp = saveLoadHelper.load();
+                        temp.remove(vehiclePos);
+                        saveLoadHelper.save(temp);
+
+                        getActivity().finish();
+                    }});
+
+                builder.show();
+
                 return true;
 
             default:

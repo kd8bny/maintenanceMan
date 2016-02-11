@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class dialog_addVehicleEvent extends DialogFragment {
         editValue.setFloatingLabelText(label);
 
         if (isEvent){
-            vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+            VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
             ArrayList<String> eventList = vehicleDB.getEvents(getActivity().getApplicationContext());
             //TODO add premade lists items
 

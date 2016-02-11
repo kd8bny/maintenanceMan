@@ -90,7 +90,7 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
         if(roster.isEmpty()) {
             return R.layout.card_overview_empty;
         }else{
-            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){//|| Build.VERSION.SDK_INT == Build.VERSION_CODES.x
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){
                 return R.layout.card_overview_v19;
             }else{
                 return R.layout.card_overview;

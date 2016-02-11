@@ -7,14 +7,14 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.interfaces.AsyncResponse;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 
-public class backupRestoreHelper implements AsyncResponse {
+public class BackupRestoreHelper implements AsyncResponse {
     private static final String TAG = "bckp_rstr_hlpr";
 
     public UpdateUI updateUI = null;
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-    private dropboxHelper mdropboxHelper;
+    private DropboxHelper mdropboxHelper;
 
-    public backupRestoreHelper(){
+    public BackupRestoreHelper(){
 
     }
 
@@ -26,7 +26,7 @@ public class backupRestoreHelper implements AsyncResponse {
         if (!cloudExists.isEmpty()) {
             switch (cloudDefault) {
                 case "dropbox":
-                    mdropboxHelper = new dropboxHelper(context, action, force);
+                    mdropboxHelper = new DropboxHelper(context, action, force);
                     mdropboxHelper.listener = this;
                     mdropboxHelper.execute();
 

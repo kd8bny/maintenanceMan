@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class vehicleLogDBHelper extends SQLiteOpenHelper{
+public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
 
     public static final int DB_VERSION = 3; // v2 was 50
@@ -45,7 +45,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
         + COLUMN_ICON + " text not null default '0'"
         + ");";
 
-    public vehicleLogDBHelper(Context context){
+    public VehicleLogDBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -56,7 +56,7 @@ public class vehicleLogDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
-        Log.w(vehicleLogDBHelper.class.getName(),
+        Log.w(VehicleLogDBHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.beginTransaction();

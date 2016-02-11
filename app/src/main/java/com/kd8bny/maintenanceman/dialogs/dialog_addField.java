@@ -22,6 +22,8 @@ import java.util.Arrays;
 public class dialog_addField extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
+    private static final int REQUEST_CODE = 1;
+
     public MaterialBetterSpinner spinnerFieldType;
     public MaterialAutoCompleteTextView editFieldName;
     public MaterialAutoCompleteTextView editFieldVal;
@@ -33,9 +35,7 @@ public class dialog_addField extends DialogFragment {
     public String [] mfieldTypes;
     public Integer recyclerPosition;
 
-    public dialog_addField(){
-
-    }
+    public dialog_addField(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class dialog_addField extends DialogFragment {
                     fieldVal = editFieldVal.getText().toString();
 
                     if(!isLegit()) {
-                        sendResult(1);
+                        sendResult();
                         alertDialog.dismiss();
                     }
                 }
@@ -121,7 +121,7 @@ public class dialog_addField extends DialogFragment {
         }
     }
 
-    private void sendResult(int REQUEST_CODE) {
+    private void sendResult() {
         Intent intent = new Intent();
         ArrayList<String> temp = new ArrayList<>();
         temp.add(fieldType);

@@ -3,13 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_del"
-        android:title="@string/menu_del"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_action_trash"
-        android:paddingLeft="@dimen/header_horizontal_margin"
-        app:showAsAction="never" />
-
     <item android:id="@+id/menu_edit"
         android:title="@string/menu_edit"
         android:orderInCategory="100"

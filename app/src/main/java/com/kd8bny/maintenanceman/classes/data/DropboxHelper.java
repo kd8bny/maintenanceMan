@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class dropboxHelper extends AsyncTask<String, Void, String> {
+public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String TAG = "dbxHlpr";
 
     public AsyncResponse listener = null;
@@ -35,7 +35,7 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
     private Boolean force;
     private Boolean filesUpdated = false;
 
-    public dropboxHelper(Context context, String action, Boolean force) {
+    public DropboxHelper(Context context, String action, Boolean force) {
         this.context = context;
         this.action = action;
         this.force = force;
@@ -175,7 +175,7 @@ public class dropboxHelper extends AsyncTask<String, Void, String> {
     }
 
     public void forceRestore(DropboxAPI<AndroidAuthSession> mDBApi, File fleetRoster, File vehicleLog) {
-        vehicleLogDBHelper mvehicleLogDBHelper = new vehicleLogDBHelper(context);
+        VehicleLogDBHelper mvehicleLogDBHelper = new VehicleLogDBHelper(context);
         mvehicleLogDBHelper.createDatabase(context);
         try {
             FileOutputStream outputStream1 = new FileOutputStream(fleetRoster.getPath());

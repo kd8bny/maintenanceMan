@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +18,8 @@ import android.view.ViewGroup;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_history;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
-import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
 
@@ -122,12 +121,12 @@ public class fragment_history extends Fragment {
                                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                     public void onClick(DialogInterface dialog, int which) {
-                                        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                                        VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
                                         vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
 
                                         vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
 
-                                        backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                                        BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
                                         mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                                         onResume();
@@ -149,7 +148,7 @@ public class fragment_history extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
         vehicleHist = sort(vehicleDB.getEntries(context, refID));
         histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), prefUnit);
         histList.setAdapter(histListAdapter);
@@ -158,7 +157,7 @@ public class fragment_history extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(this.getActivity());
+        VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
         vehicleHist = sort(vehicleDB.getEntries(context, refID));
         histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), prefUnit);
         histList.swapAdapter(histListAdapter, false);

@@ -19,7 +19,7 @@ import android.widget.ArrayAdapter;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_add_vehicleEvent;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_iconPicker;
@@ -71,12 +71,10 @@ public class fragment_vehicleEvent_add extends Fragment {
         labels.add(5, "Comment");
 
         final Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
         dataSet.put(labels.get(0), "");
-        dataSet.put(labels.get(1), month + 1 + "/" + day + "/" + year);
+        dataSet.put(labels.get(1), cal.get(Calendar.MONTH) + 1
+                + "/" + cal.get(Calendar.DAY_OF_MONTH)
+                + "/" + cal.get(Calendar.YEAR));
         dataSet.put(labels.get(2), "");
         dataSet.put(labels.get(3), "");
         dataSet.put(labels.get(4), "");
@@ -177,7 +175,7 @@ public class fragment_vehicleEvent_add extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+        inflater.inflate(R.menu.menu_fleet_roster_add, menu);
     }
 
     @Override
@@ -185,22 +183,20 @@ public class fragment_vehicleEvent_add extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()){
-                    vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                    VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
                     vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(getResources().getColor(R.color.error)).show(); ///TODO snakz w/ right label
+                            .setActionTextColor(getResources().getColor(R.color.error)).show(); //TODO snakz w/ right label
 
-                    getActivity().getFragmentManager().popBackStack();
-
+                    getActivity().finish();
                     return true;
                 }
 
                 return false;
 
             case R.id.menu_cancel:
-                getActivity().getFragmentManager().popBackStack();
-
+                getActivity().finish();
                 return true;
 
             default:

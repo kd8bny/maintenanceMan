@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -149,15 +148,13 @@ public class fragment_fleetRoster_add extends Fragment {
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
                 dialog_addField dialog_addField = new dialog_addField();
-                dialog_addField.setTargetFragment(fragment_fleetRoster_add.this, 0);
+                dialog_addField.setTargetFragment(fragment_fleetRoster_add.this, 1);
                 dialog_addField.show(fm, "dialog_add_field");
             }
         });
 
         return view;
     }
-
-    public void onStart(){super.onStart();}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -200,7 +197,7 @@ public class fragment_fleetRoster_add extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+        inflater.inflate(R.menu.menu_fleet_roster_add, menu);
     }
 
     @Override
@@ -216,13 +213,13 @@ public class fragment_fleetRoster_add extends Fragment {
                     roster.add(vehicle);
                     new SaveLoadHelper(context).save(roster);
 
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().finish();
                 }
 
                 return true;
 
             case R.id.menu_cancel:
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().finish();
                 return true;
 
             default:

@@ -19,8 +19,8 @@ import android.widget.ArrayAdapter;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_add_vehicleEvent;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
-import com.kd8bny.maintenanceman.classes.data.vehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;
 import com.kd8bny.maintenanceman.dialogs.dialog_iconPicker;
@@ -28,7 +28,6 @@ import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -178,7 +177,7 @@ public class fragment_vehicleEvent_edit extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_add_fleet_roster, menu);
+        inflater.inflate(R.menu.menu_fleet_roster_add, menu);
     }
 
     @Override
@@ -189,7 +188,7 @@ public class fragment_vehicleEvent_edit extends Fragment {
                     int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
                     String refID = roster.get(pos).getRefID();
 
-                    vehicleLogDBHelper vehicleDB = new vehicleLogDBHelper(getActivity().getApplicationContext());
+                    VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
                     if(!isNew){
                         vehicleDB.deleteEntry(getActivity().getApplicationContext(), editData);
                     }
@@ -198,7 +197,7 @@ public class fragment_vehicleEvent_edit extends Fragment {
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                             .setActionTextColor(getResources().getColor(R.color.error)).show(); ///TODO snakz w/ right label
 
-                    backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                    BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
                     mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                     getActivity().finish();

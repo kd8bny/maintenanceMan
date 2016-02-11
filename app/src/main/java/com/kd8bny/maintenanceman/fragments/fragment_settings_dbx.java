@@ -12,7 +12,7 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.data.backupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
 
 
 public class fragment_settings_dbx extends PreferenceFragment{
@@ -51,7 +51,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
             public boolean onPreferenceClick(Preference preference) {
                 mDBApi.getSession().startOAuth2Authentication(getActivity());
 
-                backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
                 mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", true);
 
                 return true;
@@ -60,7 +60,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
         backupButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
                 mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", true);
 
                 Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox_backup), Snackbar.LENGTH_SHORT).show();
@@ -71,7 +71,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
         restoreButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
+                BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
                 mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", true);
 
                 Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox_restore), Snackbar.LENGTH_SHORT).show();
