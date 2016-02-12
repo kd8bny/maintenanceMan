@@ -20,14 +20,27 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.VehicleActivity"
-                  android:parentActivityName=".activities.MainActivity"/>
+              android:label="@string/title_view_pager"
+              android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
         <activity android:name=".activities.ViewPagerActivity"
-                  android:label="@string/title_view_pager"
-                  android:parentActivityName=".activities.MainActivity"/>
+              android:label="@string/title_view_pager"
+              android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
         <activity
             android:name=".activities.IntroActivity"
             android:label="@string/title_intro"
-            android:parentActivityName=".activities.MainActivity"/>
+            android:parentActivityName=".activities.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity"/>
+        </activity>
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_settings"

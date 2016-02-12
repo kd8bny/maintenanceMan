@@ -28,6 +28,7 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_add_fleetRoster;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 
@@ -39,6 +40,7 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 public class fragment_fleetRoster_add extends Fragment {
     private static final String TAG = "frg_add_fltRstr";
 
+    private UpdateUI mUpdateUI = null;
     private Context context;
 
     private MaterialBetterSpinner vehicleSpinner;
@@ -67,6 +69,9 @@ public class fragment_fleetRoster_add extends Fragment {
 
         Bundle bundle = getArguments();
         roster = bundle.getParcelableArrayList("roster");
+        if(roster == null){
+            roster = new ArrayList<>();
+        }
 
         FragmentManager fm = getChildFragmentManager();
         dialog_addField_required dialog = new dialog_addField_required();
@@ -212,6 +217,7 @@ public class fragment_fleetRoster_add extends Fragment {
 
                     roster.add(vehicle);
                     new SaveLoadHelper(context).save(roster);
+                    mUpdateUI.onUpdate(true);
 
                     getActivity().finish();
                 }

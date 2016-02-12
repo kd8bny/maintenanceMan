@@ -258,8 +258,7 @@ public class fragment_main extends Fragment implements UpdateUI{
     @Override
     public void onResume() {
         super.onResume();
-        cardListAdapter = new adapter_overview(context, roster, mUnit);
-        cardList.swapAdapter(cardListAdapter, false);
+
     }
 
     @Override
@@ -269,7 +268,9 @@ public class fragment_main extends Fragment implements UpdateUI{
 
     public void onUpdate(Boolean doUpdate){
         if (doUpdate) {
-            onResume();
+            roster = new ArrayList<>(new SaveLoadHelper(context).load());
+            cardListAdapter = new adapter_overview(context, roster, mUnit);
+            cardList.setAdapter(cardListAdapter);
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
         }
     }

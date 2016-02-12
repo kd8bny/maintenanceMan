@@ -146,7 +146,6 @@ public class Vehicle implements Parcelable{
 
         @Override
         public Vehicle createFromParcel(Parcel source) {
-            Log.d(TAG, "create");
             return new Vehicle(source);
         }
 
