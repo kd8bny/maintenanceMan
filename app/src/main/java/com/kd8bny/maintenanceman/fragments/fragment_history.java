@@ -3,7 +3,10 @@ package com.kd8bny.maintenanceman.fragments;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.adapter_history;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
@@ -41,12 +45,11 @@ public class fragment_history extends Fragment {
     private RecyclerView.Adapter histListAdapter;
 
     private Context context;
-    private SharedPreferences sharedPreferences;
 
+    private ArrayList<Vehicle> roster;
     private Vehicle vehicle;
     private int vehiclePos;
     private String refID;
-    private String prefUnit;
     private ArrayList<ArrayList> vehicleHist;
 
     public fragment_history() {}
@@ -58,19 +61,16 @@ public class fragment_history extends Fragment {
         context = getActivity().getApplicationContext();
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        vehicle = bundle.getParcelable("vehicle");
+        roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
+        vehicle = roster.get(vehiclePos);
         refID = vehicle.getRefID();
-
-        sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_history, container, false);
         registerForContextMenu(view);
-
-
 
         //Task History
         histList = (RecyclerView) view.findViewById(R.id.histList);
@@ -104,16 +104,18 @@ public class fragment_history extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
-                            case R.id.menu_edit:
-                                /*Intent editIntent = new Intent(getActivity(), activity_vehicleEvent.class);
-                                editIntent.putExtra("dataSet", temp);
-                                editIntent.putExtra("refID", refID);
-                                getActivity().startActivity(editIntent);*/
+                            case R.id.menu_edit: //TODO not done
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("caseID", 3);
+                                bundle.putStringArrayList("event", temp);
+                                bundle.putParcelableArrayList("roster", roster);
+                                bundle.putInt("vehiclePos", vehiclePos);
+                                getActivity().startActivity(new Intent(getActivity(), VehicleActivity.class).putExtra("bundle", bundle));
 
                                 return true;
 
                             case R.id.menu_delete:
-                                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                                /*AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                 builder.setCancelable(true);
                                 builder.setTitle("Delete Item?");
                                 builder.setMessage(temp.get(4) + " completed on " + temp.get(2));
@@ -133,7 +135,7 @@ public class fragment_history extends Fragment {
                                     }
                                 }).show();
 
-                                return true;
+                                return true;*/
 
                             default:
                                 return false;}}});
@@ -146,21 +148,12 @@ public class fragment_history extends Fragment {
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-        VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-        vehicleHist = sort(vehicleDB.getEntries(context, refID));
-        histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), prefUnit);
-        histList.setAdapter(histListAdapter);
-    }
-
-    @Override
     public void onResume(){
         super.onResume();
-        VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-        vehicleHist = sort(vehicleDB.getEntries(context, refID));
-        histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), prefUnit);
-        histList.swapAdapter(histListAdapter, false);
+        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(context);
+        vehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
+        histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), null);
+        histList.setAdapter(histListAdapter);
     }
 
     /*@Override
@@ -215,7 +208,7 @@ public class fragment_history extends Fragment {
 
         for (int i = 0; i < vehicleHist.size(); i++){
             eventPacket = vehicleHist.get(i);
-            String date = eventPacket.get(2) + ":" + i + "";
+            String date = eventPacket.get(1) + ":" + i + "";
             dates.add(date);
             eventPackets.put(date, eventPacket);
         }

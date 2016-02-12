@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -35,6 +36,7 @@ import java.util.LinkedHashMap;
 public class fragment_vehicleEvent_add extends Fragment {
     private static final String TAG = "frg_add_vhclEvnt";
 
+    private Context mContext;
     private MaterialBetterSpinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
 
@@ -55,6 +57,7 @@ public class fragment_vehicleEvent_add extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getArguments() ;
         roster = bundle.getParcelableArrayList("roster");
@@ -183,8 +186,8 @@ public class fragment_vehicleEvent_add extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()){
-                    VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
-                    vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
+                    VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                    vehicleLogDBHelper.insertEntry(refID, dataSet);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                             .setActionTextColor(getResources().getColor(R.color.error)).show(); //TODO snakz w/ right label

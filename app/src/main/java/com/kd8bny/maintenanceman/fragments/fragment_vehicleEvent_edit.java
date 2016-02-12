@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +21,6 @@ import android.widget.ArrayAdapter;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_add_vehicleEvent;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;
@@ -35,6 +36,7 @@ import java.util.LinkedHashMap;
 public class fragment_vehicleEvent_edit extends Fragment {
     private static final String TAG = "frg_add_vhclEvnt";
 
+    private Context mContext;
     private MaterialBetterSpinner vehicleSpinner;
     private ArrayAdapter<String> spinnerAdapter;
 
@@ -47,10 +49,9 @@ public class fragment_vehicleEvent_edit extends Fragment {
     private String refID;
     ArrayList<String> singleVehicle = new ArrayList<>();
     private ArrayList<String> labels = new ArrayList<>();
-    private ArrayList<String> editData;
+    private ArrayList<String> event;
     private HashMap<String, String> dataSet = new LinkedHashMap<>();
 
-    private Boolean isNew = true;
 
     public fragment_vehicleEvent_edit() {}
 
@@ -58,12 +59,13 @@ public class fragment_vehicleEvent_edit extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mContext = getActivity().getApplicationContext();
 
-        Bundle bundle = getArguments() ;
-        vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = bundle.getParcelable("vehicle");
-
-        editData = (ArrayList) getActivity().getIntent().getSerializableExtra("dataSet"); //TODO ??
+        Bundle bundle = getArguments();
+        event = bundle.getStringArrayList("event");
+        roster = bundle.getParcelableArrayList("roster");
+        vehiclePos = bundle.getInt("vehiclePos");
+        vehicle = roster.get(vehiclePos);
         refID = vehicle.getRefID();
 
         labels.add(0, "icon");
@@ -73,12 +75,9 @@ public class fragment_vehicleEvent_edit extends Fragment {
         labels.add(4, "Price");
         labels.add(5, "Comment");
 
-        dataSet.put(labels.get(0), editData.get(1));
-        dataSet.put(labels.get(1), editData.get(2));
-        dataSet.put(labels.get(2), editData.get(3));
-        dataSet.put(labels.get(3), editData.get(4));
-        dataSet.put(labels.get(4), editData.get(5));
-        dataSet.put(labels.get(5), editData.get(6));
+        for (int i = 0; i < 6; i++) {
+            dataSet.put(labels.get(i), event.get(i));
+        }
     }
 
     @Override
@@ -96,7 +95,8 @@ public class fragment_vehicleEvent_edit extends Fragment {
         eventList.setLayoutManager(new LinearLayoutManager(getActivity()));
         eventList.setHasFixedSize(true);
         eventList.setItemAnimator(new DefaultItemAnimator());
-        eventList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(getActivity().getApplicationContext(), eventList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        eventList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, eventList,
+                new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
                 FragmentManager fm = getFragmentManager();
@@ -188,17 +188,11 @@ public class fragment_vehicleEvent_edit extends Fragment {
                     int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
                     String refID = roster.get(pos).getRefID();
 
-                    VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
-                    if(!isNew){
-                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), editData);
-                    }
-                    vehicleDB.saveEntry(getActivity().getApplicationContext(), refID, dataSet);
+                    VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                    vehicleLogDBHelper.insertEntry(refID, dataSet);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                             .setActionTextColor(getResources().getColor(R.color.error)).show(); ///TODO snakz w/ right label
-
-                    BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
-                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
 
                     getActivity().finish();
 
