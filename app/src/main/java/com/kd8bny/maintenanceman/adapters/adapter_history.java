@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,29 +58,21 @@ public class adapter_history extends RecyclerView.Adapter<adapter_history.Adapte
         final ArrayList<String> histEvent = new ArrayList<>();
         histEvent.addAll(mVehicleHist.get(i));
 
-        if (histEvent != null) {
-            if (histEvent.get(0) != null) {
-                if (histEvent.get(1).isEmpty()) {
-                    viewHolder.vIcon.setImageResource(icons.getResourceId(0, 0));
-                } else {
-                    viewHolder.vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(1)), 0));
-                }
-                int color = headerColors.getColor(i % 8, 0);
-                viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        if (histEvent.get(0).isEmpty()) {
+            viewHolder.vIcon.setImageResource(icons.getResourceId(0, 0));
+        } else {
+            viewHolder.vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(0)), 0));
+        }
+        int color = headerColors.getColor(i % 8, 0);
+        viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-                viewHolder.vdate.setText(histEvent.get(2));
-                viewHolder.vodo.setText(histEvent.get(3));
-                viewHolder.vevent.setText(histEvent.get(4));
-                if (mType.equals(vehicleTypes[0]) | mType.equals(vehicleTypes[1]) | mType.equals(vehicleTypes[5])) {
-                    viewHolder.vunit.setText(mUnit);
-                } else {
-                    viewHolder.vunit.setText(res.getString(R.string.unit_time));
-                }
-            } else {
-                viewHolder.vIconBackground.getDrawable().setColorFilter(res.getColor(R.color.error), PorterDuff.Mode.SRC_ATOP);
-
-                viewHolder.vevent.setText(histEvent.get(2));
-            }
+        viewHolder.vdate.setText(histEvent.get(1));
+        viewHolder.vodo.setText(histEvent.get(2));
+        viewHolder.vevent.setText(histEvent.get(3));
+        if (mType.equals(vehicleTypes[0]) | mType.equals(vehicleTypes[1]) | mType.equals(vehicleTypes[5])) {
+            viewHolder.vunit.setText(mUnit);
+        } else {
+            viewHolder.vunit.setText(res.getString(R.string.unit_time));
         }
     }
 

@@ -20,17 +20,18 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
 
     private ArrayList<HashMap> vehicleInfoArray = new ArrayList<>();
     private ArrayList<Integer> itemPos = new ArrayList<>();
     private HashMap<String, String> cardInfo = new HashMap<>();
-    private ArrayList<ArrayList> vehicleHist = new ArrayList<>();
+    private ArrayList<String> mVehicleHist;
     private Vehicle mVehicle;
 
     private static final int VIEW_SPECS = 0;
@@ -40,25 +41,41 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected View vSpecs;
     protected View vChart;
 
-    public adapter_info(Vehicle vehicle) {
+    public InfoAdapter(Vehicle vehicle, ArrayList<String> vehicleHist) {
+        Log.d(TAG,vehicleHist.toString());
         mVehicle = vehicle;
+        mVehicleHist = vehicleHist;
         ArrayList<HashMap> temp = new ArrayList<>();
         temp.add(mVehicle.getGeneralSpecs());
-        temp.add(1, new HashMap());//TODO package here
         temp.add(mVehicle.getEngineSpecs());
         temp.add(mVehicle.getPowerTrainSpecs());
         temp.add(mVehicle.getOtherSpecs());
+
+        //TODO vehicle hist return null if none?
+
+
+Log.d(TAG, vehicleHist.isEmpty()+"");
+
+
+
         vehicleInfoArray = temp;
-        for (int i = temp.size()-1; i >= 0 ; i--) {
+        for (int i = temp.size()-1; i >= 0 ; i--) { //Remove Empty HashMaps
             if (temp.get(i).isEmpty()){
                 vehicleInfoArray.remove(i);
                 if (i == 0){
                     chartPos = 0;
-                }else if (i == 1){
+                }else if (i == 1 & vehicleHist.isEmpty()){
                     chartPos = -1;
                 }
-            }else{itemPos.add(0, i);}
+            }else{
+                itemPos.add(0, i);
+            }
         }
+        if (!vehicleHist.isEmpty()){
+            vehicleInfoArray.add(1, new HashMap());//TODO package here
+        }
+
+        Log.d(TAG, vehicleInfoArray.toString());
     }
 
     public int getItemViewType(int i){
@@ -102,9 +119,10 @@ public class adapter_info extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         cardInfo = vehicleInfoArray.get(i);
+
         switch (getItemViewType(i)) {
             case VIEW_CHART:
-                new vhChart(vChart, vehicleHist);
+                new vhChart(vChart, mVehicleHist);
                 break;
 
             case VIEW_SPECS:
@@ -195,7 +213,7 @@ class vhChart extends RecyclerView.ViewHolder {
 
     private TypedArray headerColors;
 
-    public vhChart(View view, final ArrayList<ArrayList> vehicleHist) {
+    public vhChart(View view, final ArrayList<String> vehicleHist) {
         super(view);
 
         final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
@@ -231,11 +249,12 @@ class vhChart extends RecyclerView.ViewHolder {
 
             try {
                 for (int i = 0; i < vehicleHist.size(); i++) {
-                    ArrayList<String> tempEvent = vehicleHist.get(i);
+                    //ArrayList<String> tempEvent = vehicleHist.get(i);
+                    ArrayList<String> tempEvent = vehicleHist; //TODO meh!!!
                     String[] dateArray = tempEvent.get(2).split("/");
                     int monthLog = Integer.parseInt(dateArray[0]);
 
-                    if (!tempEvent.get(5).isEmpty()) {
+                    //if (!tempEvent.get(5).isEmpty()) {
                         if (xvalsNum.size() > 0){
                             if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
                                 yvalsNum.add(
@@ -250,7 +269,7 @@ class vhChart extends RecyclerView.ViewHolder {
                             xvalsNum.add(monthLog);
                             yvalsNum.add(Float.parseFloat(tempEvent.get(5)));
                         }
-                    }
+                    //}
                 }
 
                 if(xvalsNum.size() > 0) {

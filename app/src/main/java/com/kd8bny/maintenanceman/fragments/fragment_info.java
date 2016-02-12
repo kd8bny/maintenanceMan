@@ -18,9 +18,10 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
-import com.kd8bny.maintenanceman.adapters.adapter_info;
+import com.kd8bny.maintenanceman.adapters.InfoAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class fragment_info extends Fragment {
     private ArrayList<Vehicle> roster;
     private int vehiclePos;
     private Vehicle vehicle;
+    private ArrayList<String> vehicleHist;
 
     public fragment_info() {}
 
@@ -52,6 +54,9 @@ public class fragment_info extends Fragment {
         roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
         vehicle = roster.get(vehiclePos);
+
+        VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
+        vehicleHist = new ArrayList<>(); //vehicleHist = vehicleDB.getColumnData(context, vehicle.getRefID(), 1);
     }
 
     @Override
@@ -63,7 +68,7 @@ public class fragment_info extends Fragment {
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
-        cardListAdapter = new adapter_info(vehicle);
+        cardListAdapter = new InfoAdapter(vehicle, vehicleHist);
         cardList.setAdapter(cardListAdapter);
 
         //menu_overview_fab
@@ -84,7 +89,7 @@ public class fragment_info extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        cardListAdapter = new adapter_info(vehicle);
+        cardListAdapter = new InfoAdapter(vehicle, vehicleHist);
         cardList.setAdapter(cardListAdapter);
     }
 
@@ -146,7 +151,6 @@ public class fragment_info extends Fragment {
                 bundle.putInt("caseID", 2);
                 bundle.putInt("vehiclePos", vehiclePos);
                 bundle.putParcelableArrayList("roster", roster);
-                Log.d(TAG, roster.toString());
                 startActivity(new Intent(getActivity(), VehicleActivity.class).putExtra("bundle", bundle));
 
                 return true;

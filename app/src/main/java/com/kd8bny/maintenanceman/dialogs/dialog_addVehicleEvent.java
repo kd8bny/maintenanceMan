@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 public class dialog_addVehicleEvent extends DialogFragment {
     private static final String TAG = "dlg_add_evnt";
 
+    private Context mContext;
     private int REQUEST_CODE = 1;
     private String label;
     private String value;
@@ -33,6 +35,8 @@ public class dialog_addVehicleEvent extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity().getApplicationContext();
+
         Bundle args = getArguments();
         if (args != null){
             label = args.getString("label");
@@ -50,8 +54,8 @@ public class dialog_addVehicleEvent extends DialogFragment {
         editValue.setFloatingLabelText(label);
 
         if (isEvent){
-            VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-            ArrayList<String> eventList = vehicleDB.getEvents(getActivity().getApplicationContext());
+            /*VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
+            ArrayList<String> eventList = vehicleDB.getColumnData(mContext, null, 0);
             //TODO add premade lists items
 
             // Remove dup's
@@ -60,7 +64,7 @@ public class dialog_addVehicleEvent extends DialogFragment {
             eventList.clear();
             eventList.addAll(tempHS);
 
-            editValue.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, eventList));
+            editValue.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, eventList));*/
         }
         editValue.setText(value);
 

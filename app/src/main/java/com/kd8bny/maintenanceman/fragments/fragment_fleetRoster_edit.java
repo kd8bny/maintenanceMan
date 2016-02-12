@@ -236,8 +236,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
-                        new VehicleLogDBHelper(context)
-                                .purgeHistory(context, vehicle.getRefID());
+                        new VehicleLogDBHelper(context).purgeVehicle(vehicle.getRefID());
 
                         SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
                         ArrayList<Vehicle> temp = saveLoadHelper.load();
