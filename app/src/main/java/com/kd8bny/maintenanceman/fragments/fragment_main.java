@@ -64,7 +64,6 @@ public class fragment_main extends Fragment implements UpdateUI{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         context = getActivity().getApplicationContext();
-        roster = new ArrayList<>(new SaveLoadHelper(context).load());
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
 
         //Data
@@ -161,7 +160,6 @@ public class fragment_main extends Fragment implements UpdateUI{
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
-
         cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
@@ -258,7 +256,8 @@ public class fragment_main extends Fragment implements UpdateUI{
 
     @Override
     public void onResume() {
-        super.onResume();//TODO
+        super.onResume();
+        roster = new ArrayList<>(new SaveLoadHelper(context).load());
         cardListAdapter = new adapter_overview(context, roster, mUnit);
         cardList.setAdapter(cardListAdapter);
     }
