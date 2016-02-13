@@ -147,12 +147,12 @@ public class dialog_addField extends DialogFragment {
 
             error = true;
         }
-        if (fieldName.equals("")){
+        if (fieldName.isEmpty()){
             editFieldName.setError(getResources().getString(R.string.error_field_label));
 
             error = true;
         }
-        if (fieldVal.equals("")){
+        if (fieldVal.isEmpty()){
             editFieldVal.setError(getResources().getString(R.string.error_field_val));
 
             error = true;

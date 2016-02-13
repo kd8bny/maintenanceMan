@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/field_vertical_margin"
 
-        android:inputType="textCapWords"
+        android:inputType="number"
         android:singleLine="true"
 
         app:met_baseColor="@color/primary_text"

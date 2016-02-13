@@ -4,9 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,7 +19,6 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.adapter_history;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
@@ -44,7 +40,7 @@ public class fragment_history extends Fragment {
     private RecyclerView.LayoutManager histMan;
     private RecyclerView.Adapter histListAdapter;
 
-    private Context context;
+    private Context mContext;
 
     private ArrayList<Vehicle> roster;
     private Vehicle vehicle;
@@ -58,7 +54,7 @@ public class fragment_history extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        context = getActivity().getApplicationContext();
+        mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
         roster = bundle.getParcelableArrayList("roster");
@@ -76,7 +72,7 @@ public class fragment_history extends Fragment {
         histList = (RecyclerView) view.findViewById(R.id.histList);
         histMan = new LinearLayoutManager(getActivity());
         histList.setLayoutManager(histMan);
-        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, histList,
+        histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, histList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -115,7 +111,7 @@ public class fragment_history extends Fragment {
                                 return true;
 
                             case R.id.menu_delete:
-                                /*AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                 builder.setCancelable(true);
                                 builder.setTitle("Delete Item?");
                                 builder.setMessage(temp.get(4) + " completed on " + temp.get(2));
@@ -124,23 +120,17 @@ public class fragment_history extends Fragment {
 
                                     public void onClick(DialogInterface dialog, int which) {
                                         VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
-                                        vehicleDB.deleteEntry(getActivity().getApplicationContext(), temp);
-
-                                        vehicleHist = sort(vehicleDB.getEntries(getActivity().getApplicationContext(), refID));
-
-                                        BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
-                                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
-
+                                        vehicleDB.deleteEntry(temp);
                                         onResume();
                                     }
                                 }).show();
 
-                                return true;*/
+                                return true;
 
                             default:
                                 return false;}}});
 
-                if (!temp.get(2).equals(context.getResources().getString(R.string.no_history))) {
+                if (!temp.get(2).equals(mContext.getResources().getString(R.string.no_history))) {
                     popupMenu.show();
                 }}}));
 
@@ -150,56 +140,11 @@ public class fragment_history extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(context);
+        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         vehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
         histListAdapter = new adapter_history(vehicleHist, vehicle.getVehicleType(), null);
         histList.setAdapter(histListAdapter);
     }
-
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_info, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem menuitem) {
-        switch (menuitem.getItemId()) {
-            case R.id.menu_del:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setCancelable(true);
-                builder.setTitle("Are you sure you would like to delete this vehicle?");
-                builder.setNegativeButton("No", null);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        fleetRosterJSONHelper fltjson = new fleetRosterJSONHelper();
-                        fltjson.deleteEntry(getActivity(), refID);
-
-                        vehicleLogDBHelper vhclDBHlpr = new vehicleLogDBHelper(getActivity().getApplicationContext());
-                        vhclDBHlpr.purgeHistory(getActivity().getApplicationContext(), refID);
-
-                        backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper();
-                        mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", false);
-
-                        getActivity().finish();
-                    }});
-
-                builder.show();
-
-                return true;
-
-            case R.id.menu_edit:
-                Intent editIntent = new Intent(getActivity(), activity_edit.class);
-                editIntent.putExtra("refID", refID);
-                getActivity().startActivity(editIntent);
-
-                return true;
-
-            default:
-                return false;
-        }
-    }*/
 
     public ArrayList<ArrayList> sort(ArrayList<ArrayList> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
