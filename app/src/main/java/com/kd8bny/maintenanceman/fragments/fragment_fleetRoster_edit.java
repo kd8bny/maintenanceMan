@@ -234,7 +234,6 @@ public class fragment_fleetRoster_edit extends Fragment {
                 builder.setTitle("Are you sure you would like to delete " + vehicle.getTitle() + "?");
                 builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
                     public void onClick(DialogInterface dialog, int which) {
                         new VehicleLogDBHelper(context).purgeVehicle(vehicle.getRefID());
 
@@ -243,6 +242,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                         temp.remove(vehiclePos);
                         saveLoadHelper.save(temp);
 
+                        getActivity().setResult(91);
                         getActivity().finish();
                     }});
 

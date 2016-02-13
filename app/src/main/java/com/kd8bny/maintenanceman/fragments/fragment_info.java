@@ -106,10 +106,9 @@ public class fragment_info extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> result = data.getStringArrayListExtra("fieldData");
-
         switch (resultCode) {
             case (1):
+                ArrayList<String> result = data.getStringArrayListExtra("fieldData");
                 HashMap<String, String> temp;
                 switch (result.get(0)) {//TODO replace changed key
                     case "General":
@@ -133,10 +132,14 @@ public class fragment_info extends Fragment {
                         vehicle.setOtherSpecs(temp);
                         break;
                 }
+                roster.set(vehiclePos, vehicle);
+                new SaveLoadHelper(context).save(roster);
+
+            case(91):
+                //Delete vehicle
+                getActivity().finish();
             break;
         }
-        roster.set(vehiclePos, vehicle);
-        new SaveLoadHelper(context).save(roster);
 
         onResume();
     }
@@ -155,7 +158,7 @@ public class fragment_info extends Fragment {
                 bundle.putInt("caseID", 2);
                 bundle.putInt("vehiclePos", vehiclePos);
                 bundle.putParcelableArrayList("roster", roster);
-                startActivity(new Intent(getActivity(), VehicleActivity.class).putExtra("bundle", bundle));
+                startActivityForResult(new Intent(getActivity(), VehicleActivity.class).putExtra("bundle", bundle), 90);
 
                 return true;
 

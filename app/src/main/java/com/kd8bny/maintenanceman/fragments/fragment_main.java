@@ -245,8 +245,7 @@ public class fragment_main extends Fragment implements UpdateUI{
             editor.putInt("appVersion", BuildConfig.VERSION_CODE);
             editor.apply();
 
-            FragmentManager fm = getFragmentManager();//TODO marqee view
-
+            FragmentManager fm = getFragmentManager();
             dialog_whatsNew dialog_whatsNew = new dialog_whatsNew();
             dialog_whatsNew.show(fm, "dialog_whatsNew");
         }
@@ -262,7 +261,7 @@ public class fragment_main extends Fragment implements UpdateUI{
         cardList.setAdapter(cardListAdapter);
     }
 
-    public void onUpdate(Boolean doUpdate){
+    public void onUpdate(Boolean doUpdate){ //TODO test to see if working
         if (doUpdate) {
             roster = new ArrayList<>(new SaveLoadHelper(context).load());
             cardListAdapter = new adapter_overview(context, roster, mUnit);
