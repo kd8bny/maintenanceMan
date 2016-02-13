@@ -20,7 +20,6 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private ArrayList<HashMap> vehicleInfoArray = new ArrayList<>();
     private ArrayList<Integer> itemPos = new ArrayList<>();
     private HashMap<String, String> cardInfo = new HashMap<>();
-    private ArrayList<String> mVehicleHist;
+    private ArrayList<ArrayList> mCostHist;
     private Vehicle mVehicle;
 
     private static final int VIEW_SPECS = 0;
@@ -41,10 +40,10 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected View vSpecs;
     protected View vChart;
 
-    public InfoAdapter(Vehicle vehicle, ArrayList<String> vehicleHist) {
-        Log.d(TAG,vehicleHist.toString());
+    public InfoAdapter(Vehicle vehicle, ArrayList<ArrayList> costHist) {
+        Log.d(TAG,costHist.toString());
         mVehicle = vehicle;
-        mVehicleHist = vehicleHist;
+        mCostHist = costHist;
         ArrayList<HashMap> temp = new ArrayList<>();
         temp.add(mVehicle.getGeneralSpecs());
         temp.add(mVehicle.getEngineSpecs());
@@ -54,7 +53,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         //TODO vehicle hist return null if none?
 
 
-Log.d(TAG, vehicleHist.isEmpty()+"");
+Log.d(TAG, costHist.isEmpty()+"");
 
 
 
@@ -64,14 +63,14 @@ Log.d(TAG, vehicleHist.isEmpty()+"");
                 vehicleInfoArray.remove(i);
                 if (i == 0){
                     chartPos = 0;
-                }else if (i == 1 & vehicleHist.isEmpty()){
+                }else if (i == 1 & costHist.isEmpty()){
                     chartPos = -1;
                 }
             }else{
                 itemPos.add(0, i);
             }
         }
-        if (!vehicleHist.isEmpty()){
+        if (!costHist.isEmpty()){
             vehicleInfoArray.add(1, new HashMap());//TODO package here
         }
 
@@ -122,7 +121,7 @@ Log.d(TAG, vehicleHist.isEmpty()+"");
 
         switch (getItemViewType(i)) {
             case VIEW_CHART:
-                new vhChart(vChart, mVehicleHist);
+                new vhChart(vChart, mCostHist);
                 break;
 
             case VIEW_SPECS:
@@ -213,7 +212,7 @@ class vhChart extends RecyclerView.ViewHolder {
 
     private TypedArray headerColors;
 
-    public vhChart(View view, final ArrayList<String> vehicleHist) {
+    public vhChart(View view, final ArrayList<ArrayList> vehicleHist) {
         super(view);
 
         final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
@@ -249,27 +248,24 @@ class vhChart extends RecyclerView.ViewHolder {
 
             try {
                 for (int i = 0; i < vehicleHist.size(); i++) {
-                    //ArrayList<String> tempEvent = vehicleHist.get(i);
-                    ArrayList<String> tempEvent = vehicleHist; //TODO meh!!!
-                    String[] dateArray = tempEvent.get(2).split("/");
+                    ArrayList<String> tempEvent = vehicleHist.get(i);
+                    String[] dateArray = tempEvent.get(0).split("/");
                     int monthLog = Integer.parseInt(dateArray[0]);
 
-                    //if (!tempEvent.get(5).isEmpty()) {
-                        if (xvalsNum.size() > 0){
-                            if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
-                                yvalsNum.add(
-                                        yvalsNum.size()-1,
-                                        yvalsNum.get(yvalsNum.size()-1) +
-                                                Float.parseFloat(tempEvent.get(5)));
-                            }else {
-                                xvalsNum.add(monthLog);
-                                yvalsNum.add(Float.parseFloat(tempEvent.get(5)));
-                            }
+                    if (xvalsNum.size() > 0){
+                        if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
+                            yvalsNum.add(
+                                    yvalsNum.size()-1,
+                                    yvalsNum.get(yvalsNum.size()-1) +
+                                            Float.parseFloat(tempEvent.get(1)));
                         }else {
                             xvalsNum.add(monthLog);
-                            yvalsNum.add(Float.parseFloat(tempEvent.get(5)));
+                            yvalsNum.add(Float.parseFloat(tempEvent.get(1)));
                         }
-                    //}
+                    }else {
+                        xvalsNum.add(monthLog);
+                        yvalsNum.add(Float.parseFloat(tempEvent.get(1)));
+                    }
                 }
 
                 if(xvalsNum.size() > 0) {

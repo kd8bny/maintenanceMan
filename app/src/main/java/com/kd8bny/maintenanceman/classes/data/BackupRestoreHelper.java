@@ -14,9 +14,7 @@ public class BackupRestoreHelper implements AsyncResponse {
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private DropboxHelper mdropboxHelper;
 
-    public BackupRestoreHelper(){
-
-    }
+    public BackupRestoreHelper(){}
 
     public void startAction(Context context, String action, Boolean force){
         String cloudDefault = context.getString(R.string.pref_cloud_default);

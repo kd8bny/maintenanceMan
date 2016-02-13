@@ -82,7 +82,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<ArrayList> getFullVehicleEntries(String refID) {//TODO sort by date
+    public ArrayList<ArrayList> getFullVehicleEntries(String refID) {
         SQLiteDatabase db = getReadableDatabase();
         String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -99,6 +99,39 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                     temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_ODO)));
                     temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_EVENT)));
                     temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
+                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_COMMENT)));
+
+                    vehicleList.add(temp);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                db.close();
+            }
+        }
+
+        return vehicleList;
+    }
+
+    public ArrayList<ArrayList> getPriceByDate(String refID) {
+        SQLiteDatabase db = getReadableDatabase();
+        String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s != '';",
+                COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE,
+                TABLE_VEHICLE,
+                COLUMN_VEHICLE_REFID, refID,
+                COLUMN_VEHICLE_PRICE);
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        ArrayList<ArrayList> vehicleList = new ArrayList<>();
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    ArrayList<String> temp = new ArrayList<>();
+                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
                     temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
 
                     vehicleList.add(temp);
@@ -116,19 +149,19 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return vehicleList;
     }
 
-    public void deleteEntry(ArrayList<String> arrayList){
+    public void deleteEntry(ArrayList<String> arrayList){//TODO test
         /* Data incoming format
-        *String refID, String icon, String date, String odo, String event, String price, String comment
+        *String icon, String date, String odo, String event, String price, String comment
         */
         SQLiteDatabase db = getWritableDatabase();
         String QUERY = String.format("DELETE FROM %s WHERE %s = %s " +
                 "AND %s = %s AND %s = %s AND %s = %s AND %s = %s;",
                 TABLE_VEHICLE,
-                COLUMN_VEHICLE_DATE, arrayList.get(2),
-                COLUMN_VEHICLE_EVENT, arrayList.get(4),
-                COLUMN_VEHICLE_ODO, arrayList.get(3),
-                COLUMN_VEHICLE_PRICE, arrayList.get(5),
-                COLUMN_VEHICLE_COMMENT, arrayList.get(6));
+                COLUMN_VEHICLE_DATE, arrayList.get(1),
+                COLUMN_VEHICLE_EVENT, arrayList.get(3),
+                COLUMN_VEHICLE_ODO, arrayList.get(2),
+                COLUMN_VEHICLE_PRICE, arrayList.get(4),
+                COLUMN_VEHICLE_COMMENT, arrayList.get(5));
         try {
             db.rawQuery(QUERY, null);
         }catch (Exception e) {

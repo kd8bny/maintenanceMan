@@ -40,7 +40,7 @@ public class fragment_info extends Fragment {
     private ArrayList<Vehicle> roster;
     private int vehiclePos;
     private Vehicle vehicle;
-    private ArrayList<String> vehicleHist;
+    private ArrayList<ArrayList> vehicleHist;
 
     public fragment_info() {}
 
@@ -56,7 +56,8 @@ public class fragment_info extends Fragment {
         vehicle = roster.get(vehiclePos);
 
         VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-        vehicleHist = new ArrayList<>(); //vehicleHist = vehicleDB.getColumnData(context, vehicle.getRefID(), 1);
+        vehicleHist = vehicleDB.getPriceByDate(vehicle.getRefID());
+        Log.d(TAG, vehicleHist.toString());
     }
 
     @Override

@@ -34,8 +34,6 @@ import java.util.HashMap;
 public class fragment_history extends Fragment {
     private static final String TAG = "frgmnt_inf";
 
-    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-
     private RecyclerView histList;
     private RecyclerView.LayoutManager histMan;
     private RecyclerView.Adapter histListAdapter;
