@@ -80,6 +80,7 @@ public class dialog_addField_required extends DialogFragment {
         /*Used to keep alert dialog open for error check*/
         super.onStart();
         final AlertDialog alertDialog = (AlertDialog) getDialog();
+        alertDialog.setCanceledOnTouchOutside(false);
         if(alertDialog != null){
             Button positiveButton = alertDialog.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener(){
