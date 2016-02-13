@@ -188,12 +188,10 @@ class vhSpecs extends RecyclerView.ViewHolder {
             case 0:
                 return R.string.header_general;
             case 1:
-                return R.string.header_chart;
-            case 2:
                 return R.string.header_engine;
-            case 3:
+            case 2:
                 return R.string.header_power_train;
-            case 4:
+            case 3:
                 return R.string.header_other;
             default:
                 return -1;
@@ -208,9 +206,14 @@ class vhChart extends RecyclerView.ViewHolder {
 
     public vhChart(View view, final ArrayList<ArrayList> vehicleHist) {
         super(view);
-
-        final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
+        //final TextView tempHeaderTitle = (TextView) view.findViewById(R.id.chart_header);
         final String[] months = view.getResources().getStringArray(R.array.spec_month);
+
+        View relLayout = view.findViewById(R.id.card_info_rel);
+        DisplayMetrics metrics = relLayout.getContext().getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        float fieldsp = view.getResources().getDimension(R.dimen.field_font);
+        int fieldSize = (int) (fieldsp/metrics.density + 0.5f);
 
         ArrayList<BarEntry> yvals = new ArrayList<>();
         ArrayList<String> xvals = new ArrayList<>();
@@ -219,7 +222,18 @@ class vhChart extends RecyclerView.ViewHolder {
 
         if (vehicleHist != null) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-            tempHeaderTitle.setBackgroundColor(headerColors.getColor(0, 0));
+            TextView vTitle = new TextView(view.getContext());
+            ImageView imageView = (ImageView) view.findViewById(R.id.card_info_iv);
+            imageView.setBackgroundColor(headerColors.getColor(1, 0));
+
+            vTitle.setLayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            vTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
+            vTitle.setTextColor(view.getResources().getColor(R.color.secondary_text));
+            vTitle.setMinWidth(width/3);
+            vTitle.setMaxWidth(width/2);
+
             view.animate();
 
             HorizontalBarChart mchart = (HorizontalBarChart) view.findViewById(R.id.chart);
