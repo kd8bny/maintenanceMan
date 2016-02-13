@@ -26,6 +26,7 @@ import com.kd8bny.maintenanceman.adapters.adapter_overview;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.legacy.FleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -41,6 +42,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class fragment_main extends Fragment implements UpdateUI{
     private static final String TAG = "frg_ovrvw";
@@ -159,8 +161,7 @@ public class fragment_main extends Fragment implements UpdateUI{
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
-        cardListAdapter = new adapter_overview(context, roster, mUnit);
-        cardList.setAdapter(cardListAdapter);
+
         cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
@@ -257,13 +258,9 @@ public class fragment_main extends Fragment implements UpdateUI{
 
     @Override
     public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        super.onResume();//TODO
+        cardListAdapter = new adapter_overview(context, roster, mUnit);
+        cardList.setAdapter(cardListAdapter);
     }
 
     public void onUpdate(Boolean doUpdate){

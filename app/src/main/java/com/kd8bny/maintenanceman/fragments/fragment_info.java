@@ -55,6 +55,9 @@ public class fragment_info extends Fragment {
         vehiclePos = bundle.getInt("vehiclePos", -1);
         vehicle = roster.get(vehiclePos);
 
+        Log.d(TAG, vehicle.getRefID() + vehicle.getTitle() + vehicle.getReservedSpecs() + vehicle.getGeneralSpecs()
+        + vehicle.getEngineSpecs() + vehicle.getPowerTrainSpecs() + vehicle.getOtherSpecs() + "");
+
         VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getPriceByDate(vehicle.getRefID());
         Log.d(TAG, vehicleHist.toString());

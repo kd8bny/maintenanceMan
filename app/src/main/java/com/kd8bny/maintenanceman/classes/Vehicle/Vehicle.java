@@ -8,13 +8,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 public class Vehicle implements Parcelable{
     private static final String TAG = "Vehicle";
-    public static final int VERSION = 0;
     public String vehicleType;
     public String refID;
     public String title;
@@ -38,7 +35,6 @@ public class Vehicle implements Parcelable{
 
     private Vehicle(Parcel parcel){
         Log.v(TAG, "ParcelData(Parcel source): time to put back parcel data");
-
         vehicleType = parcel.readString();
         refID = parcel.readString();
         title = parcel.readString();
@@ -47,6 +43,20 @@ public class Vehicle implements Parcelable{
         engineSpecs = parcel.readString();
         powerTrainSpecs = parcel.readString();
         otherSpecs = parcel.readString();
+    }
+
+    public Vehicle(String refID, String vehicleType, String year, String make, String model){
+        /*
+        *TODO Temp to bring everyone up to new spec
+         */
+        this.refID = refID;
+        this.title = year + " " + make + " " + model;
+        this.vehicleType = vehicleType;
+        HashMap<String, String> temp = new HashMap<>(); //TODO no need for map
+        temp.put("year", year);
+        temp.put("make", make);
+        temp.put("model", model);
+        setReservedSpecs(temp);
     }
 
     @Override

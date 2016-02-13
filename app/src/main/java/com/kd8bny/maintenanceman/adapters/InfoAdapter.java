@@ -48,23 +48,27 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         temp.add(mVehicle.getEngineSpecs());
         temp.add(mVehicle.getPowerTrainSpecs());
         temp.add(mVehicle.getOtherSpecs());
+        Log.d(TAG, temp.toString());
 
         vehicleInfoArray = temp;
         for (int i = temp.size()-1; i >= 0 ; i--) { //Remove Empty HashMaps
-            if (temp.get(i).isEmpty()){
+            if (temp.get(i).isEmpty()) {
                 vehicleInfoArray.remove(i);
-                if (i == 0){
+                if (i == 0) {
                     chartPos = 0;
-                }else if (i == 1 & costHist.isEmpty()){
+                } else if (i == 1 & costHist.isEmpty()) {
                     chartPos = -1;
                 }
-            }else{
+            } else {
                 itemPos.add(0, i);
             }
         }
         if (!costHist.isEmpty()){
             vehicleInfoArray.add(1, new HashMap());
+            itemPos.add(1, 1);
         }
+
+        Log.d(TAG, vehicleInfoArray.toString());
     }
 
     public int getItemViewType(int i){

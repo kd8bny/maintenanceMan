@@ -1,7 +1,11 @@
-package com.kd8bny.maintenanceman.classes.data;
+package com.kd8bny.maintenanceman.classes.legacy;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,13 +20,18 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
+/*
+This file is being discontinued when users are brought up to new spec
+ */
 
-public class LegacyFleetRosterJSONHelper {
+public class FleetRosterJSONHelper {
     private static final String TAG = "fltRstrJSONHlpr";
 
     public static final String JSON_NAME = "fleetRoster.json";
 
-    public LegacyFleetRosterJSONHelper(){
+    private Context mContext;
+
+    public FleetRosterJSONHelper(){
 
     }
 
@@ -127,6 +136,7 @@ public class LegacyFleetRosterJSONHelper {
     }
 
     public HashMap<String, HashMap> getEntries(Context context){
+        mContext = context;
         String json = openJSON(context);
 
         HashMap<String, HashMap> vehicleDataAll = new HashMap<>();
@@ -193,6 +203,47 @@ public class LegacyFleetRosterJSONHelper {
         }catch(JSONException e){
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<Vehicle> saveToNew(HashMap<String, HashMap> oldRoster){
+        Log.i(TAG, "Attempting to capture old data and store new format");
+        ArrayList<Vehicle> newRoster = new ArrayList<>();
+        for (String key : oldRoster.keySet()) {
+            HashMap<String, HashMap> oldVehicle = oldRoster.get(key);
+            HashMap<String, String> genTemp = oldVehicle.get("General");
+            Log.d(TAG, genTemp.toString());
+            String type = genTemp.get("type");
+            String year = genTemp.get("Year");
+            String make = genTemp.get("Make");
+            String model = genTemp.get("Model");
+            Vehicle tempVehicle = new Vehicle(key, type, year, make, model);
+
+            genTemp.remove("type");
+            genTemp.remove("Year");
+            genTemp.remove("Make");
+            genTemp.remove("Model");
+
+            tempVehicle.setGeneralSpecs(genTemp);
+            if (oldVehicle.containsKey("Engine")){
+                tempVehicle.setEngineSpecs(oldVehicle.get("Engine"));
+            }else{
+                tempVehicle.setEngineSpecs(new HashMap<String, String>());
+            }
+            Log.d(TAG,oldVehicle.containsKey("Power Train")+"" );
+            if (oldVehicle.containsKey("Power Train")){
+                tempVehicle.setPowerTrainSpecs(oldVehicle.get("Power Train"));
+            }else{
+                tempVehicle.setPowerTrainSpecs(new HashMap<String, String>());
+            }
+            if (oldVehicle.containsKey("Other")){
+                tempVehicle.setOtherSpecs(oldVehicle.get("Other"));
+            }else{
+                tempVehicle.setOtherSpecs(new HashMap<String, String>());
+            }
+
+            newRoster.add(tempVehicle);
+        }
+        return newRoster;
     }
 }
 
