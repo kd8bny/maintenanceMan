@@ -41,7 +41,6 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     protected View vChart;
 
     public InfoAdapter(Vehicle vehicle, ArrayList<ArrayList> costHist) {
-        Log.d(TAG,costHist.toString());
         mVehicle = vehicle;
         mCostHist = costHist;
         ArrayList<HashMap> temp = new ArrayList<>();
@@ -49,13 +48,6 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         temp.add(mVehicle.getEngineSpecs());
         temp.add(mVehicle.getPowerTrainSpecs());
         temp.add(mVehicle.getOtherSpecs());
-
-        //TODO vehicle hist return null if none?
-
-
-Log.d(TAG, costHist.isEmpty()+"");
-
-
 
         vehicleInfoArray = temp;
         for (int i = temp.size()-1; i >= 0 ; i--) { //Remove Empty HashMaps
@@ -71,10 +63,8 @@ Log.d(TAG, costHist.isEmpty()+"");
             }
         }
         if (!costHist.isEmpty()){
-            vehicleInfoArray.add(1, new HashMap());//TODO package here
+            vehicleInfoArray.add(1, new HashMap());
         }
-
-        Log.d(TAG, vehicleInfoArray.toString());
     }
 
     public int getItemViewType(int i){
