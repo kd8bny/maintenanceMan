@@ -75,7 +75,7 @@ public class fragment_info extends Fragment {
         cardListAdapter = new InfoAdapter(vehicle, vehicleHist);
         cardList.setAdapter(cardListAdapter);
 
-        //menu_overview_fab
+        //fab
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
@@ -129,6 +130,19 @@ public class fragment_history extends Fragment {
                                     return false;}}});
                         popupMenu.show();
                 }}}));
+
+        //menu_overview_fab
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("caseID", 1);
+                bundle.putParcelableArrayList("roster", roster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
+            }
+        });
 
         return view;
     }
