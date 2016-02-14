@@ -95,14 +95,17 @@ public class SaveLoadHelper {
     private void onUpgrade(int oldVersion){
         switch (oldVersion) {
             case -1:
-                //Make new objects //TODO remove by Production version and 95% users
-                FleetRosterJSONHelper fleetRosterJSONHelper = new FleetRosterJSONHelper();
-                HashMap<String, HashMap> oldRoster = fleetRosterJSONHelper.getEntries(mContext);
-                save(fleetRosterJSONHelper.saveToNew(oldRoster));
+                File file = new File(FILE_LOCATION);
+                if (file.exists()) {
+                    //Make new objects //TODO remove by Production version and 95% users
+                    FleetRosterJSONHelper fleetRosterJSONHelper = new FleetRosterJSONHelper();
+                    HashMap<String, HashMap> oldRoster = fleetRosterJSONHelper.getEntries(mContext);
+                    save(fleetRosterJSONHelper.saveToNew(oldRoster));
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("fleetRosterDBVersion", 1);
-                editor.apply();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putInt("fleetRosterDBVersion", 1);
+                    editor.apply();
+                }
             default:
                 Log.e(TAG, "No case for DB upgrade");
         }

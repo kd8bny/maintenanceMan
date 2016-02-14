@@ -20,6 +20,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
+import com.kd8bny.maintenanceman.classes.Vehicle.Event;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -34,7 +35,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class fragment_history extends Fragment {
-    private static final String TAG = "frgmnt_inf";
+    private static final String TAG = "frgmnt_hist";
 
     private RecyclerView histList;
     private RecyclerView.LayoutManager histMan;
@@ -46,7 +47,7 @@ public class fragment_history extends Fragment {
     private Vehicle vehicle;
     private int vehiclePos;
     private String refID;
-    private ArrayList<ArrayList> vehicleHist;
+    private ArrayList<Event> vehicleHist;
 
     public fragment_history() {}
 
@@ -76,22 +77,22 @@ public class fragment_history extends Fragment {
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                final ArrayList<String> temp = vehicleHist.get(pos);
-                if (!temp.isEmpty()) {
-                    Bundle args = new Bundle();
-                    args.putSerializable("event", vehicleHist.get(pos));
+                if (!vehicleHist.isEmpty()) {
+                    final Event event = vehicleHist.get(pos);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("event", event);
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    dialog_vehicleHistory dialog_vehicleHistory = new dialog_vehicleHistory();
-                    dialog_vehicleHistory.setTargetFragment(fragment_history.this, 0);
-                    dialog_vehicleHistory.setArguments(args);
-                    dialog_vehicleHistory.show(fm, "dialog_vehicle_history");
+                    dialog_vehicleHistory dialog = new dialog_vehicleHistory();
+                    dialog.setTargetFragment(fragment_history.this, 0);
+                    dialog.setArguments(bundle);
+                    dialog.show(fm, "dialog_vehicle_history");
                 }
             }
 
             @Override
             public void onItemLongClick(final View view, int pos) {
                 if (!vehicleHist.isEmpty()) {
-                    final ArrayList<String> temp = vehicleHist.get(pos);
+                    final Event event = vehicleHist.get(pos);
                     PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                     popupMenu.getMenuInflater().inflate(R.menu.pop_menu_history, popupMenu.getMenu());
                     //TODO vibrate
@@ -103,10 +104,11 @@ public class fragment_history extends Fragment {
                                 case R.id.menu_edit: //TODO not done
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("caseID", 3);
-                                    bundle.putStringArrayList("event", temp);
+                                    bundle.putSerializable("event", event);
                                     bundle.putParcelableArrayList("roster", roster);
                                     bundle.putInt("vehiclePos", vehiclePos);
-                                    getActivity().startActivity(new Intent(getActivity(), VehicleActivity.class).putExtra("bundle", bundle));
+                                    getActivity().startActivity(new Intent(getActivity(), VehicleActivity.class)
+                                            .putExtra("bundle", bundle));
 
                                     return true;
 
@@ -114,13 +116,13 @@ public class fragment_history extends Fragment {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
-                                    builder.setMessage(temp.get(4) + " completed on " + temp.get(2));
+                                    builder.setMessage(event.getEvent() + " completed on " + event.getDate());
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
                                             VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
-                                            vehicleDB.deleteEntry(temp);
+                                            vehicleDB.deleteEntry(event);
                                             onResume();
                                         }
                                     }).show();
@@ -153,21 +155,21 @@ public class fragment_history extends Fragment {
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         vehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
-        Log.d(TAG, vehicleHist.toString());
-        histListAdapter = new HistoryAdapter(mContext, vehicleHist, vehicle.getVehicleType(), null);
+        Log.d(TAG,vehicleHist.toString());
+        histListAdapter = new HistoryAdapter(mContext, vehicleHist);
         histList.setAdapter(histListAdapter);
     }
 
-    public ArrayList<ArrayList> sort(ArrayList<ArrayList> vehicleHist){
+    public ArrayList<Event> sort(ArrayList<Event> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
-        ArrayList<String> eventPacket;
-        HashMap<String, ArrayList> eventPackets = new HashMap<>();
+
+        HashMap<String, Event> eventPackets = new HashMap<>();
 
         for (int i = 0; i < vehicleHist.size(); i++){
-            eventPacket = vehicleHist.get(i);
-            String date = eventPacket.get(1) + ":" + i + "";
+            Event event = vehicleHist.get(i);
+            String date = event.getDate() + ":" + i + "";
             dates.add(date);
-            eventPackets.put(date, eventPacket);
+            eventPackets.put(date, event);
         }
 
         Collections.sort(dates, new Comparator<String>() {
