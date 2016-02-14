@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -41,10 +42,11 @@ public class dialog_addVehicleEvent extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_add_vehicle_event, null);
         final MaterialAutoCompleteTextView editValue = (MaterialAutoCompleteTextView) view.findViewById(R.id.value);
         Resources mRes = view.getResources();
-        switch (RESULT_CODE){
+        switch (RESULT_CODE){//TODO get data for edit
             case 2:
                 editValue.setHint(mRes.getString(R.string.field_odo));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_odo));
+                editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
                 break;
 
             case 3:
@@ -62,11 +64,13 @@ public class dialog_addVehicleEvent extends DialogFragment {
             case 4:
                 editValue.setHint(mRes.getString(R.string.field_price));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_price));
+                editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
                 break;
 
             case 5:
                 editValue.setHint(mRes.getString(R.string.field_comment));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_comment));
+                editValue.setInputType(InputType.TYPE_CLASS_TEXT);
                 break;
         }
 
