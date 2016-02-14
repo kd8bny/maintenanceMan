@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -118,7 +119,7 @@ public class fragment_history extends Fragment {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(getActivity().getApplicationContext());
+                                            VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
                                             vehicleDB.deleteEntry(temp);
                                             onResume();
                                         }
@@ -152,6 +153,7 @@ public class fragment_history extends Fragment {
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         vehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
+        Log.d(TAG, vehicleHist.toString());
         histListAdapter = new HistoryAdapter(mContext, vehicleHist, vehicle.getVehicleType(), null);
         histList.setAdapter(histListAdapter);
     }

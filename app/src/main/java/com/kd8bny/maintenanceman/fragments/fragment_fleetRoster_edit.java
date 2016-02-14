@@ -39,7 +39,7 @@ import java.util.HashMap;
 public class fragment_fleetRoster_edit extends Fragment {
     private static final String TAG = "frg_fltRstr_edit";
 
-    private Context context;
+    private Context mContext;
 
     private MaterialBetterSpinner vehicleSpinner;
     private RecyclerView addList;
@@ -64,7 +64,7 @@ public class fragment_fleetRoster_edit extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        context = getActivity().getApplicationContext();
+        mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getArguments();
         Log.d(TAG, bundle.toString());
@@ -77,11 +77,11 @@ public class fragment_fleetRoster_edit extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.fragment_fleet_roster, container, false);
-        context = getActivity().getApplicationContext();
+        mContext = getActivity().getApplicationContext();
 
         //Spinner
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
-        mvehicleTypes = context.getResources().getStringArray(R.array.vehicle_type);
+        mvehicleTypes = mContext.getResources().getStringArray(R.array.vehicle_type);
         vehicleSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -96,7 +96,7 @@ public class fragment_fleetRoster_edit extends Fragment {
         addListAdapter = new adapter_add_fleetRoster(allSpecs);
         addList.setAdapter(addListAdapter);
 
-        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
+        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int i) {
                 FragmentManager fm = getFragmentManager();
@@ -137,7 +137,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                     builder.show();
                 }else{
                     Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(ContextCompat.getColor(context, R.color.error)).show();
+                            .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
                 }
             }}));
 
@@ -214,7 +214,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                 vehicle.setPowerTrainSpecs(powerTrainSpecs);
                 vehicle.setOtherSpecs(otherSpecs);
 
-                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
+                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
                 if(!vehicle.equals(roster.get(vehiclePos))) {
                     roster.set(vehiclePos, vehicle);
@@ -235,9 +235,9 @@ public class fragment_fleetRoster_edit extends Fragment {
                 builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        new VehicleLogDBHelper(context).purgeVehicle(vehicle.getRefID());
+                        VehicleLogDBHelper.getInstance(mContext).purgeVehicle(vehicle.getRefID());
 
-                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(context);
+                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext);
                         ArrayList<Vehicle> temp = saveLoadHelper.load();
                         temp.remove(vehiclePos);
                         saveLoadHelper.save(temp);
