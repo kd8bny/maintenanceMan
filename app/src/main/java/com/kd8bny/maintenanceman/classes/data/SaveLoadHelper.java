@@ -101,11 +101,10 @@ public class SaveLoadHelper {
                     FleetRosterJSONHelper fleetRosterJSONHelper = new FleetRosterJSONHelper();
                     HashMap<String, HashMap> oldRoster = fleetRosterJSONHelper.getEntries(mContext);
                     save(fleetRosterJSONHelper.saveToNew(oldRoster));
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putInt("fleetRosterDBVersion", 1);
-                    editor.apply();
                 }
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("fleetRosterDBVersion", 1);
+                editor.apply();
             default:
                 Log.e(TAG, "No case for DB upgrade");
         }
