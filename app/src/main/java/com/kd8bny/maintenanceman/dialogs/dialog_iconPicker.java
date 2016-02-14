@@ -12,15 +12,16 @@ import android.widget.GridView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.adapter_iconPicker;
+import com.kd8bny.maintenanceman.classes.Vehicle.Event;
 
 
 public class dialog_iconPicker extends DialogFragment {
     private static final String TAG = "dlg_icnPckr";
 
-    private int REQUEST_CODE = 0;
+    private int RESULT_CODE;
 
     public dialog_iconPicker(){
-
+        RESULT_CODE = getTargetRequestCode();
     }
 
     @Override
@@ -30,14 +31,13 @@ public class dialog_iconPicker extends DialogFragment {
         final GridView iconGrid = (GridView) view.findViewById(R.id.iconGrid);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-
         alertDialog.setView(view);
 
         iconGrid.setAdapter(new adapter_iconPicker(view.getContext()));
         iconGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                sendResult(position+"");
+                sendResult(position);
                 dismiss();
             }
         });
@@ -45,10 +45,8 @@ public class dialog_iconPicker extends DialogFragment {
         return alertDialog.create();
     }
 
-    private void sendResult(String position) {
-        Intent intent = new Intent();
-        intent.putExtra("icon", position);
-
-        getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
+    private void sendResult(int position) {
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
+                new Intent().putExtra("value", position));
     }
 }

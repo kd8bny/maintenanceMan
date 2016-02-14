@@ -13,29 +13,22 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-
-import java.util.ArrayList;
+import com.kd8bny.maintenanceman.classes.Vehicle.Event;
 
 
 public class dialog_vehicleHistory extends DialogFragment {
     private static final String TAG = "dlg_vhcl_hstry";
 
-    public ArrayList<String> event;
+    public Event event;
 
-    public dialog_vehicleHistory(){
-
-    }
+    public dialog_vehicleHistory(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle args = getArguments();
-        if (args != null){
-            event = (ArrayList) args.getSerializable("event");
-
-        }
-
+        Bundle bundle = getArguments();
+        event = (Event) bundle.getSerializable("event");
     }
 
     @Override
@@ -43,8 +36,8 @@ public class dialog_vehicleHistory extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_vehicle_history, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-        SpannableStringBuilder dateString = new SpannableStringBuilder("Completed on " + event.get(2));
-        SpannableStringBuilder odoString = new SpannableStringBuilder(" at " + event.get(3) + " mi");
+        SpannableStringBuilder dateString = new SpannableStringBuilder("Completed on " + event.getDate());
+        SpannableStringBuilder odoString = new SpannableStringBuilder(" at " + event.getOdometer() + " " + event.getUnit());
         StyleSpan styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
         StyleSpan styleSpan2 = new StyleSpan(android.graphics.Typeface.BOLD);
 
@@ -52,9 +45,9 @@ public class dialog_vehicleHistory extends DialogFragment {
         odoString.setSpan(styleSpan2, 0, 4, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
 
         ((TextView) view.findViewById(R.id.val_spec_date_and_odo)).setText(TextUtils.concat(dateString, odoString));
-        ((TextView)view.findViewById(R.id.val_spec_event)).setText(event.get(4));
-        ((TextView) view.findViewById(R.id.val_spec_price)).setText(event.get(5));
-        ((TextView)view.findViewById(R.id.val_spec_comment)).setText(event.get(6));
+        ((TextView)view.findViewById(R.id.val_spec_event)).setText(event.getEvent());
+        ((TextView) view.findViewById(R.id.val_spec_price)).setText(event.getPrice()+"");
+        ((TextView)view.findViewById(R.id.val_spec_comment)).setText(event.getComment());
 
         return view;
     }

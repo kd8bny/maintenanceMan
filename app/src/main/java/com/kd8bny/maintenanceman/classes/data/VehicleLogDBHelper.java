@@ -8,8 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.kd8bny.maintenanceman.classes.Vehicle.Event;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
@@ -56,49 +59,50 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 + COLUMN_ICON + " TEXT NOT NULL DEFAULT '0');");
     }
 
-    public void insertEntry(String refID, HashMap<String, String> dataSet) {
+    public void insertEntry(Event event) {
         /* Data incoming format
         *String date, String odo, String task, String price, String comment, String icon
         */
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_VEHICLE_REFID, refID);
-        contentValues.put(COLUMN_VEHICLE_DATE, dataSet.get("Date"));
-        contentValues.put(COLUMN_VEHICLE_ODO, dataSet.get("Odometer"));
-        contentValues.put(COLUMN_VEHICLE_EVENT, dataSet.get("Event"));
-        contentValues.put(COLUMN_VEHICLE_PRICE, dataSet.get("Price"));
-        contentValues.put(COLUMN_VEHICLE_COMMENT, dataSet.get("Comment"));
-        contentValues.put(COLUMN_ICON, dataSet.get("icon"));
-        db.beginTransaction();
+        contentValues.put(COLUMN_VEHICLE_REFID, event.getRefID());
+        contentValues.put(COLUMN_VEHICLE_DATE, event.getDate());
+        contentValues.put(COLUMN_VEHICLE_ODO, event.getOdometer());
+        contentValues.put(COLUMN_VEHICLE_EVENT, event.getEvent());
+        contentValues.put(COLUMN_VEHICLE_PRICE, event.getPrice());
+        contentValues.put(COLUMN_VEHICLE_COMMENT, event.getComment());
+        contentValues.put(COLUMN_ICON, event.getIcon());
+
         try {
+            db.beginTransaction();
             db.insertOrThrow(TABLE_VEHICLE, null, contentValues);
             db.setTransactionSuccessful();
         } catch (Exception e){
+            e.printStackTrace();
             Log.e(TAG, "Error on insert entry");
         } finally {
             db.endTransaction();
         }
     }
 
-    public ArrayList<ArrayList> getFullVehicleEntries(String refID) {
+    public ArrayList<Event> getFullVehicleEntries(String refID) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT rowid, * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
         Cursor cursor = db.rawQuery(QUERY, null);
 
-        ArrayList<ArrayList> vehicleList = new ArrayList<>();
-
+        ArrayList<Event> eventList = new ArrayList<>();
         try {
             if (cursor.moveToFirst()) {
                 do {
-                    ArrayList<String> temp = new ArrayList<>();
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_ICON)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_ODO)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_EVENT)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_COMMENT)));
+                    Event event = new Event(refID);
+                    event.setIcon(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ICON))));
+                    event.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    event.setOdometer(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_ODO)));
+                    event.setEvent(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_EVENT)));
+                    event.setPrice(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
+                    event.setComment(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_COMMENT)));
 
-                    vehicleList.add(temp);
+                    eventList.add(event);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -110,7 +114,31 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             }
         }
 
-        return vehicleList;
+        return eventList;
+    }
+
+    public HashSet<String> getEntries() {
+        SQLiteDatabase db = getReadableDatabase();
+        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_VEHICLE_EVENT, TABLE_VEHICLE);
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        HashSet<String> entryList = new HashSet<>();
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    entryList.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_EVENT)));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                db.close();
+            }
+        }
+
+        return entryList;
     }
 
     public ArrayList<ArrayList> getPriceByDate(String refID) {
@@ -146,15 +174,13 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return vehicleList;
     }
 
-    public void deleteEntry(ArrayList<String> arrayList){
-        /* Data incoming format
-        *String icon, String date, String odo, String event, String price, String comment
-        */
+    public void deleteEntry(Event event){
         SQLiteDatabase db = getWritableDatabase();
-        String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s';",
+        String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
                 TABLE_VEHICLE,
-                COLUMN_VEHICLE_DATE, arrayList.get(1),
-                COLUMN_VEHICLE_EVENT, arrayList.get(3));
+                COLUMN_VEHICLE_REFID, event.getRefID(),
+                COLUMN_VEHICLE_DATE, event.getDate(),
+                COLUMN_VEHICLE_EVENT, event.getEvent());
         try {
             db.beginTransaction();
             db.execSQL(QUERY);
@@ -201,63 +227,8 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 Log.e(TAG, e.toString());
                 Log.e(TAG, "Error updating db");
             } finally {
-                //db.setVersion(DB_VERSION);
                 db.endTransaction();
             }
         }
-
-        /*if (oldVersion == 3){
-            Log.i(TAG, "trying");
-            db.execSQL("CREATE TABLE "
-                    + TABLE_VEHICLE_NEW
-                    + "("
-                    + COLUMN_ID + " integer primary key autoincrement, "
-                    + COLUMN_VEHICLE_REFID + " text not null, "
-                    + COLUMN_VEHICLE_DATE + " text not null, "
-                    + COLUMN_VEHICLE_ODO + " text not null, "
-                    + COLUMN_VEHICLE_EVENT + " text not null, "
-                    + COLUMN_VEHICLE_PRICE + " text not null, "
-                    + COLUMN_VEHICLE_COMMENT + " text not null,"
-                    + COLUMN_ICON + " text not null default '0'"
-                    + ");");
-
-
-            String QUERY_FROM = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s;",
-                    COLUMN_VEHICLE_REFID, COLUMN_ICON, COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_ODO,
-                    COLUMN_VEHICLE_EVENT, COLUMN_VEHICLE_PRICE, COLUMN_VEHICLE_COMMENT,
-                    TABLE_VEHICLE);
-
-            Cursor cursorFrom = db.rawQuery(QUERY_FROM, null);
-            try {
-                if (cursorFrom.moveToFirst()) {
-                    do {
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(COLUMN_VEHICLE_REFID, cursorFrom.getString(cursorFrom.getColumnIndex(COLUMN_VEHICLE_REFID)));
-                        contentValues.put(COLUMN_ICON, cursorFrom.getString(cursorFrom.getColumnIndex(COLUMN_ICON)));
-                        contentValues.put(COLUMN_VEHICLE_DATE, cursorFrom.getString(cursorFrom.getColumnIndex(COLUMN_VEHICLE_DATE)));
-                        contentValues.put(COLUMN_VEHICLE_ODO, cursorFrom.getColumnIndex(COLUMN_VEHICLE_ODO));
-                        contentValues.put(COLUMN_VEHICLE_EVENT, cursorFrom.getString(cursorFrom.getColumnIndex(COLUMN_VEHICLE_EVENT)));
-                        contentValues.put(COLUMN_VEHICLE_PRICE, cursorFrom.getString(cursorFrom.getColumnIndex(COLUMN_VEHICLE_PRICE)));
-                        contentValues.put(COLUMN_VEHICLE_COMMENT, cursorFrom.getString(cursorFrom.getColumnIndex(COLUMN_VEHICLE_COMMENT)));
-
-                        db.insertOrThrow(TABLE_VEHICLE_NEW, null, contentValues);
-
-                    } while (cursorFrom.moveToNext());
-                    db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
-                    db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " RENAME TO " + TABLE_VEHICLE);
-
-                    db.setTransactionSuccessful();
-                    Log.i(TAG, "Much success ben haz");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (!cursorFrom.isClosed()) {
-                    cursorFrom.close();
-                    db.endTransaction();
-                    //db.close();
-                }
-            }
-        }*/
     }
 }

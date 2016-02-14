@@ -2,9 +2,9 @@ package com.kd8bny.maintenanceman.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -12,37 +12,27 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.Vehicle.Event;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 
 public class dialog_addVehicleEvent extends DialogFragment {
     private static final String TAG = "dlg_add_evnt";
 
-    private Context mContext;
-    private int REQUEST_CODE = 1;
-    private String label;
-    private String value;
-    private Boolean isEvent;
+    private int RESULT_CODE;
+    private Event mEvent;
 
-    public dialog_addVehicleEvent(){
-
-    }
+    public dialog_addVehicleEvent(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = getActivity().getApplicationContext();
-
-        Bundle args = getArguments();
-        if (args != null){
-            label = args.getString("label");
-            value = args.getString("value");
-            isEvent = args.getBoolean("isEvent");
-        }
+        RESULT_CODE = getTargetRequestCode();
+        Bundle bundle = getArguments();
+        mEvent = (Event) bundle.getSerializable("event");
     }
 
     @Override
@@ -50,52 +40,58 @@ public class dialog_addVehicleEvent extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_vehicle_event, null);
         final MaterialAutoCompleteTextView editValue = (MaterialAutoCompleteTextView) view.findViewById(R.id.value);
-        editValue.setHint(label);
-        editValue.setFloatingLabelText(label);
+        Resources mRes = view.getResources();
+        switch (RESULT_CODE){
+            case 2:
+                editValue.setHint(mRes.getString(R.string.field_odo));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_odo));
+                break;
 
-        if (isEvent){
-            /*VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-            ArrayList<String> eventList = vehicleDB.getColumnData(mContext, null, 0);
-            //TODO add premade lists items
+            case 3:
+                editValue.setHint(mRes.getString(R.string.field_event));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_event));
 
-            // Remove dup's
-            HashSet tempHS = new HashSet();
-            tempHS.addAll(eventList);
-            eventList.clear();
-            eventList.addAll(tempHS);
+                VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(getActivity().getApplicationContext());
+                ArrayList<String> eventList = new ArrayList<>();
+                eventList.addAll(vehicleDB.getEntries());
+                //TODO add premade lists items
 
-            editValue.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, eventList));*/
+                editValue.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, eventList));
+                break;
+
+            case 4:
+                editValue.setHint(mRes.getString(R.string.field_price));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_price));
+                break;
+
+            case 5:
+                editValue.setHint(mRes.getString(R.string.field_comment));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_comment));
+                break;
         }
-        editValue.setText(value);
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
             .setTitle("Set:")
             .setPositiveButton("OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            value = editValue.getText().toString();
-                            sendResult();
+                            sendResult(editValue.getText().toString());
                         }
-                    }
-            )
+                    })
             .setNegativeButton("Cancel",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             // DO SOMETHING
                         }
-                    }
-            );
+                    });
 
         alertDialog.setView(view);
 
         return alertDialog.create();
     }
 
-    private void sendResult() {
-        Intent intent = new Intent();
-        intent.putExtra("label", label);
-        intent.putExtra("value", value);
-
-        getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
+    private void sendResult(String value) {
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
+                new Intent().putExtra("value", value));
     }
 }

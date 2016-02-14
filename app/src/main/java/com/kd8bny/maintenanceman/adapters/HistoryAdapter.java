@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.Vehicle.Event;
 
 import java.util.ArrayList;
 
@@ -22,27 +22,22 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
     private Context mContext;
     private TypedArray icons;
     private TypedArray headerColors;
-    private String[] vehicleTypes;
     private Resources res;
 
-    private ArrayList<ArrayList> mVehicleHist = new ArrayList<>();
-    private String mType;
-    private String mUnit;
+    private ArrayList<Event> mEventList;
     private View itemView;
 
-    public HistoryAdapter(Context context, ArrayList<ArrayList> vehicleList, String type, String unit) {
+    public HistoryAdapter(Context context, ArrayList<Event> eventList) {
         mContext = context;
-        mVehicleHist = vehicleList;
-        mType = type;
-        mUnit = unit;
+        mEventList = eventList;
     }
 
     @Override
     public int getItemCount() {
-        if (mVehicleHist.isEmpty()){
+        if (mEventList.isEmpty()){
             return 1;
         }
-        return mVehicleHist.size();
+        return mEventList.size();
     }
 
     @Override
@@ -50,8 +45,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
         res = viewGroup.getResources();
         icons = res.obtainTypedArray(R.array.icon_event);
         headerColors = res.obtainTypedArray(R.array.header_color);
-        vehicleTypes = res.getStringArray(R.array.vehicle_type);
-
         itemView = LayoutInflater
                 .from(viewGroup.getContext())
                 .inflate(R.layout.card_hist, viewGroup, false);
@@ -61,25 +54,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
 
     @Override
     public void onBindViewHolder(final AdapterViewHolder viewHolder, int i) {
-       if(!mVehicleHist.isEmpty()){
-            ArrayList<String> histEvent = mVehicleHist.get(i);
-            if (histEvent.get(0).isEmpty()) {
-                viewHolder.vIcon.setImageResource(icons.getResourceId(0, 0));
-            } else {
-                viewHolder.vIcon.setImageResource(icons.getResourceId(Integer.parseInt(histEvent.get(0)), 0));
-            }
+       if(!mEventList.isEmpty()){
             int color = headerColors.getColor(i % 8, 0);
             viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-            viewHolder.vdate.setText(histEvent.get(1));
-            viewHolder.vodo.setText(histEvent.get(2));
-            viewHolder.vevent.setText(histEvent.get(3));
-            if (mType.equals(vehicleTypes[0]) | mType.equals(vehicleTypes[1]) | mType.equals(vehicleTypes[5])) {
-                viewHolder.vunit.setText(mUnit);
-            } else {
-                viewHolder.vunit.setText(res.getString(R.string.unit_time));
-            }
-        }else{
+            Event event = mEventList.get(i);
+            viewHolder.vIcon.setImageResource(icons.getResourceId(event.getIcon(), 0));
+            viewHolder.vdate.setText(event.getDate());
+            viewHolder.vodo.setText(event.getOdometer());
+            viewHolder.vevent.setText(event.getEvent());
+            viewHolder.vunit.setText(event.getUnit());
+       }else{
            viewHolder.vevent.setText(mContext.getResources().getString(R.string.error_no_history));
            viewHolder.vIconBackground.getDrawable()
                    .setColorFilter(mContext.getResources().getColor(R.color.error), PorterDuff.Mode.SRC_ATOP);
