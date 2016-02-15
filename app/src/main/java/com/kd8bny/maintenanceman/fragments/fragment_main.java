@@ -22,11 +22,10 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
-import com.kd8bny.maintenanceman.adapters.adapter_overview;
+import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
-import com.kd8bny.maintenanceman.classes.legacy.FleetRosterJSONHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -42,7 +41,6 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class fragment_main extends Fragment implements UpdateUI{
     private static final String TAG = "frg_ovrvw";
@@ -56,7 +54,6 @@ public class fragment_main extends Fragment implements UpdateUI{
     private RecyclerView.Adapter cardListAdapter;
 
     private ArrayList<Vehicle> roster;
-    private String mUnit;
 
     public fragment_main() {}
 
@@ -156,7 +153,6 @@ public class fragment_main extends Fragment implements UpdateUI{
             }});
 
         //cards
-        mUnit = sharedPreferences.getString("prefUnitDist", "");
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
@@ -257,14 +253,14 @@ public class fragment_main extends Fragment implements UpdateUI{
     public void onResume() {
         super.onResume();
         roster = new ArrayList<>(new SaveLoadHelper(context).load());
-        cardListAdapter = new adapter_overview(context, roster, mUnit);
+        cardListAdapter = new OverviewAdapter(roster);
         cardList.setAdapter(cardListAdapter);
     }
 
     public void onUpdate(Boolean doUpdate){ //TODO test to see if working
         if (doUpdate) {
             roster = new ArrayList<>(new SaveLoadHelper(context).load());
-            cardListAdapter = new adapter_overview(context, roster, mUnit);
+            cardListAdapter = new OverviewAdapter(roster);
             cardList.setAdapter(cardListAdapter);
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
         }

@@ -2,6 +2,8 @@ package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,18 +17,14 @@ import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 
 import java.util.ArrayList;
 
-public class adapter_overview extends RecyclerView.Adapter<adapter_overview.AdapterViewHolder>{
+public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.AdapterViewHolder>{
     private static final String TAG = "adptr_ovrvw";
 
-    private Context context;
-    private final String mUnit;
     private ArrayList<Vehicle> roster;
     private TypedArray headerColors;
 
-    public adapter_overview(Context context, ArrayList<Vehicle> roster, String unit) {
-        this.context = context;
+    public OverviewAdapter(ArrayList<Vehicle> roster) {
         this.roster = roster;
-        this.mUnit = unit;
     }
 
     @Override
@@ -81,8 +79,8 @@ public class adapter_overview extends RecyclerView.Adapter<adapter_overview.Adap
             }
             adapterViewHolder.vTitle.setText(vehicle.getTitle());
             adapterViewHolder.vRect.setBackgroundColor(color);
-            //adapterViewHolder.vCarPicBack.setBackgroundColor(color);
-            adapterViewHolder.vCarPicBack.setColorFilter(color, android.graphics.PorterDuff.Mode.MULTIPLY);
+            GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();
+            shapeDrawable.setColor(color);
         }
     }
 
