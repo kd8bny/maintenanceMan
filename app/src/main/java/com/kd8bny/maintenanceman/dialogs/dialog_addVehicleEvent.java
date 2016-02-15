@@ -64,7 +64,7 @@ public class dialog_addVehicleEvent extends DialogFragment {
             case 4:
                 editValue.setHint(mRes.getString(R.string.field_price));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_price));
-                editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 break;
 
             case 5:
