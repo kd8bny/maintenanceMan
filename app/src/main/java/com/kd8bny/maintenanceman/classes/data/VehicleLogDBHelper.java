@@ -95,7 +95,11 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             if (cursor.moveToFirst()) {
                 do {
                     Event event = new Event(refID);
-                    event.setIcon(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ICON))));
+                    if (cursor.getString(cursor.getColumnIndex(COLUMN_ICON)).isEmpty()){
+                        event.setIcon(0);
+                    }else{
+                        event.setIcon(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ICON))));
+                    }
                     event.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
                     event.setOdometer(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_ODO)));
                     event.setEvent(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_EVENT)));
