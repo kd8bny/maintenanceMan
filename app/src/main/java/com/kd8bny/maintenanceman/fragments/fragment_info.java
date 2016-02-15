@@ -30,8 +30,6 @@ import java.util.HashMap;
 public class fragment_info extends Fragment {
     private static final String TAG = "frgmnt_inf";
 
-    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
@@ -55,18 +53,13 @@ public class fragment_info extends Fragment {
         vehiclePos = bundle.getInt("vehiclePos", -1);
         vehicle = roster.get(vehiclePos);
 
-        Log.d(TAG, vehicle.getRefID() + vehicle.getTitle() + vehicle.getReservedSpecs() + vehicle.getGeneralSpecs()
-        + vehicle.getEngineSpecs() + vehicle.getPowerTrainSpecs() + vehicle.getOtherSpecs() + "");
-
         VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
         vehicleHist = vehicleDB.getPriceByDate(vehicle.getRefID());
-        Log.d(TAG, vehicleHist.toString());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
-        registerForContextMenu(view);
 
         //Info Cards
         cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
@@ -95,12 +88,6 @@ public class fragment_info extends Fragment {
         super.onResume();
         cardListAdapter = new InfoAdapter(vehicle, vehicleHist);
         cardList.setAdapter(cardListAdapter);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d(TAG, "save");
     }
 
     @Override
