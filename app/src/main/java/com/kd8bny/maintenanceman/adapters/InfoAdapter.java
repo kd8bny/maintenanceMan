@@ -48,6 +48,13 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         temp.add(mVehicle.getEngineSpecs());
         temp.add(mVehicle.getPowerTrainSpecs());
         temp.add(mVehicle.getOtherSpecs());
+        if (!costHist.isEmpty()){
+            HashMap<String, ArrayList> tempCost = new HashMap<>();
+            tempCost.put("cost", costHist);
+            temp.add(1, tempCost);
+        }else{
+            temp.add(1, new HashMap());
+        }
 
         vehicleInfoArray = temp;
         for (int i = temp.size()-1; i >= 0 ; i--) { //Remove Empty HashMaps
@@ -55,25 +62,20 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 vehicleInfoArray.remove(i);
                 if (i == 0) {
                     chartPos = 0;
-                } else if (i == 1 & costHist.isEmpty()) {
+                } else if (i == 1) {
                     chartPos = -1;
                 }
             } else {
                 itemPos.add(0, i);
             }
         }
-        if (!costHist.isEmpty()){
-            vehicleInfoArray.add(1, new HashMap());
-            itemPos.add(1, 1);
-        }
     }
 
     public int getItemViewType(int i){
         if(i == chartPos) {
             return VIEW_CHART;
-        }else{
-            return VIEW_SPECS;
         }
+        return VIEW_SPECS;
     }
 
     @Override
@@ -101,7 +103,6 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
            default:
                Log.e(TAG, "No view");
-
                return null;
        }
     }
@@ -184,11 +185,11 @@ class vhSpecs extends RecyclerView.ViewHolder {
         switch (itemPos.get(i)){
             case 0:
                 return R.string.header_general;
-            case 1:
-                return R.string.header_engine;
             case 2:
-                return R.string.header_power_train;
+                return R.string.header_engine;
             case 3:
+                return R.string.header_power_train;
+            case 4:
                 return R.string.header_other;
             default:
                 return -1;
