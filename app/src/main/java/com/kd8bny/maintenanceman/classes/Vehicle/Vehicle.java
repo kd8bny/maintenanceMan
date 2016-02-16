@@ -15,6 +15,7 @@ public class Vehicle implements Parcelable{
     public String vehicleType;
     public String refID;
     public String title;
+    public Boolean isBusiness;
 
     public String reservedSpecs;
     public String generalSpecs;
@@ -22,10 +23,11 @@ public class Vehicle implements Parcelable{
     public String powerTrainSpecs;
     public String otherSpecs;
 
-    public Vehicle(String vehicleType, String year, String make, String model){
+    public Vehicle(String vehicleType, Boolean isBusiness, String year, String make, String model){
         this.refID = UUID.randomUUID().toString();
-        this.title = year + " " + make + " " + model;
         this.vehicleType = vehicleType;
+        this.isBusiness = isBusiness;
+        this.title = year + " " + make + " " + model;
         HashMap<String, String> temp = new HashMap<>(); //TODO no need for map
         temp.put("year", year);
         temp.put("make", make);
@@ -38,6 +40,7 @@ public class Vehicle implements Parcelable{
         vehicleType = parcel.readString();
         refID = parcel.readString();
         title = parcel.readString();
+        isBusiness = parcel.readByte() != 0;
         reservedSpecs = parcel.readString();
         generalSpecs= parcel.readString();
         engineSpecs = parcel.readString();
@@ -66,6 +69,8 @@ public class Vehicle implements Parcelable{
         parcel.writeString(vehicleType);
         parcel.writeString(refID);
         parcel.writeString(title);
+        Log.d(TAG, isBusiness+"");
+        parcel.writeByte((byte) (isBusiness ? 1 : 0));
 
         parcel.writeString(reservedSpecs);
         parcel.writeString(generalSpecs);
@@ -98,6 +103,14 @@ public class Vehicle implements Parcelable{
     public HashMap<String, String> getReservedSpecs() {
         Gson gson = new Gson();
         return gson.fromJson(reservedSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
+    }
+
+    public Boolean getBusiness() {
+        return isBusiness;
+    }
+
+    public void setBusiness(Boolean bool) {
+        isBusiness = bool;
     }
 
     public void setReservedSpecs(HashMap<String, String> reserveredSpecs) {

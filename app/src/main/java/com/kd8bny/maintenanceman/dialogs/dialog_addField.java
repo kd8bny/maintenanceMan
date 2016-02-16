@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class dialog_addField extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
-    private static final int REQUEST_CODE = 1;
+    private static int RESULT_CODE = 1;
 
     public MaterialBetterSpinner spinnerFieldType;
     public MaterialAutoCompleteTextView editFieldName;
@@ -30,8 +30,6 @@ public class dialog_addField extends DialogFragment {
     public String fieldType;
     public String fieldName;
     public String fieldVal;
-    public Boolean isEdit = false;
-    public Boolean isRequired = false;
     public String [] mfieldTypes;
     public Integer recyclerPosition;
 
@@ -40,12 +38,11 @@ public class dialog_addField extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null){
-            isEdit = true;
-            isRequired = args.getBoolean("isRequired");
-            recyclerPosition = args.getInt("pos");
-            ArrayList<String> fieldData = (ArrayList<String>) args.getSerializable("field");
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            RESULT_CODE = 2;
+            recyclerPosition = bundle.getInt("pos");
+            ArrayList<String> fieldData = bundle.getStringArrayList("field");
             fieldType = fieldData.get(0);
             fieldName = fieldData.get(1);
             fieldVal = fieldData.get(2);
@@ -66,11 +63,7 @@ public class dialog_addField extends DialogFragment {
 
         editFieldName = (MaterialAutoCompleteTextView) view.findViewById(R.id.field_name);
         editFieldVal = (MaterialAutoCompleteTextView) view.findViewById(R.id.field_val);
-        if(isRequired){
-            editFieldName.setEnabled(false);
-            editFieldVal.requestFocus();
-        }
-        if (isEdit){
+        if (RESULT_CODE == 2){
             editFieldName.setText(fieldName);
             editFieldVal.setText(fieldVal);
         }
@@ -122,42 +115,35 @@ public class dialog_addField extends DialogFragment {
     }
 
     private void sendResult() {
-        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
         ArrayList<String> temp = new ArrayList<>();
         temp.add(fieldType);
         temp.add(fieldName);
         temp.add(fieldVal);
 
-        if (isEdit){
-            intent.putExtra("action", "edit");
-        }else{
-            intent.putExtra("action", "new");
+        if (RESULT_CODE == 2){
+            bundle.putInt("pos", recyclerPosition);
         }
+        bundle.putStringArrayList("fieldData", temp);
 
-        intent.putExtra("fieldData", temp);
-        intent.putExtra("pos", recyclerPosition);
-
-        getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
+                new Intent().putExtra("bundle", bundle));
     }
 
     public boolean isLegit(){
-        Boolean error = false;
         if (Arrays.asList(mfieldTypes).indexOf(spinnerFieldType.getText().toString()) == -1){
             spinnerFieldType.setError(getResources().getString(R.string.error_set_vehicle_type));
-
-            error = true;
+            return true;
         }
         if (fieldName.isEmpty()){
             editFieldName.setError(getResources().getString(R.string.error_field_label));
-
-            error = true;
+            return true;
         }
         if (fieldVal.isEmpty()){
             editFieldVal.setError(getResources().getString(R.string.error_field_val));
-
-            error = true;
+            return true;
         }
 
-        return error;
+        return false;
     }
 }

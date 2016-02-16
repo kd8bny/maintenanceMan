@@ -11,8 +11,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.adapters.adapter_iconPicker;
-import com.kd8bny.maintenanceman.classes.Vehicle.Event;
+import com.kd8bny.maintenanceman.adapters.IconPickerAdapter;
 
 
 public class dialog_iconPicker extends DialogFragment {
@@ -33,7 +32,7 @@ public class dialog_iconPicker extends DialogFragment {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
         alertDialog.setView(view);
 
-        iconGrid.setAdapter(new adapter_iconPicker(view.getContext()));
+        iconGrid.setAdapter(new IconPickerAdapter(view.getContext()));
         iconGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

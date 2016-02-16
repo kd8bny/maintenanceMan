@@ -23,7 +23,7 @@ import java.util.HashMap;
 public class SaveLoadHelper {
     private static final String TAG = "svLdHlpr";
 
-    public static final int DB_VERSION = 1; //v56
+    public static final int DB_VERSION = 2; //v56 2(v57)
 
     private SharedPreferences sharedPreferences;
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
@@ -37,7 +37,7 @@ public class SaveLoadHelper {
 
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
         int oldVersion = sharedPreferences.getInt("fleetRosterDBVersion", -1);
-        if (DB_VERSION != oldVersion){
+        if (DB_VERSION > oldVersion){
             onUpgrade(oldVersion);
         }
     }
@@ -102,11 +102,21 @@ public class SaveLoadHelper {
                     HashMap<String, HashMap> oldRoster = fleetRosterJSONHelper.getEntries(mContext);
                     save(fleetRosterJSONHelper.saveToNew(oldRoster));
                 }
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("fleetRosterDBVersion", 1);
-                editor.apply();
+
+            case 1:
+                ArrayList<Vehicle> temp = load();
+                for (int i=0; i<temp.size(); i++) {
+                    Vehicle v =temp.get(i);
+                    v.setBusiness(false);
+                    temp.set(i, v);
+                }
+                save(temp);
             default:
                 Log.e(TAG, "No case for DB upgrade");
         }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("fleetRosterDBVersion", DB_VERSION);
+        editor.apply();
     }
 }

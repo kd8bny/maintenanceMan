@@ -11,13 +11,13 @@ import android.widget.ImageView;
 
 import com.kd8bny.maintenanceman.R;
 
-public class adapter_iconPicker extends BaseAdapter {
+public class IconPickerAdapter extends BaseAdapter {
     private static final String TAG = "adptr_icnPckr";
 
     private Context mContext;
     private TypedArray icons;
 
-    public adapter_iconPicker(Context context) {
+    public IconPickerAdapter(Context context) {
         mContext = context;
         icons = mContext.getResources().obtainTypedArray(R.array.icon_event);
     }

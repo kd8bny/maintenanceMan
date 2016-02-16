@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,15 +23,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.adapters.adapter_add_fleetRoster;
+import com.kd8bny.maintenanceman.adapters.FleetRosterAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.kd8bny.maintenanceman.dialogs.dialog_addField_required;
+import com.kd8bny.maintenanceman.dialogs.dialog_addVehicle;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 
@@ -73,8 +70,13 @@ public class fragment_fleetRoster_add extends Fragment {
         }
 
         FragmentManager fm = getChildFragmentManager();
-        dialog_addField_required dialog = new dialog_addField_required();
+        dialog_addVehicle dialog = new dialog_addVehicle();
         dialog.setTargetFragment(fragment_fleetRoster_add.this, 0);
+
+        dialog_addField dialogField = new dialog_addField();
+        dialogField.setTargetFragment(fragment_fleetRoster_add.this, 0);
+
+        dialogField.show(fm, "dialog_add_field");
         dialog.show(fm, "dialog_add_field");
     }
 
@@ -97,7 +99,7 @@ public class fragment_fleetRoster_add extends Fragment {
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
         addMan = new LinearLayoutManager(getActivity());
         addList.setLayoutManager(addMan);
-        addListAdapter = new adapter_add_fleetRoster(allSpecs);
+        addListAdapter = new FleetRosterAdapter(allSpecs);
         addList.setAdapter(addListAdapter);
 
         addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, addList,
@@ -105,44 +107,31 @@ public class fragment_fleetRoster_add extends Fragment {
             @Override
             public void onItemClick(View view, int i) {
                 FragmentManager fm = getFragmentManager();
-                Bundle args = new Bundle();
-                if(i > 0){
-                    args.putSerializable("field", allSpecs.get(i));
-                    dialog_addField dialog_addField = new dialog_addField();
-                    dialog_addField.setTargetFragment(fragment_fleetRoster_add.this, 1);
-                    dialog_addField.setArguments(args);
-                    dialog_addField.show(fm, "dialog_add_field");
-                }else {
-                    args.putSerializable("year", vehicle.getReservedSpecs());
-                    dialog_addField_required dialog = new dialog_addField_required();
-                    dialog.setTargetFragment(fragment_fleetRoster_add.this, 0);
-                    dialog.setArguments(args);
-                    dialog.show(fm, "dialog_addField_required");
-                }
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList("field", allSpecs.get(i));
+                dialog_addField dialog_addField = new dialog_addField();
+                dialog_addField.setTargetFragment(fragment_fleetRoster_add.this, 1);
+                dialog_addField.setArguments(bundle);
+                dialog_addField.show(fm, "dialog_add_field");
             }
 
             @Override
             public void onItemLongClick(View view, int i) {
                 final int pos = i;
-                if(i > 0){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setCancelable(true);
-                    builder.setTitle("Are you sure you would like to delete this field?");
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().finish();
-                        }
-                    });
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            removeEntry(pos);
-                        }});
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Are you sure you would like to delete this field?");
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int which) {
+                        getActivity().finish();
+                    }
+                });
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeEntry(pos);
+                    }});
 
-                    builder.show();
-                }else{
-                    Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(ContextCompat.getColor(context, R.color.error)).show();
-                }
+                builder.show();
             }}));
 
         //menu_overview_fab
@@ -163,21 +152,18 @@ public class fragment_fleetRoster_add extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> result = data.getStringArrayListExtra("fieldData");
+        Bundle bundle = data.getBundleExtra("bundle");
+        ArrayList<String> result = bundle.getStringArrayList("fieldData");
 
         switch (resultCode){
             case (0):
-                allSpecs.add(result);
-                vehicle = new Vehicle(vehicleSpinner.getText().toString(), result.get(0),
-                        result.get(1), result.get(2));
-
-                addListAdapter = new adapter_add_fleetRoster(allSpecs);
-                addList.setAdapter(addListAdapter);
+                vehicle = new Vehicle(vehicleSpinner.getText().toString(),
+                            bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
                 break;
 
             case (1):
                 allSpecs.add(result);
-                switch (result.get(0)){//TODO replace changed key
+                switch (result.get(0)) {
                     case "General":
                         generalSpecs.put(result.get(1), result.get(2));
                         break;
@@ -190,11 +176,31 @@ public class fragment_fleetRoster_add extends Fragment {
                     case "Other":
                         otherSpecs.put(result.get(1), result.get(2));
                         break;
+                    }
+                break;
+
+            case (2):
+                int pos = bundle.getInt("pos");
+                switch (result.get(0)) {
+                    case "General":
+                        generalSpecs.remove(allSpecs.get(pos).get(1));
+                        generalSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Engine":
+                        engineSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Power Train":
+                        powerTrainSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Other":
+                        otherSpecs.put(result.get(1), result.get(2));
+                        break;
                 }
+                allSpecs.set(pos, result);
                 break;
         }
 
-        addListAdapter = new adapter_add_fleetRoster(allSpecs);
+        addListAdapter = new FleetRosterAdapter(allSpecs);
         addList.swapAdapter(addListAdapter, false);
     }
 

@@ -4,6 +4,7 @@
 
     <!-- Add Fleet Roster -->
     <string name="title_add_fleet_roster">Add Vehicle</string>
+    <string name="title_dialog_add">New Vehicle</string>
     <string name="error_required">This Field is Required</string>
     <string name="error_required_missing">Missing Required Field: Make, Model, or Year</string>
     <string name="error_set_vehicle_type">Please Select Vehicle</string>
@@ -12,6 +13,7 @@
     <string name="hint_year">Year</string>
     <string name="hint_make">Make</string>
     <string name="hint_model">Model</string>
+    <string name="field_business">Business Vehicle</string>
 
     <string-array name="vehicle_type">
         <item>Automobile</item>

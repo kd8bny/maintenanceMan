@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,18 +21,16 @@ import android.widget.ArrayAdapter;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.adapters.adapter_add_fleetRoster;
+import com.kd8bny.maintenanceman.adapters.FleetRosterAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
-import com.kd8bny.maintenanceman.dialogs.dialog_addField_required;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class fragment_fleetRoster_edit extends Fragment {
     private static final String TAG = "frg_fltRstr_edit";
@@ -67,7 +63,6 @@ public class fragment_fleetRoster_edit extends Fragment {
         mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getArguments();
-        Log.d(TAG, bundle.toString());
         roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
         vehicle = roster.get(vehiclePos);
@@ -93,53 +88,40 @@ public class fragment_fleetRoster_edit extends Fragment {
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
         addMan = new LinearLayoutManager(getActivity());
         addList.setLayoutManager(addMan);
-        addListAdapter = new adapter_add_fleetRoster(allSpecs);
+        addListAdapter = new FleetRosterAdapter(allSpecs);
         addList.setAdapter(addListAdapter);
 
-        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, addList, new RecyclerViewOnItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int i) {
-                FragmentManager fm = getFragmentManager();
-                Bundle args = new Bundle();
+        addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, addList,
+                new RecyclerViewOnItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int i) {
+                        FragmentManager fm = getFragmentManager();
+                        Bundle args = new Bundle();
+                        args.putSerializable("field", allSpecs.get(i));
+                        dialog_addField dialog_addField = new dialog_addField();
+                        dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 1);
+                        dialog_addField.setArguments(args);
+                        dialog_addField.show(fm, "dialog_add_field");
+                    }
 
-                if(i > 0){
-                    args.putSerializable("field", allSpecs.get(i));
-                    dialog_addField dialog_addField = new dialog_addField();
-                    dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 1);
-                    dialog_addField.setArguments(args);
-                    dialog_addField.show(fm, "dialog_add_field");
-                }else {
-                    args.putSerializable("year", vehicle.getReservedSpecs());
-                    dialog_addField_required dialog = new dialog_addField_required();
-                    dialog.setTargetFragment(fragment_fleetRoster_edit.this, 0);
-                    dialog.setArguments(args);
-                    dialog.show(fm, "dialog_addField_required");
-                }
-            }
+                    @Override
+                    public void onItemLongClick(View view, int i) {
+                        final int pos = i;
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setCancelable(true);
+                        builder.setTitle("Are you sure you would like to delete this field?");
+                        builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which) {
+                                getActivity().finish();
+                            }
+                        });
+                        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                removeEntry(pos);
+                            }});
 
-            @Override
-            public void onItemLongClick(View view, int i) {
-                final int pos = i;
-                if(i > 0){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setCancelable(true);
-                    builder.setTitle("Are you sure you would like to delete this field?");
-                    builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().finish();
-                        }
-                    });
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            removeEntry(pos);
-                        }});
-
-                    builder.show();
-                }else{
-                    Snackbar.make(view.getRootView().findViewById(R.id.snackbar), getString(R.string.error_required), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
-                }
-            }}));
+                        builder.show();
+                }}));
 
         //menu_overview_fab
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -164,21 +146,18 @@ public class fragment_fleetRoster_edit extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        ArrayList<String> result = data.getStringArrayListExtra("fieldData");
+        Bundle bundle = data.getBundleExtra("bundle");
+        ArrayList<String> result = bundle.getStringArrayList("fieldData");
 
         switch (resultCode){
             case (0):
-                allSpecs.add(result);
-                vehicle = new Vehicle(vehicleSpinner.getText().toString(), result.get(0),
-                        result.get(1), result.get(2));
-
-                addListAdapter = new adapter_add_fleetRoster(allSpecs);
-                addList.setAdapter(addListAdapter);
+                vehicle = new Vehicle(vehicleSpinner.getText().toString(),
+                        bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
                 break;
 
             case (1):
                 allSpecs.add(result);
-                switch (result.get(0)){//TODO replace changed key
+                switch (result.get(0)) {
                     case "General":
                         generalSpecs.put(result.get(1), result.get(2));
                         break;
@@ -193,9 +172,29 @@ public class fragment_fleetRoster_edit extends Fragment {
                         break;
                 }
                 break;
+
+            case (2):
+                int pos = bundle.getInt("pos");
+                switch (result.get(0)) {
+                    case "General":
+                        generalSpecs.remove(allSpecs.get(pos).get(1));
+                        generalSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Engine":
+                        engineSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Power Train":
+                        powerTrainSpecs.put(result.get(1), result.get(2));
+                        break;
+                    case "Other":
+                        otherSpecs.put(result.get(1), result.get(2));
+                        break;
+                }
+                allSpecs.set(pos, result);
+                break;
         }
 
-        addListAdapter = new adapter_add_fleetRoster(allSpecs);
+        addListAdapter = new FleetRosterAdapter(allSpecs);
         addList.swapAdapter(addListAdapter, false);
     }
 
@@ -220,6 +219,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                     roster.set(vehiclePos, vehicle);
                     saveLoadHelper.save(roster);
                 }
+
                 getActivity().finish();
 
                 return true;
@@ -264,6 +264,7 @@ public class fragment_fleetRoster_edit extends Fragment {
         vehicleSpinner.setText(vehicle.getVehicleType());
         for (String key : generalSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
+            temp = new ArrayList<>();
             temp.add("General");
             temp.add(key);
             temp.add(generalSpecs.get(key));
@@ -271,6 +272,7 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
         for (String key : engineSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
+            temp = new ArrayList<>();
             temp.add("Engine");
             temp.add(key);
             temp.add(engineSpecs.get(key));
@@ -278,6 +280,7 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
         for (String key : powerTrainSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
+            temp = new ArrayList<>();
             temp.add("Power Train");
             temp.add(key);
             temp.add(powerTrainSpecs.get(key));
@@ -285,6 +288,7 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
         for (String key : otherSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
+            temp = new ArrayList<>();
             temp.add("Other");
             temp.add(key);
             temp.add(otherSpecs.get(key));

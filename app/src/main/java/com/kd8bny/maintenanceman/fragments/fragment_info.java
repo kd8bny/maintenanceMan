@@ -95,7 +95,8 @@ public class fragment_info extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case (1):
-                ArrayList<String> result = data.getStringArrayListExtra("fieldData");
+                Bundle bundle = data.getBundleExtra("bundle");
+                ArrayList<String> result = bundle.getStringArrayList("fieldData");
                 HashMap<String, String> temp;
                 switch (result.get(0)) {//TODO replace changed key
                     case "General":

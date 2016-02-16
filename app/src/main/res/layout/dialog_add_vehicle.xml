@@ -50,4 +50,11 @@
         app:met_primaryColor="@color/accent"
         app:met_errorColor="@color/error"
         app:met_floatingLabel="highlight"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_business"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/model_val"
+        android:text="@string/field_business"/>
 </RelativeLayout>

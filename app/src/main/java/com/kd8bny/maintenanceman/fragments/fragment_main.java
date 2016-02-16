@@ -63,10 +63,10 @@ public class fragment_main extends Fragment implements UpdateUI{
         context = getActivity().getApplicationContext();
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
 
-        //Data
-        BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
+        //Data //TODO
+        /*BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
         mbackupRestoreHelper.updateUI = this;
-        mbackupRestoreHelper.startAction(context, "restore", false);
+        mbackupRestoreHelper.startAction(context, "restore", false);*/
     }
 
     @Override

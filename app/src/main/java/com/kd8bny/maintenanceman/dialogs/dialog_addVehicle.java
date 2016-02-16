@@ -6,17 +6,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
 
-public class dialog_addField_required extends DialogFragment {
+public class dialog_addVehicle extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
     private static final int REQUEST_CODE = 0;
@@ -24,27 +25,32 @@ public class dialog_addField_required extends DialogFragment {
     private MaterialEditText yearVal;
     private MaterialEditText makeVal;
     private MaterialEditText modelVal;
+    private CheckBox businessVal;
     private String YEAR;
     private String MAKE;
     private String MODEL;
+    private Boolean isBusiness = false;
+    private Boolean isEdit;
 
-    public dialog_addField_required(){}
+    public dialog_addVehicle(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle args = getArguments();
-        if (args != null){
-            YEAR = args.getString("year");
-            MAKE = args.getString("make");
-            MODEL = args.getString("model");
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            YEAR = bundle.getString("year");
+            MAKE = bundle.getString("make");
+            MODEL = bundle.getString("model");
+            isBusiness = bundle.getBoolean("isBusiness");
+            isEdit = bundle.getBoolean("isEdit");
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_field_required, null);
+        View view = inflater.inflate(R.layout.dialog_add_vehicle, null);
 
         yearVal = (MaterialEditText) view.findViewById(R.id.year_val);
         yearVal.setHint(view.getResources().getString(R.string.hint_year));
@@ -58,14 +64,24 @@ public class dialog_addField_required extends DialogFragment {
         modelVal.setHint(view.getResources().getString(R.string.hint_model));
         modelVal.setFloatingLabelText(view.getResources().getString(R.string.hint_model));
 
+        businessVal = (CheckBox) view.findViewById(R.id.checkbox_business);
+        businessVal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isBusiness = isChecked;
+            }});
+
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-            .setTitle("Set:")
+            .setTitle(view.getResources().getString(R.string.title_dialog_add))
             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     //Leave blank as we override onStart()
                 }})
             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
+                    if (isEdit){
+                        getDialog().dismiss();
+                    }
                     getActivity().finish();
                 }
             });
@@ -81,12 +97,11 @@ public class dialog_addField_required extends DialogFragment {
         super.onStart();
         final AlertDialog alertDialog = (AlertDialog) getDialog();
         alertDialog.setCanceledOnTouchOutside(false);
-        if(alertDialog != null){
-            Button positiveButton = alertDialog.getButton(Dialog.BUTTON_POSITIVE);
-            positiveButton.setOnClickListener(new View.OnClickListener(){
+        Button positiveButton = alertDialog.getButton(Dialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener(){
 
-                @Override
-                public void onClick(View v){
+            @Override
+            public void onClick(View v){
                 YEAR = yearVal.getText().toString();
                 MAKE = makeVal.getText().toString();
                 MODEL = modelVal.getText().toString();
@@ -94,9 +109,8 @@ public class dialog_addField_required extends DialogFragment {
                     sendResult();
                     alertDialog.dismiss();
                 }
-                }
-            });
-        }
+            }
+        });
     }
 
     private boolean isLegit(){
@@ -117,13 +131,15 @@ public class dialog_addField_required extends DialogFragment {
     }
 
     private void sendResult() {
-        Intent intent = new Intent();
         ArrayList<String> temp = new ArrayList<>();
         temp.add(YEAR);
         temp.add(MAKE);
         temp.add(MODEL);
-        intent.putExtra("fieldData", temp);
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("fieldData", temp);
+        bundle.putBoolean("isBusiness", isBusiness);
 
-        getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE, intent);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE,
+                new Intent().putExtra("bundle", bundle));
     }
 }
