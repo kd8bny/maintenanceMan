@@ -21,7 +21,7 @@
                 android:id="@+id/rect"
                 android:layout_height="36dp"
                 android:layout_width="match_parent"
-                android:elevation="10sp"
+                android:elevation="4sp"
 
                 android:background="@drawable/rect"/>
 
@@ -30,7 +30,7 @@
                 android:layout_height="64dp"
                 android:layout_width="64dp"
                 android:layout_marginTop="8dp"
-                android:elevation="12sp"
+                android:elevation="6sp"
                 android:layout_marginStart="32dp"
                 android:background="@drawable/circle"/>
 
@@ -39,7 +39,7 @@
                 android:layout_height="64dp"
                 android:layout_width="64dp"
                 android:layout_marginTop="8dp"
-                android:elevation="12sp"
+                android:elevation="6sp"
                 android:layout_marginStart="32dp"
 
                 android:src="@drawable/np_car"
