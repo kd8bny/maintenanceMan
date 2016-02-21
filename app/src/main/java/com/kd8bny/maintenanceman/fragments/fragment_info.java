@@ -122,10 +122,19 @@ public class fragment_info extends Fragment {
                 roster.set(vehiclePos, vehicle);
                 new SaveLoadHelper(context).save(roster);
 
+            case(90):
+                //Saved
+                roster = new SaveLoadHelper(context).load();
+                vehicle = roster.get(vehiclePos);
+                break;
+
             case(91):
                 //Delete vehicle
                 getActivity().finish();
             break;
+
+            default:
+                break;
         }
 
         onResume();

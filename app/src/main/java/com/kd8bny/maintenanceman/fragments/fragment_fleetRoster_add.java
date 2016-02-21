@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -102,8 +103,6 @@ public class fragment_fleetRoster_add extends Fragment {
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
         addMan = new LinearLayoutManager(getActivity());
         addList.setLayoutManager(addMan);
-        addListAdapter = new FleetRosterAdapter(allSpecs);
-        addList.setAdapter(addListAdapter);
 
         addList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, addList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
@@ -150,6 +149,13 @@ public class fragment_fleetRoster_add extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        addListAdapter = new FleetRosterAdapter(allSpecs);
+        addList.setAdapter(addListAdapter);
     }
 
     @Override
@@ -202,9 +208,7 @@ public class fragment_fleetRoster_add extends Fragment {
                 allSpecs.set(pos, result);
                 break;
         }
-
-        addListAdapter = new FleetRosterAdapter(allSpecs);
-        addList.swapAdapter(addListAdapter, false);
+        onResume();
     }
 
     @Override
@@ -260,6 +264,8 @@ public class fragment_fleetRoster_add extends Fragment {
             otherSpecs.remove(temp.get(1));
         }
         allSpecs.remove(i);
+
+        onResume();
     }
 }
 

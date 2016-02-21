@@ -144,6 +144,14 @@ public class fragment_fleetRoster_edit extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        addListAdapter = new FleetRosterAdapter(allSpecs);
+        addList.setAdapter(addListAdapter);
+    }
+
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = data.getBundleExtra("bundle");
@@ -215,6 +223,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                     saveLoadHelper.save(roster);
                 }
 
+                getActivity().setResult(90);
                 getActivity().finish();
 
                 return true;
@@ -259,7 +268,6 @@ public class fragment_fleetRoster_edit extends Fragment {
         vehicleSpinner.setText(vehicle.getVehicleType());
         for (String key : generalSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
-            temp = new ArrayList<>();
             temp.add("General");
             temp.add(key);
             temp.add(generalSpecs.get(key));
@@ -267,7 +275,6 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
         for (String key : engineSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
-            temp = new ArrayList<>();
             temp.add("Engine");
             temp.add(key);
             temp.add(engineSpecs.get(key));
@@ -275,7 +282,6 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
         for (String key : powerTrainSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
-            temp = new ArrayList<>();
             temp.add("Power Train");
             temp.add(key);
             temp.add(powerTrainSpecs.get(key));
@@ -283,7 +289,6 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
         for (String key : otherSpecs.keySet()) {
             ArrayList<String> temp = new ArrayList<>();
-            temp = new ArrayList<>();
             temp.add("Other");
             temp.add(key);
             temp.add(otherSpecs.get(key));
@@ -303,6 +308,8 @@ public class fragment_fleetRoster_edit extends Fragment {
             otherSpecs.remove(temp.get(1));
         }
         allSpecs.remove(i);
+
+        onResume();
     }
 }
 
