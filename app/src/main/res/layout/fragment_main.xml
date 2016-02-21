@@ -74,6 +74,21 @@
                     fab:fab_colorRipple="@color/primary_dark"
 
                     android:src="@drawable/ic_action_add_event_white"/>
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fab_add_business"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    fab:fab_size="mini"
+                    fab:fab_label="@string/menu_add_business"
+                    fab:fab_showAnimation="@anim/fab_scale_up"
+                    fab:fab_hideAnimation="@anim/fab_scale_down"
+                    fab:fab_colorNormal="@color/accent"
+                    fab:fab_colorPressed="@color/primary_light"
+                    fab:fab_colorRipple="@color/primary_dark"
+
+                    android:src="@drawable/ic_speedo"/>
             </com.github.clans.fab.FloatingActionMenu>
         </android.support.design.widget.CoordinatorLayout>
     </android.support.v4.widget.DrawerLayout>

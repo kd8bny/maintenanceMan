@@ -53,6 +53,13 @@
     <string name="field_price">Price</string>
     <string name="field_comment">Comment</string>
 
+    <!-- Add Business Event -->
+    <string name="title_business">Business</string>
+    <string name="field_start">Odometer Start</string>
+    <string name="field_end">Odometer End</string>
+    <string name="field_dest">Destination</string>
+    <string name="field_purpose">Reason for Trip</string>
+
     <!-- Donate -->
     <string name="title_donate">Donate</string>
     <string name="message_donate">Thank you for your interest in my app :) Any donation would be appreciated</string>
@@ -64,6 +71,7 @@
     <!--fab-->
     <string name="menu_add_vehicle">Add Vehicle</string>
     <string name="menu_add_event">Add Event</string>
+    <string name="menu_add_business">Log Trip</string>
 
     <!-- History -->
     <string name="title_history">History</string>

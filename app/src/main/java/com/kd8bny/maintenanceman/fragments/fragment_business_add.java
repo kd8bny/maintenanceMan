@@ -19,19 +19,20 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.adapters.VehicleEventAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
+import com.kd8bny.maintenanceman.adapters.BusinessEventAdapter;
+import com.kd8bny.maintenanceman.classes.Vehicle.Business;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
-import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addBusinessEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;
-import com.kd8bny.maintenanceman.dialogs.dialog_iconPicker;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class fragment_vehicleEvent_edit extends Fragment {
+
+public class fragment_business_add extends Fragment {
     private static final String TAG = "frg_add_vhclEvnt";
 
     private Context mContext;
@@ -42,15 +43,13 @@ public class fragment_vehicleEvent_edit extends Fragment {
     private RecyclerView.Adapter eventListAdapter;
 
     private ArrayList<Vehicle> roster;
-    private int vehiclePos;
     private Vehicle vehicle;
+    private int vehiclePos;
     private String refID;
+    private Business mBusiness;
     private ArrayList<String> singleVehicle = new ArrayList<>();
-    private ArrayList<String> labels = new ArrayList<>();
-    private Maintenance mMaintenance;
 
-
-    public fragment_vehicleEvent_edit() {}
+    public fragment_business_add() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,12 +57,20 @@ public class fragment_vehicleEvent_edit extends Fragment {
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
 
-        Bundle bundle = getArguments();
-        mMaintenance = (Maintenance) bundle.getSerializable("event");
+        Bundle bundle = getArguments() ;
         roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos");
         vehicle = roster.get(vehiclePos);
         refID = vehicle.getRefID();
+
+        mBusiness = (Business) bundle.getSerializable("event"); //TODO edit better
+        if (mBusiness == null) {
+            mBusiness = new Business(refID);
+            final Calendar cal = Calendar.getInstance();
+            mBusiness.setDate(cal.get(Calendar.MONTH) + 1
+                    + "/" + cal.get(Calendar.DAY_OF_MONTH)
+                    + "/" + cal.get(Calendar.YEAR));
+        }
     }
 
     @Override
@@ -83,75 +90,65 @@ public class fragment_vehicleEvent_edit extends Fragment {
         eventList.setItemAnimator(new DefaultItemAnimator());
         eventList.addOnItemTouchListener(
                 new RecyclerViewOnItemClickListener(mContext, eventList,
-                    new RecyclerViewOnItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int pos) {
-                FragmentManager fm = getFragmentManager();
-                Bundle bundle = new Bundle();
+                        new RecyclerViewOnItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int pos) {
+                                FragmentManager fm = getFragmentManager();
+                                Bundle bundle = new Bundle();
+                                switch (pos){
+                                    case 0:
+                                        dialog_datePicker datePicker = new dialog_datePicker();
+                                        datePicker.setTargetFragment(fragment_business_add.this, 0);
+                                        datePicker.show(fm, "datePicker");
+                                        break;
 
-                switch (pos){
-                    case 0:
-                        dialog_iconPicker iconPicker = new dialog_iconPicker();
-                        iconPicker.setTargetFragment(fragment_vehicleEvent_edit.this, 0);
-                        iconPicker.show(fm, "dialogIconPicker");
-                        break;
+                                    default:
+                                        bundle.putSerializable("event", mBusiness);
+                                        dialog_addBusinessEvent addBusinessEvent = new dialog_addBusinessEvent();
+                                        addBusinessEvent.setTargetFragment(fragment_business_add.this, pos);
+                                        addBusinessEvent.setArguments(bundle);
+                                        addBusinessEvent.show(fm, "dialog_addEvent");
+                                        break;
+                                }}
 
-                    case 1:
-                        dialog_datePicker datePicker = new dialog_datePicker();
-                        datePicker.setTargetFragment(fragment_vehicleEvent_edit.this, 1);
-                        datePicker.show(fm, "datePicker");
-                        break;
-
-                    default:
-                        bundle.putSerializable("event", mMaintenance);
-                        dialog_addVehicleEvent dialog_addVehicleEvent = new dialog_addVehicleEvent();
-                        dialog_addVehicleEvent.setTargetFragment(fragment_vehicleEvent_edit.this, pos);
-                        dialog_addVehicleEvent.setArguments(bundle);
-                        dialog_addVehicleEvent.show(fm, "dialog_addEvent");
-                        break;
-                }}
-
-            @Override
-            public void onItemLongClick(View view, int pos) {}
-        }));
+                            @Override
+                            public void onItemLongClick(View view, int pos) {}
+                        }));
 
         return view;
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        eventListAdapter = new VehicleEventAdapter(mMaintenance);
-        eventList.setAdapter(eventListAdapter);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        String val = data.getBundleExtra("bundle").getString("value");
         switch (resultCode) {
-            case 1:
-                mMaintenance.setIcon(data.getIntExtra("value", 0));
-                break;
             case 0:
-                String val = data.getBundleExtra("bundle").getString("value");
-                mMaintenance.setDate(val);
+                mBusiness.setDate(val);
+                break;
+            case 1:
+                mBusiness.setStart(Double.parseDouble(val));
                 break;
             case 2:
-                mMaintenance.setOdometer(data.getStringExtra("value"));
+                mBusiness.setStop(Double.parseDouble(val));
                 break;
             case 3:
-                mMaintenance.setEvent(data.getStringExtra("value"));
+                mBusiness.setDest(val);
                 break;
             case 4:
-                mMaintenance.setPrice(data.getStringExtra("value"));
-                break;
-            case 5:
-                mMaintenance.setComment(data.getStringExtra("value"));
+                mBusiness.setPurpose(val);
                 break;
             default:
                 Log.i(TAG, "No return");
         }
-        eventListAdapter = new VehicleEventAdapter(mMaintenance);
+        eventListAdapter = new BusinessEventAdapter(mBusiness);
+        eventList.setAdapter(eventListAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        eventListAdapter = new BusinessEventAdapter(mBusiness);
         eventList.setAdapter(eventListAdapter);
     }
 
@@ -166,15 +163,15 @@ public class fragment_vehicleEvent_edit extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 if(!isLegit()){
-                    int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString()); //In case of vehicle change
-                    mMaintenance.setRefID(roster.get(pos).getRefID());
+                    int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
+                    mBusiness.setRefID(roster.get(pos).getRefID());
 
                     VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                    vehicleLogDBHelper.deleteEntry(mMaintenance);
-                    vehicleLogDBHelper.insertEntry(mMaintenance);
+                    vehicleLogDBHelper.insertEntry(mBusiness);
 
-                    Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(getResources().getColor(R.color.error)).show(); ///TODO snakz w/ right label
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                            getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
+                            .setActionTextColor(getResources().getColor(R.color.error)).show(); //TODO snakz w/ right label
 
                     getActivity().finish();
                     return true;
@@ -203,7 +200,12 @@ public class fragment_vehicleEvent_edit extends Fragment {
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
             return true;
         }
-        if (mMaintenance.getEvent().isEmpty()){
+        if (mBusiness.getStart() == null){
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(getResources().getColor(R.color.error)).show();
+            return true;
+        }
+        if (mBusiness.getDest().isEmpty()){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                     .setActionTextColor(getResources().getColor(R.color.error)).show();
             return true;

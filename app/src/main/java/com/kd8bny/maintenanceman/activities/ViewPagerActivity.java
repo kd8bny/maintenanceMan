@@ -1,18 +1,15 @@
 package com.kd8bny.maintenanceman.activities;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.ViewPagerAdapter;
-import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster_add;
-import com.kd8bny.maintenanceman.fragments.fragment_info;
-import com.kd8bny.maintenanceman.fragments.fragment_vehicleEvent_add;
+import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+
+import java.util.ArrayList;
 
 public class ViewPagerActivity extends AppCompatActivity {
     private static final String TAG = "activity_viewpager";
@@ -29,7 +26,12 @@ public class ViewPagerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getApplicationContext());
+        Bundle bundle = getIntent().getBundleExtra("bundle");
+        ArrayList<Vehicle> roster = bundle.getParcelableArrayList("roster");
+        int vehiclePos = bundle.getInt("vehiclePos", -1);
+
+        mAdapter = new ViewPagerAdapter(getApplicationContext(), getSupportFragmentManager(),
+                roster.get(vehiclePos).getBusiness());
 
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);

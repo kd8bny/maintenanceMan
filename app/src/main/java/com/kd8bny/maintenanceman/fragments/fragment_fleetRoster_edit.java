@@ -150,11 +150,6 @@ public class fragment_fleetRoster_edit extends Fragment {
         ArrayList<String> result = bundle.getStringArrayList("fieldData");
 
         switch (resultCode){
-            case (0):
-                vehicle = new Vehicle(vehicleSpinner.getText().toString(),
-                        bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
-                break;
-
             case (1):
                 allSpecs.add(result);
                 switch (result.get(0)) {

@@ -132,14 +132,13 @@ public class fragment_vehicleEvent_add extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, requestCode +"...."+ resultCode);
-        switch (resultCode) {
+        switch (resultCode) { //TODO Clean this up. Combine edit/add
             case 1:
                 mMaintenance.setIcon(data.getIntExtra("value", 0));
                 break;
             case 0:
-                //Dialog fragment is being dumb only return 0
-                mMaintenance.setDate(data.getStringExtra("value"));
+                String val = data.getBundleExtra("bundle").getString("value");
+                mMaintenance.setDate(val);
                 break;
             case 2:
                 mMaintenance.setOdometer(data.getStringExtra("value"));

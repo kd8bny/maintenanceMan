@@ -3,7 +3,6 @@ package com.kd8bny.maintenanceman.adapters;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Event;
+import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 
 public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "adptr_vhcl_evnt";
 
-    private Event mEvent;
+    private Maintenance mMaintenance;
 
     protected View itemViewIcon;
     protected View itemViewData;
@@ -24,8 +23,8 @@ public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_ICON = 0;
     private static final int VIEW_DATA = 1;
 
-    public VehicleEventAdapter(Event event) {
-        mEvent = event;
+    public VehicleEventAdapter(Maintenance maintenance) {
+        mMaintenance = maintenance;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         .from(viewGroup.getContext())
                         .inflate(R.layout.card_add_vehicle_event, viewGroup, false);
 
-                return new ViewHolderData(itemViewData, mEvent, -1);
+                return new ViewHolderData(itemViewData, mMaintenance, -1);
         }
     }
 
@@ -65,14 +64,13 @@ public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         switch (getItemViewType(i)) {
             case VIEW_ICON:
-                new ViewHolderIcon(itemViewIcon, mEvent.getIcon());
+                new ViewHolderIcon(itemViewIcon, mMaintenance.getIcon());
                 break;
             default:
-                new ViewHolderData(itemViewData, mEvent, i);
+                new ViewHolderData(itemViewData, mMaintenance, i);
                 break;
         }
     }
-
 
     public static class ViewHolderIcon extends RecyclerView.ViewHolder {
         public ViewHolderIcon(View view, int icon) {
@@ -85,7 +83,7 @@ public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public static class ViewHolderData extends RecyclerView.ViewHolder {
-        public ViewHolderData(View view, Event event, int pos) {
+        public ViewHolderData(View view, Maintenance maintenance, int pos) {
             super(view);
 
             TextView mValue = (TextView) view.findViewById(R.id.value);
@@ -94,23 +92,23 @@ public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             switch (pos) {
                 case 1:
                     mValue.setHint(mRes.getString(R.string.field_date));
-                    mValue.setText(event.getDate());
+                    mValue.setText(maintenance.getDate());
                     break;
                 case 2:
                     mValue.setHint(mRes.getString(R.string.field_odo));
-                    mValue.setText(event.getOdometer());
+                    mValue.setText(maintenance.getOdometer());
                     break;
                 case 3:
                     mValue.setHint(mRes.getString(R.string.field_event));
-                    mValue.setText(event.getEvent());
+                    mValue.setText(maintenance.getEvent());
                     break;
                 case 4:
                     mValue.setHint(mRes.getString(R.string.field_price));
-                    mValue.setText(event.getPrice());
+                    mValue.setText(maintenance.getPrice());
                     break;
                 case 5:
                     mValue.setHint(mRes.getString(R.string.field_comment));
-                    mValue.setText(event.getComment());
+                    mValue.setText(maintenance.getComment());
                     break;
 
                 default:

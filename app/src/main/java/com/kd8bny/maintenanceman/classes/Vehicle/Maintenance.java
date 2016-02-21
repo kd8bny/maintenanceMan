@@ -1,23 +1,18 @@
 package com.kd8bny.maintenanceman.classes.Vehicle;
 
-import java.io.Serializable;
-
 /**
  * Created by kd8bny on 2/13/16.
  */
-public class Event implements Serializable{
-    private static final String TAG = "Event";
+public class Maintenance extends Entry{
+    private static final String TAG = "Maintenance";
 
     public int mIcon = 0;
-    public String mRefID;
-    public String mDate;
     public String mEvent;
     public String mOdometer;
     public String mPrice = "";
     public String mComment = "";
-    public String mUnit;
 
-    public Event(String refID){
+    public Maintenance(String refID){
         mRefID = refID;
     }
 

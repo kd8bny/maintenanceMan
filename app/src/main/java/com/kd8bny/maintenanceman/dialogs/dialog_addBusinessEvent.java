@@ -10,30 +10,27 @@ import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.Vehicle.Business;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
-import java.util.ArrayList;
-
-
-public class dialog_addVehicleEvent extends DialogFragment {
+public class dialog_addBusinessEvent extends DialogFragment {
     private static final String TAG = "dlg_add_evnt";
 
     private int RESULT_CODE;
-    private Maintenance mMaintenance;
+    private Business mBusiness;
+    private int mPos;
 
-    public dialog_addVehicleEvent(){}
+    public dialog_addBusinessEvent(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RESULT_CODE = getTargetRequestCode();
         Bundle bundle = getArguments();
-        mMaintenance = (Maintenance) bundle.getSerializable("event");
+        mBusiness = (Business) bundle.getSerializable("event");
+        mPos = bundle.getInt("pos");
     }
 
     @Override
@@ -43,33 +40,26 @@ public class dialog_addVehicleEvent extends DialogFragment {
         final MaterialAutoCompleteTextView editValue = (MaterialAutoCompleteTextView) view.findViewById(R.id.value);
         Resources mRes = view.getResources();
         switch (RESULT_CODE){//TODO get data for edit
+            case 1:
+                editValue.setHint(mRes.getString(R.string.field_start));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_start));
+                editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+                break;
+
             case 2:
-                editValue.setHint(mRes.getString(R.string.field_odo));
-                editValue.setFloatingLabelText(mRes.getString(R.string.field_odo));
+                editValue.setHint(mRes.getString(R.string.field_end));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_end));
                 editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
                 break;
 
             case 3:
-                editValue.setHint(mRes.getString(R.string.field_event));
-                editValue.setFloatingLabelText(mRes.getString(R.string.field_event));
-
-                VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(getActivity().getApplicationContext());
-                ArrayList<String> eventList = new ArrayList<>();
-                eventList.addAll(vehicleDB.getEntries());
-                //TODO add premade lists items
-
-                editValue.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, eventList));
+                editValue.setHint(mRes.getString(R.string.field_dest));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_dest));
                 break;
 
             case 4:
-                editValue.setHint(mRes.getString(R.string.field_price));
-                editValue.setFloatingLabelText(mRes.getString(R.string.field_price));
-                editValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                break;
-
-            case 5:
-                editValue.setHint(mRes.getString(R.string.field_comment));
-                editValue.setFloatingLabelText(mRes.getString(R.string.field_comment));
+                editValue.setHint(mRes.getString(R.string.field_purpose));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_purpose));
                 editValue.setInputType(InputType.TYPE_CLASS_TEXT);
                 break;
         }
@@ -95,7 +85,10 @@ public class dialog_addVehicleEvent extends DialogFragment {
     }
 
     private void sendResult(String value) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("pos", mPos);
+        bundle.putString("value", value);
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                new Intent().putExtra("value", value));
+                new Intent().putExtra("bundle", bundle));
     }
 }

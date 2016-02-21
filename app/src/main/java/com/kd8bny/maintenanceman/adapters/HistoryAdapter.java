@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Event;
+import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 
 import java.util.ArrayList;
 
@@ -24,20 +24,20 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
     private TypedArray headerColors;
     private Resources res;
 
-    private ArrayList<Event> mEventList;
+    private ArrayList<Maintenance> mMaintenanceList;
     private View itemView;
 
-    public HistoryAdapter(Context context, ArrayList<Event> eventList) {
+    public HistoryAdapter(Context context, ArrayList<Maintenance> maintenanceList) {
         mContext = context;
-        mEventList = eventList;
+        mMaintenanceList = maintenanceList;
     }
 
     @Override
     public int getItemCount() {
-        if (mEventList.isEmpty()){
+        if (mMaintenanceList.isEmpty()){
             return 1;
         }
-        return mEventList.size();
+        return mMaintenanceList.size();
     }
 
     @Override
@@ -54,16 +54,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
 
     @Override
     public void onBindViewHolder(final AdapterViewHolder viewHolder, int i) {
-       if(!mEventList.isEmpty()){
+       if(!mMaintenanceList.isEmpty()){
             int color = headerColors.getColor(i % 8, 0);
             viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-            Event event = mEventList.get(i);
-            viewHolder.vIcon.setImageResource(icons.getResourceId(event.getIcon(), 0));
-            viewHolder.vdate.setText(event.getDate());
-            viewHolder.vodo.setText(event.getOdometer());
-            viewHolder.vevent.setText(event.getEvent());
-            viewHolder.vunit.setText(event.getUnit());
+            Maintenance maintenance = mMaintenanceList.get(i);
+            viewHolder.vIcon.setImageResource(icons.getResourceId(maintenance.getIcon(), 0));
+            viewHolder.vdate.setText(maintenance.getDate());
+            viewHolder.vodo.setText(maintenance.getOdometer());
+            viewHolder.vevent.setText(maintenance.getEvent());
+            viewHolder.vunit.setText(maintenance.getUnit());
        }else{
            viewHolder.vevent.setText(mContext.getResources().getString(R.string.error_no_history));
            viewHolder.vIconBackground.getDrawable()

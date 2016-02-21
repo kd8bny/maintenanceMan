@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,10 +58,10 @@ public class fragment_info extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_info, container, false);
+        final View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         //Info Cards
-        cardList = (RecyclerView) view.findViewById(R.id.info_cardList);
+        cardList = (RecyclerView) view.findViewById(R.id.cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
         cardListAdapter = new InfoAdapter(vehicle, vehicleHist);

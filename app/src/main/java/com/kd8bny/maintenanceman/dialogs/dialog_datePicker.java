@@ -31,7 +31,10 @@ public class dialog_datePicker extends DialogFragment implements DatePickerDialo
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
+        String date = String.format("%s/%s/%s", month + 1, day, year);
+        Bundle bundle = new Bundle();
+        bundle.putString("value", date);
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                new Intent().putExtra("value", month + 1 + "/" + day + "/" + year));
+                new Intent().putExtra("bundle", bundle));
     }
 }

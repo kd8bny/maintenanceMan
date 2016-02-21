@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/header"
+        android:layout_height="4dp"
+        android:layout_width="match_parent"
+        android:elevation="2sp"
+        android:background="@drawable/rect"/>
+
+    <LinearLayout
+        android:id="@+id/holder_date_delta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:padding="@dimen/content_vertical_space">
+
+        <TextView
+            android:id="@+id/val_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/header_sub_font"/>
+
+        <TextView
+            android:id="@+id/val_delta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/header_sub_font"/>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/content_vertical_space"
+        android:layout_below="@id/holder_date_delta">
+
+
+        <TextView
+            android:id="@+id/val_dest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
+
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"/>
+
+        <TextView
+            android:id="@+id/val_purpose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
+
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"/>
+    </LinearLayout>
+</RelativeLayout>

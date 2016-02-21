@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
@@ -52,6 +54,7 @@ public class fragment_main extends Fragment implements UpdateUI{
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
+    private FloatingActionButton fabBusiness;
 
     private ArrayList<Vehicle> roster;
 
@@ -63,7 +66,7 @@ public class fragment_main extends Fragment implements UpdateUI{
         context = getActivity().getApplicationContext();
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
 
-        //Data //TODO
+        //Data //TODO get up and running again
         /*BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
         mbackupRestoreHelper.updateUI = this;
         mbackupRestoreHelper.startAction(context, "restore", false);*/
@@ -209,6 +212,24 @@ public class fragment_main extends Fragment implements UpdateUI{
                 }
             }});
 
+        fabBusiness = (FloatingActionButton) view.findViewById(R.id.fab_add_business);
+        fabBusiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (roster.isEmpty()){
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
+                            Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("caseID", 4);
+                    bundle.putParcelableArrayList("roster", roster);
+                    startActivity(new Intent(getActivity(), VehicleActivity.class)
+                            .putExtra("bundle", bundle));
+                    fabMenu.close(true);
+                }
+            }});
+        fabBusiness.hideButtonInMenu(true);
+
         view.setFocusableInTouchMode(true);
         view.requestFocus();
         view.setOnKeyListener(new View.OnKeyListener() {
@@ -250,11 +271,24 @@ public class fragment_main extends Fragment implements UpdateUI{
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         roster = new ArrayList<>(new SaveLoadHelper(context).load());
         cardListAdapter = new OverviewAdapter(roster);
         cardList.setAdapter(cardListAdapter);
+
+        for (Vehicle v:roster) {
+            if (v.getBusiness()){
+                fabBusiness.show(true);
+                break;
+            }
+        }
     }
 
     public void onUpdate(Boolean doUpdate){ //TODO test to see if working
