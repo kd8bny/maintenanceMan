@@ -69,7 +69,6 @@ public class Vehicle implements Parcelable{
         parcel.writeString(vehicleType);
         parcel.writeString(refID);
         parcel.writeString(title);
-        Log.d(TAG, isBusiness+"");
         parcel.writeByte((byte) (isBusiness ? 1 : 0));
 
         parcel.writeString(reservedSpecs);
