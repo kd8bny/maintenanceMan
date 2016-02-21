@@ -17,7 +17,7 @@ public class dialog_datePicker extends DialogFragment implements DatePickerDialo
     private int RESULT_CODE;
 
     public dialog_datePicker (){
-        RESULT_CODE = 1;
+        RESULT_CODE = getTargetRequestCode();
     }
 
     @Override

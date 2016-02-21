@@ -20,7 +20,7 @@ public class dialog_iconPicker extends DialogFragment {
     private int RESULT_CODE;
 
     public dialog_iconPicker(){
-        RESULT_CODE = getTargetRequestCode();
+        RESULT_CODE = 1;//getTargetRequestCode(); //stupid date dialog steals the thunder
     }
 
     @Override

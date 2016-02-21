@@ -20,7 +20,7 @@ import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.VehicleEventAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Event;
+import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -49,7 +49,7 @@ public class fragment_vehicleEvent_add extends Fragment {
     private Vehicle vehicle;
     private int vehiclePos;
     private String refID;
-    private Event mEvent;
+    private Maintenance mMaintenance;
     private ArrayList<String> singleVehicle = new ArrayList<>();
     private ArrayList<String> labels = new ArrayList<>();
     private HashMap<String, String> dataSet = new LinkedHashMap<>();
@@ -68,9 +68,9 @@ public class fragment_vehicleEvent_add extends Fragment {
         vehicle = roster.get(vehiclePos);
         refID = vehicle.getRefID();
 
-        mEvent = new Event(refID);
+        mMaintenance = new Maintenance(refID);
         final Calendar cal = Calendar.getInstance();
-        mEvent.setDate(cal.get(Calendar.MONTH) + 1
+        mMaintenance.setDate(cal.get(Calendar.MONTH) + 1
                 + "/" + cal.get(Calendar.DAY_OF_MONTH)
                 + "/" + cal.get(Calendar.YEAR));
     }
@@ -100,7 +100,7 @@ public class fragment_vehicleEvent_add extends Fragment {
                                 switch (pos){
                                     case 0:
                                         dialog_iconPicker iconPicker = new dialog_iconPicker();
-                                        iconPicker.setTargetFragment(fragment_vehicleEvent_add.this, 1);
+                                        iconPicker.setTargetFragment(fragment_vehicleEvent_add.this, pos);
                                         iconPicker.show(fm, "dialogIconPicker");
                                         break;
 
@@ -111,7 +111,7 @@ public class fragment_vehicleEvent_add extends Fragment {
                                         break;
 
                                     default:
-                                        bundle.putSerializable("event", mEvent);
+                                        bundle.putSerializable("event", mMaintenance);
                                         dialog_addVehicleEvent dialog_addVehicleEvent = new dialog_addVehicleEvent();
                                         dialog_addVehicleEvent.setTargetFragment(fragment_vehicleEvent_add.this, pos);
                                         dialog_addVehicleEvent.setArguments(bundle);
@@ -123,7 +123,7 @@ public class fragment_vehicleEvent_add extends Fragment {
                             public void onItemLongClick(View view, int pos) {}
                         }));
 
-        eventListAdapter = new VehicleEventAdapter(mEvent);
+        eventListAdapter = new VehicleEventAdapter(mMaintenance);
         eventList.setAdapter(eventListAdapter);
 
         return view;
@@ -134,28 +134,29 @@ public class fragment_vehicleEvent_add extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, requestCode +"...."+ resultCode);
         switch (resultCode) {
-            case 0:
-                mEvent.setIcon(data.getIntExtra("value", 0));
-                break;
             case 1:
-                mEvent.setDate(data.getStringExtra("value"));
+                mMaintenance.setIcon(data.getIntExtra("value", 0));
+                break;
+            case 0:
+                //Dialog fragment is being dumb only return 0
+                mMaintenance.setDate(data.getStringExtra("value"));
                 break;
             case 2:
-                mEvent.setOdometer(data.getStringExtra("value"));
+                mMaintenance.setOdometer(data.getStringExtra("value"));
                 break;
             case 3:
-                mEvent.setEvent(data.getStringExtra("value"));
+                mMaintenance.setEvent(data.getStringExtra("value"));
                 break;
             case 4:
-                mEvent.setPrice(data.getStringExtra("value"));
+                mMaintenance.setPrice(data.getStringExtra("value"));
                 break;
             case 5:
-                mEvent.setComment(data.getStringExtra("value"));
+                mMaintenance.setComment(data.getStringExtra("value"));
                 break;
             default:
                 Log.i(TAG, "No return");
         }
-        eventListAdapter = new VehicleEventAdapter(mEvent);
+        eventListAdapter = new VehicleEventAdapter(mMaintenance);
         eventList.setAdapter(eventListAdapter);
     }
 
@@ -171,10 +172,10 @@ public class fragment_vehicleEvent_add extends Fragment {
             case R.id.menu_save:
                 if(!isLegit()){
                     int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
-                    mEvent.setRefID(roster.get(pos).getRefID());
+                    mMaintenance.setRefID(roster.get(pos).getRefID());
 
                     VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                    vehicleLogDBHelper.insertEntry(mEvent);
+                    vehicleLogDBHelper.insertEntry(mMaintenance);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                             .setActionTextColor(getResources().getColor(R.color.error)).show(); //TODO snakz w/ right label
@@ -206,7 +207,7 @@ public class fragment_vehicleEvent_add extends Fragment {
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
             return true;
         }
-        if (mEvent.getEvent().isEmpty()){
+        if (mMaintenance.getEvent().isEmpty()){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                     .setActionTextColor(getResources().getColor(R.color.error)).show();
             return true;
