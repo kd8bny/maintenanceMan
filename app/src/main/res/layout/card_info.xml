@@ -19,7 +19,7 @@
             android:id="@+id/card_info_iv"
             android:layout_height="36dp"
             android:layout_width="match_parent"
-            android:elevation="10sp"
+            android:elevation="4sp"
 
             android:background="@drawable/rect"/>
 
