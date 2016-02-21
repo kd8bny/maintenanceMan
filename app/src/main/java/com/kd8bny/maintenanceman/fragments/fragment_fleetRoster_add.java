@@ -69,9 +69,12 @@ public class fragment_fleetRoster_add extends Fragment {
             roster = new ArrayList<>();
         }
 
+        Bundle newBundle = new Bundle();
+        newBundle.putBoolean("isEdit", false);
         FragmentManager fm = getChildFragmentManager();
         dialog_addVehicle dialog = new dialog_addVehicle();
         dialog.setTargetFragment(fragment_fleetRoster_add.this, 0);
+        dialog.setArguments(newBundle);
 
         dialog_addField dialogField = new dialog_addField();
         dialogField.setTargetFragment(fragment_fleetRoster_add.this, 0);
