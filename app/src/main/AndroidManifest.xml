@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.kd8bny.maintenanceman"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="58"
+          android:versionCode="59"
           android:versionName="3.0.0.0">
 
     <uses-permission android:name="com.android.vending.BILLING"/>
