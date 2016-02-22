@@ -9,8 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -25,7 +23,6 @@ public class dialog_addVehicle extends DialogFragment {
     private MaterialEditText yearVal;
     private MaterialEditText makeVal;
     private MaterialEditText modelVal;
-    private CheckBox businessVal;
     private String YEAR;
     private String MAKE;
     private String MODEL;
@@ -42,7 +39,6 @@ public class dialog_addVehicle extends DialogFragment {
             YEAR = bundle.getString("year");
             MAKE = bundle.getString("make");
             MODEL = bundle.getString("model");
-            isBusiness = bundle.getBoolean("isBusiness");
             isEdit = bundle.getBoolean("isEdit");
         }
     }
@@ -63,13 +59,6 @@ public class dialog_addVehicle extends DialogFragment {
         modelVal = (MaterialEditText) view.findViewById(R.id.model_val);
         modelVal.setHint(view.getResources().getString(R.string.hint_model));
         modelVal.setFloatingLabelText(view.getResources().getString(R.string.hint_model));
-
-        businessVal = (CheckBox) view.findViewById(R.id.checkbox_business);
-        businessVal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isBusiness = isChecked;
-            }});
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
             .setTitle(view.getResources().getString(R.string.title_dialog_add))
@@ -137,7 +126,6 @@ public class dialog_addVehicle extends DialogFragment {
         temp.add(MODEL);
         Bundle bundle = new Bundle();
         bundle.putStringArrayList("fieldData", temp);
-        bundle.putBoolean("isBusiness", isBusiness);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE,
                 new Intent().putExtra("bundle", bundle));

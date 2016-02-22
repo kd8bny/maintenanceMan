@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +47,7 @@ public class fragment_fleetRoster_add extends Fragment {
     private RecyclerView.LayoutManager addMan;
     private RecyclerView.Adapter addListAdapter;
     private FloatingActionButton fab;
+    private CheckBox businessVal;
 
     private String [] mvehicleTypes;
     private ArrayList<Vehicle> roster;
@@ -98,6 +101,8 @@ public class fragment_fleetRoster_add extends Fragment {
                 vehicle.setVehicleType(vehicleSpinner.getText().toString());
             }});
         vehicleSpinner.setAdapter(new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes));
+
+        businessVal = (CheckBox) view.findViewById(R.id.checkbox_business);
 
         //Recycler View
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
@@ -226,6 +231,7 @@ public class fragment_fleetRoster_add extends Fragment {
                     vehicle.setEngineSpecs(engineSpecs);
                     vehicle.setPowerTrainSpecs(powerTrainSpecs);
                     vehicle.setOtherSpecs(otherSpecs);
+                    vehicle.setBusiness(businessVal.isChecked());
 
                     roster.add(vehicle);
                     new SaveLoadHelper(context).save(roster);
