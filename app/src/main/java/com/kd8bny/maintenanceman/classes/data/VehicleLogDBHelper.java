@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.kd8bny.maintenanceman.classes.Vehicle.Business;
+import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     private static VehicleLogDBHelper sInstance;
 
-    private static final int DB_VERSION = 4; // v3(578) v2(50)
+    private static final int DB_VERSION = 4; // v3(58) v2(50)
     private static final String DB_NAME = "vehicleLog.db";
 
     private static final String TABLE_VEHICLE = "grandVehicleLog";
@@ -32,7 +32,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String COLUMN_VEHICLE_COMMENT = "comment";
     private static final String COLUMN_ICON = "icon";
 
-    private static final String TABLE_BUSINESS = "businessLog";
+    private static final String TABLE_TRAVEL = "travelLog";
     private static final String COLUMN_START = "start";
     private static final String COLUMN_STOP = "end";
     private static final String COLUMN_DEST = "dest";
@@ -59,7 +59,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
         String CREATE_BUSINESS = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                         + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
-                TABLE_BUSINESS, COLUMN_ID, COLUMN_VEHICLE_REFID,
+                TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
                 COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
 
         try {
@@ -210,19 +210,19 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void insertEntry(Business business) {
+    public void insertEntry(Travel travel) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_VEHICLE_REFID, business.getRefID());
-        contentValues.put(COLUMN_VEHICLE_DATE, business.getDate());
-        contentValues.put(COLUMN_START, business.getStart());
-        contentValues.put(COLUMN_STOP, business.getStop());
-        contentValues.put(COLUMN_DEST, business.getDest());
-        contentValues.put(COLUMN_PURPOSE, business.getPurpose());
+        contentValues.put(COLUMN_VEHICLE_REFID, travel.getRefID());
+        contentValues.put(COLUMN_VEHICLE_DATE, travel.getDate());
+        contentValues.put(COLUMN_START, travel.getStart());
+        contentValues.put(COLUMN_STOP, travel.getStop());
+        contentValues.put(COLUMN_DEST, travel.getDest());
+        contentValues.put(COLUMN_PURPOSE, travel.getPurpose());
 
         try {
             db.beginTransaction();
-            db.insertOrThrow(TABLE_BUSINESS, null, contentValues);
+            db.insertOrThrow(TABLE_TRAVEL, null, contentValues);
             db.setTransactionSuccessful();
         } catch (Exception e){
             e.printStackTrace();
@@ -232,23 +232,23 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Business> getFullBusinessEntries(String refID) {
+    public ArrayList<Travel> getFullBusinessEntries(String refID) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_BUSINESS, COLUMN_VEHICLE_REFID, refID);
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_TRAVEL, COLUMN_VEHICLE_REFID, refID);
         Cursor cursor = db.rawQuery(QUERY, null);
 
-        ArrayList<Business> businessList = new ArrayList<>();
+        ArrayList<Travel> travelList = new ArrayList<>();
         try {
             if (cursor.moveToFirst()) {
                 do {
-                    Business business = new Business(refID);
-                    business.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
-                    business.setStart(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_START))));
-                    business.setStop(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_STOP))));
-                    business.setDest(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
-                    business.setPurpose(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    Travel travel = new Travel(refID);
+                    travel.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    travel.setStart(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_START))));
+                    travel.setStop(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_STOP))));
+                    travel.setDest(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
+                    travel.setPurpose(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
 
-                    businessList.add(business);
+                    travelList.add(travel);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -260,12 +260,12 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             }
         }
 
-        return businessList;
+        return travelList;
     }
 
     public HashSet<String> getPurpose() {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_PURPOSE, TABLE_BUSINESS);
+        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_PURPOSE, TABLE_TRAVEL);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         HashSet<String> entryList = new HashSet<>();
@@ -287,13 +287,13 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return entryList;
     }
 
-    public void deleteEntry(Business business){
+    public void deleteEntry(Travel travel){
         SQLiteDatabase db = getWritableDatabase();
         String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
-                TABLE_BUSINESS,
-                COLUMN_VEHICLE_REFID, business.getRefID(),
-                COLUMN_VEHICLE_DATE, business.getDate(),
-                COLUMN_START, business.getStart());
+                TABLE_TRAVEL,
+                COLUMN_VEHICLE_REFID, travel.getRefID(),
+                COLUMN_VEHICLE_DATE, travel.getDate(),
+                COLUMN_START, travel.getStart());
         try {
             db.beginTransaction();
             db.execSQL(QUERY);
@@ -311,13 +311,13 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         String QUERY = String.format("DELETE FROM %s WHERE %s = '%s';",
                 TABLE_VEHICLE,
                 COLUMN_VEHICLE_REFID, refID);
-        String QUERY_BUSINESS = String.format("DELETE FROM %s WHERE %s = '%s';",
-                TABLE_BUSINESS,
+        String QUERY_TRAVEL = String.format("DELETE FROM %s WHERE %s = '%s';",
+                TABLE_TRAVEL,
                 COLUMN_VEHICLE_REFID, refID);
         try {
             db.beginTransaction();
             db.rawQuery(QUERY, null);
-            db.rawQuery(QUERY_BUSINESS, null);
+            db.rawQuery(QUERY_TRAVEL, null);
             db.setTransactionSuccessful();
         }catch (Exception e) {
             e.printStackTrace();
@@ -347,7 +347,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 Log.d(TAG, "bus");
                 String CREATE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                         + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
-                        TABLE_BUSINESS, COLUMN_ID, COLUMN_VEHICLE_REFID,
+                        TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
                         COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
                 db.execSQL(CREATE);
                 Log.d(TAG, "bus done");

@@ -3,7 +3,7 @@ package com.kd8bny.maintenanceman.classes.Vehicle;
 /**
  * Created by kd8bny on 2/13/16.
  */
-public class Business extends Entry {
+public class Travel extends Entry {
     private static final String TAG = "Business";
 
     public Double mStart;
@@ -12,7 +12,7 @@ public class Business extends Entry {
     public String mDest;
     public String mPurpose = "";
 
-    public Business(String refID) {
+    public Travel(String refID) {
         mRefID = refID;
     }
 

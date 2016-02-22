@@ -2,12 +2,8 @@ package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,30 +11,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Business;
+import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 
 import java.util.ArrayList;
 
-public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.AdapterViewHolder> {
+public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterViewHolder> {
     private static final String TAG = "adptr_hstry";
 
     private Context mContext;
     private Resources res;
 
-    private ArrayList<Business> mBusinessList;
+    private ArrayList<Travel> mTravelList;
     private View itemView;
 
-    public BusinessAdapter(Context context, ArrayList<Business> businessList) {
+    public TravelAdapter(Context context, ArrayList<Travel> travelList) {
         mContext = context;
-        mBusinessList = businessList;
+        mTravelList = travelList;
     }
 
     @Override
     public int getItemCount() {
-        if (mBusinessList.isEmpty()){
+        if (mTravelList.isEmpty()){
             return 1;
         }
-        return mBusinessList.size();
+        return mTravelList.size();
     }
 
     @Override
@@ -53,17 +49,17 @@ public class BusinessAdapter extends RecyclerView.Adapter<BusinessAdapter.Adapte
 
     @Override
     public void onBindViewHolder(final AdapterViewHolder viewHolder, int i) {
-       if(!mBusinessList.isEmpty()){
-           Business business = mBusinessList.get(i);
-           viewHolder.vDate.setText(business.getDate());
-           viewHolder.vDest.setText(business.getDest());
+       if(!mTravelList.isEmpty()){
+           Travel travel = mTravelList.get(i);
+           viewHolder.vDate.setText(travel.getDate());
+           viewHolder.vDest.setText(travel.getDest());
 
            String delta;
-           if (business.getStop() == -1.0){
+           if (travel.getStop() == -1.0){
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
                delta = String.format("In Progress");
            }else{
-               delta = String.format("%f mi", business.getDelta());
+               delta = String.format("%f mi", travel.getDelta());
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.goodToGo));
            }
            viewHolder.vDelta.setText(delta);

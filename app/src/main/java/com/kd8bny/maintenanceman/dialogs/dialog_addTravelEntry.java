@@ -12,24 +12,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Business;
+import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
-public class dialog_addBusinessEvent extends DialogFragment {
+public class dialog_addTravelEntry extends DialogFragment {
     private static final String TAG = "dlg_add_evnt";
 
     private int RESULT_CODE;
-    private Business mBusiness;
+    private Travel mTravel;
     private int mPos;
 
-    public dialog_addBusinessEvent(){}
+    public dialog_addTravelEntry(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RESULT_CODE = getTargetRequestCode();
         Bundle bundle = getArguments();
-        mBusiness = (Business) bundle.getSerializable("event");
+        mTravel = (Travel) bundle.getSerializable("event");
         mPos = bundle.getInt("pos");
     }
 

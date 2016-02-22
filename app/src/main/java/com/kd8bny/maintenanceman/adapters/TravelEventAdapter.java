@@ -8,16 +8,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Business;
+import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 
-public class BusinessEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TravelEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "adptr_vhcl_evnt";
 
     protected View itemViewData;
-    private Business mBusiness;
+    private Travel mTravel;
 
-    public BusinessEventAdapter(Business business) {
-        mBusiness = business;
+    public TravelEventAdapter(Travel travel) {
+        mTravel = travel;
     }
 
     @Override
@@ -31,16 +31,16 @@ public class BusinessEventAdapter extends RecyclerView.Adapter<RecyclerView.View
                 .from(viewGroup.getContext())
                 .inflate(R.layout.card_add_vehicle_event, viewGroup, false);
 
-        return new ViewHolderData(itemViewData, mBusiness, -1);
+        return new ViewHolderData(itemViewData, mTravel, -1);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        new ViewHolderData(itemViewData, mBusiness, i);
+        new ViewHolderData(itemViewData, mTravel, i);
     }
 
     public static class ViewHolderData extends RecyclerView.ViewHolder {
-        public ViewHolderData(View view, Business business, int pos) {
+        public ViewHolderData(View view, Travel travel, int pos) {
             super(view);
 
             TextView mValue = (TextView) view.findViewById(R.id.value);
@@ -49,27 +49,27 @@ public class BusinessEventAdapter extends RecyclerView.Adapter<RecyclerView.View
             switch (pos) {
                 case 0:
                     mValue.setHint(mRes.getString(R.string.field_date));
-                    mValue.setText(business.getDate());
+                    mValue.setText(travel.getDate());
                     break;
                 case 1:
                     mValue.setHint(mRes.getString(R.string.field_start));
-                    if (business.getStart() != null) {
-                        mValue.setText(business.getStart().toString());
+                    if (travel.getStart() != null) {
+                        mValue.setText(travel.getStart().toString());
                     }
                     break;
                 case 2:
                     mValue.setHint(mRes.getString(R.string.field_end));
-                    if (business.getStop() != -1.0){
-                        mValue.setText(business.getStop().toString());
+                    if (travel.getStop() != -1.0){
+                        mValue.setText(travel.getStop().toString());
                     }
                     break;
                 case 3:
                     mValue.setHint(mRes.getString(R.string.field_dest));
-                    mValue.setText(business.getDest());
+                    mValue.setText(travel.getDest());
                     break;
                 case 4:
                     mValue.setHint(mRes.getString(R.string.field_purpose));
-                    mValue.setText(business.getPurpose());
+                    mValue.setText(travel.getPurpose());
                     break;
 
                 default:

@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.fragments.fragment_business_add;
+import com.kd8bny.maintenanceman.fragments.fragment_travel_add;
 import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster_add;
 import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster_edit;
 import com.kd8bny.maintenanceman.fragments.fragment_vehicleEvent_add;
@@ -53,7 +53,7 @@ public class VehicleActivity extends AppCompatActivity {
                 break;
             case 4:
                 toolbar.setTitle(getString(R.string.title_edit));
-                fragment = new fragment_business_add();
+                fragment = new fragment_travel_add();
                 fragment.setArguments(bundle);
                 break;
         }

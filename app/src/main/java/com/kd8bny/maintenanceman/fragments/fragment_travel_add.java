@@ -19,11 +19,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.adapters.BusinessEventAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Business;
+import com.kd8bny.maintenanceman.adapters.TravelEventAdapter;
+import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
-import com.kd8bny.maintenanceman.dialogs.dialog_addBusinessEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 
-public class fragment_business_add extends Fragment {
+public class fragment_travel_add extends Fragment {
     private static final String TAG = "frg_add_vhclEvnt";
 
     private Context mContext;
@@ -46,10 +46,10 @@ public class fragment_business_add extends Fragment {
     private Vehicle vehicle;
     private int vehiclePos;
     private String refID;
-    private Business mBusiness;
+    private Travel mTravel;
     private ArrayList<String> singleVehicle = new ArrayList<>();
 
-    public fragment_business_add() {}
+    public fragment_travel_add() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,11 @@ public class fragment_business_add extends Fragment {
         vehicle = roster.get(vehiclePos);
         refID = vehicle.getRefID();
 
-        mBusiness = (Business) bundle.getSerializable("event"); //TODO edit better
-        if (mBusiness == null) {
-            mBusiness = new Business(refID);
+        mTravel = (Travel) bundle.getSerializable("event"); //TODO edit better
+        if (mTravel == null) {
+            mTravel = new Travel(refID);
             final Calendar cal = Calendar.getInstance();
-            mBusiness.setDate(cal.get(Calendar.MONTH) + 1
+            mTravel.setDate(cal.get(Calendar.MONTH) + 1
                     + "/" + cal.get(Calendar.DAY_OF_MONTH)
                     + "/" + cal.get(Calendar.YEAR));
         }
@@ -98,14 +98,14 @@ public class fragment_business_add extends Fragment {
                                 switch (pos){
                                     case 0:
                                         dialog_datePicker datePicker = new dialog_datePicker();
-                                        datePicker.setTargetFragment(fragment_business_add.this, 0);
+                                        datePicker.setTargetFragment(fragment_travel_add.this, 0);
                                         datePicker.show(fm, "datePicker");
                                         break;
 
                                     default:
-                                        bundle.putSerializable("event", mBusiness);
-                                        dialog_addBusinessEvent addBusinessEvent = new dialog_addBusinessEvent();
-                                        addBusinessEvent.setTargetFragment(fragment_business_add.this, pos);
+                                        bundle.putSerializable("event", mTravel);
+                                        dialog_addTravelEntry addBusinessEvent = new dialog_addTravelEntry();
+                                        addBusinessEvent.setTargetFragment(fragment_travel_add.this, pos);
                                         addBusinessEvent.setArguments(bundle);
                                         addBusinessEvent.show(fm, "dialog_addEvent");
                                         break;
@@ -124,31 +124,31 @@ public class fragment_business_add extends Fragment {
         String val = data.getBundleExtra("bundle").getString("value");
         switch (resultCode) {
             case 0:
-                mBusiness.setDate(val);
+                mTravel.setDate(val);
                 break;
             case 1:
-                mBusiness.setStart(Double.parseDouble(val));
+                mTravel.setStart(Double.parseDouble(val));
                 break;
             case 2:
-                mBusiness.setStop(Double.parseDouble(val));
+                mTravel.setStop(Double.parseDouble(val));
                 break;
             case 3:
-                mBusiness.setDest(val);
+                mTravel.setDest(val);
                 break;
             case 4:
-                mBusiness.setPurpose(val);
+                mTravel.setPurpose(val);
                 break;
             default:
                 Log.i(TAG, "No return");
         }
-        eventListAdapter = new BusinessEventAdapter(mBusiness);
+        eventListAdapter = new TravelEventAdapter(mTravel);
         eventList.setAdapter(eventListAdapter);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        eventListAdapter = new BusinessEventAdapter(mBusiness);
+        eventListAdapter = new TravelEventAdapter(mTravel);
         eventList.setAdapter(eventListAdapter);
     }
 
@@ -164,10 +164,10 @@ public class fragment_business_add extends Fragment {
             case R.id.menu_save:
                 if(!isLegit()){
                     int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
-                    mBusiness.setRefID(roster.get(pos).getRefID());
+                    mTravel.setRefID(roster.get(pos).getRefID());
 
                     VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                    vehicleLogDBHelper.insertEntry(mBusiness);
+                    vehicleLogDBHelper.insertEntry(mTravel);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar),
                             getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
@@ -200,12 +200,12 @@ public class fragment_business_add extends Fragment {
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
             return true;
         }
-        if (mBusiness.getStart() == null){
+        if (mTravel.getStart() == null){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                     .setActionTextColor(getResources().getColor(R.color.error)).show();
             return true;
         }
-        if (mBusiness.getDest().isEmpty()){
+        if (mTravel.getDest().isEmpty()){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
                     .setActionTextColor(getResources().getColor(R.color.error)).show();
             return true;

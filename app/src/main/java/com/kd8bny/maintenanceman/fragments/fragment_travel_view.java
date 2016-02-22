@@ -18,12 +18,11 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
-import com.kd8bny.maintenanceman.adapters.BusinessAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Business;
+import com.kd8bny.maintenanceman.adapters.TravelAdapter;
+import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
-import com.kd8bny.maintenanceman.dialogs.dialog_addBusinessEvent;
-import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
+import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import java.text.DateFormat;
@@ -34,7 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class fragment_business_view extends Fragment {
+public class fragment_travel_view extends Fragment {
     private static final String TAG = "frgmnt_bsnss";
 
     private RecyclerView businessList;
@@ -47,9 +46,9 @@ public class fragment_business_view extends Fragment {
     private Vehicle mVehicle;
     private int mVehiclePos;
     private String mRefID;
-    private ArrayList<Business> mBusinessLog;
+    private ArrayList<Travel> mTravelLog;
 
-    public fragment_business_view() {}
+    public fragment_travel_view() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,15 +76,15 @@ public class fragment_business_view extends Fragment {
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                if (!mBusinessLog.isEmpty()) {
-                    final Business business = mBusinessLog.get(pos);
-                    if (business.getStop() == -1.0) {
+                if (!mTravelLog.isEmpty()) {
+                    final Travel travel = mTravelLog.get(pos);
+                    if (travel.getStop() == -1.0) {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("event", business);
+                        bundle.putSerializable("event", travel);
                         bundle.putInt("pos", pos);
                         FragmentManager fm = getActivity().getSupportFragmentManager();
-                        dialog_addBusinessEvent dialog = new dialog_addBusinessEvent();
-                        dialog.setTargetFragment(fragment_business_view.this, 2);
+                        dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                        dialog.setTargetFragment(fragment_travel_view.this, 2);
                         dialog.setArguments(bundle);
                         dialog.show(fm, "dialog_vehicle_history");
                     }
@@ -94,8 +93,8 @@ public class fragment_business_view extends Fragment {
 
             @Override
             public void onItemLongClick(final View view, int pos) {
-                if (!mBusinessLog.isEmpty()) {
-                    final Business business = mBusinessLog.get(pos);
+                if (!mTravelLog.isEmpty()) {
+                    final Travel travel = mTravelLog.get(pos);
                     PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                     popupMenu.getMenuInflater().inflate(R.menu.pop_menu_history, popupMenu.getMenu());
                     //TODO vibrate
@@ -107,7 +106,7 @@ public class fragment_business_view extends Fragment {
                                 case R.id.menu_edit: //TODO not done
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("caseID", 4);
-                                    bundle.putSerializable("event", business);
+                                    bundle.putSerializable("event", travel);
                                     bundle.putParcelableArrayList("roster", mRoster);
                                     bundle.putInt("vehiclePos", mVehiclePos);
                                     getActivity().startActivity(new Intent(getActivity(), VehicleActivity.class)
@@ -119,13 +118,13 @@ public class fragment_business_view extends Fragment {
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
-                                    builder.setMessage(business.getDest() + " completed on " + business.getDate());
+                                    builder.setMessage(travel.getDest() + " completed on " + travel.getDate());
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
                                             VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                                            vehicleLogDBHelper.deleteEntry(business);
+                                            vehicleLogDBHelper.deleteEntry(travel);
                                             onResume();
                                         }
                                     }).show();
@@ -156,8 +155,8 @@ public class fragment_business_view extends Fragment {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mBusinessLog = sort(vehicleLogDBHelper.getFullBusinessEntries(mRefID));
-        businessListAdapter = new BusinessAdapter(mContext, mBusinessLog);
+        mTravelLog = sort(vehicleLogDBHelper.getFullBusinessEntries(mRefID));
+        businessListAdapter = new TravelAdapter(mContext, mTravelLog);
         businessList.setAdapter(businessListAdapter);
     }
 
@@ -165,25 +164,25 @@ public class fragment_business_view extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = data.getBundleExtra("bundle");
-        Business business = mBusinessLog.get(bundle.getInt("pos"));
-        business.setStop(Double.parseDouble(bundle.getString("value")));
+        Travel travel = mTravelLog.get(bundle.getInt("pos"));
+        travel.setStop(Double.parseDouble(bundle.getString("value")));
 
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        vehicleLogDBHelper.deleteEntry(business);
-        vehicleLogDBHelper.insertEntry(business);
+        vehicleLogDBHelper.deleteEntry(travel);
+        vehicleLogDBHelper.insertEntry(travel);
         onResume();
     }
 
-    public ArrayList<Business> sort(ArrayList<Business> vehicleHist){
+    public ArrayList<Travel> sort(ArrayList<Travel> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
 
-        HashMap<String, Business> eventPackets = new HashMap<>();
+        HashMap<String, Travel> eventPackets = new HashMap<>();
 
         for (int i = 0; i < vehicleHist.size(); i++){
-            Business business = vehicleHist.get(i);
-            String date = business.getDate() + ":" + i + "";
+            Travel travel = vehicleHist.get(i);
+            String date = travel.getDate() + ":" + i + "";
             dates.add(date);
-            eventPackets.put(date, business);
+            eventPackets.put(date, travel);
         }
 
         Collections.sort(dates, new Comparator<String>() {

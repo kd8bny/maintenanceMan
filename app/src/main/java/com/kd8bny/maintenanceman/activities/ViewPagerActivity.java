@@ -7,9 +7,6 @@ import android.support.v7.widget.Toolbar;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.ViewPagerAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-
-import java.util.ArrayList;
 
 public class ViewPagerActivity extends AppCompatActivity {
     private static final String TAG = "activity_viewpager";
@@ -26,13 +23,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        Bundle bundle = getIntent().getBundleExtra("bundle");
-        ArrayList<Vehicle> roster = bundle.getParcelableArrayList("roster");
-        int vehiclePos = bundle.getInt("vehiclePos", -1);
-
-        mAdapter = new ViewPagerAdapter(getApplicationContext(), getSupportFragmentManager(),
-                roster.get(vehiclePos).getBusiness());
-
+        mAdapter = new ViewPagerAdapter(getApplicationContext(), getSupportFragmentManager());
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);
     }

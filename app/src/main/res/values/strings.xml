@@ -53,8 +53,8 @@
     <string name="field_price">Price</string>
     <string name="field_comment">Comment</string>
 
-    <!-- Add Business Event -->
-    <string name="title_business">Business</string>
+    <!-- Add Travel Event -->
+    <string name="title_travel">Travel Log</string>
     <string name="field_start">Odometer Start</string>
     <string name="field_end">Odometer End</string>
     <string name="field_dest">Destination</string>

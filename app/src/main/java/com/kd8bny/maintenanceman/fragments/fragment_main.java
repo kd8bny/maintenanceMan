@@ -228,7 +228,6 @@ public class fragment_main extends Fragment implements UpdateUI{
                     fabMenu.close(true);
                 }
             }});
-        fabBusiness.hideButtonInMenu(true);
 
         view.setFocusableInTouchMode(true);
         view.requestFocus();
@@ -282,13 +281,6 @@ public class fragment_main extends Fragment implements UpdateUI{
         roster = new ArrayList<>(new SaveLoadHelper(context).load());
         cardListAdapter = new OverviewAdapter(roster);
         cardList.setAdapter(cardListAdapter);
-
-        for (Vehicle v:roster) {
-            if (v.getBusiness()){
-                fabBusiness.show(true);
-                break;
-            }
-        }
     }
 
     public void onUpdate(Boolean doUpdate){ //TODO test to see if working
