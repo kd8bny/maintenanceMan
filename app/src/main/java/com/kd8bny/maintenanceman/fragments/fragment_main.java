@@ -28,6 +28,7 @@ import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -282,14 +283,14 @@ public class fragment_main extends Fragment implements UpdateUI{
     public void onResume() {
         super.onResume();
         roster = new ArrayList<>(new SaveLoadHelper(context).load());
-        cardListAdapter = new OverviewAdapter(roster);
+        cardListAdapter = new OverviewAdapter(context, roster);
         cardList.setAdapter(cardListAdapter);
     }
 
     public void onUpdate(Boolean doUpdate){ //TODO test to see if working
         if (doUpdate) {
             roster = new ArrayList<>(new SaveLoadHelper(context).load());
-            cardListAdapter = new OverviewAdapter(roster);
+            cardListAdapter = new OverviewAdapter(context, roster);
             cardList.setAdapter(cardListAdapter);
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
         }

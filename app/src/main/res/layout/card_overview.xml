@@ -58,30 +58,10 @@
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
                 android:singleLine="true"
-                android:maxEms="10"
-                android:minEms="10"
+                android:maxEms="12"
+                android:minEms="12"
 
                 android:text="@string/no_data"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"/>
-
-            <TextView
-                android:id="@+id/odo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/vehicle_title"
-                android:layout_toEndOf="@+id/carPic"
-                android:layout_alignParentEnd="true"
-                android:paddingStart="@dimen/content_vertical_space"
-                android:paddingEnd="@dimen/content_vertical_space"
-
-                android:ellipsize="marquee"
-                android:fadingEdge="horizontal"
-                android:singleLine="true"
-                android:maxEms="7"
-                android:minEms="7"
-
-                android:text="666666 mi"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
 
@@ -89,35 +69,54 @@
                 android:id="@+id/last_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/odo"
+                android:layout_below="@id/vehicle_title"
                 android:layout_toEndOf="@+id/carPic"
                 android:layout_alignParentEnd="true"
                 android:paddingStart="@dimen/content_vertical_space"
                 android:paddingEnd="@dimen/content_vertical_space"
 
-                android:text="Last Event"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/field_font"/>
 
-            <TextView
-                android:id="@+id/event"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/vehicle_title"
-                android:layout_toEndOf="@+id/odo"
-                android:layout_alignParentEnd="true"
-                android:paddingStart="@dimen/content_vertical_space"
-                android:paddingEnd="@dimen/content_vertical_space"
+                android:layout_below="@id/last_label"
+                android:layout_toEndOf="@+id/carPic"
+                android:layout_alignParentEnd="true">
 
-                android:ellipsize="marquee"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:fadingEdge="horizontal"
-                android:singleLine="true"
-                android:maxEms="7"
-                android:minEms="7"
+                <TextView
+                    android:id="@+id/val_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/content_vertical_space"
+                    android:paddingEnd="@dimen/content_vertical_space"
 
-                android:text="Oil Change"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"/>
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:fadingEdge="horizontal"
+                    android:singleLine="true"
+                    android:maxEms="7"
+                    android:minEms="7"
+
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/field_font"/>
+
+                <TextView
+                    android:id="@+id/val_odo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/content_vertical_space"
+                    android:paddingEnd="@dimen/content_vertical_space"
+
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:singleLine="true"
+                    android:maxEms="5"
+                    android:minEms="5"
+
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/field_font"/>
+            </LinearLayout>
         </RelativeLayout>
 </android.support.v7.widget.CardView>

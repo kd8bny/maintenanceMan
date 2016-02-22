@@ -2,9 +2,9 @@ package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,32 +13,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 
 import java.util.ArrayList;
 
 public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.AdapterViewHolder>{
     private static final String TAG = "adptr_ovrvw";
 
-    private ArrayList<Vehicle> roster;
+    private View itemView;
+    private VehicleLogDBHelper mVehicleLogDBHelper;
+    private ArrayList<Vehicle> mRoster;
     private TypedArray headerColors;
 
-    public OverviewAdapter(ArrayList<Vehicle> roster) {
-        this.roster = roster;
+    public OverviewAdapter(Context context, ArrayList<Vehicle> roster) {
+        mVehicleLogDBHelper = VehicleLogDBHelper.getInstance(context);
+        mRoster = roster;
     }
 
     @Override
     public int getItemCount() {
-        if(roster.isEmpty()) {
+        if(mRoster.isEmpty()) {
             return 1;
         }
 
-        return roster.size();
+        return mRoster.size();
     }
 
     @Override
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater
+        itemView = LayoutInflater
                 .from(viewGroup.getContext())
                 .inflate(determineLayout(), viewGroup, false);
 
@@ -49,9 +54,9 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        if(!roster.isEmpty()) {
+        if(!mRoster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
-            Vehicle vehicle = roster.get(i);
+            Vehicle vehicle = mRoster.get(i);
             switch (vehicle.getVehicleType()){
                 case "Automobile":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_car);
@@ -81,11 +86,19 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             adapterViewHolder.vRect.setBackgroundColor(color);
             GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();
             shapeDrawable.setColor(color);
+
+            ArrayList<Maintenance> temp = mVehicleLogDBHelper.getFullVehicleEntries(vehicle.getRefID());
+            if (!temp.isEmpty()) {
+                adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
+                adapterViewHolder.vOdo.setText(temp.get(temp.size()-1).getOdometer());
+                adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());
+                adapterViewHolder.vTitle.setSelected(true);
+            }
         }
     }
 
     public int determineLayout(){
-        if(roster.isEmpty()) {
+        if(mRoster.isEmpty()) {
             return R.layout.card_overview_empty;
         }else{
             if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){
@@ -97,12 +110,14 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
     }
 
     public static class AdapterViewHolder extends RecyclerView.ViewHolder{
+
         protected ImageView vRect;
         protected ImageView vCarPic;
         protected ImageView vCarPicBack;
         protected TextView vTitle;
-        protected TextView vevent;
-        protected TextView vodo;
+        private TextView vLastLabel;
+        protected TextView vEvent;
+        protected TextView vOdo;
 
         public AdapterViewHolder(View view) {
             super(view);
@@ -112,9 +127,9 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             vCarPicBack = (ImageView) view.findViewById(R.id.carPicBack);
             vTitle = (TextView) view.findViewById(R.id.vehicle_title);
 
-            //vevent = (TextView) view.findViewById(R.id.event);
-            //vodo = (TextView) view.findViewById(R.id.odo);
-            //vevent.setSelected(true);
+            vLastLabel = (TextView) view.findViewById(R.id.last_label);
+            vEvent = (TextView) view.findViewById(R.id.val_event);
+            vOdo = (TextView) view.findViewById(R.id.val_odo);
         }
     }
 }
