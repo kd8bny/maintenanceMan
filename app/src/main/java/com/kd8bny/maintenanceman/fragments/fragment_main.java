@@ -96,6 +96,7 @@ public class fragment_main extends Fragment implements UpdateUI{
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
                         new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
+                        new PrimaryDrawerItem().withName(R.string.title_travel).withIcon(R.drawable.ic_speedo_blk ),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(R.string.title_settings),
                         new SecondaryDrawerItem().withName(R.string.title_donate),
@@ -128,14 +129,22 @@ public class fragment_main extends Fragment implements UpdateUI{
 
                         return true;
 
-                    case 4: //Settings
+                    case 3: //Travel Log
+                        bundle.putInt("caseID", 4);
+                        bundle.putParcelableArrayList("roster", roster);
+                        intent.putExtra("bundle", bundle);
+                        view.getContext().startActivity(intent);
+
+                        return true;
+
+                    case 5: //Settings
                         Intent settingsIntent = new Intent(view.getContext(), SettingsActivity.class);
                         view.getContext().startActivity(settingsIntent);
                         drawer.closeDrawer();
 
                         return true;
 
-                    case 5: //Donate
+                    case 6: //Donate
                         FragmentManager fm = getFragmentManager();
 
                         dialog_donate dialog_donate = new dialog_donate();
@@ -144,7 +153,7 @@ public class fragment_main extends Fragment implements UpdateUI{
 
                         return true;
 
-                    case 6: //Community
+                    case 7: //Community
                         Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
                         Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
                         startActivity(gplusIntent);
@@ -267,12 +276,6 @@ public class fragment_main extends Fragment implements UpdateUI{
         }
 
         return view;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
     }
 
     @Override
