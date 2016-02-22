@@ -37,7 +37,7 @@
     <string-array name="pref_array_values_unit_dist">
         <item>mi</item>
         <item>Km</item>
-    </string-array>w
+    </string-array>
     <string-array name="pref_array_entry_cloud">
         <item>Dropbox</item>
         <item>Google Drive</item>

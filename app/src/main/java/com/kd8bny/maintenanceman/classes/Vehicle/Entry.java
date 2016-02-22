@@ -10,7 +10,6 @@ public class Entry implements Serializable{
 
     public String mRefID;
     public String mDate;
-    public String mUnit;
 
     public String getDate() {
         return mDate;
@@ -26,13 +25,5 @@ public class Entry implements Serializable{
 
     public void setRefID(String refID) {
         mRefID = refID;
-    }
-
-    public String getUnit() {
-        return mUnit;
-    }
-
-    public void setUnit(String unit) {
-        mUnit = unit;
     }
 }

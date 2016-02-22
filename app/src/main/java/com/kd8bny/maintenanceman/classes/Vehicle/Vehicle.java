@@ -28,7 +28,7 @@ public class Vehicle implements Parcelable{
         this.vehicleType = vehicleType;
         this.isBusiness = isBusiness;
         this.title = year + " " + make + " " + model;
-        HashMap<String, String> temp = new HashMap<>(); //TODO no need for map
+        HashMap<String, String> temp = new HashMap<>();
         temp.put("year", year);
         temp.put("make", make);
         temp.put("model", model);
