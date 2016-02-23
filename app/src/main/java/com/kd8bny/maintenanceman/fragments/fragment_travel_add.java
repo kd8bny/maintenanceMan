@@ -130,13 +130,13 @@ public class fragment_travel_add extends Fragment {
                 mTravel.setStart(Double.parseDouble(val));
                 break;
             case 2:
-                mTravel.setStop(Double.parseDouble(val));
-                break;
-            case 3:
                 mTravel.setDest(val);
                 break;
-            case 4:
+            case 3:
                 mTravel.setPurpose(val);
+                break;
+            case 4:
+                mTravel.setStop(Double.parseDouble(val));
                 break;
             default:
                 Log.i(TAG, "No return");

@@ -71,12 +71,4 @@ public class Maintenance extends Entry{
     public void setRefID(String refID) {
         mRefID = refID;
     }
-
-    public String getUnit() {
-        return mUnit;
-    }
-
-    public void setUnit(String unit) {
-        mUnit = unit;
-    }
 }

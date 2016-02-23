@@ -37,7 +37,7 @@ public class dialog_vehicleHistory extends DialogFragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         SpannableStringBuilder dateString = new SpannableStringBuilder("Completed on " + maintenance.getDate());
-        SpannableStringBuilder odoString = new SpannableStringBuilder(" at " + maintenance.getOdometer() + " " + maintenance.getUnit());
+        SpannableStringBuilder odoString = new SpannableStringBuilder(" at " + maintenance.getOdometer());
         StyleSpan styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
         StyleSpan styleSpan2 = new StyleSpan(android.graphics.Typeface.BOLD);
 

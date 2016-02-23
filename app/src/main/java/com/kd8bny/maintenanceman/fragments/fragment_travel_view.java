@@ -84,9 +84,9 @@ public class fragment_travel_view extends Fragment {
                         bundle.putInt("pos", pos);
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         dialog_addTravelEntry dialog = new dialog_addTravelEntry();
-                        dialog.setTargetFragment(fragment_travel_view.this, 2);
+                        dialog.setTargetFragment(fragment_travel_view.this, 4);
                         dialog.setArguments(bundle);
-                        dialog.show(fm, "dialog_vehicle_history");
+                        dialog.show(fm, "dialog_addTravelEntry");
                     }
                 }
             }

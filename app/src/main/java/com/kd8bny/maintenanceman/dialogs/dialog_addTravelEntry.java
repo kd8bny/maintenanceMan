@@ -43,24 +43,24 @@ public class dialog_addTravelEntry extends DialogFragment {
             case 1:
                 editValue.setHint(mRes.getString(R.string.field_start));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_start));
-                editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 break;
 
             case 2:
-                editValue.setHint(mRes.getString(R.string.field_end));
-                editValue.setFloatingLabelText(mRes.getString(R.string.field_end));
-                editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
-                break;
-
-            case 3:
                 editValue.setHint(mRes.getString(R.string.field_dest));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_dest));
                 break;
 
-            case 4:
+            case 3:
                 editValue.setHint(mRes.getString(R.string.field_purpose));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_purpose));
                 editValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                break;
+
+            case 4:
+                editValue.setHint(mRes.getString(R.string.field_end));
+                editValue.setFloatingLabelText(mRes.getString(R.string.field_end));
+                editValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 break;
         }
 

@@ -22,7 +22,7 @@ public class TravelEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 4;
     }
 
     @Override
@@ -58,16 +58,10 @@ public class TravelEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                     break;
                 case 2:
-                    mValue.setHint(mRes.getString(R.string.field_end));
-                    if (travel.getStop() != -1.0){
-                        mValue.setText(travel.getStop().toString());
-                    }
-                    break;
-                case 3:
                     mValue.setHint(mRes.getString(R.string.field_dest));
                     mValue.setText(travel.getDest());
                     break;
-                case 4:
+                case 3:
                     mValue.setHint(mRes.getString(R.string.field_purpose));
                     mValue.setText(travel.getPurpose());
                     break;

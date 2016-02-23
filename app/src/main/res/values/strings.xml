@@ -89,7 +89,8 @@
     <string name="header_engine">Engine</string>
     <string name="header_power_train">Power Train</string>
     <string name="header_other">Other</string>
-    <string name="header_chart">Cost</string>
+    <string name="header_chart">Maintenance Expenses</string>
+    <string name="header_business_chart">Business Expenses</string>
 
     <!-- Intro -->
     <string name="title_intro">intro</string>

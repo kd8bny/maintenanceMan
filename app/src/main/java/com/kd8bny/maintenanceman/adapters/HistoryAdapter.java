@@ -63,7 +63,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
             viewHolder.vdate.setText(maintenance.getDate());
             viewHolder.vodo.setText(maintenance.getOdometer());
             viewHolder.vevent.setText(maintenance.getEvent());
-            viewHolder.vunit.setText(maintenance.getUnit());
        }else{
            viewHolder.vevent.setText(mContext.getResources().getString(R.string.error_no_history));
            viewHolder.vIconBackground.getDrawable()

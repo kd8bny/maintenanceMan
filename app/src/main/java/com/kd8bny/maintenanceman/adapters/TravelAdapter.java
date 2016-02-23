@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
                delta = String.format("In Progress");
            }else{
-               delta = String.format("%f mi", travel.getDelta());
+               delta = String.format("%.1f mi", travel.getDelta());
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.goodToGo));
            }
            viewHolder.vDelta.setText(delta);
