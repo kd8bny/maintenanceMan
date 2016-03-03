@@ -7,6 +7,7 @@ import com.kd8bny.maintenanceman.fragments.intro.slide_add;
 import com.kd8bny.maintenanceman.fragments.intro.slide_dbx;
 import com.kd8bny.maintenanceman.fragments.intro.slide_mm;
 import com.kd8bny.maintenanceman.fragments.intro.slide_spec;
+import com.kd8bny.maintenanceman.fragments.intro.slide_travel;
 
 
 public class IntroActivity extends AppIntro {
@@ -17,6 +18,7 @@ public class IntroActivity extends AppIntro {
 
         addSlide(new slide_mm());
         addSlide(new slide_add());
+        addSlide(new slide_travel());
         addSlide(new slide_spec());
         addSlide(new slide_dbx());
 
