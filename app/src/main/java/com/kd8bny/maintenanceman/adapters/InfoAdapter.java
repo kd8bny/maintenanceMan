@@ -223,7 +223,7 @@ class vhChart extends RecyclerView.ViewHolder {
 
             vTitle.setText(view.getResources().getString(R.string.header_chart));
             vTitle.setMinWidth(width/3);
-            vTitle.setMaxWidth(width/2);
+            vTitle.setMaxWidth(width);
 
             view.animate();
 

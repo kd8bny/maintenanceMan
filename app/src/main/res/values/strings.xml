@@ -104,7 +104,7 @@
     <string name="summary_specs">Store your vehicle\'s specifications for easy retrieval\n
         \nItems can be filter numbers, tag number, or even tire sizes</string>
     <string name="summary_travel">Going on a long trip? Log your odometer and locations here.\n
-        \nThis way you know which trip will rack up your cars' mileage.</string>
+        \nThis way you know which trip will rack up your cars\' mileage.</string>
 
     <!-- Overview -->
     <string name="oh_noes">"Oh Noes!!!"</string>
