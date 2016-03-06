@@ -167,6 +167,7 @@ public class fragment_travel_add extends Fragment {
                     mTravel.setRefID(roster.get(pos).getRefID());
 
                     VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                    vehicleLogDBHelper.deleteEntry(mTravel);
                     vehicleLogDBHelper.insertEntry(mTravel);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar),
