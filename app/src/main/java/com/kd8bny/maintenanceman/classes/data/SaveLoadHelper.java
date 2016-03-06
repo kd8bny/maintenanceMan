@@ -25,6 +25,8 @@ public class SaveLoadHelper {
 
     public static final int DB_VERSION = 2; //v56 2(v57)
 
+    private BackupRestoreHelper mbackupRestoreHelper;
+
     private SharedPreferences sharedPreferences;
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private static final String FILE_NAME = "fleetRoster.json";
@@ -34,6 +36,8 @@ public class SaveLoadHelper {
     public SaveLoadHelper(Context context){
         mContext = context;
         FILE_LOCATION = context.getFilesDir() + "/" + FILE_NAME;
+
+        mbackupRestoreHelper = new BackupRestoreHelper();
 
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
         int oldVersion = sharedPreferences.getInt("fleetRosterDBVersion", -1);
@@ -55,17 +59,18 @@ public class SaveLoadHelper {
             fileWriter.write(json);
             fileWriter.flush();
             fileWriter.close();
-
-            //backupRestoreHelper mbackupRestoreHelper = new backupRestoreHelper(); //TODO
-            //mbackupRestoreHelper.startAction(context, "backup", false);
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        mbackupRestoreHelper.startAction(mContext, "backup", false);
 
         return true;
     }
 
     public ArrayList<Vehicle> load(){
+        mbackupRestoreHelper.startAction(mContext, "restore", false);
+
         File file = new File(FILE_LOCATION);
         Gson gson = new Gson();
 

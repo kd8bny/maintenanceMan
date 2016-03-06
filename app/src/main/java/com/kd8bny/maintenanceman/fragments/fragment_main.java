@@ -66,11 +66,6 @@ public class fragment_main extends Fragment implements UpdateUI{
         super.onCreate(savedInstanceState);
         context = getActivity().getApplicationContext();
         sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
-
-        //Data //TODO get up and running again
-        /*BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
-        mbackupRestoreHelper.updateUI = this;
-        mbackupRestoreHelper.startAction(context, "restore", false);*/
     }
 
     @Override

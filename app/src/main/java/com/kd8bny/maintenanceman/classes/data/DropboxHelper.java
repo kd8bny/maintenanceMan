@@ -61,16 +61,19 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
         try {
             SimpleDateFormat dbxDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
             Date remoteFileDate = dbxDateFormat.parse(remoteFile);
+            long diff = Math.abs(remoteFileDate.getTime() - localFileDate.getTime());
 
-            if (localFileDate.after(remoteFileDate) & action.equals("backup")){
-                Log.i(TAG, "Replacing remote " + localFileDate + " >> " + remoteFileDate);
+            if (diff > 5000) {
+                if (localFileDate.after(remoteFileDate) & action.equals("backup")) {
+                    Log.i(TAG, "Replacing remote " + localFileDate + " >> " + remoteFileDate);
 
-                return true;
-            }
-            if (localFileDate.before(remoteFileDate) & action.equals("restore")){
-                Log.i(TAG, "Replacing local " + remoteFileDate + " >> " + localFileDate);
+                    return true;
+                }
+                if (localFileDate.before(remoteFileDate) & action.equals("restore")) {
+                    Log.i(TAG, "Replacing local " + remoteFileDate + " >> " + localFileDate);
 
-                return true;
+                    return true;
+                }
             }
 
         }catch (ParseException e){
