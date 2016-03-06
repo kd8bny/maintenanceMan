@@ -21,8 +21,6 @@
         app:met_primaryColor="@color/accent"
         app:met_errorColor="@color/error"
         app:met_floatingLabel="highlight"
-        app:met_floatingLabelText="@string/label_field_value"
-        android:hint="@string/label_field_value"
 
         android:clickable="true"
         android:cursorVisible="false"
