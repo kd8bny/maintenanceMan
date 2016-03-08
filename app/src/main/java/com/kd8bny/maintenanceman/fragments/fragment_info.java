@@ -97,7 +97,7 @@ public class fragment_info extends Fragment {
                 Bundle bundle = data.getBundleExtra("bundle");
                 ArrayList<String> result = bundle.getStringArrayList("fieldData");
                 HashMap<String, String> temp;
-                switch (result.get(0)) {//TODO replace changed key
+                switch (result.get(0)) {
                     case "General":
                         temp = vehicle.getGeneralSpecs();
                         temp.put(result.get(1), result.get(2));

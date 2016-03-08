@@ -352,7 +352,7 @@ public class fragment_main extends Fragment implements UpdateUI{
         cardList.setAdapter(cardListAdapter);
     }
 
-    public void onUpdate(Boolean doUpdate){ //TODO test to see if working
+    public void onUpdate(Boolean doUpdate){
         if (doUpdate) {
             roster = new ArrayList<>(new SaveLoadHelper(mContext).load());
             cardListAdapter = new OverviewAdapter(mContext, roster);

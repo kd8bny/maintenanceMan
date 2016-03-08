@@ -103,7 +103,7 @@ public class fragment_travel_view extends Fragment {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
-                                case R.id.menu_edit: //TODO not done
+                                case R.id.menu_edit:
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("caseID", 4);
                                     bundle.putSerializable("event", travel);

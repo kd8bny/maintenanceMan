@@ -306,7 +306,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public void purgeVehicle(String refID){ //TODO test
+    public void purgeVehicle(String refID){
         SQLiteDatabase db = getWritableDatabase();
         String QUERY = String.format("DELETE FROM %s WHERE %s = '%s';",
                 TABLE_VEHICLE,

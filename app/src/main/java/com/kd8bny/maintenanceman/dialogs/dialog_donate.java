@@ -46,7 +46,7 @@ public class dialog_donate extends DialogFragment{
             public void onClick(View v) {
                 Log.d(TAG, "Launching purchase flow");
 
-                /* TODO: for security, generate your payload here for verification. See the comments on
+                /* for security, generate your payload here for verification. See the comments on
                  *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
                  *        an empty string, but on a production app you should carefully generate this. */
                 String payload = "beer";

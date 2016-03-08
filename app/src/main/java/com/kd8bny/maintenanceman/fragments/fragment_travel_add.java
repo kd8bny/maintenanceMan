@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -63,7 +64,7 @@ public class fragment_travel_add extends Fragment {
         vehicle = roster.get(vehiclePos);
         refID = vehicle.getRefID();
 
-        mTravel = (Travel) bundle.getSerializable("event"); //TODO edit better
+        mTravel = (Travel) bundle.getSerializable("event");
         if (mTravel == null) {
             mTravel = new Travel(refID);
             final Calendar cal = Calendar.getInstance();
@@ -172,7 +173,7 @@ public class fragment_travel_add extends Fragment {
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar),
                             getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                            .setActionTextColor(getResources().getColor(R.color.error)).show(); //TODO snakz w/ right label
+                            .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
 
                     getActivity().finish();
                     return true;
