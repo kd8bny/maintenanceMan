@@ -316,8 +316,8 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 COLUMN_VEHICLE_REFID, refID);
         try {
             db.beginTransaction();
-            db.rawQuery(QUERY, null);
-            db.rawQuery(QUERY_TRAVEL, null);
+            db.execSQL(QUERY);
+            db.execSQL(QUERY_TRAVEL);
             db.setTransactionSuccessful();
         }catch (Exception e) {
             e.printStackTrace();
