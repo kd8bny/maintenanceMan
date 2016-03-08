@@ -98,7 +98,7 @@ public class fragment_main extends Fragment implements UpdateUI{
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
                         new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
-                        new PrimaryDrawerItem().withName(R.string.title_travel).withIcon(R.drawable.ic_speedo_blk ),
+                        new PrimaryDrawerItem().withName(R.string.menu_add_business).withIcon(R.drawable.ic_speedo_blk),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(R.string.title_settings),
                         new SecondaryDrawerItem().withName(R.string.title_donate),
