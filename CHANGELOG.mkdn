@@ -1,3 +1,25 @@
+V3.1.2 7Mar2016
+
+- Complete rewrite of code
+- Add Travel Logs for extensive road trips
+- Sort Vehicles by Year, Model, or Type
+- Overview card shows last maintenance event
+- Beginning support for business vehicles
+
+V3.1.1 6Mar2016
+- Dropbox is back!
+- Much much code cleaning and bettering
+
+V3.0.0 21Feb2016
+- NEW!! Log business miles
+  -- To start add a vehicle with the business attribute
+- Much much code cleaning and bettering
+
+V3.0.0 14Feb2016
+
+- First upload. Complete rewrite!
+- WARNING BACKUP data first
+
 V3.1.0 24Feb2016
 
 Complete rewrite of code

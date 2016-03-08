@@ -164,13 +164,13 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
-        V3.1.0 24Feb2016\n\n
+        V3.1.2 7Mar2016\n\n
 
         Complete rewrite of code\n
-        Added Travel Logs for big trips\n
-        Overview shows last maintenance event\n
+        Add Travel Logs for extensive road trips\n
+        Sort Vehicles by Year, Model, or Type\n
+        Overview card shows last maintenance event\n
         Beginning support for business vehicles\n
-        Note: dropbox is currently disabled\n
         \n\n
     </string>
 </resources>
