@@ -106,14 +106,18 @@
     <string name="summary_travel">Going on a long trip? Log your odometer and locations here.\n
         \nThis way you know which trip will rack up your cars\' mileage.</string>
 
-    <!-- Overview -->
+    <!-- Main -->
     <string name="oh_noes">"Oh Noes!!!"</string>
     <string name="empty_db">"Click to Add Vehicle"</string>
     <string name="no_data">"No Data"</string>
     <string name="last_event">"Last Event:"</string>
     <string name="drawer_sec_options">Options</string>
     <string name="drawer_view_community">View Community</string>
+    <string name="menu_sort">Sort</string>
     <string name="toast_update_ui">Data Updated</string>
+    <string name="toast_sort_year">Sort by Year</string>
+    <string name="toast_sort_model">Sort by Model</string>
+    <string name="toast_sort_type">Sort by Type</string>
 
     <!-- Preferences -->
     <string name="title_settings">Settings</string>

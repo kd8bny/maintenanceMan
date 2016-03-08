@@ -8,13 +8,16 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,8 +30,6 @@ import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -44,13 +45,16 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 
 public class fragment_main extends Fragment implements UpdateUI{
     private static final String TAG = "frg_ovrvw";
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
 
-    private Context context;
+    private Context mContext;
     private SharedPreferences sharedPreferences;
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
@@ -58,14 +62,16 @@ public class fragment_main extends Fragment implements UpdateUI{
     private FloatingActionButton fabBusiness;
 
     private ArrayList<Vehicle> roster;
+    private int mSortType = 0;
 
     public fragment_main() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        context = getActivity().getApplicationContext();
-        sharedPreferences = context.getSharedPreferences(SHARED_PREF, 0);
+        setHasOptionsMenu(true);
+        mContext = getActivity().getApplicationContext();
+        sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
     }
 
     @Override
@@ -164,7 +170,7 @@ public class fragment_main extends Fragment implements UpdateUI{
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
-        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(context, cardList,
+        cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, cardList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
@@ -255,7 +261,7 @@ public class fragment_main extends Fragment implements UpdateUI{
             editor.putBoolean("firstRun", false);
             editor.apply();
 
-            Intent introIntent = new Intent(context, IntroActivity.class);
+            Intent introIntent = new Intent(mContext, IntroActivity.class);
             view.getContext().startActivity(introIntent);
         }
 
@@ -277,15 +283,79 @@ public class fragment_main extends Fragment implements UpdateUI{
     @Override
     public void onResume() {
         super.onResume();
-        roster = new ArrayList<>(new SaveLoadHelper(context).load());
-        cardListAdapter = new OverviewAdapter(context, roster);
+        roster = new ArrayList<>(new SaveLoadHelper(mContext).load());
+        cardListAdapter = new OverviewAdapter(mContext, roster);
+        cardList.setAdapter(cardListAdapter);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuitem) {
+        switch (menuitem.getItemId()) {
+            case R.id.menu_sort:
+                sort();
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    public void sort(){
+        ArrayList<String> values = new ArrayList<>();
+        HashMap<String, Vehicle> sortedRoster = new HashMap<>();
+
+        for (int i = 0; i < roster.size(); i++){
+            Vehicle mVehicle = roster.get(i);
+            String value;
+            switch (mSortType){
+                case 0:
+                    value = String.format("%s:%s", mVehicle.getReservedSpecs().get("year"), i);
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_year), Snackbar.LENGTH_SHORT).show();
+
+                    break;
+                case 1:
+                    value = String.format("%s:%s", mVehicle.getReservedSpecs().get("model"), i);
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_model), Snackbar.LENGTH_SHORT).show();
+                    break;
+                case 2:
+                    value = String.format("%s:%s", mVehicle.getVehicleType(), i);
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_type), Snackbar.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Log.wtf(TAG, "No sort");
+                    value = "";
+                    break;
+            }
+            values.add(value);
+            sortedRoster.put(value, mVehicle);
+        }
+
+        Collections.sort(values, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }});
+
+        roster.clear();
+        for (String year : values) {
+            roster.add(sortedRoster.get(year));
+        }
+
+        mSortType = (mSortType + 1) % 3;
+        cardListAdapter = new OverviewAdapter(mContext, roster);
         cardList.setAdapter(cardListAdapter);
     }
 
     public void onUpdate(Boolean doUpdate){ //TODO test to see if working
         if (doUpdate) {
-            roster = new ArrayList<>(new SaveLoadHelper(context).load());
-            cardListAdapter = new OverviewAdapter(context, roster);
+            roster = new ArrayList<>(new SaveLoadHelper(mContext).load());
+            cardListAdapter = new OverviewAdapter(mContext, roster);
             cardList.setAdapter(cardListAdapter);
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
         }
