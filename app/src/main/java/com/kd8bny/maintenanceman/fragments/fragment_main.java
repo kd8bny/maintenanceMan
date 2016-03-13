@@ -30,6 +30,7 @@ import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;

@@ -13,6 +13,7 @@ import com.kd8bny.maintenanceman.interfaces.AsyncResponse;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,20 +31,20 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private final String FLEETROSTER_FILENAME = "fleetRoster.json";
     private final String VEHICLELOG_FILENAME = "vehicleLog.db";
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-    private Context context;
-    private String action;
-    private Boolean force;
+    private Context mContext;
+    private String mAction;
+    private Boolean mForce;
     private Boolean filesUpdated = false;
 
     public DropboxHelper(Context context, String action, Boolean force) {
-        this.context = context;
-        this.action = action;
-        this.force = force;
+        mContext = context;
+        mAction = action;
+        mForce = force;
     }
 
     @Override
     protected String doInBackground(String... params){
-        if(action.equals("restore")) {
+        if(mAction.equals("restore")) {
             requestRestore();
         }else {
             requestBackup();
@@ -64,12 +65,12 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
             long diff = Math.abs(remoteFileDate.getTime() - localFileDate.getTime());
 
             if (diff > 5000) {
-                if (localFileDate.after(remoteFileDate) & action.equals("backup")) {
+                if (localFileDate.after(remoteFileDate) & mAction.equals("backup")) {
                     Log.i(TAG, "Replacing remote " + localFileDate + " >> " + remoteFileDate);
 
                     return true;
                 }
-                if (localFileDate.before(remoteFileDate) & action.equals("restore")) {
+                if (localFileDate.before(remoteFileDate) & mAction.equals("restore")) {
                     Log.i(TAG, "Replacing local " + remoteFileDate + " >> " + localFileDate);
 
                     return true;
@@ -84,23 +85,23 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     }
 
     public void requestBackup(){
-        if(context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                .getString(context.getString(R.string.pref_key_dropbox), null) != null) {
+        if(mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                .getString(mContext.getString(R.string.pref_key_dropbox), null) != null) {
 
-            final String APP_KEY = context.getResources().getString(R.string.dropboxKey);
-            final String APP_SECRET = context.getResources().getString(R.string.dropboxSecret);
-            final File fleetRoster = new File(context.getFilesDir() + "/" + FLEETROSTER_FILENAME);
-            final File vehicleLog = new File(context.getDatabasePath(VEHICLELOG_FILENAME).toString());
+            final String APP_KEY = mContext.getResources().getString(R.string.dropboxKey);
+            final String APP_SECRET = mContext.getResources().getString(R.string.dropboxSecret);
+            final File fleetRoster = new File(mContext.getFilesDir() + "/" + FLEETROSTER_FILENAME);
+            final File vehicleLog = new File(mContext.getDatabasePath(VEHICLELOG_FILENAME).toString());
             final FileInputStream inputStream1;
             final FileInputStream inputStream2;
             AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
             AndroidAuthSession session = new AndroidAuthSession(appKeys);
             mDBApi = new DropboxAPI<AndroidAuthSession>(session);
             mDBApi.getSession().setOAuth2AccessToken(
-                    context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                            .getString(context.getString(R.string.pref_key_dropbox), null)); //Never null
+                    mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                            .getString(mContext.getString(R.string.pref_key_dropbox), ""));
 
-            if (force) {
+            if (mForce) {
                 forceBackup(mDBApi, fleetRoster, vehicleLog);
             } else {
                 try {
@@ -128,20 +129,19 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     }
 
     public void requestRestore(){
-        final String APP_KEY = context.getResources().getString(R.string.dropboxKey);
-        final String APP_SECRET = context.getResources().getString(R.string.dropboxSecret);
-        final File fleetRoster = new File(context.getFilesDir() + "/" + FLEETROSTER_FILENAME);
-        final File vehicleLog = new File(context.getDatabasePath(VEHICLELOG_FILENAME).toString());
-        final String dropboxTokenNew = context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                .getString(context.getString(R.string.pref_key_dropbox), null);
+        final String APP_KEY = mContext.getResources().getString(R.string.dropboxKey);
+        final String APP_SECRET = mContext.getResources().getString(R.string.dropboxSecret);
+        final File fleetRoster = new File(mContext.getFilesDir() + "/" + FLEETROSTER_FILENAME);
+        final File vehicleLog = new File(mContext.getDatabasePath(VEHICLELOG_FILENAME).toString());
+        Log.d(TAG, mContext.getDatabasePath(VEHICLELOG_FILENAME).toString());
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
         mDBApi.getSession().setOAuth2AccessToken(
-                context.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                        .getString(context.getString(R.string.pref_key_dropbox), null)); //Never null
+                mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                        .getString(mContext.getString(R.string.pref_key_dropbox), ""));
 
-        if (force) {
+        if (mForce) {
             forceRestore(mDBApi, fleetRoster, vehicleLog);
         } else {
             try {
@@ -156,10 +156,16 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
                     filesUpdated = true;
                 }
                 if (actionRequired(localVehicleLog, remoteVehicleLog)) {
-                    FileOutputStream outputStream2 = new FileOutputStream(vehicleLog);
-                    DropboxAPI.DropboxFileInfo info2 = mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
+                    try {
+                        FileOutputStream outputStream2 = new FileOutputStream(vehicleLog);
+                        DropboxAPI.DropboxFileInfo info2 = mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
+                    }catch (FileNotFoundException e) {
+                        VehicleLogDBHelper.getInstance(mContext).getReadableDatabase();
+                        FileOutputStream outputStream2 = new FileOutputStream(vehicleLog);
+                        DropboxAPI.DropboxFileInfo info2 = mDBApi.getFile("/" + VEHICLELOG_FILENAME, null, outputStream2, null);
+                    }
                 }
-            } catch (IOException | DropboxException e) {
+            } catch (IOException | DropboxException e){
                 e.printStackTrace();
             }
         }

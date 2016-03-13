@@ -40,7 +40,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     public static synchronized VehicleLogDBHelper getInstance(Context context) {
         if (sInstance == null) {
-            sInstance = new VehicleLogDBHelper(context.getApplicationContext());
+            sInstance = new VehicleLogDBHelper(context);
         }
 
         return sInstance;
