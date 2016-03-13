@@ -2,6 +2,8 @@ package com.kd8bny.maintenanceman.adapters;
 
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.support.annotation.StyleRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -170,11 +172,11 @@ class vhSpecs extends RecyclerView.ViewHolder {
                             ViewGroup.LayoutParams.WRAP_CONTENT));
 
                     vTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    vTitle.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                    vTitle.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
                     vTitle.setMinWidth(width/3);
                     vTitle.setMaxWidth(width/2);
                     vItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
-                    vItem.setTextColor(view.getResources().getColor(R.color.secondary_text));
+                    vItem.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
 
                     vTitle.setText(key + ": ");
                     vItem.setText(cardInfo.get(key));
