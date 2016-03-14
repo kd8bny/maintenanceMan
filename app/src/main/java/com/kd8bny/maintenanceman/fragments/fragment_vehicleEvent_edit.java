@@ -45,10 +45,9 @@ public class fragment_vehicleEvent_edit extends Fragment {
     private ArrayList<Vehicle> roster;
     private int vehiclePos;
     private Vehicle vehicle;
-    private String refID;
     private ArrayList<String> singleVehicle = new ArrayList<>();
-    private ArrayList<String> labels = new ArrayList<>();
     private Maintenance mMaintenance;
+    private Maintenance mOldMaintenance;
 
 
     public fragment_vehicleEvent_edit() {}
@@ -60,11 +59,17 @@ public class fragment_vehicleEvent_edit extends Fragment {
         mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getArguments();
-        mMaintenance = (Maintenance) bundle.getSerializable("event");
         roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos");
         vehicle = roster.get(vehiclePos);
-        refID = vehicle.getRefID();
+
+        mMaintenance = (Maintenance) bundle.getSerializable("event");
+        mOldMaintenance = new Maintenance(mMaintenance.getRefID());
+        mOldMaintenance.setDate(mMaintenance.getDate());
+        mOldMaintenance.setOdometer(mMaintenance.getOdometer());
+        mOldMaintenance.setEvent(mMaintenance.getEvent());
+        mOldMaintenance.setPrice(mMaintenance.getPrice());
+        mOldMaintenance.setComment(mMaintenance.getComment());
     }
 
     @Override
@@ -171,7 +176,7 @@ public class fragment_vehicleEvent_edit extends Fragment {
                     mMaintenance.setRefID(roster.get(pos).getRefID());
 
                     VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                    vehicleLogDBHelper.deleteEntry(mMaintenance);
+                    vehicleLogDBHelper.deleteEntry(mOldMaintenance);
                     vehicleLogDBHelper.insertEntry(mMaintenance);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
@@ -206,7 +211,7 @@ public class fragment_vehicleEvent_edit extends Fragment {
         }
         if (mMaintenance.getEvent().isEmpty()){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(getResources().getColor(R.color.error)).show();
+                    .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
             return true;
         }
 
