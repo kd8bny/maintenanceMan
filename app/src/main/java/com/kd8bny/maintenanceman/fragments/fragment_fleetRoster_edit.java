@@ -101,6 +101,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                         FragmentManager fm = getFragmentManager();
                         Bundle args = new Bundle();
                         args.putSerializable("field", allSpecs.get(i));
+                        args.putInt("pos", i);
                         dialog_addField dialog_addField = new dialog_addField();
                         dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 1);
                         dialog_addField.setArguments(args);
@@ -187,12 +188,15 @@ public class fragment_fleetRoster_edit extends Fragment {
                         generalSpecs.put(result.get(1), result.get(2));
                         break;
                     case "Engine":
+                        engineSpecs.remove(allSpecs.get(pos).get(1));
                         engineSpecs.put(result.get(1), result.get(2));
                         break;
                     case "Power Train":
+                        powerTrainSpecs.remove(allSpecs.get(pos).get(1));
                         powerTrainSpecs.put(result.get(1), result.get(2));
                         break;
                     case "Other":
+                        otherSpecs.remove(allSpecs.get(pos).get(1));
                         otherSpecs.put(result.get(1), result.get(2));
                         break;
                 }
@@ -201,7 +205,7 @@ public class fragment_fleetRoster_edit extends Fragment {
         }
 
         addListAdapter = new FleetRosterAdapter(allSpecs);
-        addList.swapAdapter(addListAdapter, false);
+        addList.setAdapter(addListAdapter);
     }
 
     @Override

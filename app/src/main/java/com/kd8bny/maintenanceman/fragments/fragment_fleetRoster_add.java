@@ -201,12 +201,15 @@ public class fragment_fleetRoster_add extends Fragment {
                         generalSpecs.put(result.get(1), result.get(2));
                         break;
                     case "Engine":
+                        engineSpecs.remove(allSpecs.get(pos).get(1));
                         engineSpecs.put(result.get(1), result.get(2));
                         break;
                     case "Power Train":
+                        powerTrainSpecs.remove(allSpecs.get(pos).get(1));
                         powerTrainSpecs.put(result.get(1), result.get(2));
                         break;
                     case "Other":
+                        otherSpecs.remove(allSpecs.get(pos).get(1));
                         otherSpecs.put(result.get(1), result.get(2));
                         break;
                 }

@@ -23,6 +23,7 @@ public class dialog_addVehicle extends DialogFragment {
     private MaterialEditText yearVal;
     private MaterialEditText makeVal;
     private MaterialEditText modelVal;
+    private int mPos;
     private String YEAR;
     private String MAKE;
     private String MODEL;
@@ -36,6 +37,7 @@ public class dialog_addVehicle extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null){
+            mPos = bundle.getInt("pos");
             YEAR = bundle.getString("year");
             MAKE = bundle.getString("make");
             MODEL = bundle.getString("model");
@@ -125,6 +127,7 @@ public class dialog_addVehicle extends DialogFragment {
         temp.add(MAKE);
         temp.add(MODEL);
         Bundle bundle = new Bundle();
+        bundle.putInt("pos", mPos);
         bundle.putStringArrayList("fieldData", temp);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), REQUEST_CODE,
