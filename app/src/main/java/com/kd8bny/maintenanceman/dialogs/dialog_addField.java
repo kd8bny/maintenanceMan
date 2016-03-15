@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,7 +23,7 @@ import java.util.Arrays;
 public class dialog_addField extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
-    private static int RESULT_CODE = 1;
+    private int RESULT_CODE = 1;
 
     public MaterialBetterSpinner spinnerFieldType;
     public MaterialAutoCompleteTextView editFieldName;
@@ -40,12 +41,15 @@ public class dialog_addField extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null){
-            RESULT_CODE = 2;
-            recyclerPosition = bundle.getInt("pos");
-            ArrayList<String> fieldData = bundle.getStringArrayList("field");
-            fieldType = fieldData.get(0);
-            fieldName = fieldData.get(1);
-            fieldVal = fieldData.get(2);
+            if(bundle.getBoolean("isEdit")) {
+                Log.d(TAG, "editing");
+                RESULT_CODE = 2;
+                recyclerPosition = bundle.getInt("pos");
+                ArrayList<String> fieldData = bundle.getStringArrayList("field");
+                fieldType = fieldData.get(0);
+                fieldName = fieldData.get(1);
+                fieldVal = fieldData.get(2);
+            }
         }
     }
 

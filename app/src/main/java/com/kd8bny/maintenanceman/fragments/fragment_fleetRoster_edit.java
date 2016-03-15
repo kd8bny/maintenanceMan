@@ -102,6 +102,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                         Bundle args = new Bundle();
                         args.putSerializable("field", allSpecs.get(i));
                         args.putInt("pos", i);
+                        args.putBoolean("isEdit", true);
                         dialog_addField dialog_addField = new dialog_addField();
                         dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 1);
                         dialog_addField.setArguments(args);
@@ -132,9 +133,12 @@ public class fragment_fleetRoster_edit extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("isEdit", false);
                 FragmentManager fm = getFragmentManager();
                 dialog_addField dialog_addField = new dialog_addField();
                 dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 0);
+                dialog_addField.setArguments(bundle);
                 dialog_addField.show(fm, "dialog_add_field");
             }
         });

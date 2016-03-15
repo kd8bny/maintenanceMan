@@ -196,7 +196,7 @@ class vhSpecs extends RecyclerView.ViewHolder {
         }
     }
 }
-
+@SuppressWarnings("ResourceType")
 class vhChart extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_info_VwHldr_chrt";
 
