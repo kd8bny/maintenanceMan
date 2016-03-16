@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,14 +26,15 @@ import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
+import com.kd8bny.maintenanceman.dialogs.dialog_addVehicle;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class fragment_fleetRoster_edit extends Fragment {
-    private static final String TAG = "frg_fltRstr_edit";
+public class fragment_fleetRoster extends Fragment {
+    private static final String TAG = "frg_fltRstr";
 
     private Context mContext;
 
@@ -56,7 +56,7 @@ public class fragment_fleetRoster_edit extends Fragment {
     private HashMap<String, String> powerTrainSpecs = new HashMap<>();
     private HashMap<String, String> otherSpecs = new HashMap<>();
 
-    public fragment_fleetRoster_edit(){}
+    public fragment_fleetRoster(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,8 +66,24 @@ public class fragment_fleetRoster_edit extends Fragment {
 
         Bundle bundle = getArguments();
         roster = bundle.getParcelableArrayList("roster");
+        if(roster == null) {
+            roster = new ArrayList<>();
+        }
         vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = roster.get(vehiclePos);
+        if (vehiclePos == -1){
+            FragmentManager fm = getChildFragmentManager();
+            dialog_addVehicle dialog = new dialog_addVehicle();
+            dialog.setTargetFragment(fragment_fleetRoster.this, 0);
+
+            dialog_addField dialogField = new dialog_addField();
+            dialogField.setTargetFragment(fragment_fleetRoster.this, 0);
+            dialog.setArguments(bundle);
+
+            dialogField.show(fm, "dialog_add_field");
+            dialog.show(fm, "dialog_add_field");
+        }else{
+            vehicle = roster.get(vehiclePos);
+        }
     }
 
     @Override
@@ -99,13 +115,12 @@ public class fragment_fleetRoster_edit extends Fragment {
                     @Override
                     public void onItemClick(View view, int i) {
                         FragmentManager fm = getFragmentManager();
-                        Bundle args = new Bundle();
-                        args.putSerializable("field", allSpecs.get(i));
-                        args.putInt("pos", i);
-                        args.putBoolean("isEdit", true);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("field", allSpecs.get(i));
+                        bundle.putInt("pos", i);
                         dialog_addField dialog_addField = new dialog_addField();
-                        dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 1);
-                        dialog_addField.setArguments(args);
+                        dialog_addField.setTargetFragment(fragment_fleetRoster.this, 1);
+                        dialog_addField.setArguments(bundle);
                         dialog_addField.show(fm, "dialog_add_field");
                     }
 
@@ -133,12 +148,9 @@ public class fragment_fleetRoster_edit extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("isEdit", false);
                 FragmentManager fm = getFragmentManager();
                 dialog_addField dialog_addField = new dialog_addField();
-                dialog_addField.setTargetFragment(fragment_fleetRoster_edit.this, 0);
-                dialog_addField.setArguments(bundle);
+                dialog_addField.setTargetFragment(fragment_fleetRoster.this, 0);
                 dialog_addField.show(fm, "dialog_add_field");
             }
         });
@@ -148,14 +160,15 @@ public class fragment_fleetRoster_edit extends Fragment {
 
     public void onStart(){
         super.onStart();
-        prepEdit();
+        if (vehiclePos != -1) {
+            prepEdit();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        addListAdapter = new FleetRosterAdapter(allSpecs);
-        addList.setAdapter(addListAdapter);
+        addList.setAdapter(new FleetRosterAdapter(allSpecs));
     }
 
 
@@ -166,6 +179,11 @@ public class fragment_fleetRoster_edit extends Fragment {
         ArrayList<String> result = bundle.getStringArrayList("fieldData");
 
         switch (resultCode){
+            case (0):
+                vehicle = new Vehicle(vehicleSpinner.getText().toString(),
+                        bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
+                break;
+
             case (1):
                 allSpecs.add(result);
                 switch (result.get(0)) {
@@ -207,9 +225,7 @@ public class fragment_fleetRoster_edit extends Fragment {
                 allSpecs.set(pos, result);
                 break;
         }
-
-        addListAdapter = new FleetRosterAdapter(allSpecs);
-        addList.setAdapter(addListAdapter);
+        addList.setAdapter(new FleetRosterAdapter(allSpecs));
     }
 
     @Override
@@ -230,8 +246,13 @@ public class fragment_fleetRoster_edit extends Fragment {
 
                 SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
-                if(!vehicle.equals(roster.get(vehiclePos))) {
-                    roster.set(vehiclePos, vehicle);
+                if (vehiclePos != -1) {
+                    if (!vehicle.equals(roster.get(vehiclePos))) {
+                        roster.set(vehiclePos, vehicle);
+                        saveLoadHelper.save(roster);
+                    }
+                }else{
+                    roster.add(vehicle);
                     saveLoadHelper.save(roster);
                 }
 

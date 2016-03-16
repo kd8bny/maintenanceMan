@@ -19,7 +19,6 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class dialog_addField extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
@@ -41,15 +40,14 @@ public class dialog_addField extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null){
-            if(bundle.getBoolean("isEdit")) {
-                Log.d(TAG, "editing");
-                RESULT_CODE = 2;
-                recyclerPosition = bundle.getInt("pos");
-                ArrayList<String> fieldData = bundle.getStringArrayList("field");
-                fieldType = fieldData.get(0);
-                fieldName = fieldData.get(1);
-                fieldVal = fieldData.get(2);
-            }
+            Log.d(TAG, "editing");
+            RESULT_CODE = 2;
+            recyclerPosition = bundle.getInt("pos");
+            ArrayList<String> fieldData = bundle.getStringArrayList("field");
+            fieldType = fieldData.get(0);
+            fieldName = fieldData.get(1);
+            fieldVal = fieldData.get(2);
+
         }
     }
 

@@ -8,9 +8,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster;
 import com.kd8bny.maintenanceman.fragments.fragment_travel_add;
-import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster_add;
-import com.kd8bny.maintenanceman.fragments.fragment_fleetRoster_edit;
 import com.kd8bny.maintenanceman.fragments.fragment_vehicleEvent_add;
 import com.kd8bny.maintenanceman.fragments.fragment_vehicleEvent_edit;
 
@@ -33,17 +32,12 @@ public class VehicleActivity extends AppCompatActivity {
         switch (bundle.getInt("caseID", -1)){
             case 0:
                 toolbar.setTitle(getString(R.string.title_add_fleet_roster));
-                fragment = new fragment_fleetRoster_add();
+                fragment = new fragment_fleetRoster();
                 fragment.setArguments(bundle);
                 break;
             case 1:
                 toolbar.setTitle(getString(R.string.title_add_vehicle_event));
                 fragment = new fragment_vehicleEvent_add();
-                fragment.setArguments(bundle);
-                break;
-            case 2:
-                toolbar.setTitle(getString(R.string.title_edit));
-                fragment = new fragment_fleetRoster_edit();
                 fragment.setArguments(bundle);
                 break;
             case 3:

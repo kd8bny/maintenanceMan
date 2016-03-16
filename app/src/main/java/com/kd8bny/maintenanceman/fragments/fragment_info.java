@@ -151,10 +151,11 @@ public class fragment_info extends Fragment {
         switch (menuitem.getItemId()) {
             case R.id.menu_edit:
                 Bundle bundle = new Bundle();
-                bundle.putInt("caseID", 2);
+                bundle.putInt("caseID", 0);
                 bundle.putInt("vehiclePos", vehiclePos);
                 bundle.putParcelableArrayList("roster", roster);
-                startActivityForResult(new Intent(getActivity(), VehicleActivity.class).putExtra("bundle", bundle), 90);
+                startActivityForResult(new Intent(getActivity(),
+                        VehicleActivity.class).putExtra("bundle", bundle), 90);
 
                 return true;
 
