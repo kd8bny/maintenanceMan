@@ -166,6 +166,13 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V3.1.4 15Mar2016\n\n
+
+        Bug fixes: Add/editing will again populate values\n
+        Vehicle will again set when adding specific event\n
+
+        Many under the hood fixes ;)\n\n
+
         V3.1.2 7Mar2016\n\n
 
         Complete rewrite of code\n
