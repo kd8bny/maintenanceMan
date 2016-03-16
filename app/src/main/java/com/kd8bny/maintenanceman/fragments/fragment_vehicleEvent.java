@@ -44,7 +44,6 @@ public class fragment_vehicleEvent extends Fragment {
     private ArrayAdapter<String> spinnerAdapter;
 
     private RecyclerView eventList;
-    private RecyclerView.Adapter eventListAdapter;
 
     private ArrayList<Vehicle> roster;
     private ArrayList<String> singleVehicle = new ArrayList<>();
@@ -239,9 +238,9 @@ public class fragment_vehicleEvent extends Fragment {
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
             return true;
         }
-        if (mMaintenance.getEvent().isEmpty()){
+        if (mMaintenance.getEvent() == null){
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(getResources().getColor(R.color.error)).show();
+                    .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
             return true;
         }
 
