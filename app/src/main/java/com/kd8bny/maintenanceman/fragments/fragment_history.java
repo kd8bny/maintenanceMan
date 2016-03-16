@@ -103,7 +103,7 @@ public class fragment_history extends Fragment {
                             switch (item.getItemId()) {
                                 case R.id.menu_edit:
                                     Bundle bundle = new Bundle();
-                                    bundle.putInt("caseID", 3);
+                                    bundle.putInt("caseID", 1);
                                     bundle.putSerializable("event", maintenance);
                                     bundle.putParcelableArrayList("roster", roster);
                                     bundle.putInt("vehiclePos", vehiclePos);
@@ -116,7 +116,8 @@ public class fragment_history extends Fragment {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
-                                    builder.setMessage(maintenance.getEvent() + " completed on " + maintenance.getDate());
+                                    builder.setMessage(String.format("%s completed on %s",
+                                            maintenance.getEvent(), maintenance.getDate()));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 

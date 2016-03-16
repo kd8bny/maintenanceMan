@@ -1,6 +1,8 @@
 package com.kd8bny.maintenanceman.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -24,20 +26,18 @@ import com.kd8bny.maintenanceman.adapters.VehicleEventAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
-import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
-import com.kd8bny.maintenanceman.dialogs.dialog_iconPicker;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;
+import com.kd8bny.maintenanceman.dialogs.dialog_iconPicker;
+import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 
-public class fragment_vehicleEvent_add extends Fragment {
-    private static final String TAG = "frg_add_vhclEvnt";
+public class fragment_vehicleEvent extends Fragment {
+    private static final String TAG = "frg_vhclEvnt";
 
     private Context mContext;
     private MaterialBetterSpinner vehicleSpinner;
@@ -47,15 +47,13 @@ public class fragment_vehicleEvent_add extends Fragment {
     private RecyclerView.Adapter eventListAdapter;
 
     private ArrayList<Vehicle> roster;
-    private Vehicle vehicle;
-    private int vehiclePos;
-    private String refID;
-    private Maintenance mMaintenance;
     private ArrayList<String> singleVehicle = new ArrayList<>();
-    private ArrayList<String> labels = new ArrayList<>();
-    private HashMap<String, String> dataSet = new LinkedHashMap<>();
+    private int vehiclePos;
+    private Vehicle vehicle;
+    private Maintenance mMaintenance;
+    private Maintenance mOldMaintenance;
 
-    public fragment_vehicleEvent_add() {}
+    public fragment_vehicleEvent() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,13 +65,22 @@ public class fragment_vehicleEvent_add extends Fragment {
         roster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos");
         vehicle = roster.get(vehiclePos);
-        refID = vehicle.getRefID();
 
-        mMaintenance = new Maintenance(refID);
-        final Calendar cal = Calendar.getInstance();
-        mMaintenance.setDate(cal.get(Calendar.MONTH) + 1
-                + "/" + cal.get(Calendar.DAY_OF_MONTH)
-                + "/" + cal.get(Calendar.YEAR));
+        mMaintenance = (Maintenance) bundle.getSerializable("event");
+        if (mMaintenance == null){
+            mMaintenance = new Maintenance(vehicle.getRefID());
+            final Calendar cal = Calendar.getInstance();
+            mMaintenance.setDate(cal.get(Calendar.MONTH) + 1
+                    + "/" + cal.get(Calendar.DAY_OF_MONTH)
+                    + "/" + cal.get(Calendar.YEAR));
+        }else { //TODO make object implement clone
+            mOldMaintenance = new Maintenance(mMaintenance.getRefID());
+            mOldMaintenance.setDate(mMaintenance.getDate());
+            mOldMaintenance.setOdometer(mMaintenance.getOdometer());
+            mOldMaintenance.setEvent(mMaintenance.getEvent());
+            mOldMaintenance.setPrice(mMaintenance.getPrice());
+            mOldMaintenance.setComment(mMaintenance.getComment());
+        }
     }
 
     @Override
@@ -101,20 +108,20 @@ public class fragment_vehicleEvent_add extends Fragment {
                                 switch (pos){
                                     case 0:
                                         dialog_iconPicker iconPicker = new dialog_iconPicker();
-                                        iconPicker.setTargetFragment(fragment_vehicleEvent_add.this, pos);
+                                        iconPicker.setTargetFragment(fragment_vehicleEvent.this, pos);
                                         iconPicker.show(fm, "dialogIconPicker");
                                         break;
 
                                     case 1:
                                         dialog_datePicker datePicker = new dialog_datePicker();
-                                        datePicker.setTargetFragment(fragment_vehicleEvent_add.this, 0);
+                                        datePicker.setTargetFragment(fragment_vehicleEvent.this, 0);
                                         datePicker.show(fm, "datePicker");
                                         break;
 
                                     default:
                                         bundle.putSerializable("event", mMaintenance);
                                         dialog_addVehicleEvent dialog_addVehicleEvent = new dialog_addVehicleEvent();
-                                        dialog_addVehicleEvent.setTargetFragment(fragment_vehicleEvent_add.this, pos);
+                                        dialog_addVehicleEvent.setTargetFragment(fragment_vehicleEvent.this, pos);
                                         dialog_addVehicleEvent.setArguments(bundle);
                                         dialog_addVehicleEvent.show(fm, "dialog_addEvent");
                                         break;
@@ -123,17 +130,19 @@ public class fragment_vehicleEvent_add extends Fragment {
                             @Override
                             public void onItemLongClick(View view, int pos) {}
                         }));
-
-        eventListAdapter = new VehicleEventAdapter(mMaintenance);
-        eventList.setAdapter(eventListAdapter);
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        eventList.setAdapter(new VehicleEventAdapter(mMaintenance));
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) { //TODO Clean this up. Combine edit/add
+        switch (resultCode) {
             case 1:
                 mMaintenance.setIcon(data.getIntExtra("value", 0));
                 break;
@@ -156,14 +165,17 @@ public class fragment_vehicleEvent_add extends Fragment {
             default:
                 Log.i(TAG, "No return");
         }
-        eventListAdapter = new VehicleEventAdapter(mMaintenance);
-        eventList.setAdapter(eventListAdapter);
+        onResume();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_fleet_roster_add, menu);
+        if (mOldMaintenance == null) {
+            inflater.inflate(R.menu.menu_add, menu);
+        } else {
+            inflater.inflate(R.menu.menu_edit, menu);
+        }
     }
 
     @Override
@@ -175,6 +187,9 @@ public class fragment_vehicleEvent_add extends Fragment {
                     mMaintenance.setRefID(roster.get(pos).getRefID());
 
                     VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                    if (mOldMaintenance != null){
+                        vehicleLogDBHelper.deleteEntry(mOldMaintenance);
+                    }
                     vehicleLogDBHelper.insertEntry(mMaintenance);
 
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
@@ -188,6 +203,23 @@ public class fragment_vehicleEvent_add extends Fragment {
 
             case R.id.menu_cancel:
                 getActivity().finish();
+                return true;
+
+            case R.id.menu_del:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(true);
+                builder.setTitle("Delete Item?");
+                builder.setMessage(String.format("%s completed on %s",
+                        mOldMaintenance.getEvent(), mOldMaintenance.getDate()));
+                builder.setNegativeButton("No", null);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        VehicleLogDBHelper.getInstance(mContext).deleteEntry(mOldMaintenance);
+                        getActivity().finish();
+                    }});
+
+                builder.show();
+
                 return true;
 
             default:
