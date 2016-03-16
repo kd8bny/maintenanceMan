@@ -24,7 +24,6 @@ import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@SuppressWarnings("ResourceType")
 public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
 
@@ -124,6 +123,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 }
 
+@SuppressWarnings("ResourceType")
 class vhSpecs extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_info_VwHldr_gen";
 
@@ -201,6 +201,7 @@ class vhSpecs extends RecyclerView.ViewHolder {
     }
 }
 
+@SuppressWarnings("ResourceType")
 class vhChart extends RecyclerView.ViewHolder {
     private static final String TAG = "adptr_info_VwHldr_chrt";
 
