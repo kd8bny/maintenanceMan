@@ -47,11 +47,13 @@ public class dialog_addVehicleEvent extends DialogFragment {
                 editValue.setHint(mRes.getString(R.string.field_odo));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_odo));
                 editValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editValue.setText(mMaintenance.getOdometer());
                 break;
 
             case 3:
                 editValue.setHint(mRes.getString(R.string.field_event));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_event));
+                editValue.setText(mMaintenance.getEvent());
 
                 VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(getActivity().getApplicationContext());
                 ArrayList<String> eventList = new ArrayList<>();
@@ -65,12 +67,14 @@ public class dialog_addVehicleEvent extends DialogFragment {
                 editValue.setHint(mRes.getString(R.string.field_price));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_price));
                 editValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                editValue.setText(mMaintenance.getPrice());
                 break;
 
             case 5:
                 editValue.setHint(mRes.getString(R.string.field_comment));
                 editValue.setFloatingLabelText(mRes.getString(R.string.field_comment));
                 editValue.setInputType(InputType.TYPE_CLASS_TEXT);
+                editValue.setText(mMaintenance.getComment());
                 break;
         }
 
