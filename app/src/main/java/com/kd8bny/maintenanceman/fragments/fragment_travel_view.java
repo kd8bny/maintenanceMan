@@ -144,6 +144,7 @@ public class fragment_travel_view extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("caseID", 4);
                 bundle.putParcelableArrayList("roster", mRoster);
+                bundle.putInt("vehiclePos", mVehiclePos);
                 startActivity(new Intent(getActivity(), VehicleActivity.class)
                         .putExtra("bundle", bundle));
             }});

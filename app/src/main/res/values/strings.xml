@@ -59,6 +59,8 @@
     <string name="field_end">Odometer End</string>
     <string name="field_dest">Destination</string>
     <string name="field_purpose">Reason for Trip</string>
+    <string name="error_dest_val">Enter Destination</string>
+    <string name="error_start_val">Enter Trip Start</string>
 
     <!-- Donate -->
     <string name="title_donate">Donate</string>

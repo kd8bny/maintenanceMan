@@ -128,7 +128,9 @@ public class fragment_travel_add extends Fragment {
                 mTravel.setDate(val);
                 break;
             case 1:
-                mTravel.setStart(Double.parseDouble(val));
+                if (!val.isEmpty()) {
+                    mTravel.setStart(Double.parseDouble(val));
+                }
                 break;
             case 2:
                 mTravel.setDest(val);
@@ -203,13 +205,13 @@ public class fragment_travel_add extends Fragment {
             return true;
         }
         if (mTravel.getStart() == null){
-            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(getResources().getColor(R.color.error)).show();
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_start_val), Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
             return true;
         }
-        if (mTravel.getDest().isEmpty()){
-            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_field_event), Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(getResources().getColor(R.color.error)).show();
+        if (mTravel.getDest() == null){
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.error_dest_val), Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(ContextCompat.getColor(mContext, R.color.error)).show();
             return true;
         }
 
