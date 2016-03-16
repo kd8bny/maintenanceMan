@@ -143,6 +143,7 @@ public class fragment_history extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("caseID", 1);
                 bundle.putParcelableArrayList("roster", roster);
+                bundle.putInt("vehiclePos", vehiclePos);
                 startActivity(new Intent(getActivity(), VehicleActivity.class)
                         .putExtra("bundle", bundle));
             }
