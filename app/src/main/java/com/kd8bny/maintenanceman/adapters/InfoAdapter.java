@@ -100,7 +100,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                        .inflate(R.layout.card_info, viewGroup, false);
                cardInfo.clear();
 
-               return new vhSpecs(vSpecs, cardInfo, null, i);
+               return new vhSpecs(vSpecs, cardInfo, null, i, null);
 
            default:
                Log.e(TAG, "No view");
@@ -118,7 +118,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 break;
 
             case VIEW_SPECS:
-                new vhSpecs(vSpecs, cardInfo, itemPos, i);
+                new vhSpecs(vSpecs, cardInfo, itemPos, i, mVehicle.getTitle());
                 break;
         }
     }
@@ -129,7 +129,8 @@ class vhSpecs extends RecyclerView.ViewHolder {
 
     private TypedArray headerColors;
 
-    public vhSpecs(View view, final HashMap<String, String> cardInfo, ArrayList<Integer> itemPos, int i) {
+    public vhSpecs(View view, final HashMap<String, String> cardInfo,
+                   ArrayList<Integer> itemPos, int i, String vehicleTitle) {
         super(view);
         View relLayout = view.findViewById(R.id.card_info_rel);
         View linLayout = relLayout.findViewById(R.id.card_info_lin);
@@ -146,7 +147,11 @@ class vhSpecs extends RecyclerView.ViewHolder {
         if(cardInfo.size() > 0) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
             TextView vHeader = (TextView) view.findViewById(R.id.card_info_title);
-            vHeader.setText(getTitle(itemPos, i));
+            if (itemPos.get(i) == 0) {
+                vHeader.setText(vehicleTitle);
+            }else {
+                vHeader.setText(getTitle(itemPos, i));
+            }
             ImageView imageView = (ImageView) view.findViewById(R.id.card_info_iv);
             imageView.setBackgroundColor(headerColors.getColor(i, 0));
 
@@ -184,8 +189,6 @@ class vhSpecs extends RecyclerView.ViewHolder {
 
     private int getTitle(ArrayList<Integer> itemPos, int i){
         switch (itemPos.get(i)){
-            case 0:
-                return R.string.header_general;
             case 2:
                 return R.string.header_engine;
             case 3:
