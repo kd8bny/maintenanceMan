@@ -231,7 +231,11 @@ public class fragment_fleetRoster extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_fleet_roster_edit, menu);
+        if (vehiclePos == -1) {
+            inflater.inflate(R.menu.menu_add, menu);
+        } else {
+            inflater.inflate(R.menu.menu_edit, menu);
+        }
     }
 
     @Override
