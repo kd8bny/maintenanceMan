@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -196,6 +194,7 @@ public class fragment_history extends Fragment {
         (view.findViewById(R.id.button_not_ok)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mFilter = !mFilter;
                 tFilter.setText("");
                 mVehicleHist = mUnfilteredHist;
                 histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
@@ -237,7 +236,6 @@ public class fragment_history extends Fragment {
 
             case R.id.menu_sort:
                 mSortType = (mSortType + 1) % 2;//TODO sanckz
-                Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_year), Snackbar.LENGTH_SHORT).show();
                 histList.setAdapter(new HistoryAdapter(mContext, sort(mVehicleHist)));
 
                 return true;
@@ -300,10 +298,10 @@ public class fragment_history extends Fragment {
         if(show){
             vFilterView.setVisibility(View.VISIBLE);
             translateAnim = new TranslateAnimation(0, 0, -500, 0);
-            translateAnim.setDuration(1000);
+            translateAnim.setDuration(500);
         }else{
             translateAnim = new TranslateAnimation(0, 0, 0, -500);
-            translateAnim.setDuration(1000);
+            translateAnim.setDuration(500);
             vFilterView.setVisibility(View.INVISIBLE);
         }
         vFilterView.startAnimation(translateAnim);

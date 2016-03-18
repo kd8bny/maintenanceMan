@@ -20,14 +20,14 @@
             android:layout_weight="25"
 
             android:inputType="textCapWords"
-            android:hint="@string/label_field_name"
+            android:hint="@string/label_search"
             android:singleLine="true"
 
             app:met_baseColor="@color/md_white_1000"
-            app:met_primaryColor="@color/accent"
+            app:met_primaryColor="@color/md_white_1000"
             app:met_errorColor="@color/error"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/label_field_name"/>
+            app:met_floatingLabelText="@string/label_search"/>
 
         <ImageButton
             android:id="@+id/button_ok"
