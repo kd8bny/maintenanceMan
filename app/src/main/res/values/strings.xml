@@ -82,6 +82,8 @@
     <string name="label_odo">On: </string>
     <string name="menu_delete_event">Delete</string>
     <string name="menu_edit_event">Edit</string>
+    <string name="menu_hist_sort">Sort By Date</string>
+    <string name="menu_hist_search">Search Events</string>
 
     <string name="unit_time"> hrs</string>
 

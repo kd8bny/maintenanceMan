@@ -5,16 +5,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
@@ -25,6 +33,7 @@ import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,17 +46,20 @@ import java.util.HashMap;
 public class fragment_history extends Fragment {
     private static final String TAG = "frgmnt_hist";
 
+    private View vFilterView;
     private RecyclerView histList;
     private RecyclerView.LayoutManager histMan;
-    private RecyclerView.Adapter histListAdapter;
 
     private Context mContext;
 
-    private ArrayList<Vehicle> roster;
+    private ArrayList<Vehicle> mRoster;
     private Vehicle vehicle;
     private int vehiclePos;
     private String refID;
-    private ArrayList<Maintenance> vehicleHist;
+    private ArrayList<Maintenance> mVehicleHist;
+    private ArrayList<Maintenance> mUnfilteredHist;
+    private int mSortType = 0;
+    private Boolean mFilter = false;
 
     public fragment_history() {}
 
@@ -58,15 +70,18 @@ public class fragment_history extends Fragment {
         mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        roster = bundle.getParcelableArrayList("roster");
+        mRoster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = roster.get(vehiclePos);
+        vehicle = mRoster.get(vehiclePos);
         refID = vehicle.getRefID();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+        vFilterView = inflater.inflate(R.layout.dialog_filter, null);
+        ((RelativeLayout) view.findViewById(R.id.recycler_view)).addView(vFilterView);
+        vFilterView.setVisibility(View.INVISIBLE);
         registerForContextMenu(view);
 
         //Task History
@@ -77,8 +92,8 @@ public class fragment_history extends Fragment {
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                if (!vehicleHist.isEmpty()) {
-                    final Maintenance maintenance = vehicleHist.get(pos);
+                if (!mVehicleHist.isEmpty()) {
+                    final Maintenance maintenance = mVehicleHist.get(pos);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("event", maintenance);
                     FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -91,8 +106,8 @@ public class fragment_history extends Fragment {
 
             @Override
             public void onItemLongClick(final View view, int pos) {
-                if (!vehicleHist.isEmpty()) {
-                    final Maintenance maintenance = vehicleHist.get(pos);
+                if (!mVehicleHist.isEmpty()) {
+                    final Maintenance maintenance = mVehicleHist.get(pos);
                     PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                     popupMenu.getMenuInflater().inflate(R.menu.pop_menu_history, popupMenu.getMenu());
                     //TODO vibrate
@@ -105,7 +120,7 @@ public class fragment_history extends Fragment {
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("caseID", 1);
                                     bundle.putSerializable("event", maintenance);
-                                    bundle.putParcelableArrayList("roster", roster);
+                                    bundle.putParcelableArrayList("roster", mRoster);
                                     bundle.putInt("vehiclePos", vehiclePos);
                                     getActivity().startActivity(new Intent(getActivity(), VehicleActivity.class)
                                             .putExtra("bundle", bundle));
@@ -142,10 +157,49 @@ public class fragment_history extends Fragment {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("caseID", 1);
-                bundle.putParcelableArrayList("roster", roster);
+                bundle.putParcelableArrayList("roster", mRoster);
                 bundle.putInt("vehiclePos", vehiclePos);
                 startActivity(new Intent(getActivity(), VehicleActivity.class)
                         .putExtra("bundle", bundle));
+            }
+        });
+
+        //Filter dialog
+        final MaterialAutoCompleteTextView tFilter = (MaterialAutoCompleteTextView) vFilterView.findViewById(R.id.met_filter);
+        tFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().isEmpty()){
+                    mVehicleHist = mUnfilteredHist;
+                }else {
+                    mVehicleHist = filter(s.toString());
+                }
+                histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
+            }
+        });
+        (view.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vFilterView.setVisibility(View.INVISIBLE);
+            }
+        });
+        (view.findViewById(R.id.button_not_ok)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tFilter.setText("");
+                mVehicleHist = mUnfilteredHist;
+                histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
+                vFilterView.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -156,19 +210,51 @@ public class fragment_history extends Fragment {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        vehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
-        histListAdapter = new HistoryAdapter(mContext, vehicleHist);
-        histList.setAdapter(histListAdapter);
+        mVehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
+        histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
     }
 
-    public ArrayList<Maintenance> sort(ArrayList<Maintenance> vehicleHist){
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_history, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuitem) {
+        switch (menuitem.getItemId()) {
+            case R.id.menu_search:
+                mFilter = !mFilter;
+                if (mFilter) {
+                    showSearch(true);
+                    mUnfilteredHist = mVehicleHist;
+                }else{
+                    showSearch(false);
+                    mVehicleHist = mUnfilteredHist;
+                }
+
+                return true;
+
+            case R.id.menu_sort:
+                mSortType = (mSortType + 1) % 2;//TODO sanckz
+                Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_year), Snackbar.LENGTH_SHORT).show();
+                histList.setAdapter(new HistoryAdapter(mContext, sort(mVehicleHist)));
+
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    private ArrayList<Maintenance> sort(ArrayList<Maintenance> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
 
         HashMap<String, Maintenance> eventPackets = new HashMap<>();
 
         for (int i = 0; i < vehicleHist.size(); i++){
             Maintenance maintenance = vehicleHist.get(i);
-            String date = maintenance.getDate() + ":" + i + "";
+            String date = String.format("%s:%s", maintenance.getDate(), i);
             dates.add(date);
             eventPackets.put(date, maintenance);
         }
@@ -178,7 +264,11 @@ public class fragment_history extends Fragment {
             @Override
             public int compare(String o1, String o2) {
                 try {
-                    return f.parse(o2).compareTo(f.parse(o1));
+                    if (mSortType == 0) {
+                        return f.parse(o2).compareTo(f.parse(o1));
+                    }else{
+                        return f.parse(o1).compareTo(f.parse(o2));
+                    }
                 }catch (ParseException e) {throw new IllegalArgumentException(e);}
             }});
 
@@ -188,5 +278,34 @@ public class fragment_history extends Fragment {
         }
 
         return vehicleHist;
+    }
+
+    private ArrayList<Maintenance> filter(String EXPRESSION){
+        ArrayList<Maintenance> filterList = new ArrayList<>();
+        for (Maintenance m : mVehicleHist) {
+            if (m.getEvent().contains(EXPRESSION)){
+                filterList.add(m);
+            }
+        }
+
+        if (filterList.isEmpty()){
+            return mVehicleHist;
+        }
+
+        return sort(filterList);
+    }
+
+    private void showSearch(Boolean show){
+        TranslateAnimation translateAnim;
+        if(show){
+            vFilterView.setVisibility(View.VISIBLE);
+            translateAnim = new TranslateAnimation(0, 0, -500, 0);
+            translateAnim.setDuration(1000);
+        }else{
+            translateAnim = new TranslateAnimation(0, 0, 0, -500);
+            translateAnim.setDuration(1000);
+            vFilterView.setVisibility(View.INVISIBLE);
+        }
+        vFilterView.startAnimation(translateAnim);
     }
 }
