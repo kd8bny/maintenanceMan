@@ -181,7 +181,9 @@ public class fragment_travel_view extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_travel, menu);
+        if (!mTravelLog.isEmpty()) {
+            inflater.inflate(R.menu.menu_travel, menu);
+        }
     }
 
     @Override

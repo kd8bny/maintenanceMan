@@ -218,7 +218,9 @@ public class fragment_history extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_history, menu);
+        if(!mVehicleHist.isEmpty()){
+            inflater.inflate(R.menu.menu_history, menu);
+        }
     }
 
     @Override
