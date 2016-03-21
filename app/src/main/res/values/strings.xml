@@ -171,6 +171,13 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V3.1.5 21Mar2016\n\n
+
+        Search Maintenance tasks by event\n
+        Sort Maintenance tasks by date\n
+        Export both Maintenance and travel data to CSV\n
+        then import it into your favorite spreadsheet program\n\n
+
         V3.1.4 15Mar2016\n\n
 
         Bug fixes: Add/editing will again populate values\n
