@@ -1,3 +1,17 @@
+V3.1.5 21Mar2016
+
+Search Maintenance tasks by event
+Sort Maintenance tasks by date
+Export both Maintenance and travel data to CSV
+then import it into your favorite spreadsheet program
+
+V3.1.4 15Mar2016
+
+Bug fixes: Add/editing will again populate values\n
+Vehicle will again set when adding specific event\n
+
+Many under the hood fixes ;)
+        
 V3.1.2 7Mar2016
 
 - Complete rewrite of code
