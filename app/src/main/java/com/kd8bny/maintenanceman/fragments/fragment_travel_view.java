@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -188,7 +189,13 @@ public class fragment_travel_view extends Fragment {
         switch (menuitem.getItemId()) {
             case R.id.menu_export_csv:
                 Export export = new Export();
-                export.travelToCSV(mVehicle.getTitle(), mTravelLog);
+                Uri uri = export.travelToCSV(mVehicle.getTitle(), mTravelLog);
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                sendIntent.setType("text/csv");
+                startActivity(Intent.createChooser(sendIntent, mContext.getResources().getString(R.string.share)));
 
                 return true;
         }

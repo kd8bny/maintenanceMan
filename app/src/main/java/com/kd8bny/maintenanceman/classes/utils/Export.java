@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.classes.utils;
 
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -9,6 +10,7 @@ import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -30,7 +32,7 @@ public class Export {
         }
     }
 
-    public void maintenanceToCSV(String title, ArrayList<Maintenance> l){
+    public Uri maintenanceToCSV(String title, ArrayList<Maintenance> l){
         Calendar cal = Calendar.getInstance();
         String date = String.format("%s_%s_%s",
                 cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.YEAR));
@@ -48,9 +50,11 @@ public class Export {
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        return Uri.fromFile(file);
     }
 
-    public void travelToCSV(String title, ArrayList<Travel> l){
+    public Uri travelToCSV(String title, ArrayList<Travel> l){
         Calendar cal = Calendar.getInstance();
         String date = String.format("%s_%s_%s",
                 cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.YEAR));
@@ -68,5 +72,7 @@ public class Export {
         }catch (IOException e){
             e.printStackTrace();
         }
+
+        return Uri.fromFile(file);
     }
 }

@@ -86,6 +86,7 @@
     <string name="menu_hist_sort">Sort By Date</string>
     <string name="menu_hist_search">Search Events</string>
     <string name="menu_hist_export">Export to CSV</string>
+    <string name="share">Share your CSV</string>
 
     <string name="unit_time"> hrs</string>
 
