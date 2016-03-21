@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.kd8bny.maintenanceman.adapters.TravelAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
@@ -172,6 +175,25 @@ public class fragment_travel_view extends Fragment {
         vehicleLogDBHelper.deleteEntry(travel);
         vehicleLogDBHelper.insertEntry(travel);
         onResume();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_travel, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuitem) {
+        switch (menuitem.getItemId()) {
+            case R.id.menu_export_csv:
+                Export export = new Export();
+                export.travelToCSV(mVehicle.getTitle(), mTravelLog);
+
+                return true;
+        }
+
+        return false;
     }
 
     public ArrayList<Travel> sort(ArrayList<Travel> vehicleHist){

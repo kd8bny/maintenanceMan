@@ -29,6 +29,7 @@ import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
 import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -237,6 +238,12 @@ public class fragment_history extends Fragment {
             case R.id.menu_sort:
                 mSortType = (mSortType + 1) % 2;//TODO sanckz
                 histList.setAdapter(new HistoryAdapter(mContext, sort(mVehicleHist)));
+
+                return true;
+
+            case R.id.menu_export_csv:
+                Export export = new Export();
+                export.maintenanceToCSV(vehicle.getTitle(), mVehicleHist);
 
                 return true;
 

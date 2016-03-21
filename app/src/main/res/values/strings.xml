@@ -80,11 +80,12 @@
     <string name="error_no_history">No Vehicle History</string>
     <string name="label_date">Date: </string>
     <string name="label_odo">On: </string>
-    <string name="label_search">Search </string>
+    <string name="label_search">Search</string>
     <string name="menu_delete_event">Delete</string>
     <string name="menu_edit_event">Edit</string>
     <string name="menu_hist_sort">Sort By Date</string>
     <string name="menu_hist_search">Search Events</string>
+    <string name="menu_hist_export">Export to CSV</string>
 
     <string name="unit_time"> hrs</string>
 

@@ -15,4 +15,10 @@
         android:title="@string/menu_hist_sort"
         android:icon="@drawable/ic_sort"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_export_csv"
+        android:orderInCategory="3"
+        android:title="@string/menu_hist_export"
+        app:showAsAction="never"/>
 </menu>
