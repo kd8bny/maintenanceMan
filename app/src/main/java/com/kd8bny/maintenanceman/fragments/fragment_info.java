@@ -31,7 +31,6 @@ public class fragment_info extends Fragment {
 
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
-    private RecyclerView.Adapter cardListAdapter;
 
     private Context context;
     private ArrayList<Vehicle> roster;
@@ -64,8 +63,6 @@ public class fragment_info extends Fragment {
         cardList = (RecyclerView) view.findViewById(R.id.cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
-        cardListAdapter = new InfoAdapter(vehicle, vehicleHist);
-        cardList.setAdapter(cardListAdapter);
 
         //fab
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -85,8 +82,7 @@ public class fragment_info extends Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        cardListAdapter = new InfoAdapter(vehicle, vehicleHist);
-        cardList.setAdapter(cardListAdapter);
+        cardList.setAdapter(new InfoAdapter(vehicle, vehicleHist));
     }
 
     @Override
