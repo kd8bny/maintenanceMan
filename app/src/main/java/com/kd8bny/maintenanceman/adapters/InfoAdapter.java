@@ -58,7 +58,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             temp.add(1, new HashMap());
         }
 
-        vehicleInfoArray = temp;
+        vehicleInfoArray = (ArrayList<Hashmap>) temp.clone();
         for (int i = temp.size()-1; i >= 0 ; i--) { //Remove Empty HashMaps
             if (temp.get(i).isEmpty()) {
                 vehicleInfoArray.remove(i);
