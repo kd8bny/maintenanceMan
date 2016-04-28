@@ -11,7 +11,6 @@
 ## TODO
 ### In the works
 - Android wear support
-- Dropboxsync w/ integrity check
 - Maintenace reminders
 - Combining common classes into utils
 
