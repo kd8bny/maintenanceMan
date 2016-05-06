@@ -26,12 +26,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
+import com.kd8bny.maintenanceman.classes.SendToWear;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
@@ -76,6 +78,10 @@ public class fragment_main extends Fragment implements UpdateUI{
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
+
+        //TODO goolge api here
+        GoogleApiClient mGoogleApi = new GoogleApiClient.Builder(mContext);
+        mGoogleApi.
     }
 
     @Override
@@ -305,6 +311,8 @@ public class fragment_main extends Fragment implements UpdateUI{
         roster = new ArrayList<>(new SaveLoadHelper(mContext).load());
         cardListAdapter = new OverviewAdapter(mContext, roster);
         cardList.setAdapter(cardListAdapter);
+
+        new SendToWear()
     }
 
     @Override
