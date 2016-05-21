@@ -41,7 +41,7 @@
     <!-- Add Vehicle Event -->
     <string name="title_add_vehicle_event">Add Event</string>
     <string name="add_vehicle_event">Add Maintenance Task</string>
-    <string name="error_set_vehicle">Please Select Vehicle</string>
+    <string name="error_set_vehicle">Please Vehicle</string>
     <string name="error_field_event">Please Add Event</string>
     <string name="toast_update">History Updated</string>
     <string name="spec_date">Date</string>

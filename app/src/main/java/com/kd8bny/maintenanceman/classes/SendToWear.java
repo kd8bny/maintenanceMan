@@ -26,6 +26,7 @@ public class SendToWear extends Thread{
 
     public void run() {Log.d(TAG, "run?");
         PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WEAR_FILE_PATH);
+        DataMap dataMap = putDataMapRequest.getDataMap();
         putDataMapRequest.getDataMap().putAll(mDataMap);
         PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
         DataApi.DataItemResult result = Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest).await();

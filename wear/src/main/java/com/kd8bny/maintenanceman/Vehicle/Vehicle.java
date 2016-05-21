@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.classes.Vehicle;
+package com.kd8bnyapps.kd8bny.maintenanceman.Vehicle;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Vehicle implements Parcelable{
-    private static final String TAG = "com.kd8bnyapps.kd8bny.maintenanceman.Vehicle";
+    private static final String TAG = "com/kd8bnyapps/kd8bny/maintenanceman/Vehicle";
     public String vehicleType;
     public String refID;
     public String title;

@@ -1,3 +1,5 @@
+package com.kd8bny.maintenanceman.Listeners;
+
 import android.util.Log;
 
 import com.google.android.gms.wearable.DataEvent;
@@ -12,7 +14,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 public class ListenerService extends WearableListenerService {
     private static final String TAG = "wear_lstnr_svc";
 
-    private static final String WEARABLE_DATA_PATH = "/wearable_data";
+    private static final String WEARABLE_DATA_PATH = "/files";
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {

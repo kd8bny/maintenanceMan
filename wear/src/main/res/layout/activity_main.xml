@@ -8,6 +8,6 @@
     android:layout_height="match_parent"
     app:rectLayout="@layout/rect_activity_main"
     app:roundLayout="@layout/round_activity_main"
-    tools:context="com.kd8bnyapps.kd8bny.maintenanceman.MainActivity"
+    tools:context=".Activities.MainActivity"
     tools:deviceIds="wear">
 </android.support.wearable.view.WatchViewStub>
