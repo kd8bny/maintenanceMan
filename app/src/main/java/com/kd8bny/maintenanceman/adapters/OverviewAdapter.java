@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 
 import java.util.ArrayList;

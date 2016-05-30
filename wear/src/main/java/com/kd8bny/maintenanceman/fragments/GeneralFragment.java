@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.Fragments;
+package com.kd8bny.maintenanceman.fragments;
 
 public class GeneralFragment extends InfoFragment {
     private static final String TAG = "gen_frg";

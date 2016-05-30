@@ -22,7 +22,7 @@ import android.widget.CheckBox;
 import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.FleetRosterAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;

@@ -23,8 +23,8 @@ import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.VehicleEventAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicleEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;

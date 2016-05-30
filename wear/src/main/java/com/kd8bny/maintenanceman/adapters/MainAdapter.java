@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.Adapters;
+package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;
@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.kd8bny.maintenanceman.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.R;
 
 import java.util.ArrayList;

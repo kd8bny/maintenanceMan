@@ -8,8 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 import java.util.ArrayList;
 import java.util.HashSet;

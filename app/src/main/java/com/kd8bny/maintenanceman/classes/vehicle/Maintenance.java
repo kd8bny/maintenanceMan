@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.Vehicle;
+package com.kd8bny.maintenanceman.classes.vehicle;
 
 /**
  * Created by kd8bny on 2/13/16.

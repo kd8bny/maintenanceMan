@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.Vehicle;
+package com.kd8bny.maintenanceman.classes.vehicle;
 
 import java.io.Serializable;
 

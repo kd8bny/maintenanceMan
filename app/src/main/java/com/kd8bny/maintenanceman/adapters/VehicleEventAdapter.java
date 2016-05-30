@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 public class VehicleEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "adptr_vhcl_evnt";

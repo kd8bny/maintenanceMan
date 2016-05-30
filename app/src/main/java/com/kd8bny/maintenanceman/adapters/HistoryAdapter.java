@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 import java.util.ArrayList;
 

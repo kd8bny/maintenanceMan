@@ -1,25 +1,12 @@
-package com.kd8bny.maintenanceman.Activities;
+package com.kd8bny.maintenanceman.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.wearable.view.GridViewPager;
-import android.support.wearable.view.WearableListView;
-import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.Wearable;
-import com.kd8bny.maintenanceman.Adapters.InfoGridPagerAdapter;
-import com.kd8bny.maintenanceman.Adapters.MainAdapter;
+import com.kd8bny.maintenanceman.adapters.InfoGridPagerAdapter;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.SaveLoadHelperWear;
-import com.kd8bny.maintenanceman.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 public class InfoActivity extends Activity {
     private static final String TAG = "wear_info";

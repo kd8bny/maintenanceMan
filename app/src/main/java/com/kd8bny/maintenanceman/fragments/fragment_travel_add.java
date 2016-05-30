@@ -21,8 +21,8 @@ import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.TravelEventAdapter;
-import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_datePicker;

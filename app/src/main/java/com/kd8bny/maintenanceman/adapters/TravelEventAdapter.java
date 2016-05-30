@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 
 public class TravelEventAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "adptr_vhcl_evnt";

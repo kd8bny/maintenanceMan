@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,10 +28,8 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.gson.Gson;
 import com.kd8bny.maintenanceman.BuildConfig;
@@ -41,8 +38,7 @@ import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
-import com.kd8bny.maintenanceman.classes.SendToWear;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
@@ -61,7 +57,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 
 public class fragment_main extends Fragment implements UpdateUI,
@@ -348,7 +343,7 @@ public class fragment_main extends Fragment implements UpdateUI,
         }
     }
 
-    public void sort(){
+    private void sort(){
         ArrayList<String> values = new ArrayList<>();
         HashMap<String, Vehicle> sortedRoster = new HashMap<>();
 
@@ -396,9 +391,6 @@ public class fragment_main extends Fragment implements UpdateUI,
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        Log.d(TAG, "watch connected!");
-        //TODO Requires a new thread to avoid blocking the UI
-        //TODO new SendToWear(mGoogleApiClient, WEAR_FILE_PATH, dataMap).start();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -414,7 +406,6 @@ public class fragment_main extends Fragment implements UpdateUI,
             }
         });
         thread.start();
-        Log.d(TAG, "sending stuff");
     }
 
     @Override
@@ -425,7 +416,6 @@ public class fragment_main extends Fragment implements UpdateUI,
         }
     }
 
-    // Placeholders for required connection callbacks
     @Override
     public void onConnectionSuspended(int cause) {}
 

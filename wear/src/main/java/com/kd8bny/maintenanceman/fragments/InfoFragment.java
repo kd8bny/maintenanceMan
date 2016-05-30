@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.Fragments;
+package com.kd8bny.maintenanceman.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kd8bny.maintenanceman.Adapters.InfoItemAdapter;
+import com.kd8bny.maintenanceman.adapters.InfoItemAdapter;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.HashMap;
 

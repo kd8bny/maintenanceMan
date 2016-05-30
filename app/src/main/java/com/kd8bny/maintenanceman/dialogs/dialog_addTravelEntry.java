@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 public class dialog_addTravelEntry extends DialogFragment {

@@ -3,8 +3,7 @@ package com.kd8bny.maintenanceman.classes.legacy;
 import android.content.Context;
 import android.util.Log;
 
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import org.json.JSONArray;
 import org.json.JSONException;

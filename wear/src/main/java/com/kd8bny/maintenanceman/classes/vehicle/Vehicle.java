@@ -1,8 +1,7 @@
-package com.kd8bny.maintenanceman.Vehicle;
+package com.kd8bny.maintenanceman.classes.vehicle;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

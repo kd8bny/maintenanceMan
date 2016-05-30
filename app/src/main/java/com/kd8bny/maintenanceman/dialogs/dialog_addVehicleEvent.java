@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 

@@ -13,7 +13,7 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 
 public class dialog_vehicleHistory extends DialogFragment {

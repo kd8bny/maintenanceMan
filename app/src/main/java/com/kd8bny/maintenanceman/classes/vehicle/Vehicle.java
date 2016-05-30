@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.classes.Vehicle;
+package com.kd8bny.maintenanceman.classes.vehicle;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,21 +1,15 @@
-package com.kd8bny.maintenanceman.Adapters;
+package com.kd8bny.maintenanceman.adapters;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.support.wearable.view.CardFragment;
 import android.support.wearable.view.FragmentGridPagerAdapter;
-import android.view.Gravity;
 
-import com.kd8bny.maintenanceman.Fragments.EngineFragment;
-import com.kd8bny.maintenanceman.Fragments.GeneralFragment;
-import com.kd8bny.maintenanceman.Fragments.InfoFragment;
-import com.kd8bny.maintenanceman.Fragments.OtherFragment;
-import com.kd8bny.maintenanceman.Fragments.PowerTrainFragment;
-import com.kd8bny.maintenanceman.Vehicle.Vehicle;
-
-import java.util.HashMap;
-
+import com.kd8bny.maintenanceman.fragments.EngineFragment;
+import com.kd8bny.maintenanceman.fragments.GeneralFragment;
+import com.kd8bny.maintenanceman.fragments.OtherFragment;
+import com.kd8bny.maintenanceman.fragments.PowerTrainFragment;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 public class InfoGridPagerAdapter extends FragmentGridPagerAdapter {
     private static final String TAG = "wear_grd_pg";
@@ -31,7 +25,7 @@ public class InfoGridPagerAdapter extends FragmentGridPagerAdapter {
         mPages = initPages();
     }
 
-    private Fragment[][] initPages() {//TODO dont gen pages for nullz
+    private Fragment[][] initPages() {
         Fragment[][] PAGES = {
                 {
                         new GeneralFragment(),

@@ -2,7 +2,6 @@ package com.kd8bny.maintenanceman.adapters;
 
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -21,7 +20,7 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.HashMap;

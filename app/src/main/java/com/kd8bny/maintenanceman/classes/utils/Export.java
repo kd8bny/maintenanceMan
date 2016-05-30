@@ -2,15 +2,13 @@ package com.kd8bny.maintenanceman.classes.utils;
 
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
-import com.kd8bny.maintenanceman.classes.Vehicle.Maintenance;
-import com.kd8bny.maintenanceman.classes.Vehicle.Travel;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 

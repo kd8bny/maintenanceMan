@@ -1,7 +1,6 @@
-package com.kd8bny.maintenanceman.Adapters;
+package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.support.wearable.view.WearableListView;
 import android.util.AttributeSet;
 import android.widget.ImageView;

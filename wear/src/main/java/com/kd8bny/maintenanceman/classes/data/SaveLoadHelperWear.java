@@ -1,11 +1,10 @@
-package com.kd8bny.maintenanceman;
+package com.kd8bny.maintenanceman.classes.data;
 
 import android.os.Environment;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.kd8bny.maintenanceman.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.io.BufferedReader;
 import java.io.File;

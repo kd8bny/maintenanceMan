@@ -1,4 +1,4 @@
-package com.kd8bny.maintenanceman.Activities;
+package com.kd8bny.maintenanceman.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,10 +20,10 @@ import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
-import com.kd8bny.maintenanceman.Adapters.MainAdapter;
+import com.kd8bny.maintenanceman.adapters.MainAdapter;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.SaveLoadHelperWear;
-import com.kd8bny.maintenanceman.Vehicle.Vehicle;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelperWear;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
 
