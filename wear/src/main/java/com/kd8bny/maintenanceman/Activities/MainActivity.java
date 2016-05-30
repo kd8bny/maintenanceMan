@@ -27,7 +27,9 @@ import com.kd8bny.maintenanceman.Vehicle.Vehicle;
 
 import java.util.ArrayList;
 
-public class MainActivity extends Activity implements WearableListView.ClickListener{
+public class MainActivity extends Activity
+        implements WearableListView.ClickListener, DataApi.DataListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "wear_main";
 
     private static final String WEAR_FILE_PATH = "/files";
@@ -46,19 +48,8 @@ public class MainActivity extends Activity implements WearableListView.ClickList
         listView.setClickListener(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(@Nullable Bundle bundle) {
-                        Wearable.DataApi.addListener(mGoogleApiClient, onDataChangedListener);
-                    }
-                    @Override
-                    public void onConnectionSuspended(int i) {
-                    }})
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.e(TAG, "wear connection failed :(");
-                    }})
+            .addConnectionCallbacks(this)
+            .addOnConnectionFailedListener(this)
             .addApi(Wearable.API)
             .build();
     }
@@ -83,6 +74,20 @@ public class MainActivity extends Activity implements WearableListView.ClickList
     }
 
     @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Wearable.DataApi.addListener(mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.e(TAG, "wear connection failed :(");
+    }
+
+    @Override
     public void onClick(WearableListView.ViewHolder v) {
         Integer pos = (Integer) v.itemView.getTag();
         Bundle bundle = new Bundle();
@@ -90,21 +95,18 @@ public class MainActivity extends Activity implements WearableListView.ClickList
         startActivity(new Intent(this, InfoActivity.class).putExtra("bundle", bundle));
     }
 
-    //TODO make this a service
-    public DataApi.DataListener onDataChangedListener = new DataApi.DataListener() {
-        @Override
-        public void onDataChanged(DataEventBuffer dataEventBuffer) {
-            for(DataEvent event : dataEventBuffer){
-                if (event.getType() == DataEvent.TYPE_CHANGED &&
-                        event.getDataItem().getUri().getPath().equals(WEAR_FILE_PATH)){
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    new SaveLoadHelperWear().save(dataMapItem.getDataMap().getString("roster"));
-                    onStart();
-                }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        for(DataEvent event : dataEventBuffer){
+            if (event.getType() == DataEvent.TYPE_CHANGED &&
+                    event.getDataItem().getUri().getPath().equals(WEAR_FILE_PATH)){
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                new SaveLoadHelperWear().save(dataMapItem.getDataMap().getString("roster"));
+                onStart();
             }
         }
-    };
-
+    }
 
     @Override
     public void onTopEmptyRegionClick() {
