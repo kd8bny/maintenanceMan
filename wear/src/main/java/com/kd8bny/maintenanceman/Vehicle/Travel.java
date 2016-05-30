@@ -1,4 +1,4 @@
-package com.kd8bnyapps.kd8bny.maintenanceman.Vehicle;
+package com.kd8bny.maintenanceman.Vehicle;
 
 /**
  * Created by kd8bny on 2/13/16.

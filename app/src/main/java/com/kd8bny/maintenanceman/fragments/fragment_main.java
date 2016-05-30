@@ -93,46 +93,10 @@ public class fragment_main extends Fragment implements UpdateUI,
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle connectionHint) {
-                        // Now you can use the Data Layer API
-                        Log.d(TAG, "api connected!");
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WEAR_FILE_PATH);
-                                    DataMap dataMap = putDataMapRequest.getDataMap();
-                                    dataMap.putString("roster", new Gson().toJson(roster));
-                                    Wearable.DataApi.putDataItem(mGoogleApiClient, putDataMapRequest.asPutDataRequest());
-                                } catch (Exception e){
-                                    Log.e(TAG, e.getMessage());
-                                }
-                            }
-                        });
-                        thread.start();
-                        Log.d(TAG, "sending stuff through mgoogapiizzle");
-
-                    }
-                    @Override
-                    public void onConnectionSuspended(int cause) {
-                        Log.v(TAG, "onConnectionSuspended: " + cause);
-                    }})
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(ConnectionResult result) {
-                        Log.e(TAG, "onConnectionFailed: " + result);
-                    }})
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        Log.d(TAG, "onConnectionFailed" + connectionResult);
-                    }
-                })
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
                 .addApi(Wearable.API)
                 .build();
-
     }
 
     @Override
@@ -173,7 +137,7 @@ public class fragment_main extends Fragment implements UpdateUI,
                 Intent intent = new Intent(getActivity(), VehicleActivity.class);
                 Bundle bundle = new Bundle();
                 switch (i) {
-                    case 1: //Add com.kd8bnyapps.kd8bny.maintenanceman.Vehicle
+                    case 1: //Add Vehicle
                         bundle.putInt("caseID", 0);
                         bundle.putParcelableArrayList("roster", roster);
                         bundle.putInt("vehiclePos", -1);
@@ -453,13 +417,12 @@ public class fragment_main extends Fragment implements UpdateUI,
         Log.d(TAG, "sending stuff");
     }
 
-    // Disconnect from the data layer when the Activity stops
     @Override
     public void onStop() {
+        super.onStop();
         if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
-        super.onStop();
     }
 
     // Placeholders for required connection callbacks
