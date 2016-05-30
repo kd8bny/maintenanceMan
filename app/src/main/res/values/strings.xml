@@ -171,6 +171,10 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V3.2.0 30May2016\n\n
+
+        Say welcome to Android wear :)\n
+        Next will be some bug fixes\n\n
         V3.1.5 21Mar2016\n\n
 
         Search Maintenance tasks by event\n
@@ -184,14 +188,5 @@
         Vehicle will again set when adding specific event\n
 
         Many under the hood fixes ;)\n\n
-
-        V3.1.2 7Mar2016\n\n
-
-        Complete rewrite of code\n
-        Add Travel Logs for extensive road trips\n
-        Sort Vehicles by Year, Model, or Type\n
-        Overview card shows last maintenance event\n
-        Beginning support for business vehicles\n
-        \n\n
     </string>
 </resources>
