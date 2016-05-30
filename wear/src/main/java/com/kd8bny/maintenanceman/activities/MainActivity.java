@@ -44,8 +44,8 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.round_activity_main);
         mContext = getApplicationContext();
+
         listView = (WearableListView) findViewById(R.id.wearable_list);
-        listView.setClickListener(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
             .addConnectionCallbacks(this)
@@ -70,6 +70,9 @@ public class MainActivity extends Activity
 
         mGoogleApiClient.connect();
         mRoster = new SaveLoadHelperWear().load();
+        if (!mRoster.isEmpty()) {
+            listView.setClickListener(this);
+        }
         listView.setAdapter(new MainAdapter(getApplicationContext(), mRoster));
     }
 

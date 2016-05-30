@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
 import android.support.wearable.view.WearableListView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.kd8bny.maintenanceman.R;
 import java.util.ArrayList;
 
 public class MainAdapter extends WearableListView.Adapter {
+    private static final String TAG = "mainadp";
     private final Context mContext;
     private final LayoutInflater mInflater;
     private ArrayList<Vehicle> mRoster = new ArrayList<>();
@@ -42,35 +44,40 @@ public class MainAdapter extends WearableListView.Adapter {
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
         TextView view = itemHolder.textView;
         holder.itemView.setTag(i);
+        Log.d(TAG, mRoster+"");
         if(!mRoster.isEmpty()) {
-        Vehicle vehicle = mRoster.get(i);
-        switch (vehicle.getVehicleType()){
-            case "Automobile":
-                itemHolder.mImageView.setImageResource(R.drawable.np_car);
-                break;
 
-            case "Motorcycle":
-                itemHolder.mImageView.setImageResource(R.drawable.np_motorcycle);
-                break;
+            Vehicle vehicle = mRoster.get(i);
+            switch (vehicle.getVehicleType()){
+                case "Automobile":
+                    itemHolder.mImageView.setImageResource(R.drawable.np_car);
+                    break;
 
-            case "Utility":
-                itemHolder.mImageView.setImageResource(R.drawable.np_utility);
-                break;
+                case "Motorcycle":
+                    itemHolder.mImageView.setImageResource(R.drawable.np_motorcycle);
+                    break;
 
-            case "Marine":
-                itemHolder.mImageView.setImageResource(R.drawable.np_marine);
-                break;
+                case "Utility":
+                    itemHolder.mImageView.setImageResource(R.drawable.np_utility);
+                    break;
 
-            case "Lawn and Garden":
-                itemHolder.mImageView.setImageResource(R.drawable.np_tractor);
-                break;
+                case "Marine":
+                    itemHolder.mImageView.setImageResource(R.drawable.np_marine);
+                    break;
 
-            case "Trailer":
-                itemHolder.mImageView.setImageResource(R.drawable.np_trailer);
-                break;
-        }
-            view.setText(vehicle.getTitle());
-        }
+                case "Lawn and Garden":
+                    itemHolder.mImageView.setImageResource(R.drawable.np_tractor);
+                    break;
+
+                case "Trailer":
+                    itemHolder.mImageView.setImageResource(R.drawable.np_trailer);
+                    break;
+            }
+                view.setText(vehicle.getTitle());
+            }else {
+            Log.d(TAG, mRoster+"");
+                view.setText(mContext.getString(R.string.error_data));
+            }
 
         //adapterViewHolder.vRect.setBackgroundColor(color);
         //GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();

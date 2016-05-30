@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Maintenance Man</string>
+    <string name="error_data">hmmm not sync\'d yet</string>
     <string name="header_general">General</string>
     <string name="header_engine">Engine</string>
     <string name="header_power_train">Power Train</string>
