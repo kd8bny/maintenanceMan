@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Maintenance Man</string>
-    <string name="title">Hello Round World!</string>
-    <string name="body">Hello Square Worl!</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="header_general">General</string>
+    <string name="header_engine">Engine</string>
+    <string name="header_power_train">Power Train</string>
+    <string name="header_other">Other</string>
 </resources>

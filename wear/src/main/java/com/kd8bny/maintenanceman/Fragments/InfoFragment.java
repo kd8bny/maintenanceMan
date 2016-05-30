@@ -10,6 +10,7 @@ import android.support.wearable.view.WatchViewStub;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.Adapters.InfoItemAdapter;
 import com.kd8bny.maintenanceman.R;
@@ -23,6 +24,7 @@ public class InfoFragment extends Fragment {
     protected Context mContext;
     protected Vehicle mVehicle;
     protected HashMap<String, String> mCardInfo;
+    protected int mCase;
 
     public InfoFragment() {}
 
@@ -49,6 +51,23 @@ public class InfoFragment extends Fragment {
         WatchViewStub stub = (WatchViewStub) view.findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override public void onLayoutInflated(WatchViewStub stub) {
+
+                TextView vTitle = (TextView) view.findViewById(R.id.title);
+                switch (mCase){
+                    case 0:
+                        vTitle.setText(mContext.getString(R.string.header_general));
+                        break;
+                    case 1:
+                        vTitle.setText(mContext.getString(R.string.header_engine));
+                        break;
+                    case 2:
+                        vTitle.setText(mContext.getString(R.string.header_power_train));
+                        break;
+                    case 3:
+                        vTitle.setText(mContext.getString(R.string.header_other));
+                        break;
+                }
+
                 RecyclerView cardList = (RecyclerView) view.findViewById(R.id.infoRecycler);
                 LinearLayoutManager cardMan = new LinearLayoutManager(getActivity());
                 cardMan.setReverseLayout(true);

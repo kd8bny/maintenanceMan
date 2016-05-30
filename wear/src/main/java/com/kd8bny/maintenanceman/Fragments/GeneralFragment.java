@@ -7,6 +7,7 @@ public class GeneralFragment extends InfoFragment {
 
     @Override
     public void dataInit(){
+        mCase = 0;
         mCardInfo = mVehicle.getGeneralSpecs();
     }
 }

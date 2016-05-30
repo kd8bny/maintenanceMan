@@ -15,11 +15,10 @@
 
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
-        android:maxLines="1"
-        android:maxEms="7"
-        android:minEms="5"
+        android:maxLines="2"
+        android:maxEms="5"
+        android:minEms="1"
 
-        android:text="label"
         android:textColor="@color/header"/>
 
     <TextView
@@ -32,10 +31,9 @@
 
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
-        android:maxLines="1"
-        android:maxEms="7"
-        android:minEms="5"
+        android:maxLines="2"
+        android:maxEms="5"
+        android:minEms="1"
 
-        android:text="value"
         android:textColor="@color/header"/>
 </RelativeLayout>

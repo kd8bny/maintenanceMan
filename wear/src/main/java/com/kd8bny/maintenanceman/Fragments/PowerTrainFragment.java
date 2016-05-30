@@ -7,6 +7,7 @@ public class PowerTrainFragment extends InfoFragment {
 
     @Override
     public void dataInit(){
+        mCase = 2;
         mCardInfo = mVehicle.getPowerTrainSpecs();
     }
 }
