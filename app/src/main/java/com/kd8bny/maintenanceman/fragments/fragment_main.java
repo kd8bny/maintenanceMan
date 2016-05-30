@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -26,12 +27,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
+import com.google.android.gms.wearable.Wearable;
+import com.google.gson.Gson;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
+import com.kd8bny.maintenanceman.classes.SendToWear;
 import com.kd8bny.maintenanceman.classes.Vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
@@ -51,14 +61,19 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 
-public class fragment_main extends Fragment implements UpdateUI{
-    private static final String TAG = "frg_ovrvw";
+public class fragment_main extends Fragment implements UpdateUI,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    private static final String TAG = "frg_main";
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+    private static final String WEAR_FILE_PATH = "/files";
 
     private Context mContext;
+    private GoogleApiClient mGoogleApiClient;
+
     private SharedPreferences sharedPreferences;
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
@@ -76,6 +91,12 @@ public class fragment_main extends Fragment implements UpdateUI{
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Wearable.API)
+                .build();
     }
 
     @Override
@@ -297,6 +318,8 @@ public class fragment_main extends Fragment implements UpdateUI{
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
             }
         }
+
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -370,6 +393,44 @@ public class fragment_main extends Fragment implements UpdateUI{
         cardListAdapter = new OverviewAdapter(mContext, roster);
         cardList.setAdapter(cardListAdapter);
     }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        Log.d(TAG, "watch connected!");
+        //TODO Requires a new thread to avoid blocking the UI
+        //TODO new SendToWear(mGoogleApiClient, WEAR_FILE_PATH, dataMap).start();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WEAR_FILE_PATH);
+                    DataMap dataMap = putDataMapRequest.getDataMap();
+                    dataMap.putLong("time", System.currentTimeMillis());
+                    dataMap.putString("roster", new Gson().toJson(roster));
+                    Wearable.DataApi.putDataItem(mGoogleApiClient, putDataMapRequest.asPutDataRequest());
+                } catch (Exception e){
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        });
+        thread.start();
+        Log.d(TAG, "sending stuff");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    // Placeholders for required connection callbacks
+    @Override
+    public void onConnectionSuspended(int cause) {}
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {}
 
     public void onUpdate(Boolean doUpdate){
         if (doUpdate) {

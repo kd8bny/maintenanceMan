@@ -2,7 +2,7 @@
 <manifest package="com.kd8bny.maintenanceman"
           xmlns:android="http://schemas.android.com/apk/res/android"
           android:versionCode="68"
-          android:versionName="3.1.5">
+          android:versionName="3.1.5.0001">
 
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -21,6 +21,10 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version">
+            </meta-data>
         </activity>
         <activity android:name=".activities.VehicleActivity"
               android:label="@string/title_view_pager"

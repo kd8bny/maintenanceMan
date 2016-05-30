@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/primary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MainActivity"
+    tools:deviceIds="wear_round">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        app:layout_box="left|bottom|right">
+
+        <android.support.wearable.view.WearableListView
+            android:id="@+id/wearable_list"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+    </FrameLayout>
+</android.support.wearable.view.BoxInsetLayout>

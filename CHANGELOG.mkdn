@@ -8,7 +8,7 @@ then import it into your favorite spreadsheet program
 V3.1.4 15Mar2016
 
 Bug fixes: Add/editing will again populate values\n
-Vehicle will again set when adding specific event\n
+com.kd8bnyapps.kd8bny.maintenanceman.Vehicle will again set when adding specific event\n
 
 Many under the hood fixes ;)
         
@@ -144,12 +144,12 @@ Delete feature for new fields
 NEW floating action button!! Try it out!
 Added a "Lawn and Garden" Category
 Fixed icons for Marine and Motorcycle Categories
-Switched Vehicle Info and History
+Switched com.kd8bnyapps.kd8bny.maintenanceman.Vehicle Info and History
 
 V1.5.0
 
 Styles and Layout fixes all over
-NEW!! Vehicle info tool bar
+NEW!! com.kd8bnyapps.kd8bny.maintenanceman.Vehicle info tool bar
 NEW!! History views
 NEW!!! Donate option! (App still remains free)
 Engine spec is replaced by plates in overview
