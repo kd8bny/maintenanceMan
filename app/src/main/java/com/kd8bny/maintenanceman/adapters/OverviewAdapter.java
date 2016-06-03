@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
+        Log.d(TAG,mRoster+"");
         if(!mRoster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
             Vehicle vehicle = mRoster.get(i);
@@ -114,7 +116,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
         protected ImageView vCarPic;
         protected ImageView vCarPicBack;
         protected TextView vTitle;
-        private TextView vLastLabel;
+        protected TextView vLastLabel;
         protected TextView vEvent;
         protected TextView vOdo;
 

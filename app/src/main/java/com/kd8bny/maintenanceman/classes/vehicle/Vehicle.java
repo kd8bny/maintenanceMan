@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Vehicle implements Parcelable{
-    private static final String TAG = "com.kd8bnyapps.kd8bny.maintenanceman.Vehicle";
+    private static final String TAG = "Vehicle";
     public String vehicleType;
     public String refID;
     public String title;

@@ -24,7 +24,7 @@ public class BackupRestoreHelper implements AsyncResponse {
         if (!cloudExists.isEmpty()) {
             switch (cloudDefault) {
                 case "dropbox":
-                    mdropboxHelper = new DropboxHelper(context, action, force);
+                    mdropboxHelper = new DropboxHelper(context);
                     mdropboxHelper.listener = this;
                     mdropboxHelper.execute();
 

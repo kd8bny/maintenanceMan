@@ -39,6 +39,7 @@ dependencies {
     compile 'com.google.android.support:wearable:1.4.0'
     compile 'com.google.android.gms:play-services-wearable:8.4.0'
 
+    compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.clans:fab:1.6.0'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'

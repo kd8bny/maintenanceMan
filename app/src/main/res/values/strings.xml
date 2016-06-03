@@ -67,6 +67,10 @@
     <string name="message_donate">Thank you for your interest in my app :) Any donation would be appreciated</string>
     <string name="amount_sm">Buy me a Beer</string>
 
+    <!-- Dropbox -->
+    <string name="fleet_roster_hash">frhash</string>
+    <string name="vehicle_log_hash">vlhash</string>
+
     <!-- Edit -->
     <string name="title_edit">Edit Vehicle</string>
 

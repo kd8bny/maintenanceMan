@@ -13,6 +13,9 @@ import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.data.BackupRestoreHelper;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+
+import java.io.File;
 
 
 public class fragment_settings_dbx extends PreferenceFragment{
@@ -20,7 +23,8 @@ public class fragment_settings_dbx extends PreferenceFragment{
 
     private DropboxAPI<AndroidAuthSession> mDBApi;
 
-    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+    private static final String FILE_NAME = "fleetRoster.json";
     private Context context;
 
     public fragment_settings_dbx() {
@@ -41,7 +45,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
 
-        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+        mDBApi = new DropboxAPI<>(session);
 
         if (getActivity().getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).getString(getString(R.string.pref_key_dropbox), null) != null) {
         }
@@ -50,9 +54,6 @@ public class fragment_settings_dbx extends PreferenceFragment{
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 mDBApi.getSession().startOAuth2Authentication(getActivity());
-
-                BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
-                mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", true);
 
                 return true;
             }
@@ -84,6 +85,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
     public void onResume(){
         super.onResume();
         if(mDBApi.getSession().authenticationSuccessful()){
+            Log.d(TAG, "done auth");
             try{
                 mDBApi.getSession().finishAuthentication();
 
@@ -92,6 +94,23 @@ public class fragment_settings_dbx extends PreferenceFragment{
                 SharedPreferences.Editor editor= sharedPreferences.edit();
                 editor.putString(getString(R.string.pref_key_dropbox), accessToken);
                 editor.apply();
+
+
+                /*File file = new File(context.getFilesDir() + "/" + FILE_NAME);
+                if ((new SaveLoadHelper(getActivity().getApplicationContext()).load()).isEmpty()){
+                    BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
+                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "restore", true);
+                }else{
+                    BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
+                    mbackupRestoreHelper.startAction(getActivity().getApplicationContext(), "backup", true);
+                }*/
+
+                /*PackageManager packageManager = context.getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = IntentCompat.makeRestartActivityTask(componentName);
+                context.startActivity(mainIntent);
+                System.exit(0);*/
 
             } catch (IllegalStateException e) {
                 Log.i("DbAuthLog", "DROPBOX: Error authenticating", e);

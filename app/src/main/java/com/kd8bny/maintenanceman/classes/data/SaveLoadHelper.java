@@ -39,7 +39,7 @@ public class SaveLoadHelper {
 
         mbackupRestoreHelper = new BackupRestoreHelper();
 
-        sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
+        sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         int oldVersion = sharedPreferences.getInt("fleetRosterDBVersion", -1);
         if (DB_VERSION > oldVersion){
             onUpgrade(oldVersion);
