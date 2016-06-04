@@ -175,7 +175,7 @@ public class fragment_main extends Fragment implements SyncFinished,
                                 .putExtra(Intent.EXTRA_EMAIL, new String[]{ mContext.getString(R.string.to) })
                                 .putExtra(Intent.EXTRA_SUBJECT, mContext.getString(R.string.subject))
                                 .putExtra(Intent.EXTRA_TEXT, mContext.getString(R.string.body));
-                        
+
                         startActivity(Intent.createChooser(contactIntent, mContext.getString(R.string.action)));
 
                         return true;
