@@ -67,10 +67,6 @@
     <string name="message_donate">Thank you for your interest in my app :) Any donation would be appreciated</string>
     <string name="amount_sm">Buy me a Beer</string>
 
-    <!-- Dropbox -->
-    <string name="fleet_roster_hash">frhash</string>
-    <string name="vehicle_log_hash">vlhash</string>
-
     <!-- Edit -->
     <string name="title_edit">Edit Vehicle</string>
 
@@ -175,6 +171,11 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V3.2.1 4June2016\n\n
+
+        Fix that nasty dropbox bug. No longer will you FC close on start.\n
+        Sorry to anyone who experienced this\n\n
+
         V3.2.0 30May2016\n\n
 
         Say welcome to Android wear :)\n
