@@ -123,6 +123,7 @@ public class fragment_main extends Fragment implements SyncFinished,
                         new PrimaryDrawerItem().withName(R.string.menu_add_business).withIcon(R.drawable.ic_speedo_blk),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(R.string.title_settings),
+                        new SecondaryDrawerItem().withName(R.string.title_contact),
                         new SecondaryDrawerItem().withName(R.string.title_donate),
                         new SecondaryDrawerItem().withName(R.string.drawer_view_community));
 
@@ -168,7 +169,19 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 6: //Donate
+                    case 6: //Contact Me
+                        Uri uri = Uri.parse("mailto:" + mContext.getString(R.string.to))
+                                .buildUpon()
+                                .appendQueryParameter("subject", mContext.getString(R.string.subject))
+                                .appendQueryParameter("body", mContext.getString(R.string.body))
+                                .build();
+
+                        Intent contactIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                        startActivity(Intent.createChooser(contactIntent, mContext.getString(R.string.action)));
+
+                        return true;
+
+                    case 7: //Donate
                         FragmentManager fm = getFragmentManager();
 
                         dialog_donate dialog_donate = new dialog_donate();
@@ -177,7 +190,7 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 7: //Community
+                    case 8: //Community
                         Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
                         Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
                         startActivity(gplusIntent);
