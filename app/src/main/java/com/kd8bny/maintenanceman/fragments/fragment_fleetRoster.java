@@ -35,7 +35,7 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class fragment_fleetRoster extends Fragment implements SyncFinished{
+public class fragment_fleetRoster extends Fragment {
     private static final String TAG = "frg_fltRstr";
 
     private Context mContext;
@@ -250,7 +250,7 @@ public class fragment_fleetRoster extends Fragment implements SyncFinished{
                 vehicle.setOtherSpecs(otherSpecs);
                 vehicle.setBusiness(businessVal.isChecked());
 
-                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, this);
+                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
                 if (vehiclePos != -1) {
                     if (!vehicle.equals(roster.get(vehiclePos))) {
@@ -276,12 +276,11 @@ public class fragment_fleetRoster extends Fragment implements SyncFinished{
                 builder.setCancelable(true);
                 builder.setTitle("Are you sure you would like to delete " + vehicle.getTitle() + "?");
                 builder.setNegativeButton("No", null);
-                final SyncFinished syncFinished = this;
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         VehicleLogDBHelper.getInstance(mContext).purgeVehicle(vehicle.getRefID());
 
-                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, syncFinished);
+                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
                         ArrayList<Vehicle> temp = saveLoadHelper.load();
                         temp.remove(vehiclePos);
                         saveLoadHelper.save(temp);
@@ -351,9 +350,6 @@ public class fragment_fleetRoster extends Fragment implements SyncFinished{
         allSpecs.remove(i);
 
         onResume();
-    }
-
-    public void onDownloadComplete(Boolean doUpdate){
     }
 }
 

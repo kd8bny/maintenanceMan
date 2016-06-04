@@ -66,13 +66,17 @@ public class SaveLoadHelper {
             e.printStackTrace();
         }
 
-        mbackupRestoreHelper.startAction(mContext, mSyncFinished);
+        if (mSyncFinished != null) {
+            mbackupRestoreHelper.startAction(mContext, mSyncFinished);
+        }
 
         return true;
     }
 
     public ArrayList<Vehicle> load(){
-        mbackupRestoreHelper.startAction(mContext, mSyncFinished);
+        if (mSyncFinished != null) {
+            mbackupRestoreHelper.startAction(mContext, mSyncFinished);
+        }
 
         File file = new File(FILE_LOCATION);
         Gson gson = new Gson();
