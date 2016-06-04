@@ -15,9 +15,12 @@ import com.google.common.io.Files;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.interfaces.AsyncResponse;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,19 +37,19 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     public AsyncResponse listener = null;
     private DropboxAPI<AndroidAuthSession> mDBApi;
     private Context mContext;
-    private SharedPreferences sharedPreferences;
 
-    private final String FLEETROSTER = "fleetRoster.json";
-    private final String VEHICLELOG = "vehicleLog.db";
-    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-    private final String FLEETROSTER_MD5 = "d751713988987e9331980363e24189ce";
-    private final String VEHICLELOG_MD5 = "db9b2415f74b936d64c4a5c82aef9e13";
-
+    private static final int sTimeDifference = 5000; //ms
+    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+    private static final String FLEETROSTER = "/fleetRoster.json";
+    private static final String VEHICLELOG = "/vehicleLog.db";
+    private static final String FLEETROSTER_MD5 = "/fleetRoster.md5";
+    private static final String VEHICLELOG_MD5 = "/vehicleLog.md5";
+    private static final String FLEETROSTER_EMPTY_MD5 = "d751713988987e9331980363e24189ce";
+    private static final String VEHICLELOG_EMPTY_MD5 = "db9b2415f74b936d64c4a5c82aef9e13";
     private Boolean filesUpdated = false;
 
     public DropboxHelper(Context context) {
         mContext = context;
-        sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
         String APP_KEY =  mContext.getResources().getString(R.string.dropboxKey);
         String APP_SECRET = mContext.getResources().getString(R.string.dropboxSecret);
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
@@ -64,57 +67,48 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params){
-        String frHash = sharedPreferences.getString(mContext.getString(R.string.fleet_roster_hash), FLEETROSTER_MD5);
-
         try {
-            File fleetRoster = new File(mContext.getFilesDir() + "/" + FLEETROSTER);
+            File fleetRoster = new File(mContext.getFilesDir() + FLEETROSTER);
             HashCode hc = Files.hash(fleetRoster, Hashing.md5());
 
-            if (hc.toString().equals(FLEETROSTER_MD5)){
+            if (hc.toString().equals(FLEETROSTER_EMPTY_MD5)){
                 download(FLEETROSTER, fleetRoster);
             }else{
-                sync(fleetRoster, hc.toString(), frHash, FLEETROSTER);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(mContext.getString(R.string.fleet_roster_hash), hc.toString());
-                editor.apply();
+                download(FLEETROSTER_MD5, new File(mContext.getFilesDir() + FLEETROSTER_MD5));
+                sync(fleetRoster, hc.toString(), FLEETROSTER, FLEETROSTER_MD5);
             }
         }catch (IOException e){}
 
-        String vlHash = sharedPreferences.getString(mContext.getString(R.string.vehicle_log_hash), VEHICLELOG_MD5);
-
         try {
-            File vehicleLog = new File(mContext.getDatabasePath(VEHICLELOG).toString());
+            File vehicleLog = new File(VehicleLogDBHelper.getInstance(mContext).getReadableDatabase().getPath());
             HashCode hc = Files.hash(vehicleLog, Hashing.md5());
 
-            if (hc.toString().equals(VEHICLELOG_MD5)){
-                VehicleLogDBHelper.getInstance(mContext).getReadableDatabase();
-                vehicleLog = new File(mContext.getDatabasePath(VEHICLELOG).toString());
+            if (hc.toString().equals(VEHICLELOG_EMPTY_MD5)){
                 download(VEHICLELOG, vehicleLog);
             }else{
-                sync(vehicleLog , hc.toString(), vlHash, VEHICLELOG);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(mContext.getString(R.string.vehicle_log_hash), hc.toString());
-                editor.apply();
+                download(VEHICLELOG_MD5, new File(mContext.getFilesDir() + VEHICLELOG_MD5));
+                sync(vehicleLog , hc.toString(), VEHICLELOG, VEHICLELOG_MD5);
             }
         }catch (IOException e){}
 
         return null;
     }
 
-    private boolean sync(File local, String hash, String oldHash, String REMOTE){
+    private boolean sync(File local, String localHash, String REMOTE, String remoteHash){
         try {
             SimpleDateFormat dbxDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            Date remoteDate = dbxDateFormat.parse(mDBApi.metadata("/" + REMOTE, 1, null, false, null).modified);
+            Date remoteDate = dbxDateFormat.parse(mDBApi.metadata(REMOTE, 1, null, false, null).modified);
             Date localDate = new Date(local.lastModified());
             long timeDiff = Math.abs(remoteDate.getTime() - localDate.getTime());
 
-            if (!hash.equals(oldHash)) {
-                if (timeDiff > 5000) {
+            if (!localHash.equals(readMD5(remoteHash))) {
+                if (timeDiff > sTimeDifference) {
                     if (localDate.before(remoteDate)) {
                         download(REMOTE, local);
                         Log.v(TAG, "Replacing local " + local.getName() + remoteDate + " >> " + localDate);
                     } else {
                         upload(local, REMOTE);
+                        upload(writeMD5(mContext.getFilesDir() + remoteHash, localHash), remoteHash);
                         Log.v(TAG, "Replacing remote " + local.getName() + localDate + " >> " + remoteDate);
                     }
 
@@ -134,7 +128,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
          **/
         try {
             FileInputStream fis = new FileInputStream(local);
-            mDBApi.putFileOverwrite("/" + REMOTE, fis, local.length(), null);
+            mDBApi.putFileOverwrite(REMOTE, fis, local.length(), null);
         } catch (IOException | DropboxException e) {
             e.printStackTrace(); //TODO log dbx
             return false;
@@ -146,12 +140,48 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private Boolean download(String REMOTE, File local){
         try {
             FileOutputStream fos = new FileOutputStream(local);
-            DropboxAPI.DropboxFileInfo ifInfo = mDBApi.getFile("/" + REMOTE, null, fos, null);
+            DropboxAPI.DropboxFileInfo ifInfo = mDBApi.getFile(REMOTE, null, fos, null);
         } catch (IOException | DropboxException e){
             e.printStackTrace();
             return false;
         }
 
         return true;
+    }
+    
+    private File writeMD5(String name, String md5){ //TODO move to utils
+        File file = new File(name);
+        try {
+            FileWriter fileWriter = new FileWriter(file, false); //no append
+
+            fileWriter.write(md5);
+            fileWriter.flush();
+            fileWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
+    private String readMD5(String name){
+        File file = new File(mContext.getFilesDir() + name);
+        String md5 = "";
+        if (file.isFile() && file.canRead()) {
+            try {
+                BufferedReader buffReader = new BufferedReader(new FileReader(file));
+                StringBuffer stringBuffer = new StringBuffer();
+
+                while ((md5 = buffReader.readLine()) != null) {
+                    stringBuffer.append(md5);
+                }
+                md5 = stringBuffer.toString();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return md5;
     }
 }
