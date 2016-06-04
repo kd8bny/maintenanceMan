@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,11 +23,12 @@ import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class fragment_info extends Fragment {
+public class fragment_info extends Fragment implements SyncFinished {
     private static final String TAG = "frgmnt_inf";
 
     private RecyclerView cardList;
@@ -116,11 +118,11 @@ public class fragment_info extends Fragment {
                         break;
                 }
                 roster.set(vehiclePos, vehicle);
-                new SaveLoadHelper(context).save(roster);
+                new SaveLoadHelper(context, this).save(roster);
 
             case(90):
                 //Saved
-                roster = new SaveLoadHelper(context).load();
+                roster = new SaveLoadHelper(context, this).load();
                 vehicle = roster.get(vehiclePos);
                 break;
 
@@ -157,6 +159,12 @@ public class fragment_info extends Fragment {
 
             default:
                 return false;
+        }
+    }
+
+    public void onDownloadComplete(Boolean doUpdate){
+        if (doUpdate) {
+            Log.d(TAG, "aysnc respoen");
         }
     }
 }

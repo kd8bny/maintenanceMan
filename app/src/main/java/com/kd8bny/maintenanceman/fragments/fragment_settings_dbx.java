@@ -58,7 +58,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
                 return true;
             }
         });
-        backupButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        /*backupButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 BackupRestoreHelper mbackupRestoreHelper = new BackupRestoreHelper();
@@ -78,7 +78,7 @@ public class fragment_settings_dbx extends PreferenceFragment{
                 Snackbar.make(getActivity().findViewById(R.id.fragmentContainer_settings), getString(R.string.pref_toast_dropbox_restore), Snackbar.LENGTH_SHORT).show();
                 return true;
             }
-        });
+        });*/
     }
 
     @Override

@@ -1,5 +1,5 @@
 package com.kd8bny.maintenanceman.interfaces;
 
-public interface AsyncResponse {
+public interface SyncFinished {
         void onDownloadComplete(Boolean isComplete);
 }

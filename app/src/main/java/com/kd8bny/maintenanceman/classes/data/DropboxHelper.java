@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.classes.data;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,7 +12,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.interfaces.AsyncResponse;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,13 +27,13 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * rv3
+ * v3
  **/
 
 public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String TAG = "dbxHlpr";
 
-    public AsyncResponse listener = null;
+    public SyncFinished listener = null;
     private DropboxAPI<AndroidAuthSession> mDBApi;
     private Context mContext;
 
@@ -62,7 +61,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String results){
-        listener.onDownloadComplete(filesUpdated); //Fix this at fragment level
+        listener.onDownloadComplete(filesUpdated);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
         return null;
     }
 
-    private boolean sync(File local, String localHash, String REMOTE, String remoteHash){
+    private void sync(File local, String localHash, String REMOTE, String remoteHash){
         try {
             SimpleDateFormat dbxDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
             Date remoteDate = dbxDateFormat.parse(mDBApi.metadata(REMOTE, 1, null, false, null).modified);
@@ -105,21 +104,18 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
                 if (timeDiff > sTimeDifference) {
                     if (localDate.before(remoteDate)) {
                         download(REMOTE, local);
+                        filesUpdated = true;
                         Log.v(TAG, "Replacing local " + local.getName() + remoteDate + " >> " + localDate);
                     } else {
                         upload(local, REMOTE);
                         upload(writeMD5(mContext.getFilesDir() + remoteHash, localHash), remoteHash);
                         Log.v(TAG, "Replacing remote " + local.getName() + localDate + " >> " + remoteDate);
                     }
-
-                    return true;
                 }
             }
         }catch (ParseException | DropboxException e){
             e.printStackTrace();
         }
-
-        return false;
     }
 
     private Boolean upload(File local, String REMOTE){
@@ -148,7 +144,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
 
         return true;
     }
-    
+
     private File writeMD5(String name, String md5){ //TODO move to utils
         File file = new File(name);
         try {

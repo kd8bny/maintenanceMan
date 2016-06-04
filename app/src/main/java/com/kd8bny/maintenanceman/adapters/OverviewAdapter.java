@@ -54,7 +54,6 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
 
     @Override
     public void onBindViewHolder(AdapterViewHolder adapterViewHolder, int i) {
-        Log.d(TAG,mRoster+"");
         if(!mRoster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
             Vehicle vehicle = mRoster.get(i);

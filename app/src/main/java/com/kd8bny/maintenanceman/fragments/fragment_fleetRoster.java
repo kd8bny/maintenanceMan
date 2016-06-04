@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,13 +28,14 @@ import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicle;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class fragment_fleetRoster extends Fragment {
+public class fragment_fleetRoster extends Fragment implements SyncFinished{
     private static final String TAG = "frg_fltRstr";
 
     private Context mContext;
@@ -248,7 +250,7 @@ public class fragment_fleetRoster extends Fragment {
                 vehicle.setOtherSpecs(otherSpecs);
                 vehicle.setBusiness(businessVal.isChecked());
 
-                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext);
+                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, this);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
                 if (vehiclePos != -1) {
                     if (!vehicle.equals(roster.get(vehiclePos))) {
@@ -274,11 +276,12 @@ public class fragment_fleetRoster extends Fragment {
                 builder.setCancelable(true);
                 builder.setTitle("Are you sure you would like to delete " + vehicle.getTitle() + "?");
                 builder.setNegativeButton("No", null);
+                final SyncFinished syncFinished = this;
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         VehicleLogDBHelper.getInstance(mContext).purgeVehicle(vehicle.getRefID());
 
-                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext);
+                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, syncFinished);
                         ArrayList<Vehicle> temp = saveLoadHelper.load();
                         temp.remove(vehiclePos);
                         saveLoadHelper.save(temp);
@@ -348,6 +351,9 @@ public class fragment_fleetRoster extends Fragment {
         allSpecs.remove(i);
 
         onResume();
+    }
+
+    public void onDownloadComplete(Boolean doUpdate){
     }
 }
 

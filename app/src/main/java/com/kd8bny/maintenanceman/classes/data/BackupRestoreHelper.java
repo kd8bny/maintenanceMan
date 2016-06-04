@@ -4,20 +4,21 @@ import android.content.Context;
 import android.util.Log;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.interfaces.AsyncResponse;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 
-public class BackupRestoreHelper implements AsyncResponse {
+public class BackupRestoreHelper {
     private static final String TAG = "bckp_rstr_hlpr";
 
-    public UpdateUI updateUI = null;
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+    private SyncFinished mSyncFinished;
     private DropboxHelper mdropboxHelper;
 
     public BackupRestoreHelper(){}
 
-    public void startAction(Context context, String action, Boolean force){
+    public void startAction(Context context, SyncFinished syncFinished){
         String cloudDefault = context.getString(R.string.pref_cloud_default);
+        mSyncFinished = syncFinished;
         String cloudExists = context.getApplicationContext()
                 .getSharedPreferences(SHARED_PREF, 0).getString(cloudDefault, "");
 
@@ -25,7 +26,7 @@ public class BackupRestoreHelper implements AsyncResponse {
             switch (cloudDefault) {
                 case "dropbox":
                     mdropboxHelper = new DropboxHelper(context);
-                    mdropboxHelper.listener = this;
+                    mdropboxHelper.listener = mSyncFinished;
                     mdropboxHelper.execute();
 
                     break;
@@ -40,12 +41,6 @@ public class BackupRestoreHelper implements AsyncResponse {
             }
         }else{
             Log.i(TAG, "Cloud source not set up");
-        }
-    }
-
-    public void onDownloadComplete(Boolean isComplete){
-        if (updateUI != null) {
-            updateUI.onUpdate(isComplete);
         }
     }
 }

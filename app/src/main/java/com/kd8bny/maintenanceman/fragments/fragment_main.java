@@ -42,6 +42,7 @@ import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
@@ -60,7 +61,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class fragment_main extends Fragment implements UpdateUI,
+public class fragment_main extends Fragment implements SyncFinished,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "frg_main";
 
@@ -321,7 +322,7 @@ public class fragment_main extends Fragment implements UpdateUI,
     @Override
     public void onResume() {
         super.onResume();
-        roster = new SaveLoadHelper(mContext).load();
+        roster = new SaveLoadHelper(mContext, this).load();
         cardListAdapter = new OverviewAdapter(mContext, roster);
         cardList.setAdapter(cardListAdapter);
     }
@@ -431,12 +432,10 @@ public class fragment_main extends Fragment implements UpdateUI,
         }
     }
 
-    public void onUpdate(Boolean doUpdate){
-        if (doUpdate) {
-            roster = new ArrayList<>(new SaveLoadHelper(mContext).load());
-            cardListAdapter = new OverviewAdapter(mContext, roster);
-            cardList.setAdapter(cardListAdapter);
+    public void onDownloadComplete(Boolean isComplete){
+        if (isComplete) {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
+            onResume();
         }
     }
 }

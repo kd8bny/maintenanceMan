@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.legacy.FleetRosterJSONHelper;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,6 +27,7 @@ public class SaveLoadHelper {
     public static final int DB_VERSION = 2; //v56 2(v57)
 
     private BackupRestoreHelper mbackupRestoreHelper;
+    private SyncFinished mSyncFinished;
 
     private SharedPreferences sharedPreferences;
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
@@ -33,8 +35,9 @@ public class SaveLoadHelper {
     private static String FILE_LOCATION;
     private Context mContext;
 
-    public SaveLoadHelper(Context context){
+    public SaveLoadHelper(Context context, SyncFinished syncFinished){
         mContext = context;
+        mSyncFinished = syncFinished;
         FILE_LOCATION = context.getFilesDir() + "/" + FILE_NAME;
 
         mbackupRestoreHelper = new BackupRestoreHelper();
@@ -63,13 +66,13 @@ public class SaveLoadHelper {
             e.printStackTrace();
         }
 
-        mbackupRestoreHelper.startAction(mContext, "backup", false);
+        mbackupRestoreHelper.startAction(mContext, mSyncFinished);
 
         return true;
     }
 
     public ArrayList<Vehicle> load(){
-        mbackupRestoreHelper.startAction(mContext, "restore", false);
+        mbackupRestoreHelper.startAction(mContext, mSyncFinished);
 
         File file = new File(FILE_LOCATION);
         Gson gson = new Gson();
