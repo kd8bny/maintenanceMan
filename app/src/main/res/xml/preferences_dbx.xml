@@ -10,13 +10,4 @@
             android:title="@string/pref_title_cloud_init"
             android:key="@string/pref_title_cloud_init"/>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="@string/pref_title_cat_man">
-        <Preference
-            android:title="@string/pref_title_cloud_backup"
-            android:key="@string/pref_title_cloud_backup"/>
-        <Preference
-            android:title="@string/pref_title_cloud_restore"
-            android:key="@string/pref_title_cloud_restore"/>
-    </PreferenceCategory>
 </PreferenceScreen>
