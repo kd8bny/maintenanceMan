@@ -170,13 +170,12 @@ public class fragment_main extends Fragment implements SyncFinished,
                         return true;
 
                     case 6: //Contact Me
-                        Uri uri = Uri.parse("mailto:" + mContext.getString(R.string.to))
-                                .buildUpon()
-                                .appendQueryParameter("subject", mContext.getString(R.string.subject))
-                                .appendQueryParameter("body", mContext.getString(R.string.body))
-                                .build();
-
-                        Intent contactIntent = new Intent(Intent.ACTION_SENDTO, uri);
+                        Intent contactIntent = new Intent(Intent.ACTION_SEND)
+                                .setType("plain/text")
+                                .putExtra(Intent.EXTRA_EMAIL, new String[]{ mContext.getString(R.string.to) })
+                                .putExtra(Intent.EXTRA_SUBJECT, mContext.getString(R.string.subject))
+                                .putExtra(Intent.EXTRA_TEXT, mContext.getString(R.string.body));
+                        
                         startActivity(Intent.createChooser(contactIntent, mContext.getString(R.string.action)));
 
                         return true;
