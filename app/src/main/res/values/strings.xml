@@ -62,6 +62,13 @@
     <string name="error_dest_val">Enter Destination</string>
     <string name="error_start_val">Enter Trip Start</string>
 
+    <!-- Contact Me -->
+    <string name="title_contact">Contact Me</string>
+    <string name="action">Send Using...</string>
+    <string name="to">kd8bny@gmail.com</string>
+    <string name="subject">MM Feedback</string>
+    <string name="body">Hello Daryl,\n</string>
+
     <!-- Donate -->
     <string name="title_donate">Donate</string>
     <string name="message_donate">Thank you for your interest in my app :) Any donation would be appreciated</string>
@@ -171,10 +178,13 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
-        V3.2.1 4June2016\n\n
+        V3.2.2 4June2016\n\n
 
         Fix that nasty dropbox bug. No longer will you FC close on start.\n
-        Sorry to anyone who experienced this\n\n
+        Sorry to anyone who experienced this\n
+
+        Contact Me Added in Nav Drawer\n
+        Please use for any concerns with the app\n\n
 
         V3.2.0 30May2016\n\n
 

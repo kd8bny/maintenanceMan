@@ -23,4 +23,8 @@
         <Preference android:title="@string/pref_title_cat_dropbox"
             android:key="@string/pref_key_dropbox"/>
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Special Thanks">
+        <Preference android:title="Fred Bennett"/>
+    </PreferenceCategory>
 </PreferenceScreen>
