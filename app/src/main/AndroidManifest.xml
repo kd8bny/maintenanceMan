@@ -57,14 +57,6 @@
                 android:value=".activities.MainActivity"/>
         </activity>
         <activity
-            android:name=".activities.SettingsDBXActivity"
-            android:label="@string/title_settings_dbx"
-            android:parentActivityName=".activities.SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.SettingsActivity"/>
-        </activity>
-        <activity
             android:name="com.dropbox.client2.android.AuthActivity"
             android:configChanges="orientation|keyboard"
             android:launchMode="singleTask">
