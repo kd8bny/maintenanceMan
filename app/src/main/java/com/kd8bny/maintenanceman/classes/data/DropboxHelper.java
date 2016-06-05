@@ -45,8 +45,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String FLEETROSTER_MD5 = "/fleetRoster.md5";
     private static final String VEHICLELOG_MD5 = "/vehicleLog.md5";
     private static final String FLEETROSTER_EMPTY_MD5 = "d751713988987e9331980363e24189ce";
-    private static final String VEHICLELOG_EMPTY_MD5 [] = {"65128a16df21d1b3893695474f569b28",
-            "ae269eb29396c15dd7bcb3f7de19158e", "db9b2415f74b936d64c4a5c82aef9e13", "5564ee8b40ea650188199b66e777caf7"}; //api 17,18,19;21;22,23;N
+    private static final String VEHICLELOG_EMPTY_MD5 = "d751713988987e9331980363e24189ce";
     private Boolean filesUpdated = false;
 
     public DropboxHelper(Context context) {
@@ -80,17 +79,17 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
             }
         }catch (IOException e){}
 
-        try {
-            File vehicleLog = new File(VehicleLogDBHelper.getInstance(mContext).getReadableDatabase().getPath());
-            HashCode hc = Files.hash(vehicleLog, Hashing.md5());
+        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+        File vehicleLog = new File(vehicleLogDBHelper.getReadableDatabase().getPath());
 
-            if (Arrays.asList(VEHICLELOG_EMPTY_MD5).contains(hc.toString())){
-                download(VEHICLELOG, vehicleLog);
-            }else{
-                download(VEHICLELOG_MD5, new File(mContext.getFilesDir() + VEHICLELOG_MD5));
-                sync(vehicleLog , hc.toString(), VEHICLELOG, VEHICLELOG_MD5);
-            }
-        }catch (IOException e){}
+        String hash = vehicleLogDBHelper.getTablesHash();
+
+        if (FLEETROSTER_EMPTY_MD5.equals(hash)){
+            download(VEHICLELOG, vehicleLog);
+        }else{
+            download(VEHICLELOG_MD5, new File(mContext.getFilesDir() + VEHICLELOG_MD5));
+            sync(vehicleLog , hash, VEHICLELOG, VEHICLELOG_MD5);
+        }
 
         return null;
     }

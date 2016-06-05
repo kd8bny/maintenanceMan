@@ -8,11 +8,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Utf8;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
+
+import static java.util.Objects.hash;
 
 public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
@@ -325,6 +333,58 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             db.endTransaction();
             db.close();
         }
+    }
+
+    public String getTablesHash(){
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<String> allData = new ArrayList<>();
+
+        String QUERY = String.format("SELECT * FROM %s;", TABLE_VEHICLE);
+        Cursor cursor = db.rawQuery(QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    cursor.getString(cursor.getColumnIndex(COLUMN_ICON));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_ODO)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_EVENT)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_COMMENT)));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+        QUERY = String.format("SELECT * FROM %s;", TABLE_TRAVEL);
+        cursor = db.rawQuery(QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_START)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_STOP)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                db.close();
+            }
+        }
+
+        HashFunction hf = Hashing.md5();
+        HashCode hc = hf.newHasher().putString(allData.toString(), Charsets.UTF_8).hash();
+
+        return hc.toString();
     }
 
     @Override
