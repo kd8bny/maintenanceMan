@@ -335,8 +335,11 @@ public class fragment_main extends Fragment implements SyncFinished,
     public void onResume() {
         super.onResume();
         roster = new SaveLoadHelper(mContext, this).load();
-        cardListAdapter = new OverviewAdapter(mContext, roster);
-        cardList.setAdapter(cardListAdapter);
+        if (roster != null) {
+            Log.d(TAG, roster.toString());
+            cardListAdapter = new OverviewAdapter(mContext, roster);
+            cardList.setAdapter(cardListAdapter);
+        }
     }
 
     @Override

@@ -101,11 +101,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
         if(mRoster.isEmpty()) {
             return R.layout.card_overview_empty;
         }else{
-            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT ){
-                return R.layout.card_overview_v19;
-            }else{
-                return R.layout.card_overview;
-            }
+            return R.layout.card_overview;
         }
     }
 
