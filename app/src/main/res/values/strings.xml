@@ -178,10 +178,11 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
-        V3.2.2 4June2016\n\n
+        V3.2.5 5June2016\n\n
 
         Fix that nasty dropbox bug. No longer will you FC close on start.\n
-        Sorry to anyone who experienced this\n
+        Fix wrong layout for Kitkat and below. Caused FC.\n
+        Sorry to anyone who experienced these\n
 
         Contact Me Added in Nav Drawer\n
         Please use for any concerns with the app\n\n
@@ -196,12 +197,5 @@
         Sort Maintenance tasks by date\n
         Export both Maintenance and travel data to CSV\n
         then import it into your favorite spreadsheet program\n\n
-
-        V3.1.4 15Mar2016\n\n
-
-        Bug fixes: Add/editing will again populate values\n
-        Vehicle will again set when adding specific event\n
-
-        Many under the hood fixes ;)\n\n
     </string>
 </resources>
