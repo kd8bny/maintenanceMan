@@ -23,6 +23,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -44,7 +45,8 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String FLEETROSTER_MD5 = "/fleetRoster.md5";
     private static final String VEHICLELOG_MD5 = "/vehicleLog.md5";
     private static final String FLEETROSTER_EMPTY_MD5 = "d751713988987e9331980363e24189ce";
-    private static final String VEHICLELOG_EMPTY_MD5 = "db9b2415f74b936d64c4a5c82aef9e13";
+    private static final String VEHICLELOG_EMPTY_MD5 [] = {"65128a16df21d1b3893695474f569b28",
+            "ae269eb29396c15dd7bcb3f7de19158e", "db9b2415f74b936d64c4a5c82aef9e13", "5564ee8b40ea650188199b66e777caf7"}; //api 17,18,19;21;22,23;N
     private Boolean filesUpdated = false;
 
     public DropboxHelper(Context context) {
@@ -82,7 +84,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
             File vehicleLog = new File(VehicleLogDBHelper.getInstance(mContext).getReadableDatabase().getPath());
             HashCode hc = Files.hash(vehicleLog, Hashing.md5());
 
-            if (hc.toString().equals(VEHICLELOG_EMPTY_MD5)){
+            if (Arrays.asList(VEHICLELOG_EMPTY_MD5).contains(hc.toString())){
                 download(VEHICLELOG, vehicleLog);
             }else{
                 download(VEHICLELOG_MD5, new File(mContext.getFilesDir() + VEHICLELOG_MD5));
