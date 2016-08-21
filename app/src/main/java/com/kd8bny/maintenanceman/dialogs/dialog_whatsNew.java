@@ -2,9 +2,9 @@ package com.kd8bny.maintenanceman.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.kd8bny.maintenanceman.R;
 
 
-public class dialog_whatsNew extends DialogFragment{
+public class dialog_whatsNew extends DialogFragment {
     private static final String TAG = "dlg_whts_nw";
 
     public dialog_whatsNew(){

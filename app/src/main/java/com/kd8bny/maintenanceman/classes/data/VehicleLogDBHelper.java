@@ -9,25 +9,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.google.common.base.Charsets;
-import com.google.common.base.Utf8;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
+import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import static java.util.Objects.hash;
 
 public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
 
     private static VehicleLogDBHelper sInstance;
 
-    private static final int DB_VERSION = 4; // v3(58) v2(50)
+    private static final int DB_VERSION = 5; // v4 (75) v3(58) v2(50)
     private static final String DB_NAME = "vehicleLog.db";
 
     private static final String TABLE_VEHICLE = "grandVehicleLog";
@@ -45,6 +42,11 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String COLUMN_STOP = "end";
     private static final String COLUMN_DEST = "dest";
     private static final String COLUMN_PURPOSE = "purpose";
+
+    private static final String TABLE_MILEAGE = "mileageLog";
+    private static final String COLUMN_MILEAGE = "mileage";
+    private static final String COLUMN_TRIP = "tripometer";
+    private static final String COLUMN_FILL_VOL = "fillVol";
 
     public static synchronized VehicleLogDBHelper getInstance(Context context) {
         if (sInstance == null) {
@@ -70,10 +72,16 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
                 COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
 
+        String CREATE_MILEAGE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
+                        + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
+                TABLE_MILEAGE, COLUMN_ID, COLUMN_VEHICLE_REFID,
+                COLUMN_VEHICLE_DATE, COLUMN_MILEAGE, COLUMN_TRIP, COLUMN_FILL_VOL, COLUMN_VEHICLE_PRICE);
+
         try {
             db.beginTransaction();
             db.execSQL(CREATE);
             db.execSQL(CREATE_BUSINESS);
+            db.execSQL(CREATE_MILEAGE);
             db.setTransactionSuccessful();
         } catch (Exception e){
             Log.e(TAG, "Error onCreate");
@@ -83,6 +91,9 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
+    /**
+     * vehicle log
+     */
     public void insertEntry(Maintenance maintenance) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -218,6 +229,9 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
+    /**
+    * Trip Log
+     */
     public void insertEntry(Travel travel) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -314,6 +328,81 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
+    /**
+     * Mileage logs
+     * @param mileage
+     */
+
+    public void insertEntry(Mileage mileage) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_VEHICLE_REFID, mileage.getRefID());
+        contentValues.put(COLUMN_VEHICLE_DATE, mileage.getDate());
+        contentValues.put(COLUMN_MILEAGE, mileage.getMileage());
+        contentValues.put(COLUMN_TRIP, mileage.getTripometer());
+        contentValues.put(COLUMN_FILL_VOL, mileage.getFillVol());
+        contentValues.put(COLUMN_VEHICLE_PRICE, mileage.getPrice());
+
+        try {
+            db.beginTransaction();
+            db.insertOrThrow(TABLE_MILEAGE, null, contentValues);
+            db.setTransactionSuccessful();
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(TAG, "Error on insert entry");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public HashSet<String> getMilage() { //TODO
+        SQLiteDatabase db = getReadableDatabase();
+        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_PURPOSE, TABLE_MILEAGE);
+        Cursor cursor = db.rawQuery(QUERY, null);
+/*
+        HashSet<String> entryList = new HashSet<>();
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    entryList.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                db.close();
+            }
+        }
+        */
+
+        return null;
+    }
+
+    public void deleteEntry(Mileage mileage){
+        SQLiteDatabase db = getWritableDatabase();
+        String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
+                TABLE_MILEAGE,
+                COLUMN_VEHICLE_REFID, mileage.getRefID(),
+                COLUMN_VEHICLE_DATE, mileage.getDate(),
+                COLUMN_VEHICLE_EVENT, mileage.getMileage());
+        try {
+            db.beginTransaction();
+            db.execSQL(QUERY);
+            db.setTransactionSuccessful();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    /**
+     * For all tables
+     * @param refID
+     */
     public void purgeVehicle(String refID){
         SQLiteDatabase db = getWritableDatabase();
         String QUERY = String.format("DELETE FROM %s WHERE %s = '%s';",
@@ -322,10 +411,14 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         String QUERY_TRAVEL = String.format("DELETE FROM %s WHERE %s = '%s';",
                 TABLE_TRAVEL,
                 COLUMN_VEHICLE_REFID, refID);
+        String QUERY_MILEAGE = String.format("DELETE FROM %s WHERE %s = '%s';",
+                TABLE_MILEAGE,
+                COLUMN_VEHICLE_REFID, refID);
         try {
             db.beginTransaction();
             db.execSQL(QUERY);
             db.execSQL(QUERY_TRAVEL);
+            db.execSQL(QUERY_MILEAGE);
             db.setTransactionSuccessful();
         }catch (Exception e) {
             e.printStackTrace();
@@ -377,6 +470,26 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         } finally {
             if (!cursor.isClosed()) {
                 cursor.close();
+            }
+        }
+
+        QUERY = String.format("SELECT * FROM %s;", TABLE_MILEAGE);
+        cursor = db.rawQuery(QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_MILEAGE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_TRIP)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_FILL_VOL)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
                 db.close();
             }
         }
@@ -411,6 +524,15 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                         COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
                 db.execSQL(CREATE);
                 Log.d(TAG, "bus done");
+            }
+            if (oldVersion < 5){
+                Log.d(TAG, "mileage");
+                String CREATE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
+                                + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
+                        TABLE_MILEAGE, COLUMN_ID, COLUMN_VEHICLE_REFID,
+                        COLUMN_VEHICLE_DATE, COLUMN_MILEAGE, COLUMN_TRIP, COLUMN_FILL_VOL, COLUMN_VEHICLE_PRICE);
+                db.execSQL(CREATE);
+                Log.d(TAG, "mileage done");
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {

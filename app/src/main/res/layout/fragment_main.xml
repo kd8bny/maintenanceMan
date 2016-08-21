@@ -46,19 +46,19 @@
                 app:layout_behavior="com.kd8bny.maintenanceman.behaviors.FloatingActionMenuBehavior">
 
                 <com.github.clans.fab.FloatingActionButton
-                    android:id="@+id/fab_add_vehicle"
+                    android:id="@+id/fab_add_mileage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
                     fab:fab_size="mini"
-                    fab:fab_label="@string/menu_add_vehicle"
+                    fab:fab_label="@string/menu_add_mileage"
                     fab:fab_showAnimation="@anim/fab_scale_up"
                     fab:fab_hideAnimation="@anim/fab_scale_down"
                     fab:fab_colorNormal="@color/accent"
                     fab:fab_colorPressed="@color/primary_light"
                     fab:fab_colorRipple="@color/primary_dark"
 
-                    android:src="@drawable/ic_action_add_fleet_white"/>
+                    android:src="@drawable/ic_mileage"/>
 
                 <com.github.clans.fab.FloatingActionButton
                     android:id="@+id/fab_add_event"

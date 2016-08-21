@@ -1,8 +1,8 @@
 package com.kd8bny.maintenanceman.fragments;
 
 import android.Manifest;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,11 +39,13 @@ import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
-import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.activities.IntroActivity;
@@ -231,16 +233,6 @@ public class fragment_main extends Fragment implements SyncFinished,
         fabMenu.setClosedOnTouchOutside(true);
         fabMenu.setAnimated(true);
 
-        view.findViewById(R.id.fab_add_vehicle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("caseID", 0);
-                bundle.putParcelableArrayList("roster", roster);
-                startActivity(new Intent(getActivity(), VehicleActivity.class)
-                        .putExtra("bundle", bundle));
-                fabMenu.close(true);
-            }});
         view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -257,7 +249,25 @@ public class fragment_main extends Fragment implements SyncFinished,
                 }
             }});
 
-        fabBusiness = (FloatingActionButton) view.findViewById(R.id.fab_add_business);
+        view.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (roster.isEmpty()){
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
+                            Snackbar.LENGTH_SHORT).show();
+                }else {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("roster", roster);
+                    android.support.v4.app.FragmentManager fm = getFragmentManager();
+                    dialog_addMileageEntry dialog = new dialog_addMileageEntry();
+                    dialog.setTargetFragment(fragment_main.this, 0);
+                    dialog.setArguments(bundle);
+                    dialog.show(fm, "dialog_add_mileage");
+                    fabMenu.close(true);
+                }
+            }});
+
+        fabBusiness = (FloatingActionButton) view.findViewById(R.id.fab_add_business); //TODO clean this up
         fabBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -336,9 +346,20 @@ public class fragment_main extends Fragment implements SyncFinished,
         super.onResume();
         roster = new SaveLoadHelper(mContext, this).load();
         if (roster != null) {
-            Log.d(TAG, roster.toString());
             cardListAdapter = new OverviewAdapter(mContext, roster);
             cardList.setAdapter(cardListAdapter);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getBundleExtra("bundle");
+        switch (resultCode) {
+            case (0):
+                Mileage mileage = new Mileage(roster.get(bundle.getInt("pos")).getRefID());
+                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+                break;
         }
     }
 

@@ -90,7 +90,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
            case VIEW_CHART:
                vChart = LayoutInflater
                        .from(viewGroup.getContext())
-                       .inflate(R.layout.card_info_chart, viewGroup, false);
+                       .inflate(R.layout.card_info_expense, viewGroup, false);
 
                return new vhChart(vChart, null);
 

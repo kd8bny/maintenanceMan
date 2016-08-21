@@ -40,7 +40,6 @@ public class dialog_addField extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null){
-            Log.d(TAG, "editing");
             RESULT_CODE = 2;
             recyclerPosition = bundle.getInt("pos");
             ArrayList<String> fieldData = bundle.getStringArrayList("field");

@@ -1,8 +1,8 @@
 package com.kd8bny.maintenanceman.dialogs;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +18,7 @@ import com.kd8bny.maintenanceman.billing.util.Inventory;
 import com.kd8bny.maintenanceman.billing.util.Purchase;
 
 
-public class dialog_donate extends DialogFragment{
+public class dialog_donate extends DialogFragment {
     private static final String TAG = "dialog_billing";
 
     private IabHelper mHelper;

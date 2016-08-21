@@ -69,6 +69,10 @@
     <string name="subject">MM Feedback</string>
     <string name="body">Hello Daryl,\n</string>
 
+    <!-- Dialogs -->
+    <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+
     <!-- Donate -->
     <string name="title_donate">Donate</string>
     <string name="message_donate">Thank you for your interest in my app :) Any donation would be appreciated</string>
@@ -81,6 +85,7 @@
     <string name="menu_add_vehicle">Add Vehicle</string>
     <string name="menu_add_event">Add Event</string>
     <string name="menu_add_business">Log Trip</string>
+    <string name="menu_add_mileage">Add Mileage</string>
 
     <!-- History -->
     <string name="title_history">History</string>
@@ -132,6 +137,13 @@
     <string name="toast_sort_year">Sort by Year</string>
     <string name="toast_sort_model">Sort by Model</string>
     <string name="toast_sort_type">Sort by Type</string>
+
+    <!--Mileage-->
+    <string name="title_mileage_add">Add Fill Up</string>
+    <string name="field_trip">Distance Since Last Fill</string>
+    <string name="field_fill_vol">Amount Filled</string>
+    <string name="field_mileage_price">Price</string>
+
 
     <!-- Preferences -->
     <string name="title_settings">Settings</string>
