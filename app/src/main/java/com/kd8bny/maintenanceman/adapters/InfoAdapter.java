@@ -1,5 +1,6 @@
 package com.kd8bny.maintenanceman.adapters;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -23,7 +24,9 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
@@ -216,10 +219,11 @@ class vhChart extends RecyclerView.ViewHolder {
         DisplayMetrics metrics = relLayout.getContext().getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
 
-        ArrayList<BarEntry> yvals = new ArrayList<>();
-        ArrayList<String> xvals = new ArrayList<>();
-        ArrayList<Integer> xvalsNum = new ArrayList<>();
-        ArrayList<Float> yvalsNum = new ArrayList<>();
+        TreeMap<Integer, Float> costHistory = new TreeMap<>();
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        ArrayList<String> xLegend = new ArrayList<>();
+        //ArrayList<Integer> xValues = new ArrayList<>();
+        //ArrayList<Float> yValues = new ArrayList<>();
 
         if (vehicleHist != null) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
@@ -248,50 +252,54 @@ class vhChart extends RecyclerView.ViewHolder {
             xAxis.setDrawAxisLine(false);
             xAxis.setDrawGridLines(false);
             xAxis.setGridLineWidth(0.3f);
-            xAxis.setTextColor(view.getResources().getColor(R.color.secondary_text));
-            xAxis.setTextSize(view.getResources().getDimension(R.dimen.field_font));
+            xAxis.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
+            xAxis.setTextSize(18f);
 
             try {
                 for (int i = 0; i < vehicleHist.size(); i++) {
                     ArrayList<String> tempEvent = vehicleHist.get(i);
                     String[] dateArray = tempEvent.get(0).split("/");
-                    int monthLog = Integer.parseInt(dateArray[0]);
+                    int month = Integer.parseInt(dateArray[0]);
+                    int year = Integer.parseInt(dateArray[2]);
+                    int yearOffset = Calendar.getInstance().get(Calendar.YEAR) - year;
 
-                    if (xvalsNum.size() > 0){
-                        if (xvalsNum.get(xvalsNum.size()-1) == monthLog) {
-                            yvalsNum.add(
-                                    yvalsNum.size()-1,
-                                    yvalsNum.get(yvalsNum.size()-1) +
-                                            Float.parseFloat(tempEvent.get(1)));
-                        }else {
-                            xvalsNum.add(monthLog);
-                            yvalsNum.add(Float.parseFloat(tempEvent.get(1)));
-                        }
-                    }else {
-                        xvalsNum.add(monthLog);
-                        yvalsNum.add(Float.parseFloat(tempEvent.get(1)));
+                    if (yearOffset != 0){
+                        //Lets take that old boy and put it in a mod 12
+                        month += (12 * yearOffset);
+                    }
+
+                    if (costHistory.containsKey(month)){
+                        costHistory.put(month, costHistory.get(month) + Float.parseFloat(tempEvent.get(1)));
+                    } else{
+                        costHistory.put(month, Float.parseFloat(tempEvent.get(1)));
                     }
                 }
 
-                if(xvalsNum.size() > 0) {
-                    int i = 0;
-                    while (i < xvalsNum.size() && i < 4) {
-                        xvals.add(months[xvalsNum.get(i) - 1]);
-                        yvals.add(new BarEntry(yvalsNum.get(i), i));
-                        i++;
+                int i = 0;
+                for (int key : costHistory.keySet()){
+                    Log.d(TAG, key+"");
+                    if (i > 3){
+                        break;
                     }
-
-                    BarDataSet barDataSet = new BarDataSet(yvals, null);
-                    barDataSet.setColor(headerColors.getColor(6, 0));
-                    ArrayList<BarDataSet> dataSets = new ArrayList<>();
-                    dataSets.add(barDataSet);
-
-                    BarData data = new BarData(xvals, dataSets);
-                    data.setValueTextSize(10f);
-
-                    mchart.setData(data);
-                    mchart.animateY(2500);
+                    xLegend.add(months[(key - 1) % 12]);
+                    barEntries.add(0, new BarEntry(costHistory.get(key), i));
+                    i++;
                 }
+
+                Log.d(TAG, costHistory.toString());
+                Log.d(TAG, barEntries.toString());
+                Log.d(TAG, xLegend.toString());
+
+                BarDataSet barDataSet = new BarDataSet(barEntries, null);
+                barDataSet.setColor(headerColors.getColor(6, 0));
+                ArrayList<BarDataSet> dataSets = new ArrayList<>();
+                dataSets.add(barDataSet);
+
+                BarData data = new BarData(xLegend, dataSets);
+                data.setValueTextSize(10f);
+
+                mchart.setData(data);
+                mchart.animateY(2500);
 
             }catch (NumberFormatException e){
                 //e.printStackTrace();
