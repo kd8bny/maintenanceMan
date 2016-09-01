@@ -30,15 +30,14 @@
             android:padding="4dp"
             android:elevation="10sp"
 
-            android:text="GE"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="24sp"
             android:textColor="@color/header"/>
 
         <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="100dp"
             android:layout_below="@+id/card_info_title"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

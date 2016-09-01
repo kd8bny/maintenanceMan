@@ -1,6 +1,5 @@
 package com.kd8bny.maintenanceman.adapters;
 
-import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
@@ -16,16 +15,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -220,10 +222,8 @@ class vhChart extends RecyclerView.ViewHolder {
         int width = metrics.widthPixels;
 
         TreeMap<Integer, Float> costHistory = new TreeMap<>();
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        List<BarEntry> barEntries = new ArrayList<>();
         ArrayList<String> xLegend = new ArrayList<>();
-        //ArrayList<Integer> xValues = new ArrayList<>();
-        //ArrayList<Float> yValues = new ArrayList<>();
 
         if (vehicleHist != null) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
@@ -232,28 +232,31 @@ class vhChart extends RecyclerView.ViewHolder {
             imageView.setBackgroundColor(headerColors.getColor(1, 0));
 
             vTitle.setText(view.getResources().getString(R.string.header_chart));
-            vTitle.setMinWidth(width/3);
+            vTitle.setMinWidth(width / 3);
             vTitle.setMaxWidth(width);
 
             view.animate();
 
-            HorizontalBarChart mchart = (HorizontalBarChart) view.findViewById(R.id.chart);
-            mchart.setDrawValueAboveBar(true);
-            mchart.setDrawHighlightArrow(true);
-            mchart.setDescription(null);
-            mchart.getLegend().setEnabled(false);
-            mchart.getAxisLeft().setEnabled(false);
-            mchart.getAxisRight().setEnabled(false);
-            mchart.setGridBackgroundColor(Color.TRANSPARENT);
-            mchart.setTouchEnabled(false);
+            HorizontalBarChart mChart = (HorizontalBarChart) view.findViewById(R.id.chart);
+            mChart.setDrawValueAboveBar(true);
+            //mChart.setDrawHighlightArrow(true);
+            mChart.setDescription(null);
+            mChart.getLegend().setEnabled(false);
+            mChart.getAxisLeft().setEnabled(false);
+            mChart.getAxisRight().setEnabled(false);
+            mChart.setGridBackgroundColor(Color.TRANSPARENT);
+            mChart.setTouchEnabled(false);
+            //mChart.setFitBars(false);
 
-            XAxis xAxis = mchart.getXAxis();
+            XAxis xAxis = mChart.getXAxis();
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
             xAxis.setDrawAxisLine(false);
             xAxis.setDrawGridLines(false);
             xAxis.setGridLineWidth(0.3f);
             xAxis.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
             xAxis.setTextSize(18f);
+            xAxis.setGranularity(1f);
+            xAxis.setValueFormatter(new MyXAxisValueFormatter(xLegend));
 
             try {
                 for (int i = 0; i < vehicleHist.size(); i++) {
@@ -263,28 +266,30 @@ class vhChart extends RecyclerView.ViewHolder {
                     int year = Integer.parseInt(dateArray[2]);
                     int yearOffset = Calendar.getInstance().get(Calendar.YEAR) - year;
 
-                    if (yearOffset != 0){
+                    if (yearOffset != 0) {
                         //Lets take that old boy and put it in a mod 12
                         month += (12 * yearOffset);
                     }
 
-                    if (costHistory.containsKey(month)){
+                    if (costHistory.containsKey(month)) {
                         costHistory.put(month, costHistory.get(month) + Float.parseFloat(tempEvent.get(1)));
-                    } else{
+                    } else {
                         costHistory.put(month, Float.parseFloat(tempEvent.get(1)));
                     }
                 }
 
                 int i = 0;
-                for (int key : costHistory.keySet()){
-                    Log.d(TAG, key+"");
-                    if (i > 3){
+                for (int key : costHistory.keySet()) {
+                    if (i > 3) {
                         break;
                     }
+
                     xLegend.add(months[(key - 1) % 12]);
-                    barEntries.add(0, new BarEntry(costHistory.get(key), i));
+                    barEntries.add(new BarEntry(i, costHistory.get(key)));
                     i++;
                 }
+
+
 
                 Log.d(TAG, costHistory.toString());
                 Log.d(TAG, barEntries.toString());
@@ -292,19 +297,42 @@ class vhChart extends RecyclerView.ViewHolder {
 
                 BarDataSet barDataSet = new BarDataSet(barEntries, null);
                 barDataSet.setColor(headerColors.getColor(6, 0));
-                ArrayList<BarDataSet> dataSets = new ArrayList<>();
-                dataSets.add(barDataSet);
 
-                BarData data = new BarData(xLegend, dataSets);
+                BarData data = new BarData(barDataSet);
                 data.setValueTextSize(10f);
+                data.setBarWidth(0.9f);
 
-                mchart.setData(data);
-                mchart.animateY(2500);
+                mChart.setData(data);
+                mChart.animateY(2500);
 
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 //e.printStackTrace();
                 Log.i(TAG, "No date found");
             }
         }
     }
+}
+
+class MyXAxisValueFormatter implements AxisValueFormatter {
+
+    private ArrayList<String> mValues;
+
+    public MyXAxisValueFormatter(ArrayList<String> values) {
+        this.mValues = values;
+    }
+
+    @Override
+    public String getFormattedValue(float value, AxisBase axis) {
+        // "value" represents the position of the label on the axis (x or y)
+        Log.d("format", value + ":" + mValues);
+        if (value > 1) {
+            return mValues.get((int) value) + "";
+        }
+
+        return mValues.get(0) + "";
+    }
+
+    /** this is only needed if numbers are returned, else return 0 */
+    @Override
+    public int getDecimalDigits() { return 0; }
 }
