@@ -112,10 +112,10 @@ public class Vehicle implements Parcelable{
         isBusiness = bool;
     }
 
-    public void setReservedSpecs(HashMap<String, String> reserveredSpecs) {
+    public void setReservedSpecs(HashMap<String, String> reservedSpecs) {
         Gson gson = new Gson();
 
-        this.reservedSpecs = gson.toJson(reserveredSpecs);
+        this.reservedSpecs = gson.toJson(reservedSpecs);
     }
 
     public HashMap<String, String> getGeneralSpecs() {
