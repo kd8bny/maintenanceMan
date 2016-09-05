@@ -22,6 +22,7 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
@@ -33,97 +34,116 @@ import java.util.TreeMap;
 public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
 
-    private ArrayList<HashMap> vehicleInfoArray = new ArrayList<>();
-    private ArrayList<Integer> itemPos = new ArrayList<>();
+    private ArrayList<HashMap> mVehicleInfoArray = new ArrayList<>();
+    private ArrayList<Integer> viewTypes = new ArrayList<>();
     private HashMap<String, String> cardInfo = new HashMap<>();
-    private ArrayList<ArrayList> mCostHist;
     private Vehicle mVehicle;
+    private ArrayList<ArrayList> mCostHist;
+    private ArrayList<Mileage> mMileages;
 
-    private static final int VIEW_SPECS = 0;
-    private static final int VIEW_CHART = 1;
-    private int chartPos = 1;
+    private int stuipidI = 0;
+
+    private static final int VIEW_SPECS_GEN = 0;
+    private static final int VIEW_CHART_COST = 1;
+    private static final int VIEW_CHART_MILEAGE = 2;
+    private static final int VIEW_SPECS_ENG = 3;
+    private static final int VIEW_SPECS_POWER = 4;
+    private static final int VIEW_SPECS_OTHER = 5;
 
     protected View vSpecs;
-    protected View vChart;
+    protected View vChartCost;
+    protected View vChartMileage;
 
-    public InfoAdapter(Vehicle vehicle, ArrayList<ArrayList> costHist) {
+    public InfoAdapter(Vehicle vehicle, ArrayList<ArrayList> costHist, ArrayList<Mileage> mileages) {
         mVehicle = vehicle;
         mCostHist = costHist;
-        ArrayList<HashMap> temp = new ArrayList<>();
-        temp.add(mVehicle.getGeneralSpecs());
-        temp.add(mVehicle.getEngineSpecs());
-        temp.add(mVehicle.getPowerTrainSpecs());
-        temp.add(mVehicle.getOtherSpecs());
-        if (!costHist.isEmpty()){
+        mMileages = mileages;
+
+        HashMap<String, String> tempSpecs;// = new HashMap<>();
+        tempSpecs = mVehicle.getGeneralSpecs();
+        if (!tempSpecs.isEmpty()) {
+            mVehicleInfoArray.add(tempSpecs);
+            viewTypes.add(VIEW_SPECS_GEN);
+        }
+        if (!costHist.isEmpty()) {
             HashMap<String, ArrayList> tempCost = new HashMap<>();
-            tempCost.put("cost", costHist);
-            temp.add(1, tempCost);
-        }else{
-            temp.add(1, new HashMap());
+            tempCost.put("cost", mCostHist);
+            mVehicleInfoArray.add(tempCost);
+            viewTypes.add(VIEW_CHART_COST);
         }
-
-        vehicleInfoArray = (ArrayList<HashMap>) temp.clone();
-        for (int i = temp.size()-1; i >= 0 ; i--) { //Remove Empty HashMaps
-            if (temp.get(i).isEmpty()) {
-                vehicleInfoArray.remove(i);
-                if (i == 0 && chartPos != -1) {
-                    chartPos = 0;
-                } else if (i == 1) {
-                    chartPos = -1;
-                }
-            } else {
-                itemPos.add(0, i);
-            }
+        if (!mMileages.isEmpty()) {
+            HashMap<String, ArrayList> tempMileage = new HashMap<>();
+            tempMileage.put("mileage", mMileages);
+            mVehicleInfoArray.add(tempMileage);
+            viewTypes.add(VIEW_CHART_MILEAGE);
         }
-    }
-
-    public int getItemViewType(int i){
-        if(i == chartPos) {
-            return VIEW_CHART;
+        tempSpecs = mVehicle.getEngineSpecs();
+        if (!tempSpecs.isEmpty()) {
+            mVehicleInfoArray.add(tempSpecs);
+            viewTypes.add(VIEW_SPECS_ENG);
         }
-        return VIEW_SPECS;
+        tempSpecs = mVehicle.getPowerTrainSpecs();
+        if (!tempSpecs.isEmpty()) {
+            mVehicleInfoArray.add(tempSpecs);
+            viewTypes.add(VIEW_SPECS_POWER);
+        }
+        tempSpecs = mVehicle.getOtherSpecs();
+        if (!tempSpecs.isEmpty()) {
+            mVehicleInfoArray.add(tempSpecs);
+            viewTypes.add(VIEW_SPECS_OTHER);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return vehicleInfoArray.size();
+        return mVehicleInfoArray.size();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-       switch(i) {
-           case VIEW_CHART:
-               vChart = LayoutInflater
+        switch (viewTypes.get(stuipidI)){
+            case VIEW_CHART_COST:
+                vChartCost = LayoutInflater
+                        .from(viewGroup.getContext())
+                        .inflate(R.layout.card_info_expense, viewGroup, false);
+                stuipidI++;
+
+               return new vhChart(vChartCost, null);
+
+           case VIEW_CHART_MILEAGE:
+               vChartMileage = LayoutInflater
                        .from(viewGroup.getContext())
-                       .inflate(R.layout.card_info_expense, viewGroup, false);
+                       .inflate(R.layout.card_info_mileage, viewGroup, false);
+               stuipidI++;
 
-               return new vhChart(vChart, null);
+               return new vhChart(vChartMileage, null);
 
-           case VIEW_SPECS:
+           default :
                vSpecs = LayoutInflater
                        .from(viewGroup.getContext())
                        .inflate(R.layout.card_info, viewGroup, false);
                cardInfo.clear();
+               stuipidI++;
 
-               return new vhSpecs(vSpecs, cardInfo, null, i, null);
-
-           default:
-               Log.e(TAG, "No view");
-               return null;
+               return new vhSpecs(vSpecs, cardInfo, viewTypes.get(i), i, null);
        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        cardInfo = vehicleInfoArray.get(i);
+        cardInfo = mVehicleInfoArray.get(i);
 
-        switch (getItemViewType(i)) {
-            case VIEW_CHART:
-                new vhChart(vChart, mCostHist);
+        switch (viewTypes.get(i)){
+            case VIEW_CHART_COST:
+                new vhChart(vChartCost, mCostHist);
                 break;
 
-            case VIEW_SPECS:
-                new vhSpecs(vSpecs, cardInfo, itemPos, i, mVehicle.getTitle());
+            case VIEW_CHART_MILEAGE:
+                new vhChart(vChartMileage, new ArrayList<ArrayList>()); //FIX
+                break;
+
+            default :
+                new vhSpecs(vSpecs, cardInfo, viewTypes.get(i), i, mVehicle.getTitle());
                 break;
         }
     }
@@ -131,12 +151,11 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
 @SuppressWarnings("ResourceType")
 class vhSpecs extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_gen";
+    private static final String TAG = "adptr_info_specs";
 
     private TypedArray headerColors;
 
-    public vhSpecs(View view, final HashMap<String, String> cardInfo,
-                   ArrayList<Integer> itemPos, int i, String vehicleTitle) {
+    public vhSpecs(View view, final HashMap<String, String> cardInfo, int viewType, int i, String vehicleTitle) {
         super(view);
         View relLayout = view.findViewById(R.id.card_info_rel);
         View linLayout = relLayout.findViewById(R.id.card_info_lin);
@@ -153,10 +172,10 @@ class vhSpecs extends RecyclerView.ViewHolder {
         if(cardInfo.size() > 0) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
             TextView vHeader = (TextView) view.findViewById(R.id.card_info_title);
-            if (itemPos.get(i) == 0) {
+            if (viewType == 0) {
                 vHeader.setText(vehicleTitle);
             }else {
-                vHeader.setText(getTitle(itemPos, i));
+                vHeader.setText(getTitle(viewType));
             }
             ImageView imageView = (ImageView) view.findViewById(R.id.card_info_iv);
             imageView.setBackgroundColor(headerColors.getColor(i, 0));
@@ -182,7 +201,7 @@ class vhSpecs extends RecyclerView.ViewHolder {
                     vItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, fieldSize);
                     vItem.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
 
-                    vTitle.setText(key + ": ");
+                    vTitle.setText(String.format("%s: ", key));
                     vItem.setText(cardInfo.get(key));
 
                     tempLinLay.addView(vTitle);
@@ -193,13 +212,13 @@ class vhSpecs extends RecyclerView.ViewHolder {
         }
     }
 
-    private int getTitle(ArrayList<Integer> itemPos, int i){
-        switch (itemPos.get(i)){
-            case 2:
-                return R.string.header_engine;
+    private int getTitle(int viewType){
+        switch (viewType){
             case 3:
-                return R.string.header_power_train;
+                return R.string.header_engine;
             case 4:
+                return R.string.header_power_train;
+            case 5:
                 return R.string.header_other;
             default:
                 return -1;
@@ -253,6 +272,7 @@ class vhChart extends RecyclerView.ViewHolder {
             xAxis.setDrawAxisLine(false);
             xAxis.setDrawGridLines(false);
             xAxis.setGridLineWidth(0.3f);
+            xAxis.setAxisLineWidth(0.3f);
             xAxis.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
             xAxis.setTextSize(18f);
             xAxis.setGranularity(1f);
@@ -324,7 +344,6 @@ class MyXAxisValueFormatter implements AxisValueFormatter {
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
         // "value" represents the position of the label on the axis (x or y)
-        Log.d("format", value + ":" + mValues);
         if (value > 1) {
             return mValues.get((int) value) + "";
         }

@@ -19,6 +19,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.InfoAdapter;
+import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
@@ -84,7 +85,7 @@ public class fragment_info extends Fragment implements SyncFinished {
     @Override
     public void onResume(){
         super.onResume();
-        cardList.setAdapter(new InfoAdapter(vehicle, vehicleHist));
+        cardList.setAdapter(new InfoAdapter(vehicle, vehicleHist, new ArrayList<Mileage>())); //TODO mileage
     }
 
     @Override

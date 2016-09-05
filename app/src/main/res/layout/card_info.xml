@@ -31,7 +31,7 @@
             android:elevation="10sp"
 
             android:text="GE"
-            android:singleLine="true"
+            android:maxLines="1"
             android:textSize="24sp"
             android:textColor="@color/header"/>
 

@@ -355,16 +355,24 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public HashSet<String> getMilage() { //TODO
+    public ArrayList<Mileage> getMilageEntries(String refID) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_PURPOSE, TABLE_MILEAGE);
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID);
         Cursor cursor = db.rawQuery(QUERY, null);
-/*
-        HashSet<String> entryList = new HashSet<>();
+
+        ArrayList<Mileage> mileageList = new ArrayList<>();
         try {
             if (cursor.moveToFirst()) {
                 do {
-                    entryList.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    Mileage mileage = new Mileage(refID);
+
+                    mileage.setRefID(cursor.getString(cursor.getColumnIndex(refID)));
+                    mileage.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    mileage.setMileage(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_TRIP))),
+                            Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_FILL_VOL))),
+                            Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE))));
+
+                    mileageList.add(mileage);
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -375,9 +383,8 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 db.close();
             }
         }
-        */
 
-        return null;
+        return mileageList;
     }
 
     public void deleteEntry(Mileage mileage){

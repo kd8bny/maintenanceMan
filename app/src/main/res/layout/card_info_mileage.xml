@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_info_chart"
+    android:id="@+id/card_chart_mileage"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
@@ -30,15 +30,14 @@
             android:padding="4dp"
             android:elevation="10sp"
 
-            android:text="GE"
             android:maxLines="1"
             android:textSize="24sp"
             android:textColor="@color/header"/>
 
-        <com.github.mikephil.charting.charts.LineChart
+        <com.github.mikephil.charting.charts.HorizontalBarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="100dp"
             android:layout_below="@+id/card_info_title"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>
