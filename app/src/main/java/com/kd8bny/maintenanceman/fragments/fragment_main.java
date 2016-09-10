@@ -39,6 +39,7 @@ import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
@@ -59,6 +60,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -357,8 +359,17 @@ public class fragment_main extends Fragment implements SyncFinished,
         Bundle bundle = data.getBundleExtra("bundle");
         switch (resultCode) {
             case (0):
+                final Calendar cal = java.util.Calendar.getInstance();
+                String date = cal.get(java.util.Calendar.MONTH) + 1
+                        + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
+                        + "/" + cal.get(java.util.Calendar.YEAR);
+
                 Mileage mileage = new Mileage(roster.get(bundle.getInt("pos")).getRefID());
+                mileage.setDate(date);
                 mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+
+                VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
+                vehicleDB.insertEntry(mileage);
                 break;
         }
     }

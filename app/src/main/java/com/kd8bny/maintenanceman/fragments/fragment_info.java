@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +18,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.InfoAdapter;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
@@ -27,6 +27,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class fragment_info extends Fragment implements SyncFinished {
@@ -39,7 +40,8 @@ public class fragment_info extends Fragment implements SyncFinished {
     private ArrayList<Vehicle> roster;
     private int vehiclePos;
     private Vehicle vehicle;
-    private ArrayList<ArrayList> vehicleHist;
+    private ArrayList<Maintenance> mVehicleHist;
+    private ArrayList<Mileage> mMileage;
 
     public fragment_info() {}
 
@@ -55,7 +57,14 @@ public class fragment_info extends Fragment implements SyncFinished {
         vehicle = roster.get(vehiclePos);
 
         VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-        vehicleHist = vehicleDB.getPriceByDate(vehicle.getRefID());
+
+        final Calendar cal = Calendar.getInstance();
+        String date = cal.get(Calendar.MONTH) + 1
+                + "/" + cal.get(Calendar.DAY_OF_MONTH)
+                + "/" + cal.get(Calendar.YEAR);
+
+        mVehicleHist = vehicleDB.getCostByYear(vehicle.getRefID(), date);
+        mMileage = vehicleDB.getMileageEntriesByYear(vehicle.getRefID(), date);
     }
 
     @Override
@@ -85,7 +94,7 @@ public class fragment_info extends Fragment implements SyncFinished {
     @Override
     public void onResume(){
         super.onResume();
-        cardList.setAdapter(new InfoAdapter(vehicle, vehicleHist, new ArrayList<Mileage>())); //TODO mileage
+        cardList.setAdapter(new InfoAdapter(vehicle, mVehicleHist, mMileage));
     }
 
     @Override
@@ -165,7 +174,7 @@ public class fragment_info extends Fragment implements SyncFinished {
 
     public void onDownloadComplete(Boolean doUpdate){
         if (doUpdate) {
-            Log.d(TAG, "aysnc respoen");
+            //TODO
         }
     }
 }

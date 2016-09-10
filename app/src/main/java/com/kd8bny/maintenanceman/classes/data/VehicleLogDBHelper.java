@@ -177,7 +177,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return entryList;
     }
 
-    public ArrayList<ArrayList> getPriceByDate(String refID) {
+    public ArrayList<ArrayList> getMaintenanceCosts(String refID) {
         SQLiteDatabase db = getReadableDatabase();
         String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s != '';",
                 COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE,
@@ -208,6 +208,39 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         return vehicleList;
+    }
+
+    public ArrayList<Maintenance> getCostByYear(String refID, String date) {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] dateArray = date.split("/");
+        String YEAR = "%" + dateArray[2]; //SQL wildcard %
+        String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s LIKE '%s';",
+                COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE, TABLE_VEHICLE,
+                COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, YEAR);
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        ArrayList<Maintenance> maintenanceList = new ArrayList<>();
+
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    Maintenance maintenance = new Maintenance(refID);
+                    maintenance.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    maintenance.setPrice(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
+
+                    maintenanceList.add(maintenance);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                db.close();
+            }
+        }
+
+        return maintenanceList;
     }
 
     public void deleteEntry(Maintenance maintenance){
@@ -355,9 +388,10 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Mileage> getMilageEntries(String refID) {
+    public ArrayList<Mileage> getMileageEntries(String refID) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID);
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';",
+                TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Mileage> mileageList = new ArrayList<>();
@@ -365,8 +399,40 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             if (cursor.moveToFirst()) {
                 do {
                     Mileage mileage = new Mileage(refID);
+                    mileage.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
+                    mileage.setMileage(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_TRIP))),
+                            Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_FILL_VOL))),
+                            Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE))));
 
-                    mileage.setRefID(cursor.getString(cursor.getColumnIndex(refID)));
+                    mileageList.add(mileage);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (!cursor.isClosed()) {
+                cursor.close();
+                db.close();
+            }
+        }
+
+        return mileageList;
+    }
+
+    public ArrayList<Mileage> getMileageEntriesByYear(String refID, String date) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        String[] dateArray = date.split("/");
+        String YEAR = "%" + dateArray[2]; //SQL wildcard %
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s LIKE '%s';",
+                TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, YEAR);
+        Cursor cursor = db.rawQuery(QUERY, null);
+
+        ArrayList<Mileage> mileageList = new ArrayList<>();
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    Mileage mileage = new Mileage(refID);
                     mileage.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
                     mileage.setMileage(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_TRIP))),
                             Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_FILL_VOL))),

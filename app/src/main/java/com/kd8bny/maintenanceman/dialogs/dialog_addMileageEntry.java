@@ -110,7 +110,8 @@ public class dialog_addMileageEntry extends DialogFragment {
 
     private void sendResult(ArrayList<Double> values) {
         Bundle bundle = new Bundle();
-        bundle.putInt("pos", mPos);
+        int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
+        bundle.putInt("pos", pos);
         bundle.putDouble("trip", values.get(0));
         bundle.putDouble("fill", values.get(1));
         bundle.putDouble("price", values.get(2));
@@ -122,7 +123,6 @@ public class dialog_addMileageEntry extends DialogFragment {
         for(Vehicle v : roster) {
             singleVehicle.add(v.getTitle());
         }
-        Log.d(TAG, singleVehicle.toString());
         return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, singleVehicle);
     }
 

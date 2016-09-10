@@ -62,6 +62,9 @@
     <string name="error_dest_val">Enter Destination</string>
     <string name="error_start_val">Enter Trip Start</string>
 
+    <!-- Charts -->
+    <string name="header_chart">Maintenance Expenses</string>
+
     <!-- Contact Me -->
     <string name="title_contact">Contact Me</string>
     <string name="action">Send Using...</string>
@@ -108,7 +111,7 @@
     <string name="header_engine">Engine</string>
     <string name="header_power_train">Power Train</string>
     <string name="header_other">Other</string>
-    <string name="header_chart">Maintenance Expenses</string>
+    <string name="header_current">Per Annum</string>
     <string name="header_business_chart">Business Expenses</string>
 
     <!-- Intro -->
@@ -143,7 +146,11 @@
     <string name="field_trip">Distance Since Last Fill</string>
     <string name="field_fill_vol">Amount Filled</string>
     <string name="field_mileage_price">Price</string>
-
+    <string name="hint_no_mileage">Enter on your next fill up</string>
+    <string name="hint_no_cost">No maintenance completed</string>
+    <string name="hint_info_cost">total expenses</string>
+    <string name="hint_info_mileage">mpg</string>
+    <string name="hint_info_mileage_cost">avg fuel cost</string>
 
     <!-- Preferences -->
     <string name="title_settings">Settings</string>

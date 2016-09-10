@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -14,22 +13,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.Locale;
 
 public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
@@ -38,44 +29,35 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private ArrayList<Integer> viewTypes = new ArrayList<>();
     private HashMap<String, String> cardInfo = new HashMap<>();
     private Vehicle mVehicle;
-    private ArrayList<ArrayList> mCostHist;
+    private ArrayList<Maintenance> mCostHist;
     private ArrayList<Mileage> mMileages;
 
-    private int stuipidI = 0;
+    private int recycler_i = 0;
 
     private static final int VIEW_SPECS_GEN = 0;
-    private static final int VIEW_CHART_COST = 1;
-    private static final int VIEW_CHART_MILEAGE = 2;
-    private static final int VIEW_SPECS_ENG = 3;
-    private static final int VIEW_SPECS_POWER = 4;
-    private static final int VIEW_SPECS_OTHER = 5;
+    private static final int VIEW_CURRENT = 1;
+    private static final int VIEW_SPECS_ENG = 2;
+    private static final int VIEW_SPECS_POWER = 3;
+    private static final int VIEW_SPECS_OTHER = 4;
 
     protected View vSpecs;
-    protected View vChartCost;
-    protected View vChartMileage;
+    protected View vCurrent;
 
-    public InfoAdapter(Vehicle vehicle, ArrayList<ArrayList> costHist, ArrayList<Mileage> mileages) {
+    public InfoAdapter(Vehicle vehicle, ArrayList<Maintenance> costHist, ArrayList<Mileage> mileages) {
         mVehicle = vehicle;
         mCostHist = costHist;
         mMileages = mileages;
 
-        HashMap<String, String> tempSpecs;// = new HashMap<>();
-        tempSpecs = mVehicle.getGeneralSpecs();
+        HashMap<String, String> tempSpecs = mVehicle.getGeneralSpecs();
         if (!tempSpecs.isEmpty()) {
             mVehicleInfoArray.add(tempSpecs);
             viewTypes.add(VIEW_SPECS_GEN);
         }
-        if (!costHist.isEmpty()) {
-            HashMap<String, ArrayList> tempCost = new HashMap<>();
-            tempCost.put("cost", mCostHist);
-            mVehicleInfoArray.add(tempCost);
-            viewTypes.add(VIEW_CHART_COST);
-        }
-        if (!mMileages.isEmpty()) {
-            HashMap<String, ArrayList> tempMileage = new HashMap<>();
-            tempMileage.put("mileage", mMileages);
-            mVehicleInfoArray.add(tempMileage);
-            viewTypes.add(VIEW_CHART_MILEAGE);
+        if (!mCostHist.isEmpty() || !mMileages.isEmpty()) {
+            HashMap<String, String> tempCurrent = new HashMap<>();
+            tempCurrent.put("current", "current");
+            mVehicleInfoArray.add(tempCurrent);
+            viewTypes.add(VIEW_CURRENT);
         }
         tempSpecs = mVehicle.getEngineSpecs();
         if (!tempSpecs.isEmpty()) {
@@ -101,32 +83,24 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        switch (viewTypes.get(stuipidI)){
-            case VIEW_CHART_COST:
-                vChartCost = LayoutInflater
+        switch (viewTypes.get(recycler_i)){
+            case VIEW_CURRENT:
+                vCurrent = LayoutInflater
                         .from(viewGroup.getContext())
-                        .inflate(R.layout.card_info_expense, viewGroup, false);
-                stuipidI++;
+                        .inflate(R.layout.card_info_current, viewGroup, false);
+                recycler_i++;
 
-               return new vhChart(vChartCost, null);
+               return new vhCurrent(vCurrent, -1, null, null);
 
-           case VIEW_CHART_MILEAGE:
-               vChartMileage = LayoutInflater
-                       .from(viewGroup.getContext())
-                       .inflate(R.layout.card_info_mileage, viewGroup, false);
-               stuipidI++;
+            default:
+                vSpecs = LayoutInflater
+                        .from(viewGroup.getContext())
+                        .inflate(R.layout.card_info, viewGroup, false);
+                cardInfo.clear();
+                recycler_i++;
 
-               return new vhChart(vChartMileage, null);
-
-           default :
-               vSpecs = LayoutInflater
-                       .from(viewGroup.getContext())
-                       .inflate(R.layout.card_info, viewGroup, false);
-               cardInfo.clear();
-               stuipidI++;
-
-               return new vhSpecs(vSpecs, cardInfo, viewTypes.get(i), i, null);
-       }
+                   return new vhSpecs(vSpecs, -1, null, -1, null);
+           }
     }
 
     @Override
@@ -134,16 +108,12 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         cardInfo = mVehicleInfoArray.get(i);
 
         switch (viewTypes.get(i)){
-            case VIEW_CHART_COST:
-                new vhChart(vChartCost, mCostHist);
-                break;
-
-            case VIEW_CHART_MILEAGE:
-                new vhChart(vChartMileage, new ArrayList<ArrayList>()); //FIX
+            case VIEW_CURRENT:
+                new vhCurrent(vCurrent, i, mCostHist, mMileages);
                 break;
 
             default :
-                new vhSpecs(vSpecs, cardInfo, viewTypes.get(i), i, mVehicle.getTitle());
+                new vhSpecs(vSpecs, i, cardInfo, viewTypes.get(i), mVehicle.getTitle());
                 break;
         }
     }
@@ -155,7 +125,7 @@ class vhSpecs extends RecyclerView.ViewHolder {
 
     private TypedArray headerColors;
 
-    public vhSpecs(View view, final HashMap<String, String> cardInfo, int viewType, int i, String vehicleTitle) {
+    public vhSpecs(View view, int i, final HashMap<String, String> cardInfo, int viewType, String vehicleTitle) {
         super(view);
         View relLayout = view.findViewById(R.id.card_info_rel);
         View linLayout = relLayout.findViewById(R.id.card_info_lin);
@@ -169,7 +139,7 @@ class vhSpecs extends RecyclerView.ViewHolder {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        if(cardInfo.size() > 0) {
+        if(i > -1) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
             TextView vHeader = (TextView) view.findViewById(R.id.card_info_title);
             if (viewType == 0) {
@@ -214,11 +184,11 @@ class vhSpecs extends RecyclerView.ViewHolder {
 
     private int getTitle(int viewType){
         switch (viewType){
-            case 3:
+            case 2:
                 return R.string.header_engine;
-            case 4:
+            case 3:
                 return R.string.header_power_train;
-            case 5:
+            case 4:
                 return R.string.header_other;
             default:
                 return -1;
@@ -227,131 +197,56 @@ class vhSpecs extends RecyclerView.ViewHolder {
 }
 
 @SuppressWarnings("ResourceType")
-class vhChart extends RecyclerView.ViewHolder {
-    private static final String TAG = "adptr_info_VwHldr_chrt";
+class vhCurrent extends RecyclerView.ViewHolder {
+    private static final String TAG = "adptr_crnt";
 
     private TypedArray headerColors;
 
-    public vhChart(View view, final ArrayList<ArrayList> vehicleHist) {
+    public vhCurrent(View view, int i, ArrayList<Maintenance> maintenanceList, ArrayList<Mileage> mileageList) {
         super(view);
-        final String[] months = view.getResources().getStringArray(R.array.spec_month);
 
-        View relLayout = view.findViewById(R.id.card_info_rel);
-        DisplayMetrics metrics = relLayout.getContext().getResources().getDisplayMetrics();
-        int width = metrics.widthPixels;
-
-        TreeMap<Integer, Float> costHistory = new TreeMap<>();
-        List<BarEntry> barEntries = new ArrayList<>();
-        ArrayList<String> xLegend = new ArrayList<>();
-
-        if (vehicleHist != null) {
+        if(i > -1) {
             headerColors = view.getResources().obtainTypedArray(R.array.header_color);
-            TextView vTitle = (TextView) view.findViewById(R.id.card_info_title);
+            TextView vHeader = (TextView) view.findViewById(R.id.card_info_title);
+            vHeader.setText(view.getResources().getString(R.string.header_current));
             ImageView imageView = (ImageView) view.findViewById(R.id.card_info_iv);
-            imageView.setBackgroundColor(headerColors.getColor(1, 0));
+            imageView.setBackgroundColor(headerColors.getColor(i, 0));
 
-            vTitle.setText(view.getResources().getString(R.string.header_chart));
-            vTitle.setMinWidth(width / 3);
-            vTitle.setMaxWidth(width);
-
-            view.animate();
-
-            HorizontalBarChart mChart = (HorizontalBarChart) view.findViewById(R.id.chart);
-            mChart.setDrawValueAboveBar(true);
-            //mChart.setDrawHighlightArrow(true);
-            mChart.setDescription(null);
-            mChart.getLegend().setEnabled(false);
-            mChart.getAxisLeft().setEnabled(false);
-            mChart.getAxisRight().setEnabled(false);
-            mChart.setGridBackgroundColor(Color.TRANSPARENT);
-            mChart.setTouchEnabled(false);
-            //mChart.setFitBars(false);
-
-            XAxis xAxis = mChart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setDrawAxisLine(false);
-            xAxis.setDrawGridLines(false);
-            xAxis.setGridLineWidth(0.3f);
-            xAxis.setAxisLineWidth(0.3f);
-            xAxis.setTextColor(ContextCompat.getColor(view.getContext(), R.color.secondary_text));
-            xAxis.setTextSize(18f);
-            xAxis.setGranularity(1f);
-            xAxis.setValueFormatter(new MyXAxisValueFormatter(xLegend));
-
-            try {
-                for (int i = 0; i < vehicleHist.size(); i++) {
-                    ArrayList<String> tempEvent = vehicleHist.get(i);
-                    String[] dateArray = tempEvent.get(0).split("/");
-                    int month = Integer.parseInt(dateArray[0]);
-                    int year = Integer.parseInt(dateArray[2]);
-                    int yearOffset = Calendar.getInstance().get(Calendar.YEAR) - year;
-
-                    if (yearOffset != 0) {
-                        //Lets take that old boy and put it in a mod 12
-                        month += (12 * yearOffset);
-                    }
-
-                    if (costHistory.containsKey(month)) {
-                        costHistory.put(month, costHistory.get(month) + Float.parseFloat(tempEvent.get(1)));
-                    } else {
-                        costHistory.put(month, Float.parseFloat(tempEvent.get(1)));
+            if (!maintenanceList.isEmpty()){
+                Double total = 0.0;
+                for (Maintenance m: maintenanceList) {
+                    String price = m.getPrice();
+                    if (!price.isEmpty()) {
+                        total += Double.parseDouble(price);
                     }
                 }
 
-                int i = 0;
-                for (int key : costHistory.keySet()) {
-                    if (i > 3) {
-                        break;
-                    }
+                TextView vVal = (TextView) view.findViewById(R.id.value_cost);
+                TextView vInfo = (TextView) view.findViewById(R.id.info_cost);
+                vVal.setText(String.format(Locale.ENGLISH, "%1$,.2f", total));
+                vInfo.setText(view.getResources().getString(R.string.hint_info_cost));
+            }
 
-                    xLegend.add(months[(key - 1) % 12]);
-                    barEntries.add(new BarEntry(i, costHistory.get(key)));
-                    i++;
+            if (!mileageList.isEmpty()){
+                Double mileage = 0.0;
+                Double cost = 0.0;
+                for (Mileage m: mileageList) {
+                    mileage += m.getMileage();
+                    cost += m.getPrice();
                 }
+                mileage = mileage/mileageList.size();
+                cost = cost/mileageList.size();
 
+                TextView vMileageVal = (TextView) view.findViewById(R.id.value_mileage);
+                TextView vMileageInfo = (TextView) view.findViewById(R.id.info_mileage);
+                vMileageVal.setText(String.format(Locale.ENGLISH, "%1$,.2f", mileage));
+                vMileageInfo.setText(view.getResources().getString(R.string.hint_info_mileage));
 
-
-                Log.d(TAG, costHistory.toString());
-                Log.d(TAG, barEntries.toString());
-                Log.d(TAG, xLegend.toString());
-
-                BarDataSet barDataSet = new BarDataSet(barEntries, null);
-                barDataSet.setColor(headerColors.getColor(6, 0));
-
-                BarData data = new BarData(barDataSet);
-                data.setValueTextSize(10f);
-                data.setBarWidth(0.9f);
-
-                mChart.setData(data);
-                mChart.animateY(2500);
-
-            } catch (NumberFormatException e) {
-                //e.printStackTrace();
-                Log.i(TAG, "No date found");
+                TextView vCostVal = (TextView) view.findViewById(R.id.value_mileage_cost);
+                TextView vCostInfo = (TextView) view.findViewById(R.id.info_mileage_cost);
+                vCostVal.setText(String.format(Locale.ENGLISH, "%1$,.2f", cost));
+                vCostInfo.setText(view.getResources().getString(R.string.hint_info_mileage_cost));
             }
         }
     }
-}
-
-class MyXAxisValueFormatter implements AxisValueFormatter {
-
-    private ArrayList<String> mValues;
-
-    public MyXAxisValueFormatter(ArrayList<String> values) {
-        this.mValues = values;
-    }
-
-    @Override
-    public String getFormattedValue(float value, AxisBase axis) {
-        // "value" represents the position of the label on the axis (x or y)
-        if (value > 1) {
-            return mValues.get((int) value) + "";
-        }
-
-        return mValues.get(0) + "";
-    }
-
-    /** this is only needed if numbers are returned, else return 0 */
-    @Override
-    public int getDecimalDigits() { return 0; }
 }
