@@ -370,6 +370,8 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                 VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
                 vehicleDB.insertEntry(mileage);
+
+                new SaveLoadHelper(mContext, this).save(roster);
                 break;
         }
     }
