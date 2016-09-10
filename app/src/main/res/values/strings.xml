@@ -197,6 +197,12 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        V3.3 10Sept2015\n\n
+
+        Added Fuel Mileage Tracking\n
+        Removed info graph temporarily itll return bigger and better\n
+        Tons and tons of code cleaning\n\n
+
         V3.2.5 5June2016\n\n
 
         Fix that nasty dropbox bug. No longer will you FC close on start.\n
@@ -205,16 +211,5 @@
 
         Contact Me Added in Nav Drawer\n
         Please use for any concerns with the app\n\n
-
-        V3.2.0 30May2016\n\n
-
-        Say welcome to Android wear :)\n
-        Next will be some bug fixes\n\n
-        V3.1.5 21Mar2016\n\n
-
-        Search Maintenance tasks by event\n
-        Sort Maintenance tasks by date\n
-        Export both Maintenance and travel data to CSV\n
-        then import it into your favorite spreadsheet program\n\n
     </string>
 </resources>
