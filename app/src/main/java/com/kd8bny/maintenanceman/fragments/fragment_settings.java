@@ -49,6 +49,18 @@ public class fragment_settings extends PreferenceFragment{
                 return true;
             }
         });
+
+        Preference listPreference = getPreferenceManager().findPreference("prefUnitDist");
+        listPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                String unit = (String) newValue;
+                SharedPreferences.Editor editor = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).edit();
+                editor.putString("prefUnitDist", unit);
+                editor.apply();
+                return true;
+            }
+        });
     }
 
     @Override
