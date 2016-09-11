@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
@@ -15,21 +16,31 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterViewHolder> {
     private static final String TAG = "adptr_hstry";
 
     private Context mContext;
+    private View itemView;
+    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private TypedArray icons;
     private TypedArray headerColors;
     private Resources res;
+    private String UNIT_DIST;
 
     private ArrayList<Maintenance> mMaintenanceList;
-    private View itemView;
 
     public HistoryAdapter(Context context, ArrayList<Maintenance> maintenanceList) {
         mContext = context;
         mMaintenanceList = maintenanceList;
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("prefUnitDist", "mi").equals("mi")){
+            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_us);
+        }else{
+            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_metric);
+        }
     }
 
     @Override
@@ -61,7 +72,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
             Maintenance maintenance = mMaintenanceList.get(i);
             viewHolder.vIcon.setImageResource(icons.getResourceId(maintenance.getIcon(), 0));
             viewHolder.vdate.setText(maintenance.getDate());
-            viewHolder.vodo.setText(maintenance.getOdometer());
+            viewHolder.vodo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s", Double.parseDouble(maintenance.getOdometer()), UNIT_DIST));
             viewHolder.vevent.setText(maintenance.getEvent());
        }else{
            viewHolder.vevent.setText(mContext.getResources().getString(R.string.error_no_history));

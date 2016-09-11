@@ -79,7 +79,7 @@
                 android:textSize="@dimen/field_font"/>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/last_label"
                 android:layout_toEndOf="@+id/carPic"
@@ -95,9 +95,8 @@
                     android:ellipsize="marquee"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:fadingEdge="horizontal"
-                    android:singleLine="true"
-                    android:maxEms="7"
-                    android:minEms="7"
+                    android:maxLines="1"
+
 
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/field_font"/>
@@ -111,9 +110,8 @@
 
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
-                    android:singleLine="true"
-                    android:maxEms="5"
-                    android:minEms="5"
+                    android:maxLines="1"
+
 
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/field_font"/>

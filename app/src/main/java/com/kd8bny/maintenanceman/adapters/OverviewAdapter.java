@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -18,18 +19,30 @@ import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.AdapterViewHolder>{
     private static final String TAG = "adptr_ovrvw";
 
+    private Context mContext;
     private View itemView;
+    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private VehicleLogDBHelper mVehicleLogDBHelper;
     private ArrayList<Vehicle> mRoster;
     private TypedArray headerColors;
+    private String UNIT_DIST;
 
     public OverviewAdapter(Context context, ArrayList<Vehicle> roster) {
+        mContext = context;
         mVehicleLogDBHelper = VehicleLogDBHelper.getInstance(context);
         mRoster = roster;
+
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("prefUnitDist", "mi").equals("mi")){
+            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_us);
+        }else{
+            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_metric);
+        }
     }
 
     @Override
@@ -90,7 +103,8 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             ArrayList<Maintenance> temp = mVehicleLogDBHelper.getFullVehicleEntries(vehicle.getRefID());
             if (!temp.isEmpty()) {
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
-                adapterViewHolder.vOdo.setText(temp.get(temp.size()-1).getOdometer());
+                adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
+                        Double.parseDouble(temp.get(temp.size()-1).getOdometer()), UNIT_DIST));
                 adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());
                 adapterViewHolder.vTitle.setSelected(true);
             }
