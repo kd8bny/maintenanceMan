@@ -54,7 +54,7 @@
     <string name="field_comment">Comment</string>
 
     <!-- Add Travel Event -->
-    <string name="title_travel">Travel Log</string>
+    <string name="title_travel">Trips</string>
     <string name="field_start">Odometer Start</string>
     <string name="field_end">Odometer End</string>
     <string name="field_dest">Destination</string>
@@ -91,7 +91,7 @@
     <string name="menu_add_mileage">Add Mileage</string>
 
     <!-- History -->
-    <string name="title_history">History</string>
+    <string name="title_history">Maintenance</string>
     <string name="error_no_history">No Vehicle History</string>
     <string name="label_date">Date: </string>
     <string name="label_odo">On: </string>
@@ -102,8 +102,6 @@
     <string name="menu_hist_search">Search Events</string>
     <string name="menu_hist_export">Export to CSV</string>
     <string name="share">Share your CSV</string>
-
-    <string name="unit_time"> hrs</string>
 
     <!-- Info -->
     <string name="title_info">About</string>
@@ -142,6 +140,7 @@
     <string name="toast_sort_type">Sort by Type</string>
 
     <!--Mileage-->
+    <string name="title_mileage">Mileage</string>
     <string name="title_mileage_add">Add Fill Up</string>
     <string name="field_trip">Distance Since Last Fill</string>
     <string name="field_fill_vol">Amount Filled</string>
@@ -151,6 +150,8 @@
     <string name="hint_info_cost">total expenses</string>
     <string name="hint_info_mileage">mpg</string>
     <string name="hint_info_mileage_cost">avg fuel cost</string>
+    <string name="menu_toggle_mileage">Switch to Mileage</string>
+    <string name="menu_toggle_maintenance">Switch to Maintenance</string>
 
     <!-- Preferences -->
     <string name="title_settings">Settings</string>
@@ -189,6 +190,13 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_activity_billing">activity_billing</string>
+
+    <!-- Units -->
+    <string name="unit_time"> hrs</string>
+    <string name="unit_mileage_us">mpg</string>
+    <string name="unit_mileage_metric">Km/L</string>
+    <string name="unit_dist_us">mi</string>
+    <string name="unit_dist_metric">Km</string>
 
     <!-- View Pager Activity -->
     <string name="title_view_pager">My Vehicle</string>

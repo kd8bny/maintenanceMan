@@ -115,6 +115,9 @@ public class dialog_addMileageEntry extends DialogFragment {
         bundle.putDouble("trip", values.get(0));
         bundle.putDouble("fill", values.get(1));
         bundle.putDouble("price", values.get(2));
+        if (mMileage != null){
+            bundle.putSerializable("event", mMileage);
+        }
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
                 new Intent().putExtra("bundle", bundle));
     }

@@ -3,6 +3,7 @@ package com.kd8bny.maintenanceman.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -172,9 +173,10 @@ public class fragment_info extends Fragment implements SyncFinished {
         }
     }
 
-    public void onDownloadComplete(Boolean doUpdate){
-        if (doUpdate) {
-            //TODO
+    public void onDownloadComplete(Boolean isComplete){
+        if (isComplete) {
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
+            onResume();
         }
     }
 }

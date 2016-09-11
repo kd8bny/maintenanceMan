@@ -3,6 +3,7 @@
 
     <!-- Padding -->
     <dimen name="padding_header">8dp</dimen>
+    <dimen name="smidge">8dp</dimen>
 
     <!-- Horizontal -->
     <dimen name="start_end_horizontal_margin">16dp</dimen>

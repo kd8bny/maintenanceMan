@@ -18,6 +18,7 @@ import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 
 public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";
@@ -420,7 +421,6 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
     }
 
     public ArrayList<Mileage> getMileageEntriesByYear(String refID, String date) {
-
         SQLiteDatabase db = getReadableDatabase();
         String[] dateArray = date.split("/");
         String YEAR = "%" + dateArray[2]; //SQL wildcard %
@@ -455,11 +455,14 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     public void deleteEntry(Mileage mileage){
         SQLiteDatabase db = getWritableDatabase();
-        String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s = '%s';",
+        String MILEAGE = String.format(Locale.ENGLISH, "%.1f", mileage.getMileage()) + "%"; //SQL wildcard %
+        String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s LIKE '%s';",
                 TABLE_MILEAGE,
                 COLUMN_VEHICLE_REFID, mileage.getRefID(),
                 COLUMN_VEHICLE_DATE, mileage.getDate(),
-                COLUMN_VEHICLE_EVENT, mileage.getMileage());
+                COLUMN_MILEAGE, MILEAGE);
+
+        Log.d(TAG, QUERY);
         try {
             db.beginTransaction();
             db.execSQL(QUERY);
