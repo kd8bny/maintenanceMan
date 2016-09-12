@@ -455,14 +455,11 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     public void deleteEntry(Mileage mileage){
         SQLiteDatabase db = getWritableDatabase();
-        String MILEAGE = String.format(Locale.ENGLISH, "%.1f", mileage.getMileage()) + "%"; //SQL wildcard %
         String QUERY = String.format("DELETE FROM %s WHERE %s = '%s' AND %s = '%s' AND %s LIKE '%s';",
                 TABLE_MILEAGE,
                 COLUMN_VEHICLE_REFID, mileage.getRefID(),
                 COLUMN_VEHICLE_DATE, mileage.getDate(),
-                COLUMN_MILEAGE, MILEAGE);
-
-        Log.d(TAG, QUERY);
+                COLUMN_FILL_VOL, mileage.getFillVol().toString());
         try {
             db.beginTransaction();
             db.execSQL(QUERY);
