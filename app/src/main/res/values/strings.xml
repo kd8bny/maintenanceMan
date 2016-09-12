@@ -205,11 +205,14 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
-        V3.3 10Sept2015\n\n
+        V3.3.x 11Sept2016\n\n
 
-        Added Fuel Mileage Tracking\n
-        Removed info graph temporarily itll return bigger and better\n
-        Tons and tons of code cleaning\n\n
+        - Added Fuel Mileage Tracking\n
+        - Removed info graph temporarily itll return bigger and better\n
+        - Added a floating action menu for every vehicle screen\n
+        - US and Metric units make a return\n
+        - Better formatting of numbers
+        - Tons and tons of code cleaning\n\n
 
         V3.2.5 5June2016\n\n
 
