@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,16 +16,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.InfoAdapter;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 
 import java.util.ArrayList;
@@ -37,8 +40,8 @@ public class fragment_info extends Fragment implements SyncFinished {
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
 
-    private Context context;
-    private ArrayList<Vehicle> roster;
+    private Context mContext;
+    private ArrayList<Vehicle> mRoster;
     private int vehiclePos;
     private Vehicle vehicle;
     private ArrayList<Maintenance> mVehicleHist;
@@ -50,12 +53,12 @@ public class fragment_info extends Fragment implements SyncFinished {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        context = getActivity().getApplicationContext();
+        mContext = getActivity().getApplicationContext();
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        roster = bundle.getParcelableArrayList("roster");
+        mRoster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = roster.get(vehiclePos);
+        vehicle = mRoster.get(vehiclePos);
 
         VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
 
@@ -78,16 +81,69 @@ public class fragment_info extends Fragment implements SyncFinished {
         cardList.setLayoutManager(cardMan);
 
         //fab
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
+        fabMenu.setClosedOnTouchOutside(true);
+        fabMenu.setAnimated(true);
+
+        view.findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
                 dialog_addField dialog_addField = new dialog_addField();
                 dialog_addField.setTargetFragment(fragment_info.this, 0);
                 dialog_addField.show(fm, "dialog_add_field");
+                fabMenu.close(true);
             }
         });
+
+        view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("caseID", 1);
+                bundle.putParcelableArrayList("roster", mRoster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
+                fabMenu.close(true);
+            }});
+
+        view.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("roster", mRoster);
+                android.support.v4.app.FragmentManager fm = getFragmentManager();
+                dialog_addMileageEntry dialog = new dialog_addMileageEntry();
+                dialog.setTargetFragment(fragment_info.this, 0);
+                dialog.setArguments(bundle);
+                dialog.show(fm, "dialog_add_mileage");
+                fabMenu.close(true);
+            }});
+
+        view.findViewById(R.id.fab_add_business).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("caseID", 4);
+                bundle.putParcelableArrayList("roster", mRoster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
+                fabMenu.close(true);
+            }});
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (fabMenu.isOpened()) {
+                        fabMenu.close(true);
+                        return true;
+                    }
+                }
+                return false;
+            }});
 
         return view;
     }
@@ -101,9 +157,27 @@ public class fragment_info extends Fragment implements SyncFinished {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle;
         switch (resultCode) {
+            case (0):
+                bundle = data.getBundleExtra("bundle");
+                final Calendar cal = java.util.Calendar.getInstance();
+                String date = cal.get(java.util.Calendar.MONTH) + 1
+                        + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
+                        + "/" + cal.get(java.util.Calendar.YEAR);
+
+                Mileage mileage = new Mileage(mRoster.get(bundle.getInt("pos")).getRefID());
+                mileage.setDate(date);
+                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+
+                VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
+                vehicleDB.insertEntry(mileage);
+
+                new SaveLoadHelper(mContext, this).save(mRoster);
+                break;
+
             case (1):
-                Bundle bundle = data.getBundleExtra("bundle");
+                bundle = data.getBundleExtra("bundle");
                 ArrayList<String> result = bundle.getStringArrayList("fieldData");
                 HashMap<String, String> temp;
                 switch (result.get(0)) {
@@ -128,19 +202,18 @@ public class fragment_info extends Fragment implements SyncFinished {
                         vehicle.setOtherSpecs(temp);
                         break;
                 }
-                roster.set(vehiclePos, vehicle);
-                new SaveLoadHelper(context, this).save(roster);
-
-            case(90):
-                //Saved
-                roster = new SaveLoadHelper(context, this).load();
-                vehicle = roster.get(vehiclePos);
+                mRoster.set(vehiclePos, vehicle);
+                new SaveLoadHelper(mContext, this).save(mRoster);
                 break;
 
-            case(91):
-                //Delete vehicle
+            case(90)://Saved
+                mRoster = new SaveLoadHelper(mContext, this).load();
+                vehicle = mRoster.get(vehiclePos);
+                break;
+
+            case(91)://Delete vehicle
                 getActivity().finish();
-            break;
+                break;
 
             default:
                 break;
@@ -162,7 +235,7 @@ public class fragment_info extends Fragment implements SyncFinished {
                 Bundle bundle = new Bundle();
                 bundle.putInt("caseID", 0);
                 bundle.putInt("vehiclePos", vehiclePos);
-                bundle.putParcelableArrayList("roster", roster);
+                bundle.putParcelableArrayList("roster", mRoster);
                 startActivityForResult(new Intent(getActivity(),
                         VehicleActivity.class).putExtra("bundle", bundle), 90);
 

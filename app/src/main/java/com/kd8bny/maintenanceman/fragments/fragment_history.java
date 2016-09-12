@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,13 +25,19 @@ import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
+import com.kd8bny.maintenanceman.dialogs.dialog_addField;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
+import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -38,11 +46,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class fragment_history extends Fragment {
+public class fragment_history extends Fragment implements SyncFinished {
     private static final String TAG = "frgmnt_hist";
 
     private View vFilterView;
@@ -149,19 +158,69 @@ public class fragment_history extends Fragment {
                         popupMenu.show();
                 }}}));
 
-        //menu_overview_fab
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        //fab
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
+        fabMenu.setClosedOnTouchOutside(true);
+        fabMenu.setAnimated(true);
+
+        view.findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                dialog_addField dialog_addField = new dialog_addField();
+                dialog_addField.setTargetFragment(fragment_history.this, 0);
+                dialog_addField.show(fm, "dialog_add_field");
+            }
+        });
+
+        view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putInt("caseID", 1);
                 bundle.putParcelableArrayList("roster", mRoster);
-                bundle.putInt("vehiclePos", vehiclePos);
                 startActivity(new Intent(getActivity(), VehicleActivity.class)
                         .putExtra("bundle", bundle));
-            }
-        });
+                fabMenu.close(true);
+            }});
+
+        view.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("roster", mRoster);
+                android.support.v4.app.FragmentManager fm = getFragmentManager();
+                dialog_addMileageEntry dialog = new dialog_addMileageEntry();
+                dialog.setTargetFragment(fragment_history.this, 0);
+                dialog.setArguments(bundle);
+                dialog.show(fm, "dialog_add_mileage");
+                fabMenu.close(true);
+            }});
+
+        view.findViewById(R.id.fab_add_business).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("caseID", 4);
+                bundle.putParcelableArrayList("roster", mRoster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
+                fabMenu.close(true);
+            }});
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (fabMenu.isOpened()) {
+                        fabMenu.close(true);
+                        return true;
+                    }
+                }
+                return false;
+            }});
 
         //Filter dialog
         final MaterialAutoCompleteTextView tFilter = (MaterialAutoCompleteTextView) vFilterView.findViewById(R.id.met_filter);
@@ -212,6 +271,60 @@ public class fragment_history extends Fragment {
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         mVehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
         histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getBundleExtra("bundle");
+        VehicleLogDBHelper vehicleDB;
+        switch (resultCode) {
+            case (0): //Add
+                final Calendar cal = java.util.Calendar.getInstance();
+                String date = cal.get(java.util.Calendar.MONTH) + 1
+                        + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
+                        + "/" + cal.get(java.util.Calendar.YEAR);
+
+                Mileage mileage = new Mileage(mRoster.get(bundle.getInt("pos")).getRefID());
+                mileage.setDate(date);
+                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+
+                vehicleDB = new VehicleLogDBHelper(this.getActivity());
+                vehicleDB.insertEntry(mileage);
+
+                new SaveLoadHelper(mContext, this).save(mRoster);
+                onResume();
+                break;
+
+            case (1):
+                ArrayList<String> result = bundle.getStringArrayList("fieldData");
+                HashMap<String, String> temp;
+                switch (result.get(0)) {
+                    case "General":
+                        temp = vehicle.getGeneralSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setGeneralSpecs(temp);
+                        break;
+                    case "Engine":
+                        temp = vehicle.getEngineSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setEngineSpecs(temp);
+                        break;
+                    case "Power Train":
+                        temp = vehicle.getPowerTrainSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setPowerTrainSpecs(temp);
+                        break;
+                    case "Other":
+                        temp = vehicle.getOtherSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setOtherSpecs(temp);
+                        break;
+                }
+                mRoster.set(vehiclePos, vehicle);
+                new SaveLoadHelper(mContext, this).save(mRoster);
+                break;
+        }
     }
 
     @Override
@@ -320,5 +433,12 @@ public class fragment_history extends Fragment {
             vFilterView.setVisibility(View.INVISIBLE);
         }
         vFilterView.startAnimation(translateAnim);
+    }
+
+    public void onDownloadComplete(Boolean isComplete){
+        if (isComplete) {
+            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
+            onResume();
+        }
     }
 }

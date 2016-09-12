@@ -8,10 +8,12 @@ import android.os.Bundle;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +21,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.MileageAdapter;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
@@ -132,6 +137,70 @@ public class fragment_mileage extends Fragment implements SyncFinished {
                         popupMenu.show();
                 }}}));
 
+        //fab
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
+        fabMenu.setClosedOnTouchOutside(true);
+        fabMenu.setAnimated(true);
+
+        view.findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getFragmentManager();
+                dialog_addField dialog_addField = new dialog_addField();
+                dialog_addField.setTargetFragment(fragment_mileage.this, 0);
+                dialog_addField.show(fm, "dialog_add_field");
+            }
+        });
+
+        view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("caseID", 1);
+                bundle.putParcelableArrayList("roster", mRoster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
+                fabMenu.close(true);
+            }});
+
+        view.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelableArrayList("roster", mRoster);
+                android.support.v4.app.FragmentManager fm = getFragmentManager();
+                dialog_addMileageEntry dialog = new dialog_addMileageEntry();
+                dialog.setTargetFragment(fragment_mileage.this, 0);
+                dialog.setArguments(bundle);
+                dialog.show(fm, "dialog_add_mileage");
+                fabMenu.close(true);
+            }});
+
+        view.findViewById(R.id.fab_add_business).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("caseID", 4);
+                bundle.putParcelableArrayList("roster", mRoster);
+                startActivity(new Intent(getActivity(), VehicleActivity.class)
+                        .putExtra("bundle", bundle));
+                fabMenu.close(true);
+            }});
+
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (fabMenu.isOpened()) {
+                        fabMenu.close(true);
+                        return true;
+                    }
+                }
+                return false;
+            }});
+
         return view;
     }
 
@@ -164,6 +233,35 @@ public class fragment_mileage extends Fragment implements SyncFinished {
 
                 new SaveLoadHelper(mContext, this).save(mRoster);
                 onResume();
+                break;
+
+            case (1):
+                ArrayList<String> result = bundle.getStringArrayList("fieldData");
+                HashMap<String, String> temp;
+                switch (result.get(0)) {
+                    case "General":
+                        temp = vehicle.getGeneralSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setGeneralSpecs(temp);
+                        break;
+                    case "Engine":
+                        temp = vehicle.getEngineSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setEngineSpecs(temp);
+                        break;
+                    case "Power Train":
+                        temp = vehicle.getPowerTrainSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setPowerTrainSpecs(temp);
+                        break;
+                    case "Other":
+                        temp = vehicle.getOtherSpecs();
+                        temp.put(result.get(1), result.get(2));
+                        vehicle.setOtherSpecs(temp);
+                        break;
+                }
+                mRoster.set(vehiclePos, vehicle);
+                new SaveLoadHelper(mContext, this).save(mRoster);
                 break;
 
             case (90): //Edit
