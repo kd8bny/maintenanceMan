@@ -123,6 +123,7 @@ public class fragment_main extends Fragment implements SyncFinished,
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
+                        new PrimaryDrawerItem().withName(R.string.title_mileage_add).withIcon(R.drawable.ic_mileage_bk),
                         new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
                         new PrimaryDrawerItem().withName(R.string.menu_add_business).withIcon(R.drawable.ic_speedo_blk),
                         new DividerDrawerItem(),
@@ -136,6 +137,7 @@ public class fragment_main extends Fragment implements SyncFinished,
         drawer.setOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
             @Override
             public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+                android.support.v4.app.FragmentManager fm = getFragmentManager();
                 Intent intent = new Intent(getActivity(), VehicleActivity.class);
                 Bundle bundle = new Bundle();
                 switch (i) {
@@ -149,7 +151,17 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 2: //Add Event
+                    case 2:
+                        bundle.putParcelableArrayList("roster", roster);
+                        dialog_addMileageEntry dialog = new dialog_addMileageEntry();
+                        dialog.setTargetFragment(fragment_main.this, 0);
+                        dialog.setArguments(bundle);
+                        dialog.show(fm, "dialog_add_mileage");
+                        drawer.closeDrawer();
+
+                        return true;
+
+                    case 3: //Add Event
                         bundle.putInt("caseID", 1);
                         bundle.putParcelableArrayList("roster", roster);
                         intent.putExtra("bundle", bundle);
@@ -158,7 +170,7 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 3: //Travel Log
+                    case 4: //Travel Log
                         bundle.putInt("caseID", 4);
                         bundle.putParcelableArrayList("roster", roster);
                         intent.putExtra("bundle", bundle);
@@ -166,14 +178,14 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 5: //Settings
+                    case 6: //Settings
                         Intent settingsIntent = new Intent(view.getContext(), SettingsActivity.class);
                         view.getContext().startActivity(settingsIntent);
                         drawer.closeDrawer();
 
                         return true;
 
-                    case 6: //Contact Me
+                    case 7: //Contact Me
                         Intent contactIntent = new Intent(Intent.ACTION_SEND)
                                 .setType("plain/text")
                                 .putExtra(Intent.EXTRA_EMAIL, new String[]{ mContext.getString(R.string.to) })
@@ -184,16 +196,14 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 7: //Donate
-                        FragmentManager fm = getFragmentManager();
-
+                    case 8: //Donate
                         dialog_donate dialog_donate = new dialog_donate();
                         dialog_donate.show(fm, "dialog_donate");
                         drawer.closeDrawer();
 
                         return true;
 
-                    case 8: //Community
+                    case 9: //Community
                         Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
                         Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
                         startActivity(gplusIntent);
