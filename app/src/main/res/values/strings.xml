@@ -117,6 +117,7 @@
     <string name="subtitle_add">Vehicle Log</string>
     <string name="subtitle_travel">Travel Log</string>
     <string name="subtitle_specs">View Details</string>
+    <string name="subtitle_mileage">Fuel Mileage</string>
     <string name="summary_mm">Thank you for downloading Maintenance Man :)</string>
     <string name="summary_add">Add multiple vehicles, motorcycles, boats, and trailers\n
         \nTrack maintenance such as oil changes, tune ups, and tire rotations</string>
@@ -125,6 +126,8 @@
         \nItems can be filter numbers, tag number, or even tire sizes</string>
     <string name="summary_travel">Going on a long trip? Log your odometer and locations here.\n
         \nThis way you know which trip will rack up your cars\' mileage.</string>
+    <string name="summary_mileage">Every time you fill up your fuel tank, go ahead and enter it.\n
+        That way you\'ll get stats like average mileage and cost.</string>
 
     <!-- Main -->
     <string name="oh_noes">"Oh Noes!!!"</string>
