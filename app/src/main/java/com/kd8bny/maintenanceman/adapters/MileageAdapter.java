@@ -96,7 +96,7 @@ public class MileageAdapter extends RecyclerView.Adapter<MileageAdapter.AdapterV
             viewHolder.vDate.setText(mileage.getDate());
             viewHolder.vTripo.setText(String.format(Locale.ENGLISH, "%1$,.1f", mileage.getTripometer()));
             viewHolder.vTripoUnit.setText(UNIT_DIST);
-            viewHolder.vPrice.setText(String.format(Locale.ENGLISH, "%1$,.2f", mileage.getPrice()));
+            viewHolder.vPrice.setText(String.format(Locale.ENGLISH, "%1$s %2$,.2f", "@", mileage.getPrice()));
        }else{
             viewHolder.vMileage.setText(mContext.getResources().getString(R.string.error_no_history));
             viewHolder.vIconBackground.getDrawable()
