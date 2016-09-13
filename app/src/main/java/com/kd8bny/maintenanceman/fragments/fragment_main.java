@@ -151,30 +151,46 @@ public class fragment_main extends Fragment implements SyncFinished,
 
                         return true;
 
-                    case 2:
-                        bundle.putParcelableArrayList("roster", roster);
-                        dialog_addMileageEntry dialog = new dialog_addMileageEntry();
-                        dialog.setTargetFragment(fragment_main.this, 0);
-                        dialog.setArguments(bundle);
-                        dialog.show(fm, "dialog_add_mileage");
+                    case 2: //Add mileage
+                        if (roster.isEmpty()){
+                            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }else {
+                            bundle.putParcelableArrayList("roster", roster);
+                            dialog_addMileageEntry dialog = new dialog_addMileageEntry();
+                            dialog.setTargetFragment(fragment_main.this, 0);
+                            dialog.setArguments(bundle);
+                            dialog.show(fm, "dialog_add_mileage");
+                        }
                         drawer.closeDrawer();
 
                         return true;
 
                     case 3: //Add Event
-                        bundle.putInt("caseID", 1);
-                        bundle.putParcelableArrayList("roster", roster);
-                        intent.putExtra("bundle", bundle);
-                        view.getContext().startActivity(intent);
+                        if (roster.isEmpty()){
+                            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }else {
+                            bundle.putInt("caseID", 1);
+                            bundle.putParcelableArrayList("roster", roster);
+                            intent.putExtra("bundle", bundle);
+                            view.getContext().startActivity(intent);
+                        }
                         drawer.closeDrawer();
 
                         return true;
 
                     case 4: //Travel Log
-                        bundle.putInt("caseID", 4);
-                        bundle.putParcelableArrayList("roster", roster);
-                        intent.putExtra("bundle", bundle);
-                        view.getContext().startActivity(intent);
+                        if (roster.isEmpty()){
+                            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
+                                    Snackbar.LENGTH_SHORT).show();
+                        }else {
+                            bundle.putInt("caseID", 4);
+                            bundle.putParcelableArrayList("roster", roster);
+                            intent.putExtra("bundle", bundle);
+                            view.getContext().startActivity(intent);
+                        }
+                        drawer.closeDrawer();
 
                         return true;
 
