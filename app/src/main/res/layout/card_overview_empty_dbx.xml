@@ -17,36 +17,34 @@
         android:clipChildren="false">
 
         <ImageView
-            android:id="@+id/carPic"
+            android:id="@+id/np_dbx"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:elevation="4sp"
             android:scaleType="fitCenter"
             android:gravity="start"
             android:layout_alignParentStart="true"
-            android:src="@drawable/ic_action_add_md"
+            android:src="@drawable/np_dbx"
             android:padding="8dp"
-            android:background="@color/error"
-            android:tint="@android:color/white"/>
+            android:background="@color/primary_dark"/>
 
         <TextView
             android:id="@+id/ohNoes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/carPic"
+            android:layout_toEndOf="@+id/np_dbx"
             android:gravity="center_horizontal"
 
             android:maxLines="1"
-            android:background="@color/error"
+            android:background="@color/primary_dark"
 
-            android:text="@string/oh_noes"
+            android:text="@string/pref_title_cat_dropbox"
             android:textColor="@android:color/white"
             android:textSize="@dimen/header_font"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/carPic"
+            android:layout_toEndOf="@+id/np_dbx"
             android:layout_below="@+id/ohNoes"
             android:gravity="center_horizontal"
 
@@ -54,6 +52,6 @@
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/field_font"
 
-            android:text="@string/empty_db"/>
+            android:text="@string/empty_db_dbx"/>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

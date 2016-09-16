@@ -132,6 +132,7 @@
     <!-- Main -->
     <string name="oh_noes">"Oh Noes!!!"</string>
     <string name="empty_db">"Click to Add Vehicle"</string>
+    <string name="empty_db_dbx">"Set up cloud sync"</string>
     <string name="no_data">"No Data"</string>
     <string name="last_event">"Last Event:"</string>
     <string name="drawer_sec_options">Options</string>
@@ -152,6 +153,7 @@
     <string name="hint_no_cost">No maintenance completed</string>
     <string name="hint_info_cost">total expenses</string>
     <string name="hint_info_mileage">mpg</string>
+    <string name="hint_info_mileage_metric">mpg</string>
     <string name="hint_info_mileage_cost">avg fuel cost</string>
     <string name="menu_toggle_mileage">Switch to Mileage</string>
     <string name="menu_toggle_maintenance">Switch to Maintenance</string>
@@ -198,6 +200,8 @@
     <string name="unit_time"> hrs</string>
     <string name="unit_mileage_us">mpg</string>
     <string name="unit_mileage_metric">Km/L</string>
+    <string name="unit_mileage_time_metric">hr/L</string>
+    <string name="unit_mileage_time_us">hr/gal</string>
     <string name="unit_dist_us">mi</string>
     <string name="unit_dist_metric">Km</string>
 
