@@ -26,11 +26,14 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
 
     private Context mContext;
     private View itemView;
+    private int recycler_i = 0;
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
+
     private VehicleLogDBHelper mVehicleLogDBHelper;
     private ArrayList<Vehicle> mRoster;
     private TypedArray headerColors;
     private String UNIT_DIST;
+    private String UNIT_TIME;
 
     public OverviewAdapter(Context context, ArrayList<Vehicle> roster) {
         mContext = context;
@@ -43,12 +46,14 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
         }else{
             UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_metric);
         }
+
+        UNIT_TIME =mContext.getResources().getString(R.string.unit_time);
     }
 
     @Override
     public int getItemCount() {
         if(mRoster.isEmpty()) {
-            return 1;
+            return 2;
         }
 
         return mRoster.size();
@@ -70,6 +75,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
         if(!mRoster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
             Vehicle vehicle = mRoster.get(i);
+            Boolean useDist = true;
             switch (vehicle.getVehicleType()){
                 case "Automobile":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_car);
@@ -81,14 +87,17 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
 
                 case "Utility":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_utility);
+                    useDist = false;
                     break;
 
                 case "Marine":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_marine);
+                    useDist = false;
                     break;
 
                 case "Lawn and Garden":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_tractor);
+                    useDist = false;
                     break;
 
                 case "Trailer":
@@ -103,17 +112,28 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             ArrayList<Maintenance> temp = mVehicleLogDBHelper.getFullVehicleEntries(vehicle.getRefID());
             if (!temp.isEmpty()) {
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
-                adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
-                        Double.parseDouble(temp.get(temp.size()-1).getOdometer()), UNIT_DIST));
                 adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());
                 adapterViewHolder.vTitle.setSelected(true);
+
+                if (useDist) {
+                    adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
+                            Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), UNIT_DIST));
+                }else {
+                    adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
+                            Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), UNIT_TIME));
+                }
             }
         }
     }
 
-    public int determineLayout(){
+    private int determineLayout(){
         if(mRoster.isEmpty()) {
-            return R.layout.card_overview_empty;
+            if (recycler_i == 0) {
+                recycler_i++;
+                return R.layout.card_overview_empty;
+            }else{
+                return R.layout.card_overview_empty_dbx;
+            }
         }else{
             return R.layout.card_overview;
         }

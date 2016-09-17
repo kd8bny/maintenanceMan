@@ -151,7 +151,7 @@ public class fragment_info extends Fragment implements SyncFinished {
     @Override
     public void onResume(){
         super.onResume();
-        cardList.setAdapter(new InfoAdapter(vehicle, mVehicleHist, mMileage));
+        cardList.setAdapter(new InfoAdapter(mContext, vehicle, mVehicleHist, mMileage));
     }
 
     @Override

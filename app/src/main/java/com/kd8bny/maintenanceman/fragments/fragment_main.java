@@ -240,10 +240,19 @@ public class fragment_main extends Fragment implements SyncFinished,
             public void onItemClick(View view, int pos) {
                 Bundle bundle = new Bundle();
                 if (roster.isEmpty()) {
-                    bundle.putInt("caseID", 0);
-                    bundle.putInt("vehiclePos", -1);
-                    view.getContext().startActivity(new Intent(getActivity(), VehicleActivity.class)
-                            .putExtra("bundle", bundle));
+                    switch (pos){
+                        case 0:
+                            bundle.putInt("caseID", 0);
+                            bundle.putInt("vehiclePos", -1);
+                            view.getContext().startActivity(new Intent(getActivity(), VehicleActivity.class)
+                                    .putExtra("bundle", bundle));
+                            break;
+
+                        case 1:
+                            Intent settingsIntent = new Intent(view.getContext(), SettingsActivity.class);
+                            view.getContext().startActivity(settingsIntent);
+                            break;
+                    }
                 }else{
                     bundle.putParcelableArrayList("roster", roster);
                     bundle.putParcelable("vehicle", roster.get(pos));
