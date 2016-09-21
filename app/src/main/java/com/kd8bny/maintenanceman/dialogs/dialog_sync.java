@@ -14,7 +14,7 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 
 
-public class dialog_sync extends DialogFragment implements SyncFinished {
+public class dialog_sync extends DialogFragment {
     private static final String TAG = "dlg_whts_nw";
 
     public dialog_sync(){}
@@ -29,18 +29,10 @@ public class dialog_sync extends DialogFragment implements SyncFinished {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_sync, null);
 
-        TextView whatsNew = (TextView) view.findViewById(R.id.whats_new);
-
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setCancelable(false);
 
         return alertDialog.create();
-    }
-
-    public void onDownloadComplete(Boolean isComplete){
-        Log.d(TAG, "dismess plz");
-        dismiss();
-        Log.d(TAG, "dismess plz");
     }
 }
