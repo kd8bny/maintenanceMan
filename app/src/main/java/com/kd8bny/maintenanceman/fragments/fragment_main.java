@@ -46,6 +46,7 @@ import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
+import com.kd8bny.maintenanceman.dialogs.dialog_sync;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
@@ -80,6 +81,7 @@ public class fragment_main extends Fragment implements SyncFinished,
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
     private FloatingActionButton fabBusiness;
+    private dialog_sync mDialog_sync;
 
     private ArrayList<Vehicle> roster;
     private int mSortType = 0;
@@ -358,6 +360,11 @@ public class fragment_main extends Fragment implements SyncFinished,
             dialog_whatsNew.show(fm, "dialog_whatsNew");
         }
 
+        //Sync dat stuff
+        FragmentManager fm = getFragmentManager();
+        mDialog_sync = new dialog_sync();
+        mDialog_sync.show(fm, "dialog_sync");
+
         return view;
     }
 
@@ -512,7 +519,7 @@ public class fragment_main extends Fragment implements SyncFinished,
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-            Log.v(TAG,"Permission: "+permissions[0]+ "was "+grantResults[0]);
+            Log.v(TAG,"Permission: " + permissions[0] + "was " + grantResults[0]);
         }
     }
 
@@ -521,5 +528,7 @@ public class fragment_main extends Fragment implements SyncFinished,
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
             onResume();
         }
+
+        mDialog_sync.dismiss();
     }
 }

@@ -5,14 +5,13 @@ import android.util.Log;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.interfaces.SyncFinished;
-import com.kd8bny.maintenanceman.interfaces.UpdateUI;
 
 public class BackupRestoreHelper {
     private static final String TAG = "bckp_rstr_hlpr";
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private SyncFinished mSyncFinished;
-    private DropboxHelper mdropboxHelper;
+    private DropboxHelper mDropboxHelper;
 
     public BackupRestoreHelper(){}
 
@@ -25,9 +24,9 @@ public class BackupRestoreHelper {
         if (!cloudExists.isEmpty()) {
             switch (cloudDefault) {
                 case "dropbox":
-                    mdropboxHelper = new DropboxHelper(context);
-                    mdropboxHelper.listener = mSyncFinished;
-                    mdropboxHelper.execute();
+                    mDropboxHelper = new DropboxHelper(context);
+                    mDropboxHelper.listener = mSyncFinished;
+                    mDropboxHelper.execute();
 
                     break;
 
@@ -41,6 +40,7 @@ public class BackupRestoreHelper {
             }
         }else{
             Log.i(TAG, "Cloud source not set up");
+            mSyncFinished.onDownloadComplete(false);
         }
     }
 }
