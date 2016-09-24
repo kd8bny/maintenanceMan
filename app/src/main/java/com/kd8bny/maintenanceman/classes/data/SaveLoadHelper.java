@@ -131,7 +131,7 @@ public class SaveLoadHelper {
                 Log.v(TAG, "Adding units info");
                 SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
                 Boolean isUS = true;
-                Boolean useDist = true;
+
                 if (!sharedPreferences.getString("prefUnitDist", "mi").equals("mi")) {
                     isUS = false;
                 }
@@ -141,6 +141,7 @@ public class SaveLoadHelper {
                     Vehicle v = temp.get(i);
                     String type = v.getVehicleType();
 
+                    Boolean useDist = true;
                     if (type.equals("Utility") | type.equals("Marine") | type.equals("Lawn and Garden")){
                         useDist = false;
                     }
