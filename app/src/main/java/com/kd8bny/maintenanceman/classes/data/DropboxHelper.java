@@ -12,7 +12,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,7 +23,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -34,11 +33,11 @@ import java.util.Locale;
 public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String TAG = "dbxHlpr";
 
-    public SyncFinished listener = null;
+    public SyncData listener = null;
     private DropboxAPI<AndroidAuthSession> mDBApi;
     private Context mContext;
 
-    private static final int sTimeDifference = 5000; //ms
+    private static final int sTimeDifference = 10000; //ms
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private static final String FLEETROSTER = "/fleetRoster.json";
     private static final String VEHICLELOG = "/vehicleLog.db";
@@ -63,6 +62,10 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String results){
         listener.onDownloadComplete(filesUpdated);
+    }
+
+    @Override
+    protected void onPreExecute(){
     }
 
     @Override
@@ -104,6 +107,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
             if (!localHash.equals(readMD5(remoteHash))) {
                 if (timeDiff > sTimeDifference) {
                     if (localDate.before(remoteDate)) {
+                        listener.onDownloadStart();
                         download(REMOTE, local);
                         filesUpdated = true;
                         Log.v(TAG, "Replacing local " + local.getName() + remoteDate + " >> " + localDate);

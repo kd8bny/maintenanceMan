@@ -9,7 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.legacy.FleetRosterJSONHelper;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,7 +28,7 @@ public class SaveLoadHelper {
     public static final int DB_VERSION = 3; //3(v80) 2(v57) 1(v57)
 
     private BackupRestoreHelper mbackupRestoreHelper;
-    private SyncFinished mSyncFinished;
+    private SyncData mSyncData;
 
     private SharedPreferences sharedPreferences;
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
@@ -36,9 +36,9 @@ public class SaveLoadHelper {
     private static String FILE_LOCATION;
     private Context mContext;
 
-    public SaveLoadHelper(Context context, SyncFinished syncFinished){
+    public SaveLoadHelper(Context context, SyncData syncData){
         mContext = context;
-        mSyncFinished = syncFinished;
+        mSyncData = syncData;
         FILE_LOCATION = context.getFilesDir() + "/" + FILE_NAME;
 
         mbackupRestoreHelper = new BackupRestoreHelper();
@@ -67,16 +67,16 @@ public class SaveLoadHelper {
             e.printStackTrace();
         }
 
-        if (mSyncFinished != null) {
-            mbackupRestoreHelper.startAction(mContext, mSyncFinished);
+        if (mSyncData != null) {
+            mbackupRestoreHelper.startAction(mContext, mSyncData);
         }
 
         return true;
     }
 
     public ArrayList<Vehicle> load(){
-        if (mSyncFinished != null) {
-            mbackupRestoreHelper.startAction(mContext, mSyncFinished);
+        if (mSyncData != null) {
+            mbackupRestoreHelper.startAction(mContext, mSyncData);
         }
 
         File file = new File(FILE_LOCATION);

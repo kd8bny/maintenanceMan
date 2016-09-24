@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +31,7 @@ import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import java.text.DateFormat;
@@ -45,7 +44,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class fragment_mileage extends Fragment implements SyncFinished {
+public class fragment_mileage extends Fragment implements SyncData {
     private static final String TAG = "frgmnt_mileage";
 
     private RecyclerView mileageList;
@@ -346,5 +345,8 @@ public class fragment_mileage extends Fragment implements SyncFinished {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
             onResume();
         }
+    }
+
+    public void onDownloadStart(){
     }
 }

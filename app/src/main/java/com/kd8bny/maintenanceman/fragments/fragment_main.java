@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
@@ -41,14 +40,13 @@ import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
-import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.dialogs.dialog_sync;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.activities.IntroActivity;
@@ -68,7 +66,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class fragment_main extends Fragment implements SyncFinished,
+public class fragment_main extends Fragment implements SyncData,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = "frg_main";
 
@@ -368,11 +366,6 @@ public class fragment_main extends Fragment implements SyncFinished,
             dialog_whatsNew.show(fm, "dialog_whatsNew");
         }
 
-        //Sync dat stuff
-        FragmentManager fm = getFragmentManager();
-        mDialog_sync = new dialog_sync();
-        mDialog_sync.show(fm, "dialog_sync");
-
         return view;
     }
 
@@ -535,11 +528,17 @@ public class fragment_main extends Fragment implements SyncFinished,
     }
 
     public void onDownloadComplete(Boolean isComplete){
+
         if (isComplete) {
+            mDialog_sync.dismiss();
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
             onResume();
         }
+    }
 
-        mDialog_sync.dismiss();
+    public void onDownloadStart(){
+        FragmentManager fm = getFragmentManager();
+        mDialog_sync = new dialog_sync();
+        mDialog_sync.show(fm, "dialog_sync");
     }
 }

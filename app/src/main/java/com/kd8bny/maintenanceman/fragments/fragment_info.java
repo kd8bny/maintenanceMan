@@ -22,19 +22,18 @@ import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.InfoAdapter;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
-import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class fragment_info extends Fragment implements SyncFinished {
+public class fragment_info extends Fragment implements SyncData {
     private static final String TAG = "frgmnt_inf";
 
     private RecyclerView cardList;
@@ -251,5 +250,8 @@ public class fragment_info extends Fragment implements SyncFinished {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
             onResume();
         }
+    }
+
+    public void onDownloadStart(){
     }
 }

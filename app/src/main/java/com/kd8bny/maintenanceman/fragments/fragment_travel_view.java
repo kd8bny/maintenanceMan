@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
@@ -34,7 +33,7 @@ import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import java.text.DateFormat;
@@ -46,7 +45,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class fragment_travel_view extends Fragment implements SyncFinished {
+public class fragment_travel_view extends Fragment implements SyncData {
     private static final String TAG = "frgmnt_bsnss";
 
     private RecyclerView businessList;
@@ -349,5 +348,8 @@ public class fragment_travel_view extends Fragment implements SyncFinished {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
             onResume();
         }
+    }
+
+    public void onDownloadStart(){
     }
 }

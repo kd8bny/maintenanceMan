@@ -36,7 +36,7 @@ import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncFinished;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -50,7 +50,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class fragment_history extends Fragment implements SyncFinished {
+public class fragment_history extends Fragment implements SyncData {
     private static final String TAG = "frgmnt_hist";
 
     private View vFilterView;
@@ -439,5 +439,8 @@ public class fragment_history extends Fragment implements SyncFinished {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
             onResume();
         }
+    }
+
+    public void onDownloadStart(){
     }
 }
