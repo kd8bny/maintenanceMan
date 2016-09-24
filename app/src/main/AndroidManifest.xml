@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="com.kd8bny.maintenanceman"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="79"
-          android:versionName="3.3.2">
+          android:versionCode="80"
+          android:versionName="3.3.3">
 
     <uses-permission android:name="com.android.vending.BILLING"/>
     <uses-permission android:name="android.permission.INTERNET"/>
