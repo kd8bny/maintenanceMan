@@ -43,7 +43,6 @@ public class Vehicle implements Parcelable{
     }
 
     private Vehicle(Parcel parcel){
-        Log.v(TAG, "ParcelData(Parcel source): time to put back parcel data");
         vehicleType = parcel.readString();
         refID = parcel.readString();
         title = parcel.readString();
@@ -73,8 +72,6 @@ public class Vehicle implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int flags){
-        Log.v(TAG, "write to parcel: " + flags);
-
         parcel.writeString(vehicleType);
         parcel.writeString(refID);
         parcel.writeString(title);

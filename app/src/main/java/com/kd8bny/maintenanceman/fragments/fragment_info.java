@@ -32,11 +32,13 @@ import com.kd8bny.maintenanceman.interfaces.SyncData;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class fragment_info extends Fragment implements SyncData {
     private static final String TAG = "frgmnt_inf";
 
     private RecyclerView cardList;
+    private View mView;
     private RecyclerView.LayoutManager cardMan;
 
     private Context mContext;
@@ -72,19 +74,19 @@ public class fragment_info extends Fragment implements SyncData {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+        mView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
 
         //Info Cards
-        cardList = (RecyclerView) view.findViewById(R.id.cardList);
+        cardList = (RecyclerView) mView.findViewById(R.id.cardList);
         cardMan = new LinearLayoutManager(getActivity());
         cardList.setLayoutManager(cardMan);
 
         //fab
-        final FloatingActionMenu fabMenu = (FloatingActionMenu) view.findViewById(R.id.fabmenu);
+        final FloatingActionMenu fabMenu = (FloatingActionMenu) mView.findViewById(R.id.fabmenu);
         fabMenu.setClosedOnTouchOutside(true);
         fabMenu.setAnimated(true);
 
-        view.findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
+        mView.findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager fm = getFragmentManager();
@@ -95,7 +97,7 @@ public class fragment_info extends Fragment implements SyncData {
             }
         });
 
-        view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
+        mView.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -106,12 +108,12 @@ public class fragment_info extends Fragment implements SyncData {
                 fabMenu.close(true);
             }});
 
-        view.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
+        mView.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("roster", mRoster);
-                android.support.v4.app.FragmentManager fm = getFragmentManager();
+                FragmentManager fm = getFragmentManager();
                 dialog_addMileageEntry dialog = new dialog_addMileageEntry();
                 dialog.setTargetFragment(fragment_info.this, 0);
                 dialog.setArguments(bundle);
@@ -119,7 +121,7 @@ public class fragment_info extends Fragment implements SyncData {
                 fabMenu.close(true);
             }});
 
-        view.findViewById(R.id.fab_add_business).setOnClickListener(new View.OnClickListener() {
+        mView.findViewById(R.id.fab_add_business).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
@@ -130,9 +132,9 @@ public class fragment_info extends Fragment implements SyncData {
                 fabMenu.close(true);
             }});
 
-        view.setFocusableInTouchMode(true);
-        view.requestFocus();
-        view.setOnKeyListener(new View.OnKeyListener() {
+        mView.setFocusableInTouchMode(true);
+        mView.requestFocus();
+        mView.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -144,7 +146,7 @@ public class fragment_info extends Fragment implements SyncData {
                 return false;
             }});
 
-        return view;
+        return mView;
     }
 
     @Override
@@ -168,11 +170,15 @@ public class fragment_info extends Fragment implements SyncData {
                 Mileage mileage = new Mileage(mRoster.get(bundle.getInt("pos")).getRefID());
                 mileage.setDate(date);
                 mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+                Snackbar.make(mView.findViewById(R.id.snackbar),
+                        String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
+                                mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
+                        Snackbar.LENGTH_LONG).show();
 
                 VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
                 vehicleDB.insertEntry(mileage);
 
-                new SaveLoadHelper(mContext, this).save(mRoster);
+                save();
                 break;
 
             case (1):
@@ -202,7 +208,7 @@ public class fragment_info extends Fragment implements SyncData {
                         break;
                 }
                 mRoster.set(vehiclePos, vehicle);
-                new SaveLoadHelper(mContext, this).save(mRoster);
+                save();
                 break;
 
             case(90)://Saved
@@ -243,6 +249,10 @@ public class fragment_info extends Fragment implements SyncData {
             default:
                 return false;
         }
+    }
+
+    private void save(){
+        new SaveLoadHelper(mContext, this).save(mRoster);
     }
 
     public void onDownloadComplete(Boolean isComplete){

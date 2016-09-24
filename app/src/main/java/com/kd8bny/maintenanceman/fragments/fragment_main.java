@@ -409,7 +409,7 @@ public class fragment_main extends Fragment implements SyncData,
 
                 Mileage mileage = new Mileage(roster.get(bundle.getInt("pos")).getRefID());
                 mileage.setDate(date);
-                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), 
+                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"),
                         bundle.getDouble("price"));
                 Snackbar.make(getActivity().findViewById(R.id.snackbar),
                         String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
