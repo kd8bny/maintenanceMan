@@ -85,7 +85,6 @@ public class fragment_main extends Fragment implements SyncData,
 
     private ArrayList<Vehicle> roster;
     private int mSortType = 0;
-    private String UNIT_MILEAGE;
 
     public fragment_main() {}
 
@@ -95,11 +94,6 @@ public class fragment_main extends Fragment implements SyncData,
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        if (sharedPreferences.getString("prefUnitDist", "mi").equals("mi")){
-            UNIT_MILEAGE = mContext.getResources().getString(R.string.unit_mileage_us);
-        }else{
-            UNIT_MILEAGE = mContext.getResources().getString(R.string.unit_mileage_metric);
-        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
