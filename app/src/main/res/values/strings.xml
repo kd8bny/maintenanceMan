@@ -146,6 +146,7 @@
     <!--Mileage-->
     <string name="title_mileage">Mileage</string>
     <string name="title_mileage_add">Add Fill Up</string>
+    <string name="result_mileage">Your consumption: </string>
     <string name="field_trip">Distance Since Last Fill</string>
     <string name="field_fill_vol">Amount Filled</string>
     <string name="field_mileage_price">Price</string>

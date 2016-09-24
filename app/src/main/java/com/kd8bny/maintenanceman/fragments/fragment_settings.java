@@ -12,6 +12,7 @@ import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.utils.LocaleChange;
 
 
 public class fragment_settings extends PreferenceFragment{
@@ -58,6 +59,7 @@ public class fragment_settings extends PreferenceFragment{
                 SharedPreferences.Editor editor = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE).edit();
                 editor.putString("prefUnitDist", unit);
                 editor.apply();
+                new LocaleChange(mContext).changeUnits(unit);
                 return true;
             }
         });

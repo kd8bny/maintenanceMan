@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.Since;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.HashMap;
@@ -12,16 +13,22 @@ import java.util.UUID;
 
 public class Vehicle implements Parcelable{
     private static final String TAG = "Vehicle";
-    public String vehicleType;
-    public String refID;
-    public String title;
-    public Boolean isBusiness;
 
-    public String reservedSpecs;
-    public String generalSpecs;
-    public String engineSpecs;
-    public String powerTrainSpecs;
-    public String otherSpecs;
+    @Since(1.0)
+    private String vehicleType;
+    private String refID;
+    private String title;
+    private Boolean isBusiness;
+
+    private String reservedSpecs;
+    private String generalSpecs;
+    private String engineSpecs;
+    private String powerTrainSpecs;
+    private String otherSpecs;
+
+    @Since(1.1)
+    private String unitDist;
+    private String unitMileage;
 
     public Vehicle(String vehicleType, Boolean isBusiness, String year, String make, String model){
         this.refID = UUID.randomUUID().toString();
@@ -41,6 +48,8 @@ public class Vehicle implements Parcelable{
         refID = parcel.readString();
         title = parcel.readString();
         isBusiness = parcel.readByte() != 0;
+        unitDist = parcel.readString();
+        unitMileage = parcel.readString();
         reservedSpecs = parcel.readString();
         generalSpecs= parcel.readString();
         engineSpecs = parcel.readString();
@@ -70,6 +79,8 @@ public class Vehicle implements Parcelable{
         parcel.writeString(refID);
         parcel.writeString(title);
         parcel.writeByte((byte) (isBusiness ? 1 : 0));
+        parcel.writeString(unitDist);
+        parcel.writeString(unitMileage);
 
         parcel.writeString(reservedSpecs);
         parcel.writeString(generalSpecs);
@@ -160,6 +171,23 @@ public class Vehicle implements Parcelable{
 
         this.otherSpecs = gson.toJson(otherSpecs);
     }
+
+    public String getUnitDist() {
+        return this.unitDist;
+    }
+
+    public void setUnitDist(String unit) {
+        this.unitDist = unit;
+    }
+
+    public String getUnitMileage() {
+        return this.unitMileage;
+    }
+
+    public void setUnitMileage(String unit) {
+        this.unitMileage = unit;
+    }
+
 
     /**
     * Creator required for class implementing the parcelable interface.

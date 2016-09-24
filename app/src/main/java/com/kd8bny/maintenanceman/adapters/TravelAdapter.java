@@ -12,21 +12,25 @@ import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterViewHolder> {
     private static final String TAG = "adptr_hstry";
 
     private Context mContext;
+    private View itemView;
     private Resources res;
 
     private ArrayList<Travel> mTravelList;
-    private View itemView;
+    private String UNIT_DIST;
 
-    public TravelAdapter(Context context, ArrayList<Travel> travelList) {
+    public TravelAdapter(Context context, Vehicle vehicle, ArrayList<Travel> travelList) {
         mContext = context;
         mTravelList = travelList;
+        UNIT_DIST = vehicle.getUnitDist();
     }
 
     @Override
@@ -57,9 +61,9 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
            String delta;
            if (travel.getStop() == -1.0){
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
-               delta = String.format("In Progress");
+               delta = String.format(Locale.ENGLISH, "In Progress");
            }else{
-               delta = String.format("%.1f mi", travel.getDelta());
+               delta = String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST);
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.goodToGo));
            }
            viewHolder.vDelta.setText(delta);
@@ -76,7 +80,6 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
         protected TextView vDate;
         protected TextView vDelta;
         protected TextView vDest;
-        protected TextView vUnit;
 
         public AdapterViewHolder(View view) {
             super(view);
@@ -85,7 +88,6 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
             vDate = (TextView) view.findViewById(R.id.val_date);
             vDelta = (TextView) view.findViewById(R.id.val_delta);
             vDest = (TextView) view.findViewById(R.id.val_dest);
-            //vUnit = (TextView) view.findViewById(R.id.val_spec_unit);
         }
     }
 }

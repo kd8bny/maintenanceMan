@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.Wearable;
@@ -65,6 +66,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class fragment_main extends Fragment implements SyncFinished,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -85,6 +87,7 @@ public class fragment_main extends Fragment implements SyncFinished,
 
     private ArrayList<Vehicle> roster;
     private int mSortType = 0;
+    private String UNIT_MILEAGE;
 
     public fragment_main() {}
 
@@ -93,7 +96,12 @@ public class fragment_main extends Fragment implements SyncFinished,
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
-        sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, 0);
+        sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("prefUnitDist", "mi").equals("mi")){
+            UNIT_MILEAGE = mContext.getResources().getString(R.string.unit_mileage_us);
+        }else{
+            UNIT_MILEAGE = mContext.getResources().getString(R.string.unit_mileage_metric);
+        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -409,6 +417,9 @@ public class fragment_main extends Fragment implements SyncFinished,
                 Mileage mileage = new Mileage(roster.get(bundle.getInt("pos")).getRefID());
                 mileage.setDate(date);
                 mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage), mileage.getMileage(), ""),
+                        Snackbar.LENGTH_LONG).show();
 
                 VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
                 vehicleDB.insertEntry(mileage);

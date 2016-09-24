@@ -94,16 +94,6 @@
             android:textSize="@dimen/field_font"/>
 
         <TextView
-            android:id="@+id/val_tripo_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="@dimen/smidge"
-
-            android:textColor="@color/secondary_text"
-            android:textSize="@dimen/field_font"/>
-
-        <TextView
             android:id="@+id/val_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -209,7 +209,7 @@ public class fragment_mileage extends Fragment implements SyncFinished {
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         mMileageHist = sort(vehicleLogDBHelper.getMileageEntries(refID));
-        mileageList.setAdapter(new MileageAdapter(mContext, mMileageHist));
+        mileageList.setAdapter(new MileageAdapter(mContext, vehicle, mMileageHist));
     }
 
     @Override

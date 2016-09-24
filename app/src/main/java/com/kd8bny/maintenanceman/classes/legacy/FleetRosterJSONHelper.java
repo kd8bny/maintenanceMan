@@ -210,7 +210,6 @@ public class FleetRosterJSONHelper {
         for (String key : oldRoster.keySet()) {
             HashMap<String, HashMap> oldVehicle = oldRoster.get(key);
             HashMap<String, String> genTemp = oldVehicle.get("General");
-            Log.d(TAG, genTemp.toString());
             String type = genTemp.get("type");
             String year = genTemp.get("Year");
             String make = genTemp.get("Make");
@@ -228,7 +227,6 @@ public class FleetRosterJSONHelper {
             }else{
                 tempVehicle.setEngineSpecs(new HashMap<String, String>());
             }
-            Log.d(TAG,oldVehicle.containsKey("Power Train")+"" );
             if (oldVehicle.containsKey("Power Train")){
                 tempVehicle.setPowerTrainSpecs(oldVehicle.get("Power Train"));
             }else{

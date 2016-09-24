@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
@@ -61,7 +60,7 @@ public class fragment_history extends Fragment implements SyncFinished {
     private Context mContext;
 
     private ArrayList<Vehicle> mRoster;
-    private Vehicle vehicle;
+    private Vehicle mVehicle;
     private int vehiclePos;
     private String refID;
     private ArrayList<Maintenance> mVehicleHist;
@@ -80,8 +79,8 @@ public class fragment_history extends Fragment implements SyncFinished {
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
         mRoster = bundle.getParcelableArrayList("roster");
         vehiclePos = bundle.getInt("vehiclePos", -1);
-        vehicle = mRoster.get(vehiclePos);
-        refID = vehicle.getRefID();
+        mVehicle = mRoster.get(vehiclePos);
+        refID = mVehicle.getRefID();
     }
 
     @Override
@@ -242,7 +241,7 @@ public class fragment_history extends Fragment implements SyncFinished {
                 }else {
                     mVehicleHist = filter(s.toString());
                 }
-                histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
+                histList.setAdapter(new HistoryAdapter(mContext, mVehicle, mVehicleHist));
             }
         });
         (view.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
@@ -257,7 +256,7 @@ public class fragment_history extends Fragment implements SyncFinished {
                 mFilter = !mFilter;
                 tFilter.setText("");
                 mVehicleHist = mUnfilteredHist;
-                histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
+                histList.setAdapter(new HistoryAdapter(mContext, mVehicle,mVehicleHist));
                 vFilterView.setVisibility(View.INVISIBLE);
             }
         });
@@ -270,7 +269,7 @@ public class fragment_history extends Fragment implements SyncFinished {
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         mVehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
-        histList.setAdapter(new HistoryAdapter(mContext, mVehicleHist));
+        histList.setAdapter(new HistoryAdapter(mContext, mVehicle, mVehicleHist));
     }
 
     @Override
@@ -301,27 +300,27 @@ public class fragment_history extends Fragment implements SyncFinished {
                 HashMap<String, String> temp;
                 switch (result.get(0)) {
                     case "General":
-                        temp = vehicle.getGeneralSpecs();
+                        temp = mVehicle.getGeneralSpecs();
                         temp.put(result.get(1), result.get(2));
-                        vehicle.setGeneralSpecs(temp);
+                        mVehicle.setGeneralSpecs(temp);
                         break;
                     case "Engine":
-                        temp = vehicle.getEngineSpecs();
+                        temp = mVehicle.getEngineSpecs();
                         temp.put(result.get(1), result.get(2));
-                        vehicle.setEngineSpecs(temp);
+                        mVehicle.setEngineSpecs(temp);
                         break;
                     case "Power Train":
-                        temp = vehicle.getPowerTrainSpecs();
+                        temp = mVehicle.getPowerTrainSpecs();
                         temp.put(result.get(1), result.get(2));
-                        vehicle.setPowerTrainSpecs(temp);
+                        mVehicle.setPowerTrainSpecs(temp);
                         break;
                     case "Other":
-                        temp = vehicle.getOtherSpecs();
+                        temp = mVehicle.getOtherSpecs();
                         temp.put(result.get(1), result.get(2));
-                        vehicle.setOtherSpecs(temp);
+                        mVehicle.setOtherSpecs(temp);
                         break;
                 }
-                mRoster.set(vehiclePos, vehicle);
+                mRoster.set(vehiclePos, mVehicle);
                 new SaveLoadHelper(mContext, this).save(mRoster);
                 break;
         }
@@ -352,13 +351,13 @@ public class fragment_history extends Fragment implements SyncFinished {
 
             case R.id.menu_sort:
                 mSortType = (mSortType + 1) % 2;//TODO sanckz
-                histList.setAdapter(new HistoryAdapter(mContext, sort(mVehicleHist)));
+                histList.setAdapter(new HistoryAdapter(mContext, mVehicle, sort(mVehicleHist)));
 
                 return true;
 
             case R.id.menu_export_csv:
                 Export export = new Export();
-                Uri uri = export.maintenanceToCSV(vehicle.getTitle(), mVehicleHist);
+                Uri uri = export.maintenanceToCSV(mVehicle.getTitle(), mVehicleHist);
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

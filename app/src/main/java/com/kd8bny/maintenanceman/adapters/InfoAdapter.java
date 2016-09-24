@@ -28,15 +28,13 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private static final String TAG = "adptr_inf";
 
     private Context mContext;
-    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private ArrayList<HashMap> mVehicleInfoArray = new ArrayList<>();
     private ArrayList<Integer> viewTypes = new ArrayList<>();
     private HashMap<String, String> cardInfo = new HashMap<>();
     private Vehicle mVehicle;
     private ArrayList<Maintenance> mCostHist;
     private ArrayList<Mileage> mMileages;
-    private Boolean isUS = true;
-    private Boolean useDist = true;
+    private String UNIT_MILEAGE;
 
     private int recycler_i = 0;
 
@@ -54,11 +52,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         mVehicle = vehicle;
         mCostHist = costHist;
         mMileages = mileages;
-
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        if (!sharedPreferences.getString("prefUnitDist", "mi").equals("mi")) {
-            isUS = false;
-        }
+        UNIT_MILEAGE = vehicle.getUnitMileage();
 
         HashMap<String, String> tempSpecs = mVehicle.getGeneralSpecs();
         if (!tempSpecs.isEmpty()) {
@@ -102,7 +96,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         .inflate(R.layout.card_info_current, viewGroup, false);
                 recycler_i++;
 
-               return new vhCurrent(vCurrent, -1, null, null, false, false);
+               return new vhCurrent(vCurrent, -1, null, null, "");
 
             default:
                 vSpecs = LayoutInflater
@@ -118,14 +112,9 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         cardInfo = mVehicleInfoArray.get(i);
-        String type = mVehicle.getVehicleType();
-        if (type.equals("Utility") | type.equals("Marine") | type.equals("Lawn and Garden")){
-            useDist = false;
-        }
-
         switch (viewTypes.get(i)){
             case VIEW_CURRENT:
-                new vhCurrent(vCurrent, i, mCostHist, mMileages, isUS, useDist);
+                new vhCurrent(vCurrent, i, mCostHist, mMileages, UNIT_MILEAGE);
                 break;
 
             default :
@@ -218,7 +207,7 @@ class vhCurrent extends RecyclerView.ViewHolder {
 
     private TypedArray headerColors;
 
-    public vhCurrent(View view, int i, ArrayList<Maintenance> maintenanceList, ArrayList<Mileage> mileageList, Boolean isUS, Boolean useDist) {
+    public vhCurrent(View view, int i, ArrayList<Maintenance> maintenanceList, ArrayList<Mileage> mileageList, String unitMileage) {
         super(view);
 
         if(i > -1) {
@@ -256,19 +245,7 @@ class vhCurrent extends RecyclerView.ViewHolder {
                 TextView vMileageVal = (TextView) view.findViewById(R.id.value_mileage);
                 TextView vMileageInfo = (TextView) view.findViewById(R.id.info_mileage);
                 vMileageVal.setText(String.format(Locale.ENGLISH, "%1$,.2f", mileage));
-                if (useDist) {
-                    if (isUS) {
-                        vMileageInfo.setText(view.getResources().getString(R.string.unit_mileage_us));
-                    }else{
-                        vMileageInfo.setText(view.getResources().getString(R.string.unit_mileage_metric));
-                    }
-                }else{
-                    if (isUS) {
-                        vMileageInfo.setText(view.getResources().getString(R.string.unit_mileage_time_us));
-                    }else{
-                        vMileageInfo.setText(view.getResources().getString(R.string.unit_mileage_time_metric));
-                    }
-                }
+                vMileageInfo.setText(unitMileage);
 
                 TextView vCostVal = (TextView) view.findViewById(R.id.value_mileage_cost);
                 TextView vCostInfo = (TextView) view.findViewById(R.id.info_mileage_cost);

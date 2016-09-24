@@ -44,7 +44,7 @@
         android:layout_alignParentTop="true"
 
         android:ellipsize="end"
-        android:singleLine="false"
+        android:maxLines="2"
         android:layout_marginStart="@dimen/header_horizontal_margin"
         android:layout_marginEnd="@dimen/header_horizontal_margin"
         android:textColor="@color/primary_text"
@@ -75,7 +75,7 @@
 
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:singleLine="true"
+            android:maxLines="1"
 
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/field_font"/>
@@ -106,20 +106,7 @@
 
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:singleLine="true"
-
-            android:textColor="@color/secondary_text"
-            android:textSize="@dimen/field_font"/>
-
-        <TextView
-            android:id="@+id/val_spec_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:singleLine="true"
+            android:maxLines="1"
 
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/field_font"/>

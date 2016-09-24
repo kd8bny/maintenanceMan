@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,6 +40,7 @@ public class fragment_fleetRoster extends Fragment {
     private static final String TAG = "frg_fltRstr";
 
     private Context mContext;
+    private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
 
     private MaterialBetterSpinner vehicleSpinner;
     private RecyclerView addList;
@@ -182,8 +184,39 @@ public class fragment_fleetRoster extends Fragment {
 
         switch (resultCode){
             case (0):
-                vehicle = new Vehicle(vehicleSpinner.getText().toString(),
-                        bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
+                SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
+                Boolean isUS = true;
+                if (!sharedPreferences.getString("prefUnitDist", "mi").equals("mi")) {
+                    isUS = false;
+                }
+                String type = vehicleSpinner.getText().toString();
+                Boolean useDist = true;
+                if (type.equals("Utility") | type.equals("Marine") | type.equals("Lawn and Garden")){
+                    useDist = false;
+                }
+
+                String unitDist;
+                String unitMileage;
+                if (useDist) {
+                    if (isUS) {
+                        unitDist = mContext.getResources().getString(R.string.unit_dist_us);
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_us);
+                    }else{
+                        unitDist = mContext.getResources().getString(R.string.unit_dist_metric);
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_metric);
+                    }
+                }else{
+                    if (isUS) {
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_us);
+                    }else{
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_metric);
+                    }
+                    unitDist = mContext.getResources().getString(R.string.unit_time);
+                }
+
+                vehicle = new Vehicle(type, bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
+                vehicle.setUnitDist(unitDist);
+                vehicle.setUnitMileage(unitMileage);
                 break;
 
             case (1):

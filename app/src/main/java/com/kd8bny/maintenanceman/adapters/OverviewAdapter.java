@@ -1,10 +1,8 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,27 +25,15 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
     private Context mContext;
     private View itemView;
     private int recycler_i = 0;
-    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
 
     private VehicleLogDBHelper mVehicleLogDBHelper;
     private ArrayList<Vehicle> mRoster;
     private TypedArray headerColors;
-    private String UNIT_DIST;
-    private String UNIT_TIME;
 
     public OverviewAdapter(Context context, ArrayList<Vehicle> roster) {
         mContext = context;
         mVehicleLogDBHelper = VehicleLogDBHelper.getInstance(context);
         mRoster = roster;
-
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        if (sharedPreferences.getString("prefUnitDist", "mi").equals("mi")){
-            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_us);
-        }else{
-            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_metric);
-        }
-
-        UNIT_TIME =mContext.getResources().getString(R.string.unit_time);
     }
 
     @Override
@@ -75,7 +61,6 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
         if(!mRoster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
             Vehicle vehicle = mRoster.get(i);
-            Boolean useDist = true;
             switch (vehicle.getVehicleType()){
                 case "Automobile":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_car);
@@ -87,17 +72,14 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
 
                 case "Utility":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_utility);
-                    useDist = false;
                     break;
 
                 case "Marine":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_marine);
-                    useDist = false;
                     break;
 
                 case "Lawn and Garden":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_tractor);
-                    useDist = false;
                     break;
 
                 case "Trailer":
@@ -114,14 +96,8 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
                 adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());
                 adapterViewHolder.vTitle.setSelected(true);
-
-                if (useDist) {
-                    adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
-                            Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), UNIT_DIST));
-                }else {
-                    adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
-                            Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), UNIT_TIME));
-                }
+                adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
+                        Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), vehicle.getUnitDist()));
             }
         }
     }

@@ -221,7 +221,7 @@ public class fragment_travel_view extends Fragment implements SyncFinished {
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         mTravelLog = sort(vehicleLogDBHelper.getFullBusinessEntries(mRefID));
-        businessListAdapter = new TravelAdapter(mContext, mTravelLog);
+        businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
         businessList.setAdapter(businessListAdapter);
     }
 

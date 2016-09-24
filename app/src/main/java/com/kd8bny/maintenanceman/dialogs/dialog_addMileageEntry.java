@@ -101,10 +101,8 @@ public class dialog_addMileageEntry extends DialogFragment {
                         arrayList.add(Double.parseDouble(vPriceValue.getText().toString()));
 
                         sendResult(arrayList);
-                        alertDialog.dismiss();
-                    }
-                }
-            });
+                        dismiss();
+                    }}});
         }
     }
 

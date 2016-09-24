@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -24,24 +25,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
 
     private Context mContext;
     private View itemView;
-    private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private TypedArray icons;
     private TypedArray headerColors;
     private Resources res;
-    private String UNIT_DIST;
 
     private ArrayList<Maintenance> mMaintenanceList;
+    private String UNIT_DIST;
 
-    public HistoryAdapter(Context context, ArrayList<Maintenance> maintenanceList) {
+    public HistoryAdapter(Context context, Vehicle vehicle, ArrayList<Maintenance> maintenanceList) {
         mContext = context;
+        UNIT_DIST = vehicle.getUnitDist();
         mMaintenanceList = maintenanceList;
-
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        if (sharedPreferences.getString("prefUnitDist", "mi").equals("mi")){
-            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_us);
-        }else{
-            UNIT_DIST = mContext.getResources().getString(R.string.unit_dist_metric);
-        }
     }
 
     @Override
@@ -90,7 +84,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
         protected TextView vevent;
         protected TextView vodo;
         protected TextView vdate;
-        protected TextView vunit;
 
         public AdapterViewHolder(View view) {
             super(view);
@@ -100,7 +93,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
             vevent = (TextView) view.findViewById(R.id.val_spec_event);
             vodo = (TextView) view.findViewById(R.id.val_spec_odo);
             vdate = (TextView) view.findViewById(R.id.val_spec_date);
-            vunit = (TextView) view.findViewById(R.id.val_spec_unit);
         }
     }
 }
