@@ -231,7 +231,7 @@ public class fragment_mileage extends Fragment implements SyncData {
                 Snackbar.make(getActivity().findViewById(R.id.snackbar),
                         String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
                                 mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
-                        Snackbar.LENGTH_INDEFINITE).show();
+                        Snackbar.LENGTH_LONG).show();
 
                 vehicleDB = new VehicleLogDBHelper(this.getActivity());
                 vehicleDB.insertEntry(mileage);
