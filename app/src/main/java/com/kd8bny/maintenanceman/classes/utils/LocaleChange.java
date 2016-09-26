@@ -34,7 +34,7 @@ public class LocaleChange {
             Vehicle v = temp.get(i);
             String type = v.getVehicleType();
 
-            if (type.equals("Utility") | type.equals("Marine") | type.equals("Lawn and Garden")){
+            if (type.equals("Utility") || type.equals("Marine") || type.equals("Lawn and Garden")){
                 useDist = false;
             }
 

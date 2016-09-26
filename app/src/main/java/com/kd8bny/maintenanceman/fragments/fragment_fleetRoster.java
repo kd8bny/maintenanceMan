@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,7 +79,7 @@ public class fragment_fleetRoster extends Fragment {
             dialog.setTargetFragment(fragment_fleetRoster.this, 0);
 
             dialog_addField dialogField = new dialog_addField();
-            dialogField.setTargetFragment(fragment_fleetRoster.this, 0);
+            dialogField.setTargetFragment(fragment_fleetRoster.this, 1);
             dialog.setArguments(bundle);
 
             dialogField.show(fm, "dialog_add_field");
@@ -121,7 +122,7 @@ public class fragment_fleetRoster extends Fragment {
                         bundle.putSerializable("field", allSpecs.get(i));
                         bundle.putInt("pos", i);
                         dialog_addField dialog_addField = new dialog_addField();
-                        dialog_addField.setTargetFragment(fragment_fleetRoster.this, 1);
+                        dialog_addField.setTargetFragment(fragment_fleetRoster.this, 2);
                         dialog_addField.setArguments(bundle);
                         dialog_addField.show(fm, "dialog_add_field");
                     }
@@ -182,39 +183,8 @@ public class fragment_fleetRoster extends Fragment {
 
         switch (resultCode){
             case (0):
-                SharedPreferences sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-                Boolean isUS = true;
-                if (!sharedPreferences.getString("prefUnitDist", "mi").equals("mi")) {
-                    isUS = false;
-                }
-                String type = vehicleSpinner.getText().toString();
-                Boolean useDist = true;
-                if (type.equals("Utility") | type.equals("Marine") | type.equals("Lawn and Garden")){
-                    useDist = false;
-                }
-
-                String unitDist;
-                String unitMileage;
-                if (useDist) {
-                    if (isUS) {
-                        unitDist = mContext.getResources().getString(R.string.unit_dist_us);
-                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_us);
-                    }else{
-                        unitDist = mContext.getResources().getString(R.string.unit_dist_metric);
-                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_metric);
-                    }
-                }else{
-                    if (isUS) {
-                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_us);
-                    }else{
-                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_metric);
-                    }
-                    unitDist = mContext.getResources().getString(R.string.unit_time);
-                }
-
-                vehicle = new Vehicle(type, bundle.getBoolean("isBusiness"), result.get(0), result.get(1), result.get(2));
-                vehicle.setUnitDist(unitDist);
-                vehicle.setUnitMileage(unitMileage);
+                vehicle = new Vehicle("", bundle.getBoolean("isBusiness"),
+                        result.get(0), result.get(1), result.get(2));
                 break;
 
             case (1):
@@ -275,6 +245,39 @@ public class fragment_fleetRoster extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_save:
+                Boolean isUS = true, useDist = true;
+                String type = vehicleSpinner.getText().toString();
+                if (!mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                        .getString("prefUnitDist", "mi").equals("mi")) {
+                    isUS = false;
+                }
+
+                if (type.equals("Utility") || type.equals("Marine") || type.equals("Lawn and Garden")){
+
+                    useDist = false;
+                }
+
+                String unitDist, unitMileage;
+                if (useDist) {
+                    if (isUS) {
+                        unitDist = mContext.getResources().getString(R.string.unit_dist_us);
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_us);
+                    }else{
+                        unitDist = mContext.getResources().getString(R.string.unit_dist_metric);
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_metric);
+                    }
+                }else{
+                    if (isUS) {
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_us);
+                    }else{
+                        unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_metric);
+                    }
+                    unitDist = mContext.getResources().getString(R.string.unit_time);
+                }
+
+                vehicle.setUnitDist(unitDist);
+                vehicle.setUnitMileage(unitMileage);
+
                 vehicle.setGeneralSpecs(generalSpecs);
                 vehicle.setEngineSpecs(engineSpecs);
                 vehicle.setPowerTrainSpecs(powerTrainSpecs);
