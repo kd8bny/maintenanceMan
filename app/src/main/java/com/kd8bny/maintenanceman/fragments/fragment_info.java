@@ -159,72 +159,74 @@ public class fragment_info extends Fragment implements SyncData {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle;
-        switch (resultCode) {
-            case (0):
-                bundle = data.getBundleExtra("bundle");
-                final Calendar cal = java.util.Calendar.getInstance();
-                String date = cal.get(java.util.Calendar.MONTH) + 1
-                        + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
-                        + "/" + cal.get(java.util.Calendar.YEAR);
+        if (data != null) {
+            switch (resultCode) {
+                case (0):
+                    bundle = data.getBundleExtra("bundle");
 
-                Mileage mileage = new Mileage(mRoster.get(bundle.getInt("pos")).getRefID());
-                mileage.setDate(date);
-                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
-                Snackbar.make(mView.findViewById(R.id.snackbar),
-                        String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
-                                mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
-                        Snackbar.LENGTH_LONG).show();
+                    final Calendar cal = java.util.Calendar.getInstance();
+                    String date = cal.get(java.util.Calendar.MONTH) + 1
+                            + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
+                            + "/" + cal.get(java.util.Calendar.YEAR);
 
-                VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-                vehicleDB.insertEntry(mileage);
+                    Mileage mileage = new Mileage(mRoster.get(bundle.getInt("pos")).getRefID());
+                    mileage.setDate(date);
+                    mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
+                    Snackbar.make(mView.findViewById(R.id.snackbar),
+                            String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
+                                    mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
+                            Snackbar.LENGTH_LONG).show();
 
-                save();
-                break;
+                    VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
+                    vehicleDB.insertEntry(mileage);
 
-            case (1):
-                bundle = data.getBundleExtra("bundle");
-                ArrayList<String> result = bundle.getStringArrayList("fieldData");
-                HashMap<String, String> temp;
-                switch (result.get(0)) {
-                    case "General":
-                        temp = vehicle.getGeneralSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        vehicle.setGeneralSpecs(temp);
-                        break;
-                    case "Engine":
-                        temp = vehicle.getEngineSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        vehicle.setEngineSpecs(temp);
-                        break;
-                    case "Power Train":
-                        temp = vehicle.getPowerTrainSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        vehicle.setPowerTrainSpecs(temp);
-                        break;
-                    case "Other":
-                        temp = vehicle.getOtherSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        vehicle.setOtherSpecs(temp);
-                        break;
-                }
-                mRoster.set(vehiclePos, vehicle);
-                save();
-                break;
+                    save();
+                    break;
 
-            case(90)://Saved
-                mRoster = new SaveLoadHelper(mContext, this).load();
-                vehicle = mRoster.get(vehiclePos);
-                break;
+                case (1):
+                    bundle = data.getBundleExtra("bundle");
+                    ArrayList<String> result = bundle.getStringArrayList("fieldData");
+                    HashMap<String, String> temp;
+                    switch (result.get(0)) {
+                        case "General":
+                            temp = vehicle.getGeneralSpecs();
+                            temp.put(result.get(1), result.get(2));
+                            vehicle.setGeneralSpecs(temp);
+                            break;
+                        case "Engine":
+                            temp = vehicle.getEngineSpecs();
+                            temp.put(result.get(1), result.get(2));
+                            vehicle.setEngineSpecs(temp);
+                            break;
+                        case "Power Train":
+                            temp = vehicle.getPowerTrainSpecs();
+                            temp.put(result.get(1), result.get(2));
+                            vehicle.setPowerTrainSpecs(temp);
+                            break;
+                        case "Other":
+                            temp = vehicle.getOtherSpecs();
+                            temp.put(result.get(1), result.get(2));
+                            vehicle.setOtherSpecs(temp);
+                            break;
+                    }
+                    mRoster.set(vehiclePos, vehicle);
+                    save();
+                    break;
 
-            case(91)://Delete vehicle
-                getActivity().finish();
-                break;
+                case (90)://Saved
+                    mRoster = new SaveLoadHelper(mContext, this).load();
+                    vehicle = mRoster.get(vehiclePos);
+                    break;
 
-            default:
-                break;
+                case (91)://Delete vehicle
+                    getActivity().finish();
+                    break;
+
+                default:
+                    break;
+            }
+            onResume();
         }
-
-        onResume();
     }
 
     @Override
