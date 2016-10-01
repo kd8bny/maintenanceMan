@@ -221,7 +221,7 @@
 
         - Snackbar shows your mileage once you enter it\n
         - Add a sync dialog to help the db\n
-        - Fix NPE for some random bad data
+        - Fix NPE for some random bad data\n
         - Tons and tons of code cleaning\n\n
 
         v3.3.2 13Sept2016\n\n
