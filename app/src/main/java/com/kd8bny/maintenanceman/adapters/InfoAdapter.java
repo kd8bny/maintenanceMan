@@ -221,8 +221,10 @@ class vhCurrent extends RecyclerView.ViewHolder {
                 Double total = 0.0;
                 for (Maintenance m: maintenanceList) {
                     String price = m.getPrice();
-                    if (!price.isEmpty()) {
-                        total += Double.parseDouble(price);
+                    if (price != null) {
+                        if (!price.isEmpty()) {
+                            total += Double.parseDouble(price);
+                        }
                     }
                 }
 

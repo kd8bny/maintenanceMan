@@ -1,10 +1,10 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,18 +61,24 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
     @Override
     public void onBindViewHolder(final AdapterViewHolder viewHolder, int i) {
        if(!mMaintenanceList.isEmpty()){
-            int color = headerColors.getColor(i % 8, 0);
-            viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+           int color = headerColors.getColor(i % 8, 0);
+           viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
 
-            Maintenance maintenance = mMaintenanceList.get(i);
-            viewHolder.vIcon.setImageResource(icons.getResourceId(maintenance.getIcon(), 0));
-            viewHolder.vdate.setText(maintenance.getDate());
-            viewHolder.vodo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s", Double.parseDouble(maintenance.getOdometer()), UNIT_DIST));
-            viewHolder.vevent.setText(maintenance.getEvent());
+           Maintenance maintenance = mMaintenanceList.get(i);
+           viewHolder.vIcon.setImageResource(icons.getResourceId(maintenance.getIcon(), 0));
+           viewHolder.vdate.setText(maintenance.getDate());
+           viewHolder.vevent.setText(maintenance.getEvent());
+           try {
+               viewHolder.vodo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
+                       Double.parseDouble(maintenance.getOdometer()), UNIT_DIST));
+           }catch (Exception e){
+               Log.wtf(TAG, "parse error:" + maintenance.getOdometer());
+               viewHolder.vodo.setText(maintenance.getOdometer());
+           }
        }else{
            viewHolder.vevent.setText(mContext.getResources().getString(R.string.error_no_history));
            viewHolder.vIconBackground.getDrawable()
-                   .setColorFilter(mContext.getResources().getColor(R.color.error), PorterDuff.Mode.SRC_ATOP);
+                   .setColorFilter(ContextCompat.getColor(mContext, R.color.error), PorterDuff.Mode.SRC_ATOP);
        }
     }
 

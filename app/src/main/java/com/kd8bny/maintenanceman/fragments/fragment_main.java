@@ -524,10 +524,9 @@ public class fragment_main extends Fragment implements SyncData,
     }
 
     public void onDownloadComplete(Boolean isComplete){
-
         if (isComplete) {
-            mDialog_sync.dismiss();
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
+            mDialog_sync.dismiss();
             onResume();
         }
     }

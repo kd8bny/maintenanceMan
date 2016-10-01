@@ -18,7 +18,6 @@ import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Locale;
 
 public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String TAG = "vehicleLogDB";

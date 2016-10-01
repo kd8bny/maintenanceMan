@@ -96,8 +96,13 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
                 adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());
                 adapterViewHolder.vTitle.setSelected(true);
-                adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
-                        Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), vehicle.getUnitDist()));
+                try {
+                    adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
+                            Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), vehicle.getUnitDist()));
+                }catch (Exception e){
+                    Log.wtf(TAG, "parse error:" + temp.get(temp.size() - 1).getOdometer());
+                    adapterViewHolder.vOdo.setText(temp.get(temp.size() - 1).getOdometer());
+                }
             }
         }
     }
