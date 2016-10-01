@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -159,9 +160,9 @@ public class fragment_info extends Fragment implements SyncData {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle;
-        if (data != null) {
-            switch (resultCode) {
-                case (0):
+        switch (resultCode) {
+            case (0):
+                if (data != null) {
                     bundle = data.getBundleExtra("bundle");
 
                     final Calendar cal = java.util.Calendar.getInstance();
@@ -181,9 +182,11 @@ public class fragment_info extends Fragment implements SyncData {
                     vehicleDB.insertEntry(mileage);
 
                     save();
-                    break;
+                }
+                break;
 
-                case (1):
+            case (1):
+                if (data != null) {
                     bundle = data.getBundleExtra("bundle");
                     ArrayList<String> result = bundle.getStringArrayList("fieldData");
                     HashMap<String, String> temp;
@@ -211,22 +214,22 @@ public class fragment_info extends Fragment implements SyncData {
                     }
                     mRoster.set(vehiclePos, vehicle);
                     save();
-                    break;
+                }
+                break;
 
-                case (90)://Saved
-                    mRoster = new SaveLoadHelper(mContext, this).load();
-                    vehicle = mRoster.get(vehiclePos);
-                    break;
+            case (90)://Saved
+                mRoster = new SaveLoadHelper(mContext, this).load();
+                vehicle = mRoster.get(vehiclePos);
+                break;
 
-                case (91)://Delete vehicle
-                    getActivity().finish();
-                    break;
+            case (91)://Delete vehicle
+                getActivity().finish();
+                break;
 
-                default:
-                    break;
-            }
-            onResume();
+            default:
+                break;
         }
+            onResume();
     }
 
     @Override
