@@ -217,13 +217,14 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
-        V3.3.3.1 26Sept2016\n\n
+        v3.3.4 30Sept2016\n\n
 
         - Snackbar shows your mileage once you enter it\n
         - Add a sync dialog to help the db\n
+        - Fix NPE for some random bad data
         - Tons and tons of code cleaning\n\n
 
-        V3.3.2 13Sept2016\n\n
+        v3.3.2 13Sept2016\n\n
 
         - Added Fuel Mileage Tracking\n
         - Removed info graph temporarily it\'ll return bigger and better\n
