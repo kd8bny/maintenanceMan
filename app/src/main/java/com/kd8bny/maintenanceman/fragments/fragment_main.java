@@ -383,6 +383,9 @@ public class fragment_main extends Fragment implements SyncData,
     @Override
     public void onResume() {
         super.onResume();
+        if (mDialog_sync != null){
+            mDialog_sync.dismiss();
+        }
         roster = new SaveLoadHelper(mContext, this).load();
         if (roster != null) {
             cardListAdapter = new OverviewAdapter(mContext, roster);
@@ -526,7 +529,6 @@ public class fragment_main extends Fragment implements SyncData,
     public void onDownloadComplete(Boolean isComplete){
         if (isComplete) {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
-            mDialog_sync.dismiss();
             onResume();
         }
     }
