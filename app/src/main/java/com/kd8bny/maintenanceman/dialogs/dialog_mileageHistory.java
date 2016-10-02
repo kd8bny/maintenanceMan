@@ -54,7 +54,7 @@ public class dialog_mileageHistory extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_mileage_history, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
-        String unitVol = "gal", relation = "above your average XD";
+        String unitVol = "gal", relation = "above your average";
         if (!mVehicle.getUnitDist().equals("mi")){
             unitVol = "L";
         }

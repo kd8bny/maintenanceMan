@@ -57,6 +57,7 @@
                 android:id="@+id/value_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_weight="2"
 
                 android:textStyle="bold"
@@ -98,6 +99,7 @@
                 android:id="@+id/value_tripo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_weight="2"
 
                 android:textStyle="bold"
@@ -139,6 +141,7 @@
                 android:id="@+id/value_mileage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_weight="2"
 
                 android:textStyle="bold"
@@ -180,6 +183,7 @@
                 android:id="@+id/value_mileage_cost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:layout_weight="2"
 
                 android:textStyle="bold"
