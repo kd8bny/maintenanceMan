@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/content_vertical_space"
-        android:textSize="@dimen/header_font"
+        android:textSize="@dimen/header_sub_font"
         android:background="@color/primary"
         android:textColor="@color/header"
 

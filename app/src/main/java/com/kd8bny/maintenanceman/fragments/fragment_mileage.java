@@ -32,6 +32,7 @@ import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
+import com.kd8bny.maintenanceman.dialogs.dialog_mileageHistory;
 import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
@@ -83,8 +84,18 @@ public class fragment_mileage extends Fragment implements SyncData {
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                if (!mMileageHist.isEmpty()) { //TODO?
+                if (!mMileageHist.isEmpty()) {
+                    final Mileage mileage = mMileageHist.get(pos);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("vehicle", vehicle);
+                    bundle.putSerializable("event", mileage);
+                    bundle.putSerializable("eventList", mMileageHist);
 
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    dialog_mileageHistory dialog = new dialog_mileageHistory();
+                    dialog.setTargetFragment(fragment_mileage.this, 0);
+                    dialog.setArguments(bundle);
+                    dialog.show(fm, "dialog_mileage_history");
                 }
             }
 

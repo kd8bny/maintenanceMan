@@ -38,7 +38,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
-import com.kd8bny.maintenanceman.dialogs.dialog_vehicleHistory;
+import com.kd8bny.maintenanceman.dialogs.dialog_maintenanceHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
 import java.text.DateFormat;
@@ -104,9 +104,10 @@ public class fragment_history extends Fragment implements SyncData {
                 if (!mVehicleHist.isEmpty()) {
                     final Maintenance maintenance = mVehicleHist.get(pos);
                     Bundle bundle = new Bundle();
+                    bundle.putParcelable("vehicle", mVehicle);
                     bundle.putSerializable("event", maintenance);
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    dialog_vehicleHistory dialog = new dialog_vehicleHistory();
+                    dialog_maintenanceHistory dialog = new dialog_maintenanceHistory();
                     dialog.setTargetFragment(fragment_history.this, 0);
                     dialog.setArguments(bundle);
                     dialog.show(fm, "dialog_vehicle_history");
