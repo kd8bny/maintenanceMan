@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +33,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private Vehicle mVehicle;
     private ArrayList<Maintenance> mCostHist;
     private ArrayList<Mileage> mMileages;
+    private String UNIT_DIST;
     private String UNIT_MILEAGE;
 
     private int recycler_i = 0;
@@ -52,6 +52,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         mVehicle = vehicle;
         mCostHist = costHist;
         mMileages = mileages;
+        UNIT_DIST = vehicle.getUnitDist();
         UNIT_MILEAGE = vehicle.getUnitMileage();
 
         HashMap<String, String> tempSpecs = mVehicle.getGeneralSpecs();
@@ -96,7 +97,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                         .inflate(R.layout.card_info_current, viewGroup, false);
                 recycler_i++;
 
-               return new vhCurrent(vCurrent, -1, null, null, "");
+               return new vhCurrent(vCurrent, -1, null, null, "", "");
 
             default:
                 vSpecs = LayoutInflater
@@ -114,7 +115,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         cardInfo = mVehicleInfoArray.get(i);
         switch (viewTypes.get(i)){
             case VIEW_CURRENT:
-                new vhCurrent(vCurrent, i, mCostHist, mMileages, UNIT_MILEAGE);
+                new vhCurrent(vCurrent, i, mCostHist, mMileages, UNIT_DIST, UNIT_MILEAGE);
                 break;
 
             default :
@@ -207,7 +208,8 @@ class vhCurrent extends RecyclerView.ViewHolder {
 
     private TypedArray headerColors;
 
-    public vhCurrent(View view, int i, ArrayList<Maintenance> maintenanceList, ArrayList<Mileage> mileageList, String unitMileage) {
+    public vhCurrent(View view, int i, ArrayList<Maintenance> maintenanceList,
+                     ArrayList<Mileage> mileageList, String unitDist, String unitMileage) {
         super(view);
 
         if(i > -1) {
@@ -235,14 +237,19 @@ class vhCurrent extends RecyclerView.ViewHolder {
             }
 
             if (!mileageList.isEmpty()){
-                Double mileage = 0.0;
-                Double cost = 0.0;
+                Double mileage = 0.0, cost = 0.0, tripo = 0.0;
                 for (Mileage m: mileageList) {
                     mileage += m.getMileage();
                     cost += m.getPrice();
+                    tripo += m.getTripometer();
                 }
                 mileage = mileage/mileageList.size();
                 cost = cost/mileageList.size();
+
+                TextView vTripoVal = (TextView) view.findViewById(R.id.value_tripo);
+                TextView vTripoInfo = (TextView) view.findViewById(R.id.info_tripo);
+                vTripoVal.setText(String.format(Locale.ENGLISH, "%1$,.1f", tripo));
+                vTripoInfo.setText(String.format("%s traveled", unitDist));
 
                 TextView vMileageVal = (TextView) view.findViewById(R.id.value_mileage);
                 TextView vMileageInfo = (TextView) view.findViewById(R.id.info_mileage);
