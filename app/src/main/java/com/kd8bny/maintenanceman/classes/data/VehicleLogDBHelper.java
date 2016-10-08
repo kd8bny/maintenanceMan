@@ -367,7 +367,6 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
      */
 
     public void insertEntry(Mileage mileage) {
-        Log.d(TAG, "mil call");
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_VEHICLE_REFID, mileage.getRefID());
@@ -386,7 +385,6 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             Log.e(TAG, "Error on insert entry");
         } finally {
             db.endTransaction();
-            Log.d(TAG, "done");
         }
     }
 

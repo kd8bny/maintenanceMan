@@ -266,9 +266,4 @@ public class fragment_travel extends fragment_vehicleInfo {
 
         return vehicleHist;
     }
-
-    public void doReload(){
-        Log.wtf(TAG, "tra");
-        onResume();
-    }
 }

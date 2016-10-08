@@ -367,9 +367,4 @@ public class fragment_maintenance extends fragment_vehicleInfo {
         }
         vFilterView.startAnimation(translateAnim);
     }
-
-    public void doReload(){
-        Log.wtf(TAG, "main");
-        onResume();
-    }
 }

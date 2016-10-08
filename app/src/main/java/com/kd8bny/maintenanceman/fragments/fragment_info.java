@@ -44,12 +44,10 @@ public class fragment_info extends fragment_vehicleInfo {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.e(TAG, "create");
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
         mRoster = bundle.getParcelableArrayList("roster");
         mPos = bundle.getInt("pos", -1);
-        Log.e(TAG, mPos+"");
         mVehicle = mRoster.get(mPos);
 
         VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
@@ -66,7 +64,6 @@ public class fragment_info extends fragment_vehicleInfo {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
-        Log.d(TAG, "create view");
 
         //Info Cards
         cardList = (RecyclerView) mView.findViewById(R.id.cardList);
@@ -147,7 +144,6 @@ public class fragment_info extends fragment_vehicleInfo {
     @Override
     public void onResume(){
         super.onResume();
-        Log.wtf(TAG, mPos+"");
         cardList.setAdapter(new InfoAdapter(mContext, mVehicle, mVehicleHist, mMileage));
     }
 
@@ -174,10 +170,5 @@ public class fragment_info extends fragment_vehicleInfo {
             default:
                 return false;
         }
-    }
-
-    public void doReload(){
-        Log.wtf(TAG, "info");
-        onResume();
     }
 }
