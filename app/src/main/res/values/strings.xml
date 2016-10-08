@@ -6,7 +6,6 @@
     <string name="title_add_fleet_roster">Add Vehicle</string>
     <string name="title_dialog_add">New Vehicle</string>
     <string name="error_required">This Field is Required</string>
-    <string name="error_required_missing">Missing Required Field: Make, Model, or Year</string>
     <string name="error_set_vehicle_type">Please Select Vehicle</string>
     <string name="hint_spinner">Select Type</string>
     <string name="hint_spinner_cat">Select Category</string>
@@ -31,13 +30,7 @@
 
     <!-- Add Vehicle Event -->
     <string name="title_add_vehicle_event">Add Event</string>
-    <string name="add_vehicle_event">Add Maintenance Task</string>
     <string name="error_set_vehicle">Please Vehicle</string>
-    <string name="error_field_event">Please Add Event</string>
-    <string name="toast_update">History Updated</string>
-    <string name="spec_date">Date</string>
-    <string name="spec_odo">Odometer</string>
-    <string name="spec_event">Event</string>
     <string name="field_date">Date</string>
     <string name="field_odo">Odometer</string>
     <string name="field_event">Event</string>
@@ -52,9 +45,6 @@
     <string name="field_purpose">Reason for Trip</string>
     <string name="error_dest_val">Enter Destination</string>
     <string name="error_start_val">Enter Trip Start</string>
-
-    <!-- Charts -->
-    <string name="header_chart">Maintenance Expenses</string>
 
     <!-- Contact Me -->
     <string name="title_contact">Contact Me</string>
@@ -84,8 +74,6 @@
     <!-- History -->
     <string name="title_history">Maintenance</string>
     <string name="error_no_history">No Vehicle History</string>
-    <string name="label_date">Date: </string>
-    <string name="label_odo">On: </string>
     <string name="label_search">Search</string>
     <string name="menu_delete_event">Delete</string>
     <string name="menu_edit_event">Edit</string>
@@ -126,7 +114,6 @@
     <string name="empty_db_dbx">"Set up cloud sync"</string>
     <string name="no_data">"No Data"</string>
     <string name="last_event">"Last Event:"</string>
-    <string name="drawer_sec_options">Options</string>
     <string name="drawer_view_community">View Community</string>
     <string name="menu_sort">Sort</string>
     <string name="toast_update_ui">Data Updated</string>
@@ -144,15 +131,10 @@
     <string name="hint_no_mileage">Enter on your next fill up</string>
     <string name="hint_no_cost">No maintenance completed</string>
     <string name="hint_info_cost">total expenses</string>
-    <string name="hint_info_mileage">mpg</string>
-    <string name="hint_info_mileage_metric">mpg</string>
     <string name="hint_info_mileage_cost">avg fuel cost</string>
-    <string name="menu_toggle_mileage">Switch to Mileage</string>
-    <string name="menu_toggle_maintenance">Switch to Maintenance</string>
 
     <!-- Preferences -->
     <string name="title_settings">Settings</string>
-    <string name="title_settings_dbx">Dropbox Settings</string>
 
     <string name="pref_title_cat_units">Units</string>
     <string name="pref_summary_units">Select Distance Units</string>
@@ -162,11 +144,6 @@
     <string name="pref_title_cat_cloud">Cloud Backup</string>
     <string name="pref_title_cat_cloud_default">Default Cloud Back Up</string>
     <string name="pref_title_cloud_init">Set Up</string>
-    <string name="pref_title_cat_man">Manual Sync</string>
-    <string name="pref_title_cloud_restore">Restore Data</string>
-    <string name="pref_title_cloud_backup">Backup Data</string>
-    <string name="pref_toast_dropbox_restore">Restoring</string>
-    <string name="pref_toast_dropbox_backup">Backing Up</string>
 
     <string name="pref_title_cat_dropbox">Dropbox</string>
     <string name="pref_key_dropbox">dropbox</string>
@@ -193,7 +170,7 @@
     <string name="title_activity_activity_billing">activity_billing</string>
 
     <!-- Units -->
-    <string name="unit_time"> hrs</string>
+    <string name="unit_time">hrs</string>
     <string name="unit_mileage_us">mpg</string>
     <string name="unit_mileage_metric">Km/L</string>
     <string name="unit_mileage_time_metric">hr/L</string>

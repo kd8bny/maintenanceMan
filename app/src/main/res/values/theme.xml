@@ -12,10 +12,6 @@
         <!--Toolbar-->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
-        <!--Theme UI controls like checkboxes and text fields-->
-
     </style>
 </resources>
-<!--<item name="theme">@style/ThemeOverlay.AppCompat.Dark</item>-->
 
