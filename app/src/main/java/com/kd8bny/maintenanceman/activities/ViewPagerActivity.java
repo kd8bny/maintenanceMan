@@ -11,9 +11,6 @@ import com.kd8bny.maintenanceman.adapters.ViewPagerAdapter;
 public class ViewPagerActivity extends AppCompatActivity {
     private static final String TAG = "activity_viewpager";
 
-    private ViewPagerAdapter mAdapter;
-    private ViewPager mPager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,8 +20,8 @@ public class ViewPagerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mAdapter = new ViewPagerAdapter(getApplicationContext(), getSupportFragmentManager());
-        mPager = (ViewPager) findViewById(R.id.view_pager);
+        ViewPagerAdapter mAdapter = new ViewPagerAdapter(getApplicationContext(), getSupportFragmentManager());
+        ViewPager mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(mAdapter);
     }
 }

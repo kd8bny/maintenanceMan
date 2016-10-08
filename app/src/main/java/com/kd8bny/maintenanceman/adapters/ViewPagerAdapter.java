@@ -14,8 +14,6 @@ import com.kd8bny.maintenanceman.fragments.fragment_info;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
 
-    public fragment_info fragmentInfo;
-
     public ViewPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
@@ -30,8 +28,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int i) {
         switch (i) {
             case 0:
-                fragmentInfo = new fragment_info();
-                return fragmentInfo;
+                return new fragment_info();
             case 1:
                 return new fragment_maintenance();
             case 2:
