@@ -13,6 +13,15 @@
         <item>@drawable/np_rotor</item>
     </string-array>
 
+    <string-array name="vehicle_type">
+        <item>Automobile</item>
+        <item>Motorcycle</item>
+        <item>Utility</item>
+        <item>Marine</item>
+        <item>Lawn and Garden</item>
+        <item>Trailer</item>
+    </string-array>
+
     <!-- Info -->
     <string-array name="spec_month">
         <item>Jan</item>

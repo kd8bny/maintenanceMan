@@ -39,11 +39,12 @@ import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
+import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.dialogs.dialog_sync;
 import com.kd8bny.maintenanceman.interfaces.SyncData;
@@ -60,7 +61,6 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -83,7 +83,7 @@ public class fragment_main extends Fragment implements SyncData,
     private FloatingActionButton fabBusiness;
     private dialog_sync mDialog_sync;
 
-    private ArrayList<Vehicle> roster;
+    private ArrayList<Vehicle> mRoster;
     private int mSortType = 0;
 
     public fragment_main() {}
@@ -145,7 +145,7 @@ public class fragment_main extends Fragment implements SyncData,
                 switch (i) {
                     case 1: //Add Vehicle
                         bundle.putInt("caseID", 0);
-                        bundle.putParcelableArrayList("roster", roster);
+                        bundle.putParcelableArrayList("roster", mRoster);
                         bundle.putInt("vehiclePos", -1);
                         intent.putExtra("bundle", bundle);
                         view.getContext().startActivity(intent);
@@ -154,13 +154,13 @@ public class fragment_main extends Fragment implements SyncData,
                         return true;
 
                     case 2: //Add mileage
-                        if (roster.isEmpty()){
+                        if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
                         }else {
-                            bundle.putParcelableArrayList("roster", roster);
+                            bundle.putParcelableArrayList("roster", mRoster);
                             dialog_addMileageEntry dialog = new dialog_addMileageEntry();
-                            dialog.setTargetFragment(fragment_main.this, 0);
+                            dialog.setTargetFragment(fragment_main.this, 2);
                             dialog.setArguments(bundle);
                             dialog.show(fm, "dialog_add_mileage");
                         }
@@ -169,28 +169,30 @@ public class fragment_main extends Fragment implements SyncData,
                         return true;
 
                     case 3: //Add Event
-                        if (roster.isEmpty()){
+                        if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
                         }else {
-                            bundle.putInt("caseID", 1);
-                            bundle.putParcelableArrayList("roster", roster);
-                            intent.putExtra("bundle", bundle);
-                            view.getContext().startActivity(intent);
+                            bundle.putParcelableArrayList("roster", mRoster);
+                            dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                            dialog.setTargetFragment(fragment_main.this, 1);
+                            dialog.setArguments(bundle);
+                            dialog.show(fm, "dialog_add_maintenance");
                         }
                         drawer.closeDrawer();
 
                         return true;
 
                     case 4: //Travel Log
-                        if (roster.isEmpty()){
+                        if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
                         }else {
-                            bundle.putInt("caseID", 4);
-                            bundle.putParcelableArrayList("roster", roster);
-                            intent.putExtra("bundle", bundle);
-                            view.getContext().startActivity(intent);
+                            bundle.putParcelableArrayList("roster", mRoster);
+                            dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                            dialog.setTargetFragment(fragment_main.this, 3);
+                            dialog.setArguments(bundle);
+                            dialog.show(fm, "dialog_add_travel");
                         }
                         drawer.closeDrawer();
 
@@ -241,11 +243,11 @@ public class fragment_main extends Fragment implements SyncData,
             @Override
             public void onItemClick(View view, int pos) {
                 Bundle bundle = new Bundle();
-                if (roster.isEmpty()) {
+                if (mRoster.isEmpty()) {
                     switch (pos){
                         case 0:
                             bundle.putInt("caseID", 0);
-                            bundle.putInt("vehiclePos", -1);
+                            bundle.putInt("pos", -1);
                             view.getContext().startActivity(new Intent(getActivity(), VehicleActivity.class)
                                     .putExtra("bundle", bundle));
                             break;
@@ -256,9 +258,9 @@ public class fragment_main extends Fragment implements SyncData,
                             break;
                     }
                 }else{
-                    bundle.putParcelableArrayList("roster", roster);
-                    bundle.putParcelable("vehicle", roster.get(pos));
-                    bundle.putInt("vehiclePos", pos);
+                    bundle.putParcelableArrayList("roster", mRoster);
+                    bundle.putParcelable("vehicle", mRoster.get(pos));
+                    bundle.putInt("pos", pos);
                     view.getContext().startActivity(new Intent(getActivity(), ViewPagerActivity.class)
                             .putExtra("bundle", bundle));
                 }
@@ -275,15 +277,16 @@ public class fragment_main extends Fragment implements SyncData,
         view.findViewById(R.id.fab_add_event).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (roster.isEmpty()){
+                if (mRoster.isEmpty()){
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                             Snackbar.LENGTH_SHORT).show();
                 }else {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("caseID", 1);
-                    bundle.putParcelableArrayList("roster", roster);
-                    startActivity(new Intent(getActivity(), VehicleActivity.class)
-                            .putExtra("bundle", bundle));
+                    bundle.putParcelableArrayList("roster", mRoster);
+                    dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                    dialog.setTargetFragment(fragment_main.this, 1);
+                    dialog.setArguments(bundle);
+                    dialog.show(getFragmentManager(), "dialog_add_maintenance");
                     fabMenu.close(true);
                 }
             }});
@@ -291,17 +294,16 @@ public class fragment_main extends Fragment implements SyncData,
         view.findViewById(R.id.fab_add_mileage).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (roster.isEmpty()){
+                if (mRoster.isEmpty()){
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                             Snackbar.LENGTH_SHORT).show();
                 }else {
                     Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("roster", roster);
-                    android.support.v4.app.FragmentManager fm = getFragmentManager();
+                    bundle.putParcelableArrayList("roster", mRoster);
                     dialog_addMileageEntry dialog = new dialog_addMileageEntry();
-                    dialog.setTargetFragment(fragment_main.this, 0);
+                    dialog.setTargetFragment(fragment_main.this, 2);
                     dialog.setArguments(bundle);
-                    dialog.show(fm, "dialog_add_mileage");
+                    dialog.show(getFragmentManager(), "dialog_add_mileage");
                     fabMenu.close(true);
                 }
             }});
@@ -310,15 +312,16 @@ public class fragment_main extends Fragment implements SyncData,
         fabBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (roster.isEmpty()){
+                if (mRoster.isEmpty()){
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                             Snackbar.LENGTH_SHORT).show();
                 }else {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("caseID", 4);
-                    bundle.putParcelableArrayList("roster", roster);
-                    startActivity(new Intent(getActivity(), VehicleActivity.class)
-                            .putExtra("bundle", bundle));
+                    bundle.putParcelableArrayList("roster", mRoster);
+                    dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                    dialog.setTargetFragment(fragment_main.this, 3);
+                    dialog.setArguments(bundle);
+                    dialog.show(getFragmentManager(), "dialog_add_travel");
                     fabMenu.close(true);
                 }
             }});
@@ -386,9 +389,9 @@ public class fragment_main extends Fragment implements SyncData,
         if (mDialog_sync != null){
             mDialog_sync.dismiss();
         }
-        roster = new SaveLoadHelper(mContext, this).load();
-        if (roster != null) {
-            cardListAdapter = new OverviewAdapter(mContext, roster);
+        mRoster = new SaveLoadHelper(mContext, this).load();
+        if (mRoster != null) {
+            cardListAdapter = new OverviewAdapter(mContext, mRoster);
             cardList.setAdapter(cardListAdapter);
         }
     }
@@ -396,27 +399,17 @@ public class fragment_main extends Fragment implements SyncData,
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getBundleExtra("bundle");
-        switch (resultCode) {
-            case (0):
-                final Calendar cal = java.util.Calendar.getInstance();
-                String date = cal.get(java.util.Calendar.MONTH) + 1
-                        + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
-                        + "/" + cal.get(java.util.Calendar.YEAR);
-
-                Mileage mileage = new Mileage(roster.get(bundle.getInt("pos")).getRefID());
-                mileage.setDate(date);
-                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"),
-                        bundle.getDouble("price"));
-                Snackbar.make(getActivity().findViewById(R.id.snackbar),
-                        String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
-                                mileage.getMileage(), roster.get(bundle.getInt("pos")).getUnitMileage()),
-                        Snackbar.LENGTH_LONG).show();
-
-                VehicleLogDBHelper vehicleDB = new VehicleLogDBHelper(this.getActivity());
-                vehicleDB.insertEntry(mileage);
-
-                new SaveLoadHelper(mContext, this).save(roster);
+        Bundle bundle;
+        switch (resultCode){ //Mileage
+            case 2:
+                bundle = data.getBundleExtra("bundle");
+                Mileage mileage = (Mileage) bundle.getSerializable("event");
+                if (mileage != null) {
+                    Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                            String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
+                                    mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
+                            Snackbar.LENGTH_LONG).show();
+                }
                 break;
         }
     }
@@ -443,8 +436,8 @@ public class fragment_main extends Fragment implements SyncData,
         ArrayList<String> values = new ArrayList<>();
         HashMap<String, Vehicle> sortedRoster = new HashMap<>();
 
-        for (int i = 0; i < roster.size(); i++){
-            Vehicle mVehicle = roster.get(i);
+        for (int i = 0; i < mRoster.size(); i++){
+            Vehicle mVehicle = mRoster.get(i);
             String value;
             switch (mSortType){
                 case 0:
@@ -475,13 +468,13 @@ public class fragment_main extends Fragment implements SyncData,
                 return o1.compareTo(o2);
             }});
 
-        roster.clear();
+        mRoster.clear();
         for (String year : values) {
-            roster.add(sortedRoster.get(year));
+            mRoster.add(sortedRoster.get(year));
         }
 
         mSortType = (mSortType + 1) % 3;
-        cardListAdapter = new OverviewAdapter(mContext, roster);
+        cardListAdapter = new OverviewAdapter(mContext, mRoster);
         cardList.setAdapter(cardListAdapter);
     }
 
@@ -494,7 +487,7 @@ public class fragment_main extends Fragment implements SyncData,
                     PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WEAR_FILE_PATH);
                     DataMap dataMap = putDataMapRequest.getDataMap();
                     dataMap.putLong("time", System.currentTimeMillis());
-                    dataMap.putString("roster", new Gson().toJson(roster));
+                    dataMap.putString("roster", new Gson().toJson(mRoster));
                     Wearable.DataApi.putDataItem(mGoogleApiClient, putDataMapRequest.asPutDataRequest());
                 } catch (Exception e){
                     Log.e(TAG, e.getMessage());

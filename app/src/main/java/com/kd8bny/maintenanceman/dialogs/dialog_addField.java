@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,15 +21,15 @@ import java.util.Arrays;
 public class dialog_addField extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
-    private int RESULT_CODE = 1;
+    private int RESULT_CODE;
 
     public MaterialBetterSpinner spinnerFieldType;
-    public MaterialAutoCompleteTextView editFieldName;
-    public MaterialAutoCompleteTextView editFieldVal;
+    public MaterialAutoCompleteTextView editFieldName, editFieldVal;
+
     public String fieldType;
     public String fieldName;
     public String fieldVal;
-    public String [] mfieldTypes;
+    public String [] mFieldTypes;
     public Integer recyclerPosition;
 
     public dialog_addField(){}
@@ -38,15 +37,14 @@ public class dialog_addField extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        RESULT_CODE = getTargetRequestCode();
         Bundle bundle = getArguments();
         if (bundle != null){
-            RESULT_CODE = 2;
             recyclerPosition = bundle.getInt("pos");
             ArrayList<String> fieldData = bundle.getStringArrayList("field");
             fieldType = fieldData.get(0);
             fieldName = fieldData.get(1);
             fieldVal = fieldData.get(2);
-
         }
     }
 
@@ -58,8 +56,8 @@ public class dialog_addField extends DialogFragment {
         //Spinner
         spinnerFieldType = (MaterialBetterSpinner) view.findViewById(R.id.spinner_field_type);
         spinnerFieldType.setText(fieldType);
-        mfieldTypes = getActivity().getResources().getStringArray(R.array.field_type);
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mfieldTypes);
+        mFieldTypes = getActivity().getResources().getStringArray(R.array.field_type);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mFieldTypes);
         spinnerFieldType.setAdapter(spinnerAdapter);
 
         editFieldName = (MaterialAutoCompleteTextView) view.findViewById(R.id.field_name);
@@ -132,7 +130,7 @@ public class dialog_addField extends DialogFragment {
     }
 
     public boolean isLegit(){
-        if (Arrays.asList(mfieldTypes).indexOf(spinnerFieldType.getText().toString()) == -1){
+        if (Arrays.asList(mFieldTypes).indexOf(spinnerFieldType.getText().toString()) == -1){
             spinnerFieldType.setError(getResources().getString(R.string.error_set_vehicle_type));
             return true;
         }

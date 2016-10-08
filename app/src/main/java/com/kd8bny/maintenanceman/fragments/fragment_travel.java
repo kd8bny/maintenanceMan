@@ -6,8 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -22,31 +20,26 @@ import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.TravelAdapter;
-import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Locale;
 
-public class fragment_travel_view extends Fragment implements SyncData {
+public class fragment_travel extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_bsnss";
 
     private Context mContext;
@@ -58,11 +51,11 @@ public class fragment_travel_view extends Fragment implements SyncData {
 
     private ArrayList<Vehicle> mRoster;
     private Vehicle mVehicle;
-    private int mVehiclePos;
+    private int mPos;
     private String mRefID;
     private ArrayList<Travel> mTravelLog;
 
-    public fragment_travel_view() {}
+    public fragment_travel() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +65,8 @@ public class fragment_travel_view extends Fragment implements SyncData {
 
         Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
         mRoster = bundle.getParcelableArrayList("roster");
-        mVehiclePos = bundle.getInt("vehiclePos", -1);
-        mVehicle = mRoster.get(mVehiclePos);
+        mPos = bundle.getInt("pos", -1);
+        mVehicle = mRoster.get(mPos);
         mRefID = mVehicle.getRefID();
     }
 
@@ -98,7 +91,7 @@ public class fragment_travel_view extends Fragment implements SyncData {
                         bundle.putInt("pos", pos);
                         FragmentManager fm = getActivity().getSupportFragmentManager();
                         dialog_addTravelEntry dialog = new dialog_addTravelEntry();
-                        dialog.setTargetFragment(fragment_travel_view.this, 4);
+                        dialog.setTargetFragment(fragment_travel.this, 4);
                         dialog.setArguments(bundle);
                         dialog.show(fm, "dialog_addTravelEntry");
                     }
@@ -119,12 +112,13 @@ public class fragment_travel_view extends Fragment implements SyncData {
                             switch (item.getItemId()) {
                                 case R.id.menu_edit:
                                     Bundle bundle = new Bundle();
-                                    bundle.putInt("caseID", 4);
-                                    bundle.putSerializable("event", travel);
                                     bundle.putParcelableArrayList("roster", mRoster);
-                                    bundle.putInt("vehiclePos", mVehiclePos);
-                                    getActivity().startActivity(new Intent(getActivity(), VehicleActivity.class)
-                                            .putExtra("bundle", bundle));
+                                    bundle.putInt("pos", mPos);
+                                    bundle.putSerializable("event", travel);
+                                    dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                                    dialog.setTargetFragment(fragment_travel.this, 3);
+                                    dialog.setArguments(bundle);
+                                    dialog.show(getFragmentManager(), "dialog_add_travel");
 
                                     return true;
 
@@ -139,7 +133,6 @@ public class fragment_travel_view extends Fragment implements SyncData {
                                         public void onClick(DialogInterface dialog, int which) {
                                             VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
                                             vehicleLogDBHelper.deleteEntry(travel);
-                                            save();
                                             onResume();
                                         }
                                     }).show();
@@ -159,10 +152,10 @@ public class fragment_travel_view extends Fragment implements SyncData {
         mView.findViewById(R.id.fab_add_spec).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getFragmentManager();
                 dialog_addField dialog_addField = new dialog_addField();
-                dialog_addField.setTargetFragment(fragment_travel_view.this, 0);
-                dialog_addField.show(fm, "dialog_add_field");
+                dialog_addField.setTargetFragment(fragment_travel.this, 0);
+                dialog_addField.show(getFragmentManager(), "dialog_add_field");
+                fabMenu.close(true);
             }
         });
 
@@ -170,10 +163,12 @@ public class fragment_travel_view extends Fragment implements SyncData {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("caseID", 1);
                 bundle.putParcelableArrayList("roster", mRoster);
-                startActivity(new Intent(getActivity(), VehicleActivity.class)
-                        .putExtra("bundle", bundle));
+                bundle.putInt("pos", mPos);
+                dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                dialog.setTargetFragment(fragment_travel.this, 1);
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "dialog_add_maintenance");
                 fabMenu.close(true);
             }});
 
@@ -182,11 +177,11 @@ public class fragment_travel_view extends Fragment implements SyncData {
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("roster", mRoster);
-                FragmentManager fm = getFragmentManager();
+                bundle.putInt("pos", mPos);
                 dialog_addMileageEntry dialog = new dialog_addMileageEntry();
-                dialog.setTargetFragment(fragment_travel_view.this, 0);
+                dialog.setTargetFragment(fragment_travel.this, 2);
                 dialog.setArguments(bundle);
-                dialog.show(fm, "dialog_add_mileage");
+                dialog.show(getFragmentManager(), "dialog_add_mileage");
                 fabMenu.close(true);
             }});
 
@@ -194,10 +189,12 @@ public class fragment_travel_view extends Fragment implements SyncData {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putInt("caseID", 4);
                 bundle.putParcelableArrayList("roster", mRoster);
-                startActivity(new Intent(getActivity(), VehicleActivity.class)
-                        .putExtra("bundle", bundle));
+                bundle.putInt("pos", mPos);
+                dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                dialog.setTargetFragment(fragment_travel.this, 3);
+                dialog.setArguments(bundle);
+                dialog.show(getFragmentManager(), "dialog_add_travel");
                 fabMenu.close(true);
             }});
 
@@ -222,76 +219,9 @@ public class fragment_travel_view extends Fragment implements SyncData {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mTravelLog = sort(vehicleLogDBHelper.getFullBusinessEntries(mRefID));
+        mTravelLog = this.sort(vehicleLogDBHelper.getFullBusinessEntries(mRefID));
         businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
         businessList.setAdapter(businessListAdapter);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getBundleExtra("bundle");
-        VehicleLogDBHelper vehicleDB;
-        switch(resultCode) {
-            case (0):
-                final Calendar cal = java.util.Calendar.getInstance();
-                String date = cal.get(java.util.Calendar.MONTH) + 1
-                        + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
-                        + "/" + cal.get(java.util.Calendar.YEAR);
-
-                Mileage mileage = new Mileage(mRoster.get(bundle.getInt("pos")).getRefID());
-                mileage.setDate(date);
-                mileage.setMileage(bundle.getDouble("trip"), bundle.getDouble("fill"), bundle.getDouble("price"));
-                Snackbar.make(getActivity().findViewById(R.id.snackbar),
-                        String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
-                                mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
-                        Snackbar.LENGTH_LONG).show();
-
-                vehicleDB = new VehicleLogDBHelper(this.getActivity());
-                vehicleDB.insertEntry(mileage);
-
-                save();
-                break;
-
-            case (1):
-                ArrayList<String> result = bundle.getStringArrayList("fieldData");
-                HashMap<String, String> temp;
-                switch (result.get(0)) {
-                    case "General":
-                        temp = mVehicle.getGeneralSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        mVehicle.setGeneralSpecs(temp);
-                        break;
-                    case "Engine":
-                        temp = mVehicle.getEngineSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        mVehicle.setEngineSpecs(temp);
-                        break;
-                    case "Power Train":
-                        temp = mVehicle.getPowerTrainSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        mVehicle.setPowerTrainSpecs(temp);
-                        break;
-                    case "Other":
-                        temp = mVehicle.getOtherSpecs();
-                        temp.put(result.get(1), result.get(2));
-                        mVehicle.setOtherSpecs(temp);
-                        break;
-                }
-                mRoster.set(mVehiclePos, mVehicle);
-                save();
-                break;
-
-            case 4:
-                Travel travel = mTravelLog.get(bundle.getInt("pos"));
-                travel.setStop(Double.parseDouble(bundle.getString("value")));
-
-                VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                vehicleLogDBHelper.deleteEntry(travel);
-                vehicleLogDBHelper.insertEntry(travel);
-                onResume();
-                break;
-        }
     }
 
     @Override
@@ -321,10 +251,6 @@ public class fragment_travel_view extends Fragment implements SyncData {
         return false;
     }
 
-    private void save(){
-        new SaveLoadHelper(mContext, this).save(mRoster);
-    }
-
     public ArrayList<Travel> sort(ArrayList<Travel> vehicleHist){
         ArrayList<String> dates = new ArrayList<>();
 
@@ -352,15 +278,5 @@ public class fragment_travel_view extends Fragment implements SyncData {
         }
 
         return vehicleHist;
-    }
-
-    public void onDownloadComplete(Boolean isComplete){
-        if (isComplete) {
-            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
-            onResume();
-        }
-    }
-
-    public void onDownloadStart(){
     }
 }

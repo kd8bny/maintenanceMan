@@ -7,8 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.fragments.fragment_mileage;
-import com.kd8bny.maintenanceman.fragments.fragment_travel_view;
-import com.kd8bny.maintenanceman.fragments.fragment_history;
+import com.kd8bny.maintenanceman.fragments.fragment_travel;
+import com.kd8bny.maintenanceman.fragments.fragment_maintenance;
 import com.kd8bny.maintenanceman.fragments.fragment_info;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -30,11 +30,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new fragment_info();
             case 1:
-                return new fragment_history();
+                return new fragment_maintenance();
             case 2:
                 return new fragment_mileage();
             case 3:
-                return new fragment_travel_view();
+                return new fragment_travel();
         }
 
         return null;

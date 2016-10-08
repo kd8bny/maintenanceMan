@@ -15,15 +15,6 @@
     <string name="hint_model">Model</string>
     <string name="field_business">Business Vehicle</string>
 
-    <string-array name="vehicle_type">
-        <item>Automobile</item>
-        <item>Motorcycle</item>
-        <item>Utility</item>
-        <item>Marine</item>
-        <item>Lawn and Garden</item>
-        <item>Trailer</item>
-    </string-array>
-
     <!-- Add Field -->
     <string name="title_add_field">Add Field</string>
     <string name="error_field_label">Enter Label</string>

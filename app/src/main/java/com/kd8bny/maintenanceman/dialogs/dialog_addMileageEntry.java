@@ -2,6 +2,7 @@ package com.kd8bny.maintenanceman.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,24 +15,30 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class dialog_addMileageEntry extends DialogFragment {
     private static final String TAG = "dlg_add_mileage";
 
+    private int RESULT_CODE;
+    private Context mContext;
     private MaterialBetterSpinner vehicleSpinner;
     private MaterialEditText vTripValue, vFillValue, vPriceValue;
 
-    private ArrayList<Vehicle> roster;
-    private ArrayList<String> singleVehicle = new ArrayList<>();
-    private int RESULT_CODE;
-    private Mileage mMileage;
+    private ArrayList<Vehicle> mRoster;
+    private Vehicle mVehicle;
+    private Mileage mMileage, mOldMileage;
     private int mPos;
+    private ArrayList<String> mVehicleTitles;
+    private Boolean isNew = true;
+
 
     public dialog_addMileageEntry(){}
 
@@ -39,10 +46,30 @@ public class dialog_addMileageEntry extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RESULT_CODE = getTargetRequestCode();
+        mContext = getContext();
+
         Bundle bundle = getArguments();
-        roster = bundle.getParcelableArrayList("roster");
         mMileage = (Mileage) bundle.getSerializable("event");
-        mPos = bundle.getInt("pos");
+
+        mRoster = bundle.getParcelableArrayList("roster");
+        mPos = bundle.getInt("pos", -1);
+
+        mMileage = (Mileage) bundle.getSerializable("event");
+        if (mMileage == null) {
+            mMileage = new Mileage("");
+            final Calendar cal = Calendar.getInstance();
+            mMileage.setDate(cal.get(Calendar.MONTH) + 1
+                    + "/" + cal.get(Calendar.DAY_OF_MONTH)
+                    + "/" + cal.get(Calendar.YEAR));
+        }else { //TODO make object implement clone
+            isNew = false;
+            mOldMileage = new Mileage(mMileage.getRefID());
+            mOldMileage.setDate(mMileage.getDate());
+            mOldMileage.setMileage(
+                    mMileage.getTripometer(),
+                    mMileage.getFillVol(),
+                    mMileage.getPrice());
+        }
     }
 
     @Override
@@ -50,15 +77,20 @@ public class dialog_addMileageEntry extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_mileage_event, null);
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_roster);
-        vehicleSpinner.setAdapter(setVehicles());
         vTripValue = (MaterialEditText) view.findViewById(R.id.tripometer);
         vFillValue = (MaterialEditText) view.findViewById(R.id.fill_vol);
         vPriceValue = (MaterialEditText) view.findViewById(R.id.price);
+
+        vehicleSpinner.setAdapter(setVehicles());
+        if (mPos > -1) {
+            mVehicle = mRoster.get(mPos);
+            vehicleSpinner.setText(mVehicle.getTitle());
+        }
         vTripValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vFillValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vPriceValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        if (mMileage != null){
+        if (!isNew){
             vTripValue.setText(mMileage.getTripometer().toString());
             vFillValue.setText(mMileage.getFillVol().toString());
             vPriceValue.setText(mMileage.getPrice().toString());
@@ -95,40 +127,41 @@ public class dialog_addMileageEntry extends DialogFragment {
                 @Override
                 public void onClick(View v){
                     if (isLegit()) {
-                        ArrayList<Double> arrayList = new ArrayList<>();
-                        arrayList.add(Double.parseDouble(vTripValue.getText().toString()));
-                        arrayList.add(Double.parseDouble(vFillValue.getText().toString()));
-                        arrayList.add(Double.parseDouble(vPriceValue.getText().toString()));
+                        final Calendar cal = java.util.Calendar.getInstance();
+                        String date = cal.get(java.util.Calendar.MONTH) + 1
+                                + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
+                                + "/" + cal.get(java.util.Calendar.YEAR);
 
-                        sendResult(arrayList);
+                        mMileage.setDate(date);
+                        mMileage.setMileage(
+                                Double.parseDouble(vTripValue.getText().toString()),
+                                Double.parseDouble(vFillValue.getText().toString()),
+                                Double.parseDouble(vPriceValue.getText().toString()));
+                        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                        if (mOldMileage != null){
+                            vehicleLogDBHelper.deleteEntry(mOldMileage);
+                        }
+                        vehicleLogDBHelper.insertEntry(mMileage);
+
                         dismiss();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("event", mMileage);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
+                                new Intent().putExtra("bundle", bundle));
                     }}});
         }
     }
 
-    private void sendResult(ArrayList<Double> values) {
-        Bundle bundle = new Bundle();
-        int pos = singleVehicle.indexOf(vehicleSpinner.getText().toString());
-        bundle.putInt("pos", pos);
-        bundle.putDouble("trip", values.get(0));
-        bundle.putDouble("fill", values.get(1));
-        bundle.putDouble("price", values.get(2));
-        if (mMileage != null){
-            bundle.putSerializable("event", mMileage);
-        }
-        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                new Intent().putExtra("bundle", bundle));
-    }
-
     private ArrayAdapter<String> setVehicles(){
-        for(Vehicle v : roster) {
-            singleVehicle.add(v.getTitle());
+        mVehicleTitles = new ArrayList<>();
+        for(Vehicle v : mRoster) {
+            mVehicleTitles.add(v.getTitle());
         }
-        return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, singleVehicle);
+        return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mVehicleTitles);
     }
 
     private Boolean isLegit(){
-        if (singleVehicle.indexOf(vehicleSpinner.getText().toString()) == -1) {
+        if (mVehicleTitles.indexOf(vehicleSpinner.getText().toString()) == -1) {
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle_type));
 
             return false;
