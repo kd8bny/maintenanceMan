@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +22,6 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.TravelAdapter;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
-import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
@@ -42,17 +41,12 @@ import java.util.HashMap;
 public class fragment_travel extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_bsnss";
 
-    private Context mContext;
     private View mView;
 
     private RecyclerView businessList;
     private RecyclerView.LayoutManager businessMan;
     private RecyclerView.Adapter businessListAdapter;
 
-    private ArrayList<Vehicle> mRoster;
-    private Vehicle mVehicle;
-    private int mPos;
-    private String mRefID;
     private ArrayList<Travel> mTravelLog;
 
     public fragment_travel() {}
@@ -61,13 +55,6 @@ public class fragment_travel extends fragment_vehicleInfo {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mContext = getActivity().getApplicationContext();
-
-        Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        mRoster = bundle.getParcelableArrayList("roster");
-        mPos = bundle.getInt("pos", -1);
-        mVehicle = mRoster.get(mPos);
-        mRefID = mVehicle.getRefID();
     }
 
     @Override
@@ -219,7 +206,7 @@ public class fragment_travel extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mTravelLog = this.sort(vehicleLogDBHelper.getFullBusinessEntries(mRefID));
+        mTravelLog = this.sort(vehicleLogDBHelper.getFullBusinessEntries(mVehicle.getRefID()));
         businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
         businessList.setAdapter(businessListAdapter);
     }
@@ -278,5 +265,10 @@ public class fragment_travel extends fragment_vehicleInfo {
         }
 
         return vehicleHist;
+    }
+
+    public void doReload(){
+        Log.wtf(TAG, "tra");
+        onResume();
     }
 }

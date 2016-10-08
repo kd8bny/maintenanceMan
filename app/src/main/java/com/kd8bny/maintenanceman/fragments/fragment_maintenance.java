@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +11,7 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,10 +24,8 @@ import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
-import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
@@ -54,12 +52,6 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     private RecyclerView histList;
     private RecyclerView.LayoutManager histMan;
 
-    private Context mContext;
-
-    private ArrayList<Vehicle> mRoster;
-    private Vehicle mVehicle;
-    private int mPos;
-    private String refID;
     private ArrayList<Maintenance> mVehicleHist;
     private ArrayList<Maintenance> mUnfilteredHist;
     private int mSortType = 0;
@@ -71,13 +63,6 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mContext = getActivity().getApplicationContext();
-
-        Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        mRoster = bundle.getParcelableArrayList("roster");
-        mPos = bundle.getInt("pos", -1);
-        mVehicle = mRoster.get(mPos);
-        refID = mVehicle.getRefID();
     }
 
     @Override
@@ -271,7 +256,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mVehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(refID));
+        mVehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(mVehicle.getRefID()));
         histList.setAdapter(new HistoryAdapter(mContext, mVehicle, mVehicleHist));
     }
 
@@ -381,5 +366,10 @@ public class fragment_maintenance extends fragment_vehicleInfo {
             vFilterView.setVisibility(View.INVISIBLE);
         }
         vFilterView.startAnimation(translateAnim);
+    }
+
+    public void doReload(){
+        Log.wtf(TAG, "main");
+        onResume();
     }
 }

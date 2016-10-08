@@ -11,8 +11,8 @@ import com.kd8bny.maintenanceman.adapters.ViewPagerAdapter;
 public class ViewPagerActivity extends AppCompatActivity {
     private static final String TAG = "activity_viewpager";
 
-    ViewPagerAdapter mAdapter;
-    ViewPager mPager;
+    private ViewPagerAdapter mAdapter;
+    private ViewPager mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

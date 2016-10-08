@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +25,6 @@ import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
-import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
@@ -45,13 +44,9 @@ import java.util.Locale;
 public class fragment_mileage extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_mileage";
 
-    private Context mContext;
     private View mView;
     private RecyclerView mileageList;
 
-    private ArrayList<Vehicle> mRoster;
-    private Vehicle mVehicle;
-    private int mPos;
     private ArrayList<Mileage> mMileageHist;
 
     public fragment_mileage() {}
@@ -60,12 +55,6 @@ public class fragment_mileage extends fragment_vehicleInfo {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        mContext = getActivity().getApplicationContext();
-
-        Bundle bundle = getActivity().getIntent().getBundleExtra("bundle");
-        mRoster = bundle.getParcelableArrayList("roster");
-        mPos = bundle.getInt("pos", -1);
-        mVehicle = mRoster.get(mPos);
     }
 
     @Override

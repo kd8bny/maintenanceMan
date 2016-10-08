@@ -5,49 +5,30 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
 
-import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.activities.VehicleActivity;
-import com.kd8bny.maintenanceman.adapters.InfoAdapter;
+import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
-import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
-import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
-import com.kd8bny.maintenanceman.dialogs.dialog_addField;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
-import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.interfaces.SyncData;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
 public class fragment_vehicleInfo extends Fragment implements SyncData {
-    private static final String TAG = "frgmnt_inf";
+    private static final String TAG = "fvi";
 
-    private Context mContext;
-    private ArrayList<Vehicle> mRoster;
-    private int mPos;
-    private Vehicle mVehicle;
+    public Context mContext;
+    public ArrayList<Vehicle> mRoster;
+    public int mPos;
+    public Vehicle mVehicle;
+
+    private ViewPagerActivity viewPagerParent;
+    private ViewPager viewPager;
 
     public fragment_vehicleInfo() {}
 
@@ -61,6 +42,9 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
         mRoster = bundle.getParcelableArrayList("roster");
         mPos = bundle.getInt("pos", -1);
         mVehicle = mRoster.get(mPos);
+
+        viewPagerParent = (ViewPagerActivity) getActivity();
+        viewPager = (ViewPager) viewPagerParent.findViewById(R.id.view_pager);
     }
 
     @Override
@@ -98,12 +82,14 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                     mRoster.set(mPos, mVehicle);
                     new SaveLoadHelper(mContext, this).save(mRoster);
                 }
+                viewPager.getAdapter().notifyDataSetChanged();
                 break;
 
             case 2:
                 bundle = data.getBundleExtra("bundle");
                 Mileage mileage = (Mileage) bundle.getSerializable("event");
                 if (mileage != null) {
+                    viewPager.getAdapter().notifyDataSetChanged();
                     Snackbar.make(getActivity().findViewById(R.id.snackbar),
                             String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
                                     mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
@@ -114,6 +100,7 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
             case (90)://Saved
                 mRoster = new SaveLoadHelper(mContext, this).load();
                 mVehicle = mRoster.get(mPos);
+                viewPager.getAdapter().notifyDataSetChanged();
                 break;
 
             case (91)://Delete mVehicle
@@ -121,15 +108,15 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                 break;
 
             default:
+                viewPager.getAdapter().notifyDataSetChanged();
                 break;
         }
-            onResume();
     }
 
     public void onDownloadComplete(Boolean isComplete){
         if (isComplete) {
             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
-            onResume();
+            viewPager.getAdapter().notifyDataSetChanged();
         }
     }
 

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -72,7 +71,7 @@ public class fragment_fleetRoster extends Fragment {
         if(roster == null) {
             roster = new ArrayList<>();
         }
-        vehiclePos = bundle.getInt("vehiclePos", -1);
+        vehiclePos = bundle.getInt("pos", -1);
         if (vehiclePos == -1){
             FragmentManager fm = getChildFragmentManager();
             dialog_addVehicle dialog = new dialog_addVehicle();
