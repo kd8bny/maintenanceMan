@@ -44,11 +44,15 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
         if (child instanceof FloatingActionMenu && dependency instanceof Snackbar.SnackbarLayout) {
             this.updateTranslation(parent, child, dependency);
         }
-        if (child instanceof FloatingActionButton && dependency instanceof Snackbar.SnackbarLayout) {
-            this.updateTranslation(parent, child, dependency);
-        }
 
         return false;
+    }
+
+    @Override
+    public void onDependentViewRemoved(CoordinatorLayout parent, View child, View dependency) {
+        if (child instanceof FloatingActionMenu && dependency instanceof Snackbar.SnackbarLayout) {
+            this.updateTranslation(parent, child, dependency);
+        }
     }
 
     private void updateTranslation(CoordinatorLayout parent, View child, View dependency) {
@@ -72,9 +76,11 @@ public class FloatingActionMenuBehavior extends CoordinatorLayout.Behavior {
     private float getTranslationY(CoordinatorLayout parent, View child) {
         float minOffset = 0.0F;
         List dependencies = parent.getDependencies(child);
-        int i = 0;
 
-        for (int z = dependencies.size(); i < z; ++i) {
+        int z = dependencies.size();
+
+
+        for (int i = 0; z > i; ++i) {
             View view = (View) dependencies.get(i);
             if (view instanceof Snackbar.SnackbarLayout && parent.doViewsOverlap(child, view)) {
                 minOffset = Math.min(minOffset, ViewCompat.getTranslationY(view) - (float) view.getHeight());
