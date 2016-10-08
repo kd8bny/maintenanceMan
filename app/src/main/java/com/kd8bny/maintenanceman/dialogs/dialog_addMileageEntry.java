@@ -127,6 +127,9 @@ public class dialog_addMileageEntry extends DialogFragment {
                 @Override
                 public void onClick(View v){
                     if (isLegit()) {
+                        //save
+                        int pos = mVehicleTitles.indexOf(vehicleSpinner.getText().toString());
+                        mMileage.setRefID(mRoster.get(pos).getRefID());
                         final Calendar cal = java.util.Calendar.getInstance();
                         String date = cal.get(java.util.Calendar.MONTH) + 1
                                 + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
