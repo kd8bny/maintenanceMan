@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
+import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
@@ -32,6 +33,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_maintenanceHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -74,6 +76,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
         registerForContextMenu(mView);
 
         //Task History
+        final SyncData syncData = this;
         histList = (RecyclerView) mView.findViewById(R.id.cardList);
         histMan = new LinearLayoutManager(getActivity());
         histList.setLayoutManager(histMan);
@@ -128,9 +131,8 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
-                                            vehicleDB.deleteEntry(maintenance);
-                                            onResume();
+                                            VehicleLogDBHelper.getInstance(mContext).deleteEntry(maintenance);
+                                            getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
                                     }).show();
 

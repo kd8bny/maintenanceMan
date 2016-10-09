@@ -118,9 +118,8 @@ public class fragment_travel extends fragment_vehicleInfo {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                                            vehicleLogDBHelper.deleteEntry(travel);
-                                            onResume();
+                                            VehicleLogDBHelper.getInstance(mContext).deleteEntry(travel);
+                                            getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
                                     }).show();
 

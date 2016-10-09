@@ -30,6 +30,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_mileageHistory;
+import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import java.text.DateFormat;
@@ -87,6 +88,7 @@ public class fragment_mileage extends fragment_vehicleInfo {
                 if (!mMileageHist.isEmpty()) {
                     final Mileage mileage = mMileageHist.get(pos);
                     final int mileagePos = pos;
+
                     PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                     popupMenu.getMenuInflater().inflate(R.menu.pop_menu_history, popupMenu.getMenu());
                     //TODO vibrate
@@ -118,10 +120,8 @@ public class fragment_mileage extends fragment_vehicleInfo {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
-                                            vehicleDB.deleteEntry(mileage);
-                                            save();
-                                            onResume();
+                                            VehicleLogDBHelper.getInstance(mContext).deleteEntry(mileage);
+                                            getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
                                     }).show();
 
@@ -237,10 +237,6 @@ public class fragment_mileage extends fragment_vehicleInfo {
             default:
                 return false;
         }
-    }
-
-    private void save(){
-        new SaveLoadHelper(mContext, this).save(mRoster);
     }
 
     private ArrayList<Mileage> sort(ArrayList<Mileage> mileageHist){

@@ -148,6 +148,8 @@ public class dialog_addTravelEntry extends DialogFragment {
                         }
                         vehicleLogDBHelper.insertEntry(mTravel);
                         dismiss();
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
+                                new Intent());
                     }}});
         }
     }
