@@ -411,6 +411,11 @@ public class fragment_main extends Fragment implements SyncData,
                             Snackbar.LENGTH_LONG).show();
                 }
                 break;
+
+            default:
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format(Locale.ENGLISH, "saved"), Snackbar.LENGTH_LONG).show();
+                break;
         }
     }
 

@@ -83,6 +83,8 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                     new SaveLoadHelper(mContext, this).save(mRoster);
                 }
                 viewPager.getAdapter().notifyDataSetChanged();
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format(Locale.ENGLISH, "saved"), Snackbar.LENGTH_LONG).show();
                 break;
 
             case 2:
@@ -101,6 +103,8 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                 mRoster = new SaveLoadHelper(mContext, this).load();
                 mVehicle = mRoster.get(mPos);
                 viewPager.getAdapter().notifyDataSetChanged();
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format(Locale.ENGLISH, "saved"), Snackbar.LENGTH_LONG).show();
                 break;
 
             case (91)://Delete mVehicle
@@ -109,6 +113,8 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
 
             default:
                 viewPager.getAdapter().notifyDataSetChanged();
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format(Locale.ENGLISH, "saved"), Snackbar.LENGTH_LONG).show();
                 break;
         }
     }
