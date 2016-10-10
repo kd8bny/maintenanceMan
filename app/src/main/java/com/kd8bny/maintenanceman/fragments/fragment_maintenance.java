@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -71,12 +72,11 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         vFilterView = inflater.inflate(R.layout.dialog_filter, null);
-        ((RelativeLayout) mView.findViewById(R.id.recycler_view)).addView(vFilterView);
+        ((CoordinatorLayout) mView.findViewById(R.id.snackbar)).addView(vFilterView);
         vFilterView.setVisibility(View.INVISIBLE);
         registerForContextMenu(mView);
 
         //Task History
-        final SyncData syncData = this;
         histList = (RecyclerView) mView.findViewById(R.id.cardList);
         histMan = new LinearLayoutManager(getActivity());
         histList.setLayoutManager(histMan);
