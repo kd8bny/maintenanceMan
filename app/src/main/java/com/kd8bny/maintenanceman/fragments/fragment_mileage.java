@@ -121,7 +121,8 @@ public class fragment_mileage extends fragment_vehicleInfo {
 
                                         public void onClick(DialogInterface dialog, int which) {
                                             VehicleLogDBHelper.getInstance(mContext).deleteEntry(mileage);
-                                            getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
+                                            onResume(); //TODO
+                                            //getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
                                     }).show();
 
