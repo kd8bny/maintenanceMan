@@ -14,23 +14,38 @@
         android:elevation="2sp"
         android:background="@drawable/rect"/>
 
+    <TextView
+        android:id="@+id/val_dest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/content_vertical_space"
+
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:maxLines="1"
+
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/header_sub_font"
+        android:text="dest"/>
+
     <LinearLayout
-        android:id="@+id/holder_date_delta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
+        android:layout_below="@id/val_dest"
         android:padding="@dimen/content_vertical_space">
 
         <TextView
             android:id="@+id/val_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
 
             android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/header_sub_font"/>
+            android:maxLines="1"
+
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"
+            android:text="date"/>
 
         <TextView
             android:id="@+id/val_delta"
@@ -39,42 +54,23 @@
             android:layout_weight="1"
 
             android:ellipsize="end"
-            android:singleLine="true"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/header_sub_font"/>
-        </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/content_vertical_space"
-        android:layout_below="@id/holder_date_delta">
-
+            android:maxLines="1"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/field_font"
+            android:text="xMi"/>
 
         <TextView
-            android:id="@+id/val_dest"
+            android:id="@+id/val_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
 
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:singleLine="true"
+            android:maxLines="1"
 
             android:textColor="@color/secondary_text"
-            android:textSize="@dimen/field_font"/>
-
-        <TextView
-            android:id="@+id/val_purpose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:singleLine="true"
-
-            android:textColor="@color/secondary_text"
-            android:textSize="@dimen/field_font"/>
+            android:textSize="@dimen/field_font"
+            android:text="xhrs"/>
     </LinearLayout>
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package com.kd8bny.maintenanceman.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +21,6 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
 
     private Context mContext;
     private View itemView;
-    private Resources res;
 
     private ArrayList<Travel> mTravelList;
     private String UNIT_DIST;
@@ -43,10 +41,9 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
 
     @Override
     public AdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        res = viewGroup.getResources();
         itemView = LayoutInflater
                 .from(viewGroup.getContext())
-                .inflate(R.layout.card_business, viewGroup, false);
+                .inflate(R.layout.card_travel, viewGroup, false);
 
         return new AdapterViewHolder(itemView);
     }
@@ -56,19 +53,20 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
        if(!mTravelList.isEmpty()){
            Travel travel = mTravelList.get(i);
            viewHolder.vDate.setText(travel.getDate());
-           viewHolder.vDest.setText(travel.getDest());
 
-           String delta;
            if (travel.getStop() == -1.0){
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
-               delta = String.format(Locale.ENGLISH, "In Progress");
+               viewHolder.vDest.setText(mContext.getString(R.string.field_in_progress));
+
            }else{
-               delta = String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST);
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.goodToGo));
+               viewHolder.vDest.setText(String.format(Locale.ENGLISH, "%s %s",
+                       mContext.getString(R.string.field_to), travel.getDest()));
+               viewHolder.vDelta.setText(String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST));
+               viewHolder.vTime.setText();
            }
-           viewHolder.vDelta.setText(delta);
        }else{
-           viewHolder.vDate.setText(itemView.getResources().getString(R.string.error_no_history));
+           viewHolder.vDest.setText(itemView.getResources().getString(R.string.error_no_history));
            viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
        }
     }
@@ -77,9 +75,11 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
         private static final String TAG = "adptr_bsness";
 
         protected ImageView vHeader;
+        protected TextView vDest;
         protected TextView vDate;
         protected TextView vDelta;
-        protected TextView vDest;
+        protected TextView vTime;
+
 
         public AdapterViewHolder(View view) {
             super(view);
@@ -88,6 +88,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
             vDate = (TextView) view.findViewById(R.id.val_date);
             vDelta = (TextView) view.findViewById(R.id.val_delta);
             vDest = (TextView) view.findViewById(R.id.val_dest);
+            vDest = (TextView) view.findViewById(R.id.val_time);
         }
     }
 }
