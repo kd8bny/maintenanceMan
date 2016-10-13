@@ -30,7 +30,7 @@ public class dialog_timePicker extends DialogFragment implements TimePickerDialo
     }
 
     public void onTimeSet(TimePicker view, int hour, int min) {
-        Instant instant
+        //Instant instant
         Bundle bundle = new Bundle();
         bundle.putInt("hour", hour);
         bundle.putInt("min", min);
