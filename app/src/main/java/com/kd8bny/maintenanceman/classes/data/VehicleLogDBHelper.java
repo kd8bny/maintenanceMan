@@ -16,11 +16,9 @@ import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
-import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 
 public class VehicleLogDBHelper extends SQLiteOpenHelper{
@@ -585,34 +583,34 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         db.beginTransaction();
         try {
             if (oldVersion < 3) {
-                Log.d(TAG, "icon");
+                Log.v(TAG, "icon");
                 String TABLE_VEHICLE_NEW = TABLE_VEHICLE + "_new";
                 db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VEHICLE_NEW + " AS SELECT * FROM " + TABLE_VEHICLE);
                 db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_ICON + " text not null default '0'");
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
                 db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " RENAME TO " + TABLE_VEHICLE);
-                Log.d(TAG, "icondone");
+                Log.v(TAG, "icondone");
             }
             if (oldVersion < 4){
-                Log.d(TAG, "bus");
+                Log.v(TAG, "bus");
                 String CREATE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                         + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
                         TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
                         COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
                 db.execSQL(CREATE);
-                Log.d(TAG, "bus done");
+                Log.v(TAG, "bus done");
             }
             if (oldVersion < 5){
-                Log.d(TAG, "mileage");
+                Log.v(TAG, "mileage");
                 String CREATE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                                 + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
                         TABLE_MILEAGE, COLUMN_ID, COLUMN_VEHICLE_REFID,
                         COLUMN_VEHICLE_DATE, COLUMN_MILEAGE, COLUMN_TRIP, COLUMN_FILL_VOL, COLUMN_VEHICLE_PRICE);
                 db.execSQL(CREATE);
-                Log.d(TAG, "mileage done");
+                Log.v(TAG, "mileage done");
             }
             if (oldVersion < 6){
-                Log.d(TAG, "switch to iso date");
+                Log.v(TAG, "switch to iso date");
                 ArrayList<String> tables = new ArrayList<>();
                 tables.add(TABLE_VEHICLE);
                 tables.add(TABLE_MILEAGE);
@@ -648,15 +646,15 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                         }
                     }
                 }
-                Log.d(TAG, "iso date done");
+                Log.v(TAG, "iso date done");
 
-                Log.d(TAG, "add end time to travel");
+                Log.v(TAG, "add end time to travel");
                 String TABLE_TRAVEL_NEW = TABLE_TRAVEL + "_new";
                 db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_TRAVEL_NEW + " AS SELECT * FROM " + TABLE_TRAVEL);
                 db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " ADD COLUMN " + COLUMN_VEHICLE_DATE_END + " text not null default ''");
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAVEL);
                 db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " RENAME TO " + TABLE_TRAVEL);
-                Log.d(TAG, "end time added");
+                Log.v(TAG, "end time added");
                 
             }
             db.setTransactionSuccessful();
