@@ -24,7 +24,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     private static VehicleLogDBHelper sInstance;
 
-    private static final int DB_VERSION = 5; // v4 (75) v3(58) v2(50)
+    private static final int DB_VERSION = 6; //v5 (83) v4 (75) v3(58) v2(50)
     private static final String DB_NAME = "vehicleLog.db";
 
     private static final String TABLE_VEHICLE = "grandVehicleLog";
@@ -42,6 +42,8 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String COLUMN_STOP = "end";
     private static final String COLUMN_DEST = "dest";
     private static final String COLUMN_PURPOSE = "purpose";
+    private static final String COLUMN_START_CLOCK = "startClock";
+    private static final String COLUMN_STOP_CLOCK = "endClock";
 
     private static final String TABLE_MILEAGE = "mileageLog";
     private static final String COLUMN_MILEAGE = "mileage";
@@ -68,9 +70,9 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_ODO, COLUMN_VEHICLE_EVENT, COLUMN_VEHICLE_PRICE, COLUMN_VEHICLE_COMMENT, COLUMN_ICON);
 
         String CREATE_BUSINESS = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
-                        + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
+                        + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
                 TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
-                COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
+                COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE, COLUMN_START_CLOCK, COLUMN_STOP_CLOCK);
 
         String CREATE_MILEAGE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                         + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
@@ -274,6 +276,8 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         contentValues.put(COLUMN_STOP, travel.getStop());
         contentValues.put(COLUMN_DEST, travel.getDest());
         contentValues.put(COLUMN_PURPOSE, travel.getPurpose());
+        contentValues.put(COLUMN_START_CLOCK, travel.getStartClock());
+        contentValues.put(COLUMN_STOP_CLOCK, travel.getStopClock());
 
         try {
             db.beginTransaction();
@@ -302,6 +306,8 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                     travel.setStop(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_STOP))));
                     travel.setDest(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
                     travel.setPurpose(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    travel.setStartClock(cursor.getString(cursor.getColumnIndex(COLUMN_START_CLOCK)));
+                    travel.setStopClock(cursor.getString(cursor.getColumnIndex(COLUMN_STOP_CLOCK)));
 
                     travelList.add(travel);
                 } while (cursor.moveToNext());
@@ -605,6 +611,16 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                         COLUMN_VEHICLE_DATE, COLUMN_MILEAGE, COLUMN_TRIP, COLUMN_FILL_VOL, COLUMN_VEHICLE_PRICE);
                 db.execSQL(CREATE);
                 Log.d(TAG, "mileage done");
+            }
+            if (oldVersion < 6){
+                Log.d(TAG, "travel clock");
+                String TABLE_TRAVEL_NEW = TABLE_TRAVEL + "_new";
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_TRAVEL_NEW + " AS SELECT * FROM " + TABLE_TRAVEL);
+                db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " ADD COLUMN " + COLUMN_START_CLOCK + " text not null default ''");
+                db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " ADD COLUMN " + COLUMN_STOP_CLOCK + " text not null default ''");
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAVEL);
+                db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " RENAME TO " + TABLE_TRAVEL);
+                Log.d(TAG, "travel clock done");
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {

@@ -28,6 +28,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
+import com.kd8bny.maintenanceman.dialogs.dialog_finishTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import java.text.DateFormat;
@@ -76,11 +77,10 @@ public class fragment_travel extends fragment_vehicleInfo {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("event", travel);
                         bundle.putInt("pos", pos);
-                        FragmentManager fm = getActivity().getSupportFragmentManager();
-                        dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                        dialog_finishTravelEntry dialog = new dialog_finishTravelEntry();
                         dialog.setTargetFragment(fragment_travel.this, 4);
                         dialog.setArguments(bundle);
-                        dialog.show(fm, "dialog_addTravelEntry");
+                        dialog.show(getFragmentManager(), "dialog_finishTravelEntry");
                     }
                 }
             }

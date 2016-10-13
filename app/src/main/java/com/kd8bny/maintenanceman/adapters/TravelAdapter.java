@@ -3,6 +3,7 @@ package com.kd8bny.maintenanceman.adapters;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterViewHolder> {
-    private static final String TAG = "adptr_hstry";
+    private static final String TAG = "adptr_trvl";
 
     private Context mContext;
     private View itemView;
@@ -63,7 +64,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
                viewHolder.vDest.setText(String.format(Locale.ENGLISH, "%s %s",
                        mContext.getString(R.string.field_to), travel.getDest()));
                viewHolder.vDelta.setText(String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST));
-               viewHolder.vTime.setText();
+               viewHolder.vTime.setText(travel.getTimeDelta());
            }
        }else{
            viewHolder.vDest.setText(itemView.getResources().getString(R.string.error_no_history));
@@ -88,7 +89,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
             vDate = (TextView) view.findViewById(R.id.val_date);
             vDelta = (TextView) view.findViewById(R.id.val_delta);
             vDest = (TextView) view.findViewById(R.id.val_dest);
-            vDest = (TextView) view.findViewById(R.id.val_time);
+            vTime = (TextView) view.findViewById(R.id.val_time);
         }
     }
 }

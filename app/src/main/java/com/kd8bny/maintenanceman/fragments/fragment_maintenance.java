@@ -132,7 +132,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
 
                                         public void onClick(DialogInterface dialog, int which) {
                                             VehicleLogDBHelper.getInstance(mContext).deleteEntry(maintenance);
-                                            getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
+                                            //getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
                                     }).show();
 
