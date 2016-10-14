@@ -21,8 +21,9 @@ import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class dialog_addMileageEntry extends DialogFragment {
     private static final String TAG = "dlg_add_mileage";
@@ -57,10 +58,7 @@ public class dialog_addMileageEntry extends DialogFragment {
         mMileage = (Mileage) bundle.getSerializable("event");
         if (mMileage == null) {
             mMileage = new Mileage("");
-            final Calendar cal = Calendar.getInstance();
-            mMileage.setDate(cal.get(Calendar.MONTH) + 1
-                    + "/" + cal.get(Calendar.DAY_OF_MONTH)
-                    + "/" + cal.get(Calendar.YEAR));
+            mMileage.setDate(new DateTime().toString());
         }else { //TODO make object implement clone
             isNew = false;
             mOldMileage = new Mileage(mMileage.getRefID());
@@ -130,12 +128,6 @@ public class dialog_addMileageEntry extends DialogFragment {
                         //save
                         int pos = mVehicleTitles.indexOf(vehicleSpinner.getText().toString());
                         mMileage.setRefID(mRoster.get(pos).getRefID());
-                        final Calendar cal = java.util.Calendar.getInstance();
-                        String date = cal.get(java.util.Calendar.MONTH) + 1
-                                + "/" + cal.get(java.util.Calendar.DAY_OF_MONTH)
-                                + "/" + cal.get(java.util.Calendar.YEAR);
-
-                        mMileage.setDate(date);
                         mMileage.setMileage(
                                 Double.parseDouble(vTripValue.getText().toString()),
                                 Double.parseDouble(vFillValue.getText().toString()),

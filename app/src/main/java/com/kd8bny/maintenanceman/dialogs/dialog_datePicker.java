@@ -8,7 +8,8 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.DatePicker;
 
-import java.util.Calendar;
+
+import org.joda.time.DateTime;
 
 
 public class dialog_datePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener{
@@ -22,18 +23,19 @@ public class dialog_datePicker extends DialogFragment implements DatePickerDialo
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        DateTime dateTime = new DateTime();
+        int year = dateTime.getYear();
+        int month = dateTime.getMonthOfYear();
+        int day = dateTime.getDayOfMonth();
 
-        return new DatePickerDialog(getActivity(), this,  year, month, day);
+        return new DatePickerDialog(getActivity(), this,  year, month-1, day);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        String date = String.format("%s/%s/%s", month + 1, day, year);
         Bundle bundle = new Bundle();
-        bundle.putString("value", date);
+        bundle.putInt("year", year);
+        bundle.putInt("month", month+1);
+        bundle.putInt("day", day);
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
                 new Intent().putExtra("bundle", bundle));
     }

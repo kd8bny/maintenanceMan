@@ -45,7 +45,9 @@ public class dialog_iconPicker extends DialogFragment {
     }
 
     private void sendResult(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("value", position);
         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                new Intent().putExtra("value", position));
+                new Intent().putExtra("bundle", bundle));
     }
 }

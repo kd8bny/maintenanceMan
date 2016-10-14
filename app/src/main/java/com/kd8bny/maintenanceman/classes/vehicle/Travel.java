@@ -11,9 +11,7 @@ public class Travel extends Entry {
     private Double mDelta;
     private String mDest;
     private String mPurpose = "";
-    private String mStartClock;
-    private String mStopClock = "";
-    private String mTimeDelta;
+    private String mDateEnd;
 
     public Travel(String refID) {
         mRefID = refID;
@@ -56,25 +54,11 @@ public class Travel extends Entry {
         mPurpose = comment;
     }
 
-    public String getStartClock() {
-        return mStartClock;
+    public String getDateEnd() {
+        return mDateEnd;
     }
 
-    public void setStartClock(String s) {
-        mStartClock = s;
-    }
-
-    public String getStopClock() {
-        return mStopClock;
-    }
-
-    public void setStopClock(String s) {
-        mStopClock = s;
-        /*stop - start and save*/
-        mTimeDelta = "1.2kinda sorta";
-    }
-
-    public String getTimeDelta(){
-        return mTimeDelta;
+    public void setDateEnd(String s) {
+        mDateEnd = s;
     }
 }

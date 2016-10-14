@@ -11,8 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -53,7 +56,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
     public void onBindViewHolder(final AdapterViewHolder viewHolder, int i) {
        if(!mTravelList.isEmpty()){
            Travel travel = mTravelList.get(i);
-           viewHolder.vDate.setText(travel.getDate());
+           viewHolder.vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(travel.getDate())));
 
            if (travel.getStop() == -1.0){
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
@@ -64,7 +67,6 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
                viewHolder.vDest.setText(String.format(Locale.ENGLISH, "%s %s",
                        mContext.getString(R.string.field_to), travel.getDest()));
                viewHolder.vDelta.setText(String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST));
-               viewHolder.vTime.setText(travel.getTimeDelta());
            }
        }else{
            viewHolder.vDest.setText(itemView.getResources().getString(R.string.error_no_history));

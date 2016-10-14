@@ -139,7 +139,7 @@ public class dialog_finishTravelEntry extends DialogFragment {
                 bundle = data.getBundleExtra("bundle");
                 int hour = bundle.getInt("hour");
                 int min = bundle.getInt("min");
-                mTravel.setStartClock(String.format(Locale.ENGLISH, "%s:%s", hour, min));
+                //mTravel.setStartClock(String.format(Locale.ENGLISH, "%s:%s", hour, min));
                 String xM = "AM";
                 if (hour > 12){
                     xM = "PM";

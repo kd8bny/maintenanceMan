@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,12 +20,13 @@ import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class fragment_info extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_inf";
@@ -52,13 +52,10 @@ public class fragment_info extends fragment_vehicleInfo {
 
         VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
 
-        final Calendar cal = Calendar.getInstance();
-        String date = cal.get(Calendar.MONTH) + 1
-                + "/" + cal.get(Calendar.DAY_OF_MONTH)
-                + "/" + cal.get(Calendar.YEAR);
+        int year = new DateTime().getYear();
 
-        mVehicleHist = vehicleDB.getCostByYear(mVehicle.getRefID(), date);
-        mMileage = vehicleDB.getMileageEntriesByYear(mVehicle.getRefID(), date);
+        mVehicleHist = vehicleDB.getCostByYear(mVehicle.getRefID(), year);
+        mMileage = vehicleDB.getMileageEntriesByYear(mVehicle.getRefID(), year);
     }
 
     @Override
@@ -91,7 +88,7 @@ public class fragment_info extends fragment_vehicleInfo {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("roster", mRoster);
                 bundle.putInt("pos", mPos);
-                dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                 dialog.setTargetFragment(fragment_info.this, 1);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "dialog_add_maintenance");

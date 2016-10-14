@@ -9,7 +9,6 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,16 +17,18 @@ import android.widget.ImageView;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
-public class dialog_addMaintenanceEvent extends DialogFragment {
+import java.util.ArrayList;
+
+public class dialog_addMaintenanceEntry extends DialogFragment {
     private static final String TAG = "dlg_add_maint";
 
     private int RESULT_CODE;
@@ -45,7 +46,7 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
     private Boolean isNew = true;
     private int mPos;
 
-    public dialog_addMaintenanceEvent(){}
+    public dialog_addMaintenanceEntry(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,10 +62,7 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
         mMaintenance = (Maintenance) bundle.getSerializable("event");
         if (mMaintenance == null){
             mMaintenance = new Maintenance("");
-            final Calendar cal = Calendar.getInstance();
-            mMaintenance.setDate(cal.get(Calendar.MONTH) + 1
-                    + "/" + cal.get(Calendar.DAY_OF_MONTH)
-                    + "/" + cal.get(Calendar.YEAR));
+            mMaintenance.setDate(new DateTime().toString());
         }else { //TODO make object implement clone
             isNew = false;
             mOldMaintenance = new Maintenance(mMaintenance.getRefID());
@@ -96,7 +94,7 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
             mVehicle = mRoster.get(mPos);
             vehicleSpinner.setText(mVehicle.getTitle());
         }
-        vDate.setText(mMaintenance.getDate());
+        vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mMaintenance.getDate())));
         vOdo.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vEvent.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, setEvents()));
@@ -115,7 +113,7 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dialog_iconPicker iconPicker = new dialog_iconPicker();
-                iconPicker.setTargetFragment(dialog_addMaintenanceEvent.this, 0);
+                iconPicker.setTargetFragment(dialog_addMaintenanceEntry.this, 0);
                 iconPicker.show(getFragmentManager(), "dialogIconPicker");
             }
         });
@@ -124,7 +122,7 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dialog_datePicker datePicker = new dialog_datePicker();
-                datePicker.setTargetFragment(dialog_addMaintenanceEvent.this, 0);
+                datePicker.setTargetFragment(dialog_addMaintenanceEntry.this, 0);
                 datePicker.show(getFragmentManager(), "datePicker");
             }
         });
@@ -161,7 +159,6 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
                 public void onClick(View v){
                     if (isLegit()) {
                         mMaintenance.setEvent(vEvent.getText().toString());
-                        mMaintenance.setDate(vDate.getText().toString());
                         mMaintenance.setOdometer(vOdo.getText().toString());
                         mMaintenance.setPrice(vPrice.getText().toString());
                         mMaintenance.setComment(vComment.getText().toString());
@@ -188,17 +185,19 @@ public class dialog_addMaintenanceEvent extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getBundleExtra("bundle");
         switch (resultCode) {
-            case 1:
-                int icon = data.getIntExtra("value", 0);
-                mMaintenance.setIcon(icon);
-                vIcon.setImageResource(icons.getResourceId(icon, 0));
+            case 0:
+                DateTime dateTime = new DateTime().withDate(bundle.getInt("year"),
+                        bundle.getInt("month"), bundle.getInt("day"));
+                mMaintenance.setDate(dateTime.toString());
+                vDate.setText(new Utils(mContext).toFriendlyDate(dateTime));
                 break;
 
-            case 0:
-                String val = data.getBundleExtra("bundle").getString("value");
-                mMaintenance.setDate(val);
-                vDate.setText(val);
+            case 1:
+                int icon = bundle.getInt("value", 0);
+                mMaintenance.setIcon(icon);
+                vIcon.setImageResource(icons.getResourceId(icon, 0));
                 break;
         }
     }

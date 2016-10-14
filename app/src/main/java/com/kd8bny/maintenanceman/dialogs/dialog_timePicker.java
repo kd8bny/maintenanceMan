@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.TimePicker;
 
-import org.joda.time.Instant;
-
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
 public class dialog_timePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener{
     private static final String TAG = "dlg_tmPckr";
@@ -22,15 +20,14 @@ public class dialog_timePicker extends DialogFragment implements TimePickerDialo
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Calendar cal = Calendar.getInstance();
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        int min = cal.get(Calendar.MINUTE);
+        DateTime dateTime = new DateTime();
+        int hour = dateTime.getHourOfDay();
+        int min = dateTime.getMinuteOfHour();
 
         return new TimePickerDialog(getActivity(), this,  hour, min, false);
     }
 
     public void onTimeSet(TimePicker view, int hour, int min) {
-        //Instant instant
         Bundle bundle = new Bundle();
         bundle.putInt("hour", hour);
         bundle.putInt("min", min);

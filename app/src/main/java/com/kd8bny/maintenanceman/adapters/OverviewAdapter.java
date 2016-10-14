@@ -91,7 +91,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();
             shapeDrawable.setColor(color);
 
-            ArrayList<Maintenance> temp = mVehicleLogDBHelper.getFullVehicleEntries(vehicle.getRefID());
+            ArrayList<Maintenance> temp = mVehicleLogDBHelper.getMaintenanceEntries(vehicle.getRefID(), true);
             if (!temp.isEmpty()) {
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
                 adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());

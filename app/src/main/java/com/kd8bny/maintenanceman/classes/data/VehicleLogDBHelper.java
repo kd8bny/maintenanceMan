@@ -120,9 +120,14 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Maintenance> getFullVehicleEntries(String refID) {
+    public ArrayList<Maintenance> getMaintenanceEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
+        String sort = "ASC";
+        if (sortDesc){
+            sort = "DESC";
+        }
+        //String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Maintenance> maintenanceList = new ArrayList<>();
@@ -180,46 +185,12 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return entryList;
     }
 
-    public ArrayList<ArrayList> getMaintenanceCosts(String refID) {
+    public ArrayList<Maintenance> getCostByYear(String refID, int year) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s != '';",
-                COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE,
-                TABLE_VEHICLE,
-                COLUMN_VEHICLE_REFID, refID,
-                COLUMN_VEHICLE_PRICE);
-        Cursor cursor = db.rawQuery(QUERY, null);
-
-        ArrayList<ArrayList> vehicleList = new ArrayList<>();
-
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    ArrayList<String> temp = new ArrayList<>();
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
-
-                    vehicleList.add(temp);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (!cursor.isClosed()) {
-                cursor.close();
-                db.close();
-            }
-        }
-
-        return vehicleList;
-    }
-
-    public ArrayList<Maintenance> getCostByYear(String refID, String date) {
-        SQLiteDatabase db = getReadableDatabase();
-        String[] dateArray = date.split("/");
-        String YEAR = "%" + dateArray[2]; //SQL wildcard %
+        String wildcard = year + "%"; //SQL wildcard %
         String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s LIKE '%s';",
                 COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE, TABLE_VEHICLE,
-                COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, YEAR);
+                COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, wildcard);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Maintenance> maintenanceList = new ArrayList<>();
@@ -277,6 +248,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         contentValues.put(COLUMN_STOP, travel.getStop());
         contentValues.put(COLUMN_DEST, travel.getDest());
         contentValues.put(COLUMN_PURPOSE, travel.getPurpose());
+        contentValues.put(COLUMN_VEHICLE_DATE_END, travel.getDateEnd());
 
         try {
             db.beginTransaction();
@@ -290,7 +262,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Travel> getFullBusinessEntries(String refID) {
+    public ArrayList<Travel> getFullTravelEntries(String refID) {
         SQLiteDatabase db = getReadableDatabase();
         String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_TRAVEL, COLUMN_VEHICLE_REFID, refID);
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -305,6 +277,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                     travel.setStop(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_STOP))));
                     travel.setDest(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
                     travel.setPurpose(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    travel.setDateEnd(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE_END)));
 
                     travelList.add(travel);
                 } while (cursor.moveToNext());
@@ -319,30 +292,6 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         return travelList;
-    }
-
-    public HashSet<String> getPurpose() {
-        SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_PURPOSE, TABLE_TRAVEL);
-        Cursor cursor = db.rawQuery(QUERY, null);
-
-        HashSet<String> entryList = new HashSet<>();
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    entryList.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (!cursor.isClosed()) {
-                cursor.close();
-                db.close();
-            }
-        }
-
-        return entryList;
     }
 
     public void deleteEntry(Travel travel){
@@ -422,10 +371,9 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return mileageList;
     }
 
-    public ArrayList<Mileage> getMileageEntriesByYear(String refID, String date) {
+    public ArrayList<Mileage> getMileageEntriesByYear(String refID, int year) {
         SQLiteDatabase db = getReadableDatabase();
-        String[] dateArray = date.split("/");
-        String YEAR = "%" + dateArray[2]; //SQL wildcard %
+        String YEAR = year + "%"; //SQL wildcard %
         String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s LIKE '%s';",
                 TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, YEAR);
         Cursor cursor = db.rawQuery(QUERY, null);

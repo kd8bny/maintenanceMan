@@ -15,10 +15,14 @@ import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
+import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,10 +59,7 @@ public class dialog_addTravelEntry extends DialogFragment {
         mTravel = (Travel) bundle.getSerializable("event");
         if (mTravel == null) {
             mTravel = new Travel("");
-            final Calendar cal = Calendar.getInstance();
-            mTravel.setDate(cal.get(Calendar.MONTH) + 1
-                    + "/" + cal.get(Calendar.DAY_OF_MONTH)
-                    + "/" + cal.get(Calendar.YEAR));
+            mTravel.setDate(new DateTime().toString());
         }else { //TODO make object implement clone
             isNew = false;
             mOldTravel = new Travel(mTravel.getRefID());
@@ -66,7 +67,6 @@ public class dialog_addTravelEntry extends DialogFragment {
             mOldTravel.setStart(mTravel.getStart());
             mOldTravel.setDest(mTravel.getDest());
             mOldTravel.setPurpose(mTravel.getPurpose());
-            mOldTravel.setStartClock(mTravel.getStartClock());
         }
     }
 
@@ -77,7 +77,6 @@ public class dialog_addTravelEntry extends DialogFragment {
 
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_roster);
         vDate = (MaterialEditText) view.findViewById(R.id.val_date);
-        vDate.setText(mTravel.getDate());
         vOdo = (MaterialEditText) view.findViewById(R.id.val_odo);
         vDest = (MaterialEditText) view.findViewById(R.id.val_dest);
         vPurpose = (MaterialEditText) view.findViewById(R.id.val_purpose);
@@ -88,13 +87,15 @@ public class dialog_addTravelEntry extends DialogFragment {
             mVehicle = mRoster.get(mPos);
             vehicleSpinner.setText(mVehicle.getTitle());
         }
+        vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mTravel.getDate())));
+        vStartTime.setText(new Utils(mContext).toFriendlyTime(new DateTime(mTravel.getDate())));
         vOdo.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         if (!isNew){
             vOdo.setText(mTravel.getStart().toString());
             vDest.setText(mTravel.getDest());
             vPurpose.setText(mTravel.getPurpose());
-            vStartTime.setText(mTravel.getStartClock());
+            //vStartTime.setText(mTravel.getStartClock());
         }
 
         view.findViewById(R.id.val_date).setOnClickListener(new View.OnClickListener() {
@@ -149,7 +150,6 @@ public class dialog_addTravelEntry extends DialogFragment {
                         int pos = mVehicleTitles.indexOf(vehicleSpinner.getText().toString());
                         mTravel.setRefID(mRoster.get(pos).getRefID());
 
-                        mTravel.setDate(vDate.getText().toString());
                         mTravel.setStart(Double.parseDouble(vOdo.getText().toString()));
                         mTravel.setDest(vDest.getText().toString());
                         mTravel.setPurpose(vPurpose.getText().toString());
@@ -169,32 +169,21 @@ public class dialog_addTravelEntry extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle;
+        Bundle bundle = data.getBundleExtra("bundle");
+        DateTime dateTime = new DateTime(mTravel.getDate());
+        MutableDateTime mutableDateTime = dateTime.toMutableDateTime();
         switch (resultCode) {
             case 0:
-                bundle = data.getBundleExtra("bundle");
-                String val = bundle.getString("value");
-                mTravel.setDate(val);
-                vDate.setText(val);
+                mutableDateTime.setDate(bundle.getInt("year"), bundle.getInt("month"), bundle.getInt("day"));
+                vDate.setText(new Utils(mContext).toFriendlyDate(mutableDateTime.toDateTime()));
                 break;
 
             case 1:
-                bundle = data.getBundleExtra("bundle");
-                int hour = bundle.getInt("hour");
-                int min = bundle.getInt("min");
-                mTravel.setStartClock(String.format(Locale.ENGLISH, "%s:%s", hour, min));
-                String xM = "AM";
-                if (hour > 12){
-                    xM = "PM";
-                }
-                hour = hour % 12;
-                if (hour == 0){
-                    hour = 12;
-                }
-
-                vStartTime.setText(String.format(Locale.ENGLISH, "%s:%s %s", hour, min, xM));
+                mutableDateTime.setTime(bundle.getInt("hour"), bundle.getInt("min"), 0, 0);
+                vStartTime.setText(new Utils(mContext).toFriendlyTime(mutableDateTime.toDateTime()));
                 break;
         }
+        mTravel.setDate(mutableDateTime.toDateTime().toString());
     }
 
     private ArrayAdapter<String> setVehicles(){

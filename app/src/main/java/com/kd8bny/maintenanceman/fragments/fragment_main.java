@@ -42,7 +42,7 @@ import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
@@ -174,7 +174,7 @@ public class fragment_main extends Fragment implements SyncData,
                                     Snackbar.LENGTH_SHORT).show();
                         }else {
                             bundle.putParcelableArrayList("roster", mRoster);
-                            dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                            dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                             dialog.setTargetFragment(fragment_main.this, 1);
                             dialog.setArguments(bundle);
                             dialog.show(fm, "dialog_add_maintenance");
@@ -283,7 +283,7 @@ public class fragment_main extends Fragment implements SyncData,
                 }else {
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("roster", mRoster);
-                    dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                    dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                     dialog.setTargetFragment(fragment_main.this, 1);
                     dialog.setArguments(bundle);
                     dialog.show(getFragmentManager(), "dialog_add_maintenance");

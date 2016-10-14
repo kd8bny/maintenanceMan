@@ -14,13 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterViewHolder> {
+public class MaintenanceAdapter extends RecyclerView.Adapter<MaintenanceAdapter.AdapterViewHolder> {
     private static final String TAG = "adptr_hstry";
 
     private Context mContext;
@@ -32,7 +35,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
     private ArrayList<Maintenance> mMaintenanceList;
     private String UNIT_DIST;
 
-    public HistoryAdapter(Context context, Vehicle vehicle, ArrayList<Maintenance> maintenanceList) {
+    public MaintenanceAdapter(Context context, Vehicle vehicle, ArrayList<Maintenance> maintenanceList) {
         mContext = context;
         UNIT_DIST = vehicle.getUnitDist();
         mMaintenanceList = maintenanceList;
@@ -66,7 +69,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.AdapterV
 
            Maintenance maintenance = mMaintenanceList.get(i);
            viewHolder.vIcon.setImageResource(icons.getResourceId(maintenance.getIcon(), 0));
-           viewHolder.vdate.setText(maintenance.getDate());
+           viewHolder.vdate.setText(new Utils(mContext).toFriendlyDate(new DateTime(maintenance.getDate())));
            viewHolder.vevent.setText(maintenance.getEvent());
            try {
                viewHolder.vodo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
