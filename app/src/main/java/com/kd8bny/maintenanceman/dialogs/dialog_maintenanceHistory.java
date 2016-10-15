@@ -14,8 +14,11 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+
+import org.joda.time.DateTime;
 
 import java.util.Locale;
 
@@ -49,7 +52,8 @@ public class dialog_maintenanceHistory extends DialogFragment {
             Log.wtf(TAG, "parse error:" + mMaintenance.getOdometer());
             odo = mMaintenance.getOdometer();
         }
-        SpannableStringBuilder dateString = new SpannableStringBuilder("Completed on " + mMaintenance.getDate());
+        SpannableStringBuilder dateString = new SpannableStringBuilder("Completed on " +
+                new Utils(getContext()).toFriendlyDate(new DateTime(mMaintenance.getDate())));
         SpannableStringBuilder odoString = new SpannableStringBuilder(" at " + odo);
         StyleSpan styleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
         StyleSpan styleSpan2 = new StyleSpan(android.graphics.Typeface.BOLD);

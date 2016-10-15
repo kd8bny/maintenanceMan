@@ -155,7 +155,7 @@ public class dialog_finishTravelEntry extends DialogFragment {
             return false;
         }
         if (Double.parseDouble(vOdo.getText().toString()) < mTravel.getStart()){
-            vOdo.setError(getString(R.string.error_start_val));
+            vOdo.setError(getString(R.string.error_odo_val));
             return false;
         }
 

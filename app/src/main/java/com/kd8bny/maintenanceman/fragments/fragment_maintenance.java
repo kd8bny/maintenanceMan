@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.MaintenanceAdapter;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
@@ -35,6 +36,8 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_maintenanceHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
@@ -116,7 +119,8 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
                                     builder.setMessage(String.format("%s completed on %s",
-                                            maintenance.getEvent(), maintenance.getDate()));
+                                            maintenance.getEvent(),
+                                            new Utils(getContext()).toFriendlyDate(new DateTime(maintenance.getDate()))));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 

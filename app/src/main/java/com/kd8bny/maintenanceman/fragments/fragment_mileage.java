@@ -22,6 +22,7 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.MileageAdapter;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
@@ -29,6 +30,8 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_mileageHistory;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -106,7 +109,8 @@ public class fragment_mileage extends fragment_vehicleInfo {
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
                                     builder.setMessage(String.format(Locale.ENGLISH, "%1$,.2f completed on %2$s",
-                                            mileage.getMileage(), mileage.getDate()));
+                                            mileage.getMileage(),
+                                            new Utils(getContext()).toFriendlyDate(new DateTime(mileage.getDate()))));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.TravelAdapter;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
@@ -28,6 +29,8 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_finishTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
@@ -105,7 +108,8 @@ public class fragment_travel extends fragment_vehicleInfo {
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
-                                    builder.setMessage(travel.getDest() + " completed on " + travel.getDate());
+                                    builder.setMessage(travel.getDest() + " completed on " +
+                                            new Utils(getContext()).toFriendlyDate(new DateTime(travel.getDate())));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
