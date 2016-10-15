@@ -580,7 +580,6 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                                 String QUERY_UPDATE = String.format("UPDATE %s SET %s='%s' WHERE %s = '%s';", table,
                                         COLUMN_VEHICLE_DATE, dateTime.toString(),
                                         COLUMN_VEHICLE_DATE, oldDate);
-                                Log.d(TAG, QUERY_UPDATE);
                                 db.execSQL(QUERY_UPDATE);
                             } while (cursor.moveToNext());
                         }
