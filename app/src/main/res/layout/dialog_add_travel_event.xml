@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/val_date"
 
-            android:hint="fdfd"
+            android:hint="@string/field_time_start"
             android:maxLines="1"
 
             android:clickable="false"
@@ -55,7 +55,7 @@
             app:met_primaryColor="@color/accent"
             app:met_errorColor="@color/error"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="dfdf"/>
+            app:met_floatingLabelText="@string/field_time_start"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/val_odo"

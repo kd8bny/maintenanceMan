@@ -115,7 +115,7 @@ public class dialog_addTravelEntry extends DialogFragment {
         });
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(view.getResources().getString(R.string.title_add_vehicle_event))
+                .setTitle(view.getResources().getString(R.string.title_dialog_travel_start))
                 .setPositiveButton(view.getResources().getString(R.string.button_ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {

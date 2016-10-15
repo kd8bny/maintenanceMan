@@ -59,10 +59,12 @@ public class dialog_finishTravelEntry extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_finish_travel_event, null);
 
         vDate = (MaterialEditText) view.findViewById(R.id.val_date);
-        vDate.setText(mTravel.getDate());
         vStopTime = (MaterialEditText) view.findViewById(R.id.val_time);
         vOdo = (MaterialEditText) view.findViewById(R.id.val_odo);
         vOdo.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mTravel.getDateEnd())));
+        vStopTime.setText(new Utils(mContext).toFriendlyTime(new DateTime(mTravel.getDateEnd())));
 
         view.findViewById(R.id.val_date).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +85,7 @@ public class dialog_finishTravelEntry extends DialogFragment {
         });
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(view.getResources().getString(R.string.title_add_vehicle_event))
+                .setTitle(view.getResources().getString(R.string.title_dialog_travel_finish))
                 .setPositiveButton(view.getResources().getString(R.string.button_ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
