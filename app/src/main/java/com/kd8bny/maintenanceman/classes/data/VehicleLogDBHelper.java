@@ -16,6 +16,8 @@ import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -24,7 +26,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     private static VehicleLogDBHelper sInstance;
 
-    private static final int DB_VERSION = 5; // v4 (75) v3(58) v2(50)
+    private static final int DB_VERSION = 6; //v5 (83) v4 (75) v3(58) v2(50)
     private static final String DB_NAME = "vehicleLog.db";
 
     private static final String TABLE_VEHICLE = "grandVehicleLog";
@@ -42,6 +44,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
     private static final String COLUMN_STOP = "end";
     private static final String COLUMN_DEST = "dest";
     private static final String COLUMN_PURPOSE = "purpose";
+    private static final String COLUMN_VEHICLE_DATE_END = "dateEnd";
 
     private static final String TABLE_MILEAGE = "mileageLog";
     private static final String COLUMN_MILEAGE = "mileage";
@@ -68,9 +71,9 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                 COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_ODO, COLUMN_VEHICLE_EVENT, COLUMN_VEHICLE_PRICE, COLUMN_VEHICLE_COMMENT, COLUMN_ICON);
 
         String CREATE_BUSINESS = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
-                        + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
+                        + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
                 TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
-                COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
+                COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE, COLUMN_VEHICLE_DATE_END);
 
         String CREATE_MILEAGE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                         + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
@@ -117,9 +120,10 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Maintenance> getFullVehicleEntries(String refID) {
+    public ArrayList<Maintenance> getMaintenanceEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
+        String sort = (sortDesc) ? "DESC" : "ASC";
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Maintenance> maintenanceList = new ArrayList<>();
@@ -177,46 +181,12 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return entryList;
     }
 
-    public ArrayList<ArrayList> getMaintenanceCosts(String refID) {
+    public ArrayList<Maintenance> getCostByYear(String refID, int year) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s != '';",
-                COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE,
-                TABLE_VEHICLE,
-                COLUMN_VEHICLE_REFID, refID,
-                COLUMN_VEHICLE_PRICE);
-        Cursor cursor = db.rawQuery(QUERY, null);
-
-        ArrayList<ArrayList> vehicleList = new ArrayList<>();
-
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    ArrayList<String> temp = new ArrayList<>();
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE)));
-                    temp.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_PRICE)));
-
-                    vehicleList.add(temp);
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (!cursor.isClosed()) {
-                cursor.close();
-                db.close();
-            }
-        }
-
-        return vehicleList;
-    }
-
-    public ArrayList<Maintenance> getCostByYear(String refID, String date) {
-        SQLiteDatabase db = getReadableDatabase();
-        String[] dateArray = date.split("/");
-        String YEAR = "%" + dateArray[2]; //SQL wildcard %
+        String wildcard = year + "%"; //SQL wildcard %
         String QUERY = String.format("SELECT %s, %s FROM %s WHERE %s = '%s' AND %s LIKE '%s';",
                 COLUMN_VEHICLE_DATE, COLUMN_VEHICLE_PRICE, TABLE_VEHICLE,
-                COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, YEAR);
+                COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, wildcard);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Maintenance> maintenanceList = new ArrayList<>();
@@ -274,6 +244,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         contentValues.put(COLUMN_STOP, travel.getStop());
         contentValues.put(COLUMN_DEST, travel.getDest());
         contentValues.put(COLUMN_PURPOSE, travel.getPurpose());
+        contentValues.put(COLUMN_VEHICLE_DATE_END, travel.getDateEnd());
 
         try {
             db.beginTransaction();
@@ -287,9 +258,10 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Travel> getFullBusinessEntries(String refID) {
+    public ArrayList<Travel> getFullTravelEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_TRAVEL, COLUMN_VEHICLE_REFID, refID);
+        String sort = (sortDesc) ? "DESC" : "ASC";
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_TRAVEL, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Travel> travelList = new ArrayList<>();
@@ -302,6 +274,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                     travel.setStop(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_STOP))));
                     travel.setDest(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
                     travel.setPurpose(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    travel.setDateEnd(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE_END)));
 
                     travelList.add(travel);
                 } while (cursor.moveToNext());
@@ -316,30 +289,6 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
 
         return travelList;
-    }
-
-    public HashSet<String> getPurpose() {
-        SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT %s FROM %s;", COLUMN_PURPOSE, TABLE_TRAVEL);
-        Cursor cursor = db.rawQuery(QUERY, null);
-
-        HashSet<String> entryList = new HashSet<>();
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    entryList.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
-                } while (cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (!cursor.isClosed()) {
-                cursor.close();
-                db.close();
-            }
-        }
-
-        return entryList;
     }
 
     public void deleteEntry(Travel travel){
@@ -388,10 +337,10 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Mileage> getMileageEntries(String refID) {
+    public ArrayList<Mileage> getMileageEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';",
-                TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID);
+        String sort = (sortDesc) ? "DESC" : "ASC";
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Mileage> mileageList = new ArrayList<>();
@@ -419,10 +368,9 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         return mileageList;
     }
 
-    public ArrayList<Mileage> getMileageEntriesByYear(String refID, String date) {
+    public ArrayList<Mileage> getMileageEntriesByYear(String refID, int year) {
         SQLiteDatabase db = getReadableDatabase();
-        String[] dateArray = date.split("/");
-        String YEAR = "%" + dateArray[2]; //SQL wildcard %
+        String YEAR = year + "%"; //SQL wildcard %
         String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' AND %s LIKE '%s';",
                 TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, YEAR);
         Cursor cursor = db.rawQuery(QUERY, null);
@@ -535,6 +483,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                     allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_STOP)));
                     allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
                     allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE_END)));
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {
@@ -580,31 +529,79 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         db.beginTransaction();
         try {
             if (oldVersion < 3) {
-                Log.d(TAG, "icon");
+                Log.v(TAG, "icon");
                 String TABLE_VEHICLE_NEW = TABLE_VEHICLE + "_new";
                 db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_VEHICLE_NEW + " AS SELECT * FROM " + TABLE_VEHICLE);
                 db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " ADD COLUMN " + COLUMN_ICON + " text not null default '0'");
                 db.execSQL("DROP TABLE IF EXISTS " + TABLE_VEHICLE);
                 db.execSQL("ALTER TABLE " + TABLE_VEHICLE_NEW + " RENAME TO " + TABLE_VEHICLE);
-                Log.d(TAG, "icondone");
+                Log.v(TAG, "icondone");
             }
             if (oldVersion < 4){
-                Log.d(TAG, "bus");
+                Log.v(TAG, "bus");
                 String CREATE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                         + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
                         TABLE_TRAVEL, COLUMN_ID, COLUMN_VEHICLE_REFID,
                         COLUMN_VEHICLE_DATE, COLUMN_START, COLUMN_STOP, COLUMN_DEST, COLUMN_PURPOSE);
                 db.execSQL(CREATE);
-                Log.d(TAG, "bus done");
+                Log.v(TAG, "bus done");
             }
             if (oldVersion < 5){
-                Log.d(TAG, "mileage");
+                Log.v(TAG, "mileage");
                 String CREATE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s TEXT NOT NULL,"
                                 + " %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL, %s TEXT NOT NULL);",
                         TABLE_MILEAGE, COLUMN_ID, COLUMN_VEHICLE_REFID,
                         COLUMN_VEHICLE_DATE, COLUMN_MILEAGE, COLUMN_TRIP, COLUMN_FILL_VOL, COLUMN_VEHICLE_PRICE);
                 db.execSQL(CREATE);
-                Log.d(TAG, "mileage done");
+                Log.v(TAG, "mileage done");
+            }
+            if (oldVersion < 6){
+                Log.v(TAG, "switch to iso date");
+                ArrayList<String> tables = new ArrayList<>();
+                tables.add(TABLE_VEHICLE);
+                tables.add(TABLE_MILEAGE);
+                tables.add(TABLE_TRAVEL);
+
+                for (String table:tables) {
+                    Log.v("updating", "dates in " + table);
+                    String QUERY = String.format("SELECT * FROM %s;", table);
+                    Cursor cursor = db.rawQuery(QUERY, null);
+
+                    try {
+                        if (cursor.moveToFirst()) {
+                            do {
+                                String oldDate = cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE));
+                                String[] dateArr = oldDate.split("/");
+
+                                DateTime dateTime = new DateTime();
+                                dateTime = dateTime.withTimeAtStartOfDay().withDate(
+                                        Integer.parseInt(dateArr[2]), Integer.parseInt(dateArr[0]), Integer.parseInt(dateArr[1]));
+
+                                String QUERY_UPDATE = String.format("UPDATE %s SET %s='%s' WHERE %s = '%s';", table,
+                                        COLUMN_VEHICLE_DATE, dateTime.toString(),
+                                        COLUMN_VEHICLE_DATE, oldDate);
+                                Log.d(TAG, QUERY_UPDATE);
+                                db.execSQL(QUERY_UPDATE);
+                            } while (cursor.moveToNext());
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (!cursor.isClosed()) {
+                            cursor.close();
+                        }
+                    }
+                }
+                Log.v(TAG, "iso date done");
+
+                Log.v(TAG, "add end time to travel");
+                String TABLE_TRAVEL_NEW = TABLE_TRAVEL + "_new";
+                db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_TRAVEL_NEW + " AS SELECT * FROM " + TABLE_TRAVEL);
+                db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " ADD COLUMN " + COLUMN_VEHICLE_DATE_END + " text not null default ''");
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_TRAVEL);
+                db.execSQL("ALTER TABLE " + TABLE_TRAVEL_NEW + " RENAME TO " + TABLE_TRAVEL);
+                Log.v(TAG, "end time added");
+                
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {

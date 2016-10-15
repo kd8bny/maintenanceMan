@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,25 +20,20 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.MileageAdapter;
-import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_mileageHistory;
-import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class fragment_mileage extends fragment_vehicleInfo {
@@ -115,7 +109,8 @@ public class fragment_mileage extends fragment_vehicleInfo {
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
                                     builder.setMessage(String.format(Locale.ENGLISH, "%1$,.2f completed on %2$s",
-                                            mileage.getMileage(), mileage.getDate()));
+                                            mileage.getMileage(),
+                                            new Utils(getContext()).toFriendlyDate(new DateTime(mileage.getDate()))));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
@@ -154,7 +149,7 @@ public class fragment_mileage extends fragment_vehicleInfo {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("roster", mRoster);
                 bundle.putInt("pos", mPos);
-                dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                 dialog.setTargetFragment(fragment_mileage.this, 1);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "dialog_add_maintenance");
@@ -208,7 +203,7 @@ public class fragment_mileage extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mMileageHist = sort(vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID()));
+        mMileageHist = vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID(), true);
         mileageList.setAdapter(new MileageAdapter(mContext, mVehicle, mMileageHist));
     }
 
@@ -238,34 +233,5 @@ public class fragment_mileage extends fragment_vehicleInfo {
             default:
                 return false;
         }
-    }
-
-    private ArrayList<Mileage> sort(ArrayList<Mileage> mileageHist){
-        ArrayList<String> dates = new ArrayList<>();
-
-        HashMap<String, Mileage> eventPackets = new HashMap<>();
-
-        for (int i = 0; i < mileageHist.size(); i++){
-            Mileage mileage = mileageHist.get(i);
-            String date = String.format("%s:%s", mileage.getDate(), i);
-            dates.add(date);
-            eventPackets.put(date, mileage);
-        }
-
-        Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    return f.parse(o2).compareTo(f.parse(o1));
-                }catch (ParseException e) {throw new IllegalArgumentException(e);}
-            }});
-
-        mileageHist.clear();
-        for (String date : dates) {
-            mileageHist.add(eventPackets.get(date));
-        }
-
-        return mileageHist;
     }
 }

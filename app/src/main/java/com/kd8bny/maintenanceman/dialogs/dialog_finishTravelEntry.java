@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
@@ -19,30 +18,26 @@ import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
 
-public class dialog_addTravelEntry extends DialogFragment {
+public class dialog_finishTravelEntry extends DialogFragment {
     private static final String TAG = "dlg_add_trvl_evnt";
 
     private int RESULT_CODE;
     private Context mContext;
-    private MaterialBetterSpinner vehicleSpinner;
-    private MaterialEditText vDate, vOdo, vDest, vPurpose, vStartTime;
+    private MaterialEditText vDate, vOdo, vStopTime;
 
     private ArrayList<Vehicle> mRoster;
     private Vehicle mVehicle;
-    private Travel mTravel, mOldTravel;
+    private Travel mTravel;
     private int mPos;
-    private Boolean isNew = true;
-    private ArrayList<String> mVehicleTitles;
 
 
-    public dialog_addTravelEntry(){}
+    public dialog_finishTravelEntry(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,52 +50,25 @@ public class dialog_addTravelEntry extends DialogFragment {
         mPos = bundle.getInt("pos", -1);
 
         mTravel = (Travel) bundle.getSerializable("event");
-        if (mTravel == null) {
-            mTravel = new Travel("");
-            mTravel.setDate(new DateTime().toString());
-        }else { //TODO make object implement clone
-            isNew = false;
-            mOldTravel = new Travel(mTravel.getRefID());
-            mOldTravel.setDate(mTravel.getDate());
-            mOldTravel.setStart(mTravel.getStart());
-            mOldTravel.setDest(mTravel.getDest());
-            mOldTravel.setPurpose(mTravel.getPurpose());
-        }
+        mTravel.setDateEnd(new DateTime().toString());
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_travel_event, null);
+        View view = inflater.inflate(R.layout.dialog_finish_travel_event, null);
 
-        vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_roster);
         vDate = (MaterialEditText) view.findViewById(R.id.val_date);
+        vDate.setText(mTravel.getDate());
+        vStopTime = (MaterialEditText) view.findViewById(R.id.val_time);
         vOdo = (MaterialEditText) view.findViewById(R.id.val_odo);
-        vDest = (MaterialEditText) view.findViewById(R.id.val_dest);
-        vPurpose = (MaterialEditText) view.findViewById(R.id.val_purpose);
-        vStartTime = (MaterialEditText) view.findViewById(R.id.val_time);
-
-        vehicleSpinner.setAdapter(setVehicles());
-        if (mPos > -1) {
-            mVehicle = mRoster.get(mPos);
-            vehicleSpinner.setText(mVehicle.getTitle());
-        }
-        vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mTravel.getDate())));
-        vStartTime.setText(new Utils(mContext).toFriendlyTime(new DateTime(mTravel.getDate())));
         vOdo.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-        if (!isNew){
-            vOdo.setText(mTravel.getStart().toString());
-            vDest.setText(mTravel.getDest());
-            vPurpose.setText(mTravel.getPurpose());
-            vStartTime.setText(new Utils(mContext).toFriendlyTime(new DateTime(mTravel.getDate())));
-        }
 
         view.findViewById(R.id.val_date).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog_datePicker datePicker = new dialog_datePicker();
-                datePicker.setTargetFragment(dialog_addTravelEntry.this, 0);
+                datePicker.setTargetFragment(dialog_finishTravelEntry.this, 0);
                 datePicker.show(getFragmentManager(), "datePicker");
             }
         });
@@ -109,7 +77,7 @@ public class dialog_addTravelEntry extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dialog_timePicker timePicker = new dialog_timePicker();
-                timePicker.setTargetFragment(dialog_addTravelEntry.this, 1);
+                timePicker.setTargetFragment(dialog_finishTravelEntry.this, 1);
                 timePicker.show(getFragmentManager(), "timePicker");
             }
         });
@@ -145,17 +113,10 @@ public class dialog_addTravelEntry extends DialogFragment {
                 @Override
                 public void onClick(View v){
                     if (isLegit()) {
-                        int pos = mVehicleTitles.indexOf(vehicleSpinner.getText().toString());
-                        mTravel.setRefID(mRoster.get(pos).getRefID());
-
-                        mTravel.setStart(Double.parseDouble(vOdo.getText().toString()));
-                        mTravel.setDest(vDest.getText().toString());
-                        mTravel.setPurpose(vPurpose.getText().toString());
+                        mTravel.setStop(Double.parseDouble(vOdo.getText().toString()));
 
                         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                        if (mOldTravel != null){
-                            vehicleLogDBHelper.deleteEntry(mOldTravel);
-                        }
+                        vehicleLogDBHelper.deleteEntry(mTravel);
                         vehicleLogDBHelper.insertEntry(mTravel);
                         dismiss();
                         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
@@ -178,35 +139,23 @@ public class dialog_addTravelEntry extends DialogFragment {
 
             case 1:
                 mutableDateTime.setTime(bundle.getInt("hour"), bundle.getInt("min"), 0, 0);
-                vStartTime.setText(new Utils(mContext).toFriendlyTime(mutableDateTime.toDateTime()));
+                vStopTime.setText(new Utils(mContext).toFriendlyTime(mutableDateTime.toDateTime()));
                 break;
         }
-        mTravel.setDate(mutableDateTime.toDateTime().toString());
-    }
-
-    private ArrayAdapter<String> setVehicles(){
-        mVehicleTitles = new ArrayList<>();
-        for(Vehicle v : mRoster) {
-            mVehicleTitles.add(v.getTitle());
-        }
-        return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mVehicleTitles);
+        mTravel.setDateEnd(mutableDateTime.toDateTime().toString());
     }
 
     public boolean isLegit(){
-        if (mVehicleTitles.indexOf(vehicleSpinner.getText().toString()) == -1){
-            vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
-            return true;
-        }
-        if (vStartTime.getText() == null){
-            vStartTime.setError(getString(R.string.error_start_val));
+        if (vStopTime.getText() == null){
+            vStopTime.setError(getString(R.string.error_start_val));
             return false;
         }
         if (vOdo.getText() == null){
             vOdo.setError(getString(R.string.error_start_val));
             return false;
         }
-        if (vDest.getText() == null){
-            vDest.setError(getString(R.string.error_dest_val));
+        if (Double.parseDouble(vOdo.getText().toString()) < mTravel.getStart()){
+            vOdo.setError(getString(R.string.error_odo_val));
             return false;
         }
 

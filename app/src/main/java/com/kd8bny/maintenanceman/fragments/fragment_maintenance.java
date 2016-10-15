@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,31 +21,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.TranslateAnimation;
-import android.widget.RelativeLayout;
 
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.adapters.HistoryAdapter;
-import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
+import com.kd8bny.maintenanceman.adapters.MaintenanceAdapter;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_maintenanceHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 
 public class fragment_maintenance extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_hist";
@@ -57,8 +51,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
 
     private ArrayList<Maintenance> mVehicleHist;
     private ArrayList<Maintenance> mUnfilteredHist;
-    private int mSortType = 0;
-    private Boolean mFilter = false;
+    private Boolean mSortDesc = true, mFilter = false;
 
     public fragment_maintenance() {}
 
@@ -114,7 +107,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                                     bundle.putParcelableArrayList("roster", mRoster);
                                     bundle.putInt("pos", mPos);
                                     bundle.putSerializable("event", maintenance);
-                                    dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                                    dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                                     dialog.setTargetFragment(fragment_maintenance.this, 1);
                                     dialog.setArguments(bundle);
                                     dialog.show(getFragmentManager(), "dialog_add_maintenance");
@@ -126,7 +119,8 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
                                     builder.setMessage(String.format("%s completed on %s",
-                                            maintenance.getEvent(), maintenance.getDate()));
+                                            maintenance.getEvent(),
+                                            new Utils(getContext()).toFriendlyDate(new DateTime(maintenance.getDate()))));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
@@ -165,7 +159,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("roster", mRoster);
                 bundle.putInt("pos", mPos);
-                dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                 dialog.setTargetFragment(fragment_maintenance.this, 1);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "dialog_add_maintenance");
@@ -232,7 +226,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 }else {
                     mVehicleHist = filter(s.toString());
                 }
-                histList.setAdapter(new HistoryAdapter(mContext, mVehicle, mVehicleHist));
+                histList.setAdapter(new MaintenanceAdapter(mContext, mVehicle, mVehicleHist));
             }
         });
         (mView.findViewById(R.id.button_ok)).setOnClickListener(new View.OnClickListener() {
@@ -247,7 +241,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 mFilter = !mFilter;
                 tFilter.setText("");
                 mVehicleHist = mUnfilteredHist;
-                histList.setAdapter(new HistoryAdapter(mContext, mVehicle,mVehicleHist));
+                histList.setAdapter(new MaintenanceAdapter(mContext, mVehicle,mVehicleHist));
                 vFilterView.setVisibility(View.INVISIBLE);
             }
         });
@@ -259,8 +253,8 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mVehicleHist = sort(vehicleLogDBHelper.getFullVehicleEntries(mVehicle.getRefID()));
-        histList.setAdapter(new HistoryAdapter(mContext, mVehicle, mVehicleHist));
+        mVehicleHist = vehicleLogDBHelper.getMaintenanceEntries(mVehicle.getRefID(), mSortDesc);
+        histList.setAdapter(new MaintenanceAdapter(mContext, mVehicle, mVehicleHist));
     }
 
     @Override
@@ -287,8 +281,11 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 return true;
 
             case R.id.menu_sort:
-                mSortType = (mSortType + 1) % 2;//TODO snackz
-                histList.setAdapter(new HistoryAdapter(mContext, mVehicle, sort(mVehicleHist)));
+                mSortDesc = !mSortDesc;
+                String sort = (mSortDesc) ? "Descending" : "Ascending";
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format("Sort %s", sort), Snackbar.LENGTH_SHORT).show();
+                onResume();
 
                 return true;
 
@@ -309,39 +306,6 @@ public class fragment_maintenance extends fragment_vehicleInfo {
         }
     }
 
-    private ArrayList<Maintenance> sort(ArrayList<Maintenance> vehicleHist){
-        ArrayList<String> dates = new ArrayList<>();
-
-        HashMap<String, Maintenance> eventPackets = new HashMap<>();
-
-        for (int i = 0; i < vehicleHist.size(); i++){
-            Maintenance maintenance = vehicleHist.get(i);
-            String date = String.format("%s:%s", maintenance.getDate(), i);
-            dates.add(date);
-            eventPackets.put(date, maintenance);
-        }
-
-        Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    if (mSortType == 0) {
-                        return f.parse(o2).compareTo(f.parse(o1));
-                    }else{
-                        return f.parse(o1).compareTo(f.parse(o2));
-                    }
-                }catch (ParseException e) {throw new IllegalArgumentException(e);}
-            }});
-
-        vehicleHist.clear();
-        for (String date : dates) {
-            vehicleHist.add(eventPackets.get(date));
-        }
-
-        return vehicleHist;
-    }
-
     private ArrayList<Maintenance> filter(String EXPRESSION){
         ArrayList<Maintenance> filterList = new ArrayList<>();
         for (Maintenance m : mVehicleHist) {
@@ -354,7 +318,8 @@ public class fragment_maintenance extends fragment_vehicleInfo {
             return mVehicleHist;
         }
 
-        return sort(filterList);
+        //return sort(filterList);
+        return filterList;
     }
 
     private void showSearch(Boolean show){

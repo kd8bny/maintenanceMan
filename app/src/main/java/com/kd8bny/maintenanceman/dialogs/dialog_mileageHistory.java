@@ -9,8 +9,11 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -67,7 +70,9 @@ public class dialog_mileageHistory extends DialogFragment {
         ((TextView) view.findViewById(R.id.avg)).setText(String.format(Locale.ENGLISH,
                 "This is %1$s (%2$.2f %3$s)", relation, mAvgMileage, mVehicle.getUnitMileage()));
         ((TextView) view.findViewById(R.id.date)).setText(String.format(Locale.ENGLISH,
-                "Filled up on %1$s @ $%2$s /%3$s", mMileage.getDate(), mMileage.getPrice(), unitVol));
+                "Filled up on %1$s @ $%2$s /%3$s",
+                new Utils(getContext()).toFriendlyDate(new DateTime(mMileage.getDate())),
+                mMileage.getPrice(), unitVol));
         ((TextView) view.findViewById(R.id.fill_vol)).setText(String.format(Locale.ENGLISH,
                 "Traveled %1$.1f %2$s and used %3$.2f %4$s", mMileage.getTripometer(), mVehicle.getUnitDist(), mMileage.getFillVol(), unitVol));
 

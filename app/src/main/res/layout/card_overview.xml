@@ -61,8 +61,8 @@
             android:minEms="12"
 
             android:text="@string/no_data"
-            android:textColor="@color/secondary_text"
-            android:textSize="@dimen/field_font"/>
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/header_sub_font"/>
 
         <TextView
             android:id="@+id/last_label"

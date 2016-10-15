@@ -1,16 +1,14 @@
 package com.kd8bny.maintenanceman.classes.vehicle;
 
-/**
- * Created by kd8bny on 2/13/16.
- */
 public class Travel extends Entry {
     private static final String TAG = "Business";
 
-    public Double mStart;
-    public Double mStop = -1.0;
-    public Double mDelta;
-    public String mDest;
-    public String mPurpose = "";
+    private Double mStart;
+    private Double mStop = -1.0;
+    private Double mDelta;
+    private String mDest;
+    private String mPurpose = "";
+    private String mDateEnd = "";
 
     public Travel(String refID) {
         mRefID = refID;
@@ -51,5 +49,13 @@ public class Travel extends Entry {
 
     public void setPurpose(String comment) {
         mPurpose = comment;
+    }
+
+    public String getDateEnd() {
+        return mDateEnd;
+    }
+
+    public void setDateEnd(String s) {
+        mDateEnd = s;
     }
 }

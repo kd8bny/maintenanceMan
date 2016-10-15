@@ -5,11 +5,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,22 +19,20 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.TravelAdapter;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
-import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEvent;
+import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
+import com.kd8bny.maintenanceman.dialogs.dialog_finishTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 
 public class fragment_travel extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_bsnss";
@@ -76,11 +72,10 @@ public class fragment_travel extends fragment_vehicleInfo {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("event", travel);
                         bundle.putInt("pos", pos);
-                        FragmentManager fm = getActivity().getSupportFragmentManager();
-                        dialog_addTravelEntry dialog = new dialog_addTravelEntry();
+                        dialog_finishTravelEntry dialog = new dialog_finishTravelEntry();
                         dialog.setTargetFragment(fragment_travel.this, 4);
                         dialog.setArguments(bundle);
-                        dialog.show(fm, "dialog_addTravelEntry");
+                        dialog.show(getFragmentManager(), "dialog_finishTravelEntry");
                     }
                 }
             }
@@ -113,7 +108,8 @@ public class fragment_travel extends fragment_vehicleInfo {
                                     final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
                                     builder.setCancelable(true);
                                     builder.setTitle("Delete Item?");
-                                    builder.setMessage(travel.getDest() + " completed on " + travel.getDate());
+                                    builder.setMessage(travel.getDest() + " completed on " +
+                                            new Utils(getContext()).toFriendlyDate(new DateTime(travel.getDate())));
                                     builder.setNegativeButton("No", null);
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
@@ -152,7 +148,7 @@ public class fragment_travel extends fragment_vehicleInfo {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("roster", mRoster);
                 bundle.putInt("pos", mPos);
-                dialog_addMaintenanceEvent dialog = new dialog_addMaintenanceEvent();
+                dialog_addMaintenanceEntry dialog = new dialog_addMaintenanceEntry();
                 dialog.setTargetFragment(fragment_travel.this, 1);
                 dialog.setArguments(bundle);
                 dialog.show(getFragmentManager(), "dialog_add_maintenance");
@@ -206,7 +202,7 @@ public class fragment_travel extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mTravelLog = this.sort(vehicleLogDBHelper.getFullBusinessEntries(mVehicle.getRefID()));
+        mTravelLog = vehicleLogDBHelper.getFullTravelEntries(mVehicle.getRefID(), true);
         businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
         businessList.setAdapter(businessListAdapter);
     }
@@ -236,34 +232,5 @@ public class fragment_travel extends fragment_vehicleInfo {
         }
 
         return false;
-    }
-
-    public ArrayList<Travel> sort(ArrayList<Travel> vehicleHist){
-        ArrayList<String> dates = new ArrayList<>();
-
-        HashMap<String, Travel> eventPackets = new HashMap<>();
-
-        for (int i = 0; i < vehicleHist.size(); i++){
-            Travel travel = vehicleHist.get(i);
-            String date = travel.getDate() + ":" + i + "";
-            dates.add(date);
-            eventPackets.put(date, travel);
-        }
-
-        Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    return f.parse(o2).compareTo(f.parse(o1));
-                }catch (ParseException e) {throw new IllegalArgumentException(e);}
-            }});
-
-        vehicleHist.clear();
-        for (String date : dates) {
-            vehicleHist.add(eventPackets.get(date));
-        }
-
-        return vehicleHist;
     }
 }

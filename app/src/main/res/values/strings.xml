@@ -37,15 +37,6 @@
     <string name="field_price">Price</string>
     <string name="field_comment">Comment</string>
 
-    <!-- Add Travel Event -->
-    <string name="title_travel">Trips</string>
-    <string name="field_start">Odometer Start</string>
-    <string name="field_end">Odometer End</string>
-    <string name="field_dest">Destination</string>
-    <string name="field_purpose">Reason for Trip</string>
-    <string name="error_dest_val">Enter Destination</string>
-    <string name="error_start_val">Enter Trip Start</string>
-
     <!-- Contact Me -->
     <string name="title_contact">Contact Me</string>
     <string name="action">Send Using...</string>
@@ -168,6 +159,19 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_activity_billing">activity_billing</string>
+
+    <!-- Travel Event -->
+    <string name="title_travel">Trips</string>
+    <string name="field_start">Odometer Start</string>
+    <string name="field_end">Odometer End</string>
+    <string name="field_dest">Destination</string>
+    <string name="field_purpose">Reason for Trip</string>
+    <string name="error_dest_val">Enter Destination</string>
+    <string name="error_start_val">Enter Trip Start</string>
+    <string name="error_odo_val">This is before you started</string>
+
+    <string name="field_in_progress">In Progress</string>
+    <string name="field_to">Trip to</string>
 
     <!-- Units -->
     <string name="unit_time">hrs</string>

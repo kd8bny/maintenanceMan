@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+
+import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,7 +87,7 @@ public class MileageAdapter extends RecyclerView.Adapter<MileageAdapter.AdapterV
 
             viewHolder.vIconBackground.getDrawable().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
             viewHolder.vMileage.setText(String.format(Locale.ENGLISH, "%1$,.2f %2$s", mileage.getMileage(), UNIT_MILEAGE));
-            viewHolder.vDate.setText(mileage.getDate());
+            viewHolder.vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mileage.getDate())));
             viewHolder.vTripo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s", mileage.getTripometer(), UNIT_DIST));
             viewHolder.vPrice.setText(String.format(Locale.ENGLISH, "%1$s %2$,.2f", "@", mileage.getPrice()));
        }else{

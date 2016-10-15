@@ -42,6 +42,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'joda-time:joda-time:2.9.4'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
     compile 'com.github.paolorotolo:appintro:3.2.0'
