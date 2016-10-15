@@ -94,14 +94,14 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             ArrayList<Maintenance> temp = mVehicleLogDBHelper.getMaintenanceEntries(vehicle.getRefID(), true);
             if (!temp.isEmpty()) {
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
-                adapterViewHolder.vEvent.setText(temp.get(temp.size()-1).getEvent());
+                adapterViewHolder.vEvent.setText(temp.get(0).getEvent());
                 adapterViewHolder.vTitle.setSelected(true);
                 try {
                     adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
-                            Double.parseDouble(temp.get(temp.size() - 1).getOdometer()), vehicle.getUnitDist()));
+                            Double.parseDouble(temp.get(0).getOdometer()), vehicle.getUnitDist()));
                 }catch (Exception e){
-                    Log.wtf(TAG, "parse error:" + temp.get(temp.size() - 1).getOdometer());
-                    adapterViewHolder.vOdo.setText(temp.get(temp.size() - 1).getOdometer());
+                    Log.wtf(TAG, "parse error:" + temp.get(0).getOdometer());
+                    adapterViewHolder.vOdo.setText(temp.get(0).getOdometer());
                 }
             }
         }
