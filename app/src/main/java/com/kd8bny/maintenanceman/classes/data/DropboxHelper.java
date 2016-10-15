@@ -37,6 +37,8 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private DropboxAPI<AndroidAuthSession> mDBApi;
     private Context mContext;
 
+    private  VehicleLogDBHelper vehicleLogDBHelper;
+
     private static final int sTimeDifference = 10000; //ms
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private static final String FLEETROSTER = "/fleetRoster.json";
@@ -61,6 +63,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String results){
+        vehicleLogDBHelper.close();
         listener.onDownloadComplete(filesUpdated);
     }
 
@@ -82,7 +85,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
             }
         }catch (IOException e){}
 
-        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+        vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
         File vehicleLog = new File(vehicleLogDBHelper.getReadableDatabase().getPath());
 
         String hash = vehicleLogDBHelper.getTablesHash();

@@ -607,6 +607,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
             Log.e(TAG, e.toString());
             Log.e(TAG, "Error updating db");
         } finally {
+            Log.w(TAG, "Upgrade completed");
             db.endTransaction();
         }
     }
