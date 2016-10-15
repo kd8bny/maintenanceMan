@@ -70,10 +70,14 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
                viewHolder.vDest.setText(String.format(Locale.ENGLISH, "%s %s",
                        mContext.getString(R.string.field_to), travel.getDest()));
                viewHolder.vDelta.setText(String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST));
-               DateTime startTime = new DateTime(travel.getDate());
-               DateTime stopTime = new DateTime(travel.getDateEnd());
 
-               viewHolder.vTime.setText(String.format("%s %s", Minutes.minutesBetween(startTime, stopTime).getMinutes(), "mins"));
+               if (!travel.getDateEnd().isEmpty()) {
+                   DateTime startTime = new DateTime(travel.getDate());
+                   DateTime stopTime = new DateTime(travel.getDateEnd());
+                   viewHolder.vTime.setText(String.format("%s %s", Minutes.minutesBetween(startTime, stopTime).getMinutes(), "mins"));
+               }else{
+                   viewHolder.vTime.setText("");
+               }
            }
        }else{
            viewHolder.vDest.setText(itemView.getResources().getString(R.string.error_no_history));
