@@ -29,13 +29,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_finishTravelEntry;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 
 public class fragment_travel extends fragment_vehicleInfo {
     private static final String TAG = "frgmnt_bsnss";
@@ -117,7 +111,7 @@ public class fragment_travel extends fragment_vehicleInfo {
 
                                         public void onClick(DialogInterface dialog, int which) {
                                             VehicleLogDBHelper.getInstance(mContext).deleteEntry(travel);
-                                            getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
+                                            //getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
                                     }).show();
 
@@ -203,7 +197,7 @@ public class fragment_travel extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mTravelLog = this.sort(vehicleLogDBHelper.getFullTravelEntries(mVehicle.getRefID()));
+        mTravelLog = vehicleLogDBHelper.getFullTravelEntries(mVehicle.getRefID(), true);
         businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
         businessList.setAdapter(businessListAdapter);
     }
@@ -233,34 +227,5 @@ public class fragment_travel extends fragment_vehicleInfo {
         }
 
         return false;
-    }
-
-    public ArrayList<Travel> sort(ArrayList<Travel> vehicleHist){
-        ArrayList<String> dates = new ArrayList<>();
-
-        HashMap<String, Travel> eventPackets = new HashMap<>();
-
-        for (int i = 0; i < vehicleHist.size(); i++){
-            Travel travel = vehicleHist.get(i);
-            String date = travel.getDate() + ":" + i + "";
-            dates.add(date);
-            eventPackets.put(date, travel);
-        }
-
-        Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    return f.parse(o2).compareTo(f.parse(o1));
-                }catch (ParseException e) {throw new IllegalArgumentException(e);}
-            }});
-
-        vehicleHist.clear();
-        for (String date : dates) {
-            vehicleHist.add(eventPackets.get(date));
-        }
-
-        return vehicleHist;
     }
 }

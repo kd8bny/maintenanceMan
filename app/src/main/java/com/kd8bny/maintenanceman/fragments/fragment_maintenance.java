@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -31,7 +32,6 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
-import com.kd8bny.maintenanceman.interfaces.SyncData;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_maintenanceHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -48,8 +48,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
 
     private ArrayList<Maintenance> mVehicleHist;
     private ArrayList<Maintenance> mUnfilteredHist;
-    private int mSortType = 0;
-    private Boolean mFilter = false;
+    private Boolean mSortDesc = true, mFilter = false;
 
     public fragment_maintenance() {}
 
@@ -68,7 +67,6 @@ public class fragment_maintenance extends fragment_vehicleInfo {
         registerForContextMenu(mView);
 
         //Task History
-        final SyncData syncData = this;
         histList = (RecyclerView) mView.findViewById(R.id.cardList);
         histMan = new LinearLayoutManager(getActivity());
         histList.setLayoutManager(histMan);
@@ -250,8 +248,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        //mVehicleHist = sort(vehicleLogDBHelper.getMaintenanceEntries(mVehicle.getRefID()));
-        mVehicleHist = vehicleLogDBHelper.getMaintenanceEntries(mVehicle.getRefID(), true);
+        mVehicleHist = vehicleLogDBHelper.getMaintenanceEntries(mVehicle.getRefID(), mSortDesc);
         histList.setAdapter(new MaintenanceAdapter(mContext, mVehicle, mVehicleHist));
     }
 
@@ -279,8 +276,11 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 return true;
 
             case R.id.menu_sort:
-                mSortType = (mSortType + 1) % 2;
-                //histList.setAdapter(new HistoryAdapter(mContext, mVehicle, sort(mVehicleHist)));
+                mSortDesc = !mSortDesc;
+                String sort = (mSortDesc) ? "Descending" : "Ascending";
+                Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                        String.format("Sort %s", sort), Snackbar.LENGTH_SHORT).show();
+                onResume();
 
                 return true;
 
@@ -300,54 +300,6 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 return false;
         }
     }
-
-    /*private ArrayList<Maintenance> sort(ArrayList<Maintenance> vehicleHist){
-
-
-        /*switch (mSortType){
-            case 0:
-                value = String.format("%s:%s", mVehicle.getReservedSpecs().get("year"), i);
-                Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_year), Snackbar.LENGTH_SHORT).show();
-
-                break;
-            case 1:
-                value = String.format("%s:%s", mVehicle.getReservedSpecs().get("model"), i);
-                Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_model), Snackbar.LENGTH_SHORT).show();
-                break;
-        }
-
-
-        ArrayList<String> dates = new ArrayList<>();
-
-        HashMap<String, Maintenance> eventPackets = new HashMap<>();
-
-        for (int i = 0; i < vehicleHist.size(); i++){
-            Maintenance maintenance = vehicleHist.get(i);
-            String date = String.format("%s:%s", maintenance.getDate(), i);
-            dates.add(date);
-            eventPackets.put(date, maintenance);
-        }
-
-        Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    if (mSortType == 0) {
-                        return f.parse(o2).compareTo(f.parse(o1));
-                    }else{
-                        return f.parse(o1).compareTo(f.parse(o2));
-                    }
-                }catch (ParseException e) {throw new IllegalArgumentException(e);}
-            }});
-
-        vehicleHist.clear();
-        for (String date : dates) {
-            vehicleHist.add(eventPackets.get(date));
-        }
-
-        return vehicleHist;
-    }*/
 
     private ArrayList<Maintenance> filter(String EXPRESSION){
         ArrayList<Maintenance> filterList = new ArrayList<>();

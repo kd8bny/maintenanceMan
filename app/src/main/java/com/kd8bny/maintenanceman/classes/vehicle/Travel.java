@@ -1,8 +1,5 @@
 package com.kd8bny.maintenanceman.classes.vehicle;
 
-/**
- * Created by kd8bny on 2/13/16.
- */
 public class Travel extends Entry {
     private static final String TAG = "Business";
 
@@ -11,7 +8,7 @@ public class Travel extends Entry {
     private Double mDelta;
     private String mDest;
     private String mPurpose = "";
-    private String mDateEnd;
+    private String mDateEnd = "";
 
     public Travel(String refID) {
         mRefID = refID;

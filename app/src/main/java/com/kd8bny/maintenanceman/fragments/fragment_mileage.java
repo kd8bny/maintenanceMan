@@ -30,13 +30,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_mileageHistory;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Locale;
 
 public class fragment_mileage extends fragment_vehicleInfo {
@@ -204,7 +198,7 @@ public class fragment_mileage extends fragment_vehicleInfo {
     public void onResume(){
         super.onResume();
         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mMileageHist = sort(vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID()));
+        mMileageHist = vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID(), true);
         mileageList.setAdapter(new MileageAdapter(mContext, mVehicle, mMileageHist));
     }
 
@@ -234,34 +228,5 @@ public class fragment_mileage extends fragment_vehicleInfo {
             default:
                 return false;
         }
-    }
-
-    private ArrayList<Mileage> sort(ArrayList<Mileage> mileageHist){
-        ArrayList<String> dates = new ArrayList<>();
-
-        HashMap<String, Mileage> eventPackets = new HashMap<>();
-
-        for (int i = 0; i < mileageHist.size(); i++){
-            Mileage mileage = mileageHist.get(i);
-            String date = String.format("%s:%s", mileage.getDate(), i);
-            dates.add(date);
-            eventPackets.put(date, mileage);
-        }
-
-        Collections.sort(dates, new Comparator<String>() {
-            DateFormat f = new SimpleDateFormat("MM/dd/yyyy:HH");
-            @Override
-            public int compare(String o1, String o2) {
-                try {
-                    return f.parse(o2).compareTo(f.parse(o1));
-                }catch (ParseException e) {throw new IllegalArgumentException(e);}
-            }});
-
-        mileageHist.clear();
-        for (String date : dates) {
-            mileageHist.add(eventPackets.get(date));
-        }
-
-        return mileageHist;
     }
 }

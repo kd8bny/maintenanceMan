@@ -25,8 +25,6 @@ import org.joda.time.DateTime;
 import org.joda.time.MutableDateTime;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class dialog_addTravelEntry extends DialogFragment {
     private static final String TAG = "dlg_add_trvl_evnt";
@@ -95,7 +93,7 @@ public class dialog_addTravelEntry extends DialogFragment {
             vOdo.setText(mTravel.getStart().toString());
             vDest.setText(mTravel.getDest());
             vPurpose.setText(mTravel.getPurpose());
-            //vStartTime.setText(mTravel.getStartClock());
+            vStartTime.setText(new Utils(mContext).toFriendlyTime(new DateTime(mTravel.getDate())));
         }
 
         view.findViewById(R.id.val_date).setOnClickListener(new View.OnClickListener() {
@@ -199,6 +197,10 @@ public class dialog_addTravelEntry extends DialogFragment {
             vehicleSpinner.setError(getResources().getString(R.string.error_set_vehicle));
             return true;
         }
+        if (vStartTime.getText() == null){
+            vStartTime.setError(getString(R.string.error_start_val));
+            return false;
+        }
         if (vOdo.getText() == null){
             vOdo.setError(getString(R.string.error_start_val));
             return false;
@@ -207,8 +209,6 @@ public class dialog_addTravelEntry extends DialogFragment {
             vDest.setError(getString(R.string.error_dest_val));
             return false;
         }
-
-        //TODO check tiem
 
         return true;
     }

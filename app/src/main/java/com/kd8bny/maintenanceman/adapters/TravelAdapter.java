@@ -16,6 +16,8 @@ import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.Minutes;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -61,12 +63,17 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
            if (travel.getStop() == -1.0){
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.error));
                viewHolder.vDest.setText(mContext.getString(R.string.field_in_progress));
-
+               viewHolder.vDelta.setText("");
+               viewHolder.vTime.setText("");
            }else{
                viewHolder.vHeader.setBackgroundColor(ContextCompat.getColor(mContext, R.color.goodToGo));
                viewHolder.vDest.setText(String.format(Locale.ENGLISH, "%s %s",
                        mContext.getString(R.string.field_to), travel.getDest()));
                viewHolder.vDelta.setText(String.format(Locale.ENGLISH, "%1$.1f %2$s", travel.getDelta(), UNIT_DIST));
+               DateTime startTime = new DateTime(travel.getDate());
+               DateTime stopTime = new DateTime(travel.getDateEnd());
+
+               viewHolder.vTime.setText(String.format("%s %s", Minutes.minutesBetween(startTime, stopTime).getMinutes(), "mins"));
            }
        }else{
            viewHolder.vDest.setText(itemView.getResources().getString(R.string.error_no_history));
@@ -82,7 +89,6 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
         protected TextView vDate;
         protected TextView vDelta;
         protected TextView vTime;
-
 
         public AdapterViewHolder(View view) {
             super(view);

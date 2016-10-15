@@ -122,11 +122,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
 
     public ArrayList<Maintenance> getMaintenanceEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String sort = "ASC";
-        if (sortDesc){
-            sort = "DESC";
-        }
-        //String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID);
+        String sort = (sortDesc) ? "DESC" : "ASC";
         String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_VEHICLE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
@@ -262,9 +258,10 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Travel> getFullTravelEntries(String refID) {
+    public ArrayList<Travel> getFullTravelEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';", TABLE_TRAVEL, COLUMN_VEHICLE_REFID, refID);
+        String sort = (sortDesc) ? "DESC" : "ASC";
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_TRAVEL, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Travel> travelList = new ArrayList<>();
@@ -340,10 +337,10 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
         }
     }
 
-    public ArrayList<Mileage> getMileageEntries(String refID) {
+    public ArrayList<Mileage> getMileageEntries(String refID, Boolean sortDesc) {
         SQLiteDatabase db = getReadableDatabase();
-        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s';",
-                TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID);
+        String sort = (sortDesc) ? "DESC" : "ASC";
+        String QUERY = String.format("SELECT * FROM %s WHERE %s = '%s' ORDER BY %s %s;", TABLE_MILEAGE, COLUMN_VEHICLE_REFID, refID, COLUMN_VEHICLE_DATE, sort);
         Cursor cursor = db.rawQuery(QUERY, null);
 
         ArrayList<Mileage> mileageList = new ArrayList<>();
@@ -486,6 +483,7 @@ public class VehicleLogDBHelper extends SQLiteOpenHelper{
                     allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_STOP)));
                     allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_DEST)));
                     allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_PURPOSE)));
+                    allData.add(cursor.getString(cursor.getColumnIndex(COLUMN_VEHICLE_DATE_END)));
                 } while (cursor.moveToNext());
             }
         } catch (Exception e) {

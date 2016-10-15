@@ -168,6 +168,7 @@
     <string name="field_purpose">Reason for Trip</string>
     <string name="error_dest_val">Enter Destination</string>
     <string name="error_start_val">Enter Trip Start</string>
+    <string name="error_odo_val">This is before you started</string>
 
     <string name="field_in_progress">In Progress</string>
     <string name="field_to">Trip to</string>

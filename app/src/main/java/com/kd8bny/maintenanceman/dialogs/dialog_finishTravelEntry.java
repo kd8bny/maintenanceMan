@@ -14,12 +14,15 @@ import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import org.joda.time.DateTime;
+import org.joda.time.MutableDateTime;
+
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class dialog_finishTravelEntry extends DialogFragment {
     private static final String TAG = "dlg_add_trvl_evnt";
@@ -47,6 +50,7 @@ public class dialog_finishTravelEntry extends DialogFragment {
         mPos = bundle.getInt("pos", -1);
 
         mTravel = (Travel) bundle.getSerializable("event");
+        mTravel.setDateEnd(new DateTime().toString());
     }
 
     @Override
@@ -109,12 +113,10 @@ public class dialog_finishTravelEntry extends DialogFragment {
                 @Override
                 public void onClick(View v){
                     if (isLegit()) {
-                        mTravel.setDate(vDate.getText().toString());
                         mTravel.setStop(Double.parseDouble(vOdo.getText().toString()));
 
-                        //TODO remove old entry
-
                         VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                        vehicleLogDBHelper.deleteEntry(mTravel);
                         vehicleLogDBHelper.insertEntry(mTravel);
                         dismiss();
                         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
@@ -126,42 +128,36 @@ public class dialog_finishTravelEntry extends DialogFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle;
+        Bundle bundle = data.getBundleExtra("bundle");
+        DateTime dateTime = new DateTime(mTravel.getDate());
+        MutableDateTime mutableDateTime = dateTime.toMutableDateTime();
         switch (resultCode) {
             case 0:
-                bundle = data.getBundleExtra("bundle");
-                String val = bundle.getString("value");
-                mTravel.setDate(val);
-                vDate.setText(val);
+                mutableDateTime.setDate(bundle.getInt("year"), bundle.getInt("month"), bundle.getInt("day"));
+                vDate.setText(new Utils(mContext).toFriendlyDate(mutableDateTime.toDateTime()));
                 break;
 
             case 1:
-                bundle = data.getBundleExtra("bundle");
-                int hour = bundle.getInt("hour");
-                int min = bundle.getInt("min");
-                //mTravel.setStartClock(String.format(Locale.ENGLISH, "%s:%s", hour, min));
-                String xM = "AM";
-                if (hour > 12){
-                    xM = "PM";
-                }
-                hour = hour % 12;
-                if (hour == 0){
-                    hour = 12;
-                }
-
-                vStopTime.setText(String.format(Locale.ENGLISH, "%s:%s %s", hour, min, xM));
+                mutableDateTime.setTime(bundle.getInt("hour"), bundle.getInt("min"), 0, 0);
+                vStopTime.setText(new Utils(mContext).toFriendlyTime(mutableDateTime.toDateTime()));
                 break;
         }
+        mTravel.setDateEnd(mutableDateTime.toDateTime().toString());
     }
 
     public boolean isLegit(){
+        if (vStopTime.getText() == null){
+            vStopTime.setError(getString(R.string.error_start_val));
+            return false;
+        }
         if (vOdo.getText() == null){
             vOdo.setError(getString(R.string.error_start_val));
             return false;
         }
-
-        //TODO cehck if delta is neg
-        //check time
+        if (Double.parseDouble(vOdo.getText().toString()) < mTravel.getStart()){
+            vOdo.setError(getString(R.string.error_start_val));
+            return false;
+        }
 
         return true;
     }
