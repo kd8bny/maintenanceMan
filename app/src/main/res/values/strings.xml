@@ -194,9 +194,10 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
-        v3.4.0 Beta 10Oct2016\n\n
+        v3.4.0 Beta 15Oct2016\n\n
 
         - Possible bug: Add button wont retreat back down. Please contact me if you have this happen\n
+        - Now tracks total time spent traveling\n
         - per annum track distance traveled. Populated from your mileage events\n
         - Click on your mileage events to see cool details\n
         - All event add are in dialogs now Better UI\n
