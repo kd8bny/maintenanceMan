@@ -33,9 +33,10 @@ public class Utils {
     public String toFriendlyTime(DateTime dateTime) {
         int hour = dateTime.getHourOfDay();
         int min = dateTime.getMinuteOfHour();
+        String MIN = (min < 10) ? "0" + min : min + "";
         String xM = (hour < 12) ? "am" : "pm";
         hour = (hour > 12) ? hour % 12 : hour;
 
-        return String.format("%s:%s %s", hour, min, xM);
+        return String.format("%s:%s %s", hour, MIN, xM);
     }
 }

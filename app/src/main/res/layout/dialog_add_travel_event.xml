@@ -86,7 +86,7 @@
             app:met_primaryColor="@color/accent"
             app:met_errorColor="@color/error"
             app:met_floatingLabel="highlight"
-            app:met_floatingLabelText="@string/field_price"/>
+            app:met_floatingLabelText="@string/field_dest"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/val_purpose"
