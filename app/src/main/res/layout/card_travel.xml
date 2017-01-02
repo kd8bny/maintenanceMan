@@ -63,8 +63,7 @@
                 android:maxLines="1"
 
                 android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"
-                android:text="xMi"/>
+                android:textSize="@dimen/field_font"/>
 
             <TextView
                 android:id="@+id/val_time"
@@ -77,8 +76,7 @@
                 android:maxLines="1"
 
                 android:textColor="@color/secondary_text"
-                android:textSize="@dimen/field_font"
-                android:text="xhrs"/>
+                android:textSize="@dimen/field_font"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>
