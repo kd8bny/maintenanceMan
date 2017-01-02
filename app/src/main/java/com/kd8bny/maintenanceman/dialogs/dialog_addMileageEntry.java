@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
+import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -31,7 +32,7 @@ public class dialog_addMileageEntry extends DialogFragment {
     private int RESULT_CODE;
     private Context mContext;
     private MaterialBetterSpinner vehicleSpinner;
-    private MaterialEditText vTripValue, vFillValue, vPriceValue;
+    private MaterialEditText vDate, vTripValue, vFillValue, vPriceValue;
 
     private ArrayList<Vehicle> mRoster;
     private Vehicle mVehicle;
@@ -75,6 +76,7 @@ public class dialog_addMileageEntry extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_mileage_event, null);
         vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_roster);
+        vDate = (MaterialEditText) view.findViewById(R.id.date);
         vTripValue = (MaterialEditText) view.findViewById(R.id.tripometer);
         vFillValue = (MaterialEditText) view.findViewById(R.id.fill_vol);
         vPriceValue = (MaterialEditText) view.findViewById(R.id.price);
@@ -84,15 +86,26 @@ public class dialog_addMileageEntry extends DialogFragment {
             mVehicle = mRoster.get(mPos);
             vehicleSpinner.setText(mVehicle.getTitle());
         }
+        vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mMileage.getDate())));
         vTripValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vFillValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vPriceValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         if (!isNew){
-            vTripValue.setText(mMileage.getTripometer().toString());
-            vFillValue.setText(mMileage.getFillVol().toString());
-            vPriceValue.setText(mMileage.getPrice().toString());
+            vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mOldMileage.getDate())));
+            vTripValue.setText(mOldMileage.getTripometer().toString());
+            vFillValue.setText(mOldMileage.getFillVol().toString());
+            vPriceValue.setText(mOldMileage.getPrice().toString());
         }
+
+        view.findViewById(R.id.date).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog_datePicker datePicker = new dialog_datePicker();
+                datePicker.setTargetFragment(dialog_addMileageEntry.this, 0);
+                datePicker.show(getFragmentManager(), "datePicker");
+            }
+        });
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
             .setTitle(view.getResources().getString(R.string.title_mileage_add))
@@ -144,6 +157,20 @@ public class dialog_addMileageEntry extends DialogFragment {
                         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
                                 new Intent().putExtra("bundle", bundle));
                     }}});
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getBundleExtra("bundle");
+        switch (resultCode) {
+            case 0:
+                DateTime dateTime = new DateTime().withDate(bundle.getInt("year"),
+                        bundle.getInt("month"), bundle.getInt("day"));
+                mMileage.setDate(dateTime.toString());
+                vDate.setText(new Utils(mContext).toFriendlyDate(dateTime));
+                break;
         }
     }
 
