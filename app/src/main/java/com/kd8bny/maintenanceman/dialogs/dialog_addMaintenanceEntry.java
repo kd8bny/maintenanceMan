@@ -113,7 +113,7 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dialog_iconPicker iconPicker = new dialog_iconPicker();
-                iconPicker.setTargetFragment(dialog_addMaintenanceEntry.this, 0);
+                iconPicker.setTargetFragment(dialog_addMaintenanceEntry.this, 1);
                 iconPicker.show(getFragmentManager(), "dialogIconPicker");
             }
         });
