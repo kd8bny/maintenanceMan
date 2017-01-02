@@ -62,7 +62,7 @@ public class dialog_addMileageEntry extends DialogFragment {
         }else { //TODO make object implement clone
             isNew = false;
             mOldMileage = new Mileage(mMileage.getRefID());
-            mOldMileage.setDate(mMileage.getDate());
+            mOldMileage.setDate(new DateTime(mMileage.getDate()).toString());
             mOldMileage.setMileage(
                     mMileage.getTripometer(),
                     mMileage.getFillVol(),

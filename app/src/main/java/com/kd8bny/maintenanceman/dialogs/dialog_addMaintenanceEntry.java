@@ -67,7 +67,7 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
             isNew = false;
             mOldMaintenance = new Maintenance(mMaintenance.getRefID());
             mOldMaintenance.setIcon(mMaintenance.getIcon());
-            mOldMaintenance.setDate(mMaintenance.getDate());
+            mOldMaintenance.setDate(new DateTime(mMaintenance.getDate()).toString());
             mOldMaintenance.setOdometer(mMaintenance.getOdometer());
             mOldMaintenance.setEvent(mMaintenance.getEvent());
             mOldMaintenance.setPrice(mMaintenance.getPrice());

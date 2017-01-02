@@ -61,7 +61,7 @@ public class dialog_addTravelEntry extends DialogFragment {
         }else { //TODO make object implement clone
             isNew = false;
             mOldTravel = new Travel(mTravel.getRefID());
-            mOldTravel.setDate(mTravel.getDate());
+            mOldTravel.setDate(new DateTime(mTravel.getDate()).toString());
             mOldTravel.setStart(mTravel.getStart());
             mOldTravel.setDest(mTravel.getDest());
             mOldTravel.setPurpose(mTravel.getPurpose());
