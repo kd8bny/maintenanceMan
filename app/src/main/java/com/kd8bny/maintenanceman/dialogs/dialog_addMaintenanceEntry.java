@@ -67,7 +67,7 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
             isNew = false;
             mOldMaintenance = new Maintenance(mMaintenance.getRefID());
             mOldMaintenance.setIcon(mMaintenance.getIcon());
-            mOldMaintenance.setDate(new DateTime(mMaintenance.getDate()).toString());
+            mOldMaintenance.setDate(mMaintenance.getDate());
             mOldMaintenance.setOdometer(mMaintenance.getOdometer());
             mOldMaintenance.setEvent(mMaintenance.getEvent());
             mOldMaintenance.setPrice(mMaintenance.getPrice());
@@ -103,7 +103,7 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
             vIcon.setImageResource(icons.getResourceId(mOldMaintenance.getIcon(), 0));
             icons.recycle();
             vEvent.setText(mOldMaintenance.getEvent());
-            vDate.setText(mOldMaintenance.getDate());
+            vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mOldMaintenance.getDate())));
             vOdo.setText(mOldMaintenance.getOdometer());
             vPrice.setText(mOldMaintenance.getPrice());
             vComment.setText(mOldMaintenance.getComment());
