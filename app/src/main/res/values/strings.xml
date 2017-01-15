@@ -194,6 +194,11 @@
     <string name="title_whats_new">Whats New!!</string>
     <string name="button_whats_new">Read</string>
     <string name="whatsNew">
+        v3.4.1 15Jan2017\n\n
+        - Edit date for fuel mileage data\n
+        - Bug fixes\n
+        - Add supprot for Android N multiwindow mode\n\n
+
         v3.4.0 20Oct2016\n\n
 
         - Now tracks total time spent traveling\n
@@ -201,12 +206,5 @@
         - Click on your mileage events to see cool details\n
         - All event add are in dialogs now Better UI\n
         - Seriously scrapped code and cleaned like never before\n\n
-
-        v3.3.4 30Sept2016\n\n
-
-        - Snackbar shows your mileage once you enter it\n
-        - Add a sync dialog to help the db\n
-        - Fix NPE for some random bad data\n
-        - Tons and tons of code cleaning\n\n
     </string>
 </resources>
