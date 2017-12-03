@@ -91,7 +91,7 @@ public class dialog_firebase_auth extends DialogFragment {
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d(TAG, "signInWithEmail:success");
-                                        FirebaseUser user = mAuth.getCurrentUser();
+                                        alertDialog.dismiss();
 
                                     } else {
 
@@ -112,7 +112,7 @@ public class dialog_firebase_auth extends DialogFragment {
                                     }
                                 }
                             });
-            }});
+                }});
 
             buttonCreate.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -127,7 +127,7 @@ public class dialog_firebase_auth extends DialogFragment {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
                                     Log.d(TAG, "createUserWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    alertDialog.dismiss();
 
                                 } else {
                                     // If sign in fails, display a message to the user.
@@ -139,7 +139,7 @@ public class dialog_firebase_auth extends DialogFragment {
 
                                 // ...
                             }
-                    });
+                        });
                 }});
         }
     }
