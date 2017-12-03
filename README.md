@@ -1,5 +1,5 @@
 # maintenanceMan
-- Android application designed for simple traking of vehicle maintenance
+- Android application designed for simple tracking of vehicle maintenance
 - After a year of developing I have decided to open source this project hoping to generate greater development
 
 ## Application makes use of 
@@ -11,12 +11,10 @@
 ## TODO
 ### In the works
 - Android wear support
-- Maintenace reminders
-- Combining common classes into utils
+- Maintenance reminders
+- Firestone integration
 
 ### In the future
-- Sync Service
-- Google Drive sync
 
 ## Special Thanks
 - [Clans FAB](https://github.com/Clans/FloatingActionButton)

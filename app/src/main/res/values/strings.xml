@@ -2,6 +2,17 @@
 <resources>
     <string name="app_name">Maintenance Man</string>
 
+    <!--Firebase-->
+    <string name="title_firebase_auth">Account Setup</string>
+    <string name="message_firebase_auth">To use Maintenance Man please sign-in or create an account</string>
+    <string name="title_firebase_sign_in">Sign-in</string>
+    <string name="title_firebase_create_account">Create Account</string>
+    <string name="title_firebase_google">Sign-in with Google</string>
+    <string name="hint_firebase_email">Email</string>
+    <string name="hint_firebase_password">Password</string>
+
+
+    <!-- V3 Strings unknown validity-->
     <!-- Add Fleet Roster -->
     <string name="title_add_fleet_roster">Add Vehicle</string>
     <string name="title_dialog_add">New Vehicle</string>

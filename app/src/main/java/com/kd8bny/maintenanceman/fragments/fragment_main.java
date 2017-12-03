@@ -27,12 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.Wearable;
-import com.google.gson.Gson;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
@@ -46,8 +42,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
-import com.kd8bny.maintenanceman.dialogs.dialog_sync;
-import com.kd8bny.maintenanceman.interfaces.SyncData;
+import com.kd8bny.maintenanceman.dialogs.dialog_firebase_auth;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.activities.IntroActivity;
@@ -66,22 +61,19 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class fragment_main extends Fragment implements SyncData,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class fragment_main extends Fragment {
     private static final String TAG = "frg_main";
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-    private static final String WEAR_FILE_PATH = "/files";
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     private Context mContext;
-    private GoogleApiClient mGoogleApiClient;
-
     private SharedPreferences sharedPreferences;
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
     private FloatingActionButton fabBusiness;
-    private dialog_sync mDialog_sync;
 
     private ArrayList<Vehicle> mRoster;
     private int mSortType = 0;
@@ -94,12 +86,7 @@ public class fragment_main extends Fragment implements SyncData,
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(Wearable.API)
-                .build();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -380,20 +367,24 @@ public class fragment_main extends Fragment implements SyncData,
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
-        mGoogleApiClient.connect();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mDialog_sync != null){
-            mDialog_sync.dismiss();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser == null) {
+            dialog_firebase_auth dialog = new dialog_firebase_auth();
+            dialog.setTargetFragment(fragment_main.this, 0);
+            dialog.show(getFragmentManager(), "dialog_add_mileage");
         }
-        mRoster = new SaveLoadHelper(mContext, this).load();
+
+        /*mRoster = new SaveLoadHelper(mContext, this).load();
         if (mRoster != null) {
             cardListAdapter = new OverviewAdapter(mContext, mRoster);
             cardList.setAdapter(cardListAdapter);
-        }
+        }*/
     }
 
     @Override
@@ -484,39 +475,6 @@ public class fragment_main extends Fragment implements SyncData,
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(WEAR_FILE_PATH);
-                    DataMap dataMap = putDataMapRequest.getDataMap();
-                    dataMap.putLong("time", System.currentTimeMillis());
-                    dataMap.putString("roster", new Gson().toJson(mRoster));
-                    Wearable.DataApi.putDataItem(mGoogleApiClient, putDataMapRequest.asPutDataRequest());
-                } catch (Exception e){
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
-        thread.start();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int cause) {}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {}
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
@@ -524,19 +482,30 @@ public class fragment_main extends Fragment implements SyncData,
         }
     }
 
-    public void onDownloadComplete(Boolean isComplete){
-        if (mDialog_sync != null){
-            mDialog_sync.dismiss();
-        }
-        if (isComplete) {
-            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
-            onResume();
-        }
-    }
+    /*
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
-    public void onDownloadStart(){
-        FragmentManager fm = getFragmentManager();
-        mDialog_sync = new dialog_sync();
-        mDialog_sync.show(fm, "dialog_sync");
-    }
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(GoogleSignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        // ...
+                    }
+                });
+    }*/
 }
