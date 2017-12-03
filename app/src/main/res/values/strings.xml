@@ -10,7 +10,9 @@
     <string name="title_firebase_google">Sign-in with Google</string>
     <string name="hint_firebase_email">Email</string>
     <string name="hint_firebase_password">Password</string>
-
+    <string name="error_firebase_invalid_user">Account not found. Please create a new one</string>
+    <string name="error_firebase_invalid_password">This Password Is Invalid</string>
+    <string name="error_firebase_connection">Please Check Your Connection</string>
 
     <!-- V3 Strings unknown validity-->
     <!-- Add Fleet Roster -->

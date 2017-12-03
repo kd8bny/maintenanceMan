@@ -14,9 +14,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -71,9 +75,6 @@ public class dialog_firebase_auth extends DialogFragment {
     public void onStart(){
         super.onStart();
         /*Override in order to keep alert dialog open for error check*/
-        //final String email, password;// = vEmail.getText().toString();
-        //final String password; = vPassword.getText().toString();
-        //Log.d(TAG,email);
 
         final AlertDialog alertDialog = (AlertDialog) getDialog();
         if(alertDialog != null){
@@ -93,13 +94,25 @@ public class dialog_firebase_auth extends DialogFragment {
                                         FirebaseUser user = mAuth.getCurrentUser();
 
                                     } else {
-                                        // If sign in fails, display a message to the user.
-                                        Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                        /*Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                                Toast.LENGTH_SHORT).show();*/
+
                                     }
-                                }});
-                            }});
+                            }})
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "signInWithEmail:failure", e);
+                                    if(e instanceof FirebaseAuthInvalidUserException){
+                                        vEmail.setError(mContext.getString(R.string.error_firebase_invalid_user));
+                                    }
+                                    if( e instanceof FirebaseAuthInvalidCredentialsException){
+                                        vPassword.setError(mContext.getString(R.string.error_firebase_invalid_password));
+                                    }
+                                    if(e instanceof FirebaseNetworkException){
+                                        vEmail.setError(mContext.getString(R.string.error_firebase_connection));
+                                    }
+                                }
+                            });
+            }});
 
             buttonCreate.setOnClickListener(new View.OnClickListener(){
                 @Override
