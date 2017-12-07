@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,8 +22,18 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.WriteBatch;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.FleetRosterAdapter;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
@@ -33,14 +44,18 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class fragment_fleetRoster extends Fragment {
     private static final String TAG = "frg_fltRstr";
 
+    private static final int ADD_VEHICLE = 0;
+    private static final int ADD_FIELD = 1;
+    private static final int EDIT_FIELD = 2;
+
     private Context mContext;
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
 
-    private MaterialBetterSpinner vehicleSpinner;
     private RecyclerView addList;
     private RecyclerView.LayoutManager addMan;
     private RecyclerView.Adapter addListAdapter;
@@ -58,6 +73,8 @@ public class fragment_fleetRoster extends Fragment {
     private HashMap<String, String> powerTrainSpecs = new HashMap<>();
     private HashMap<String, String> otherSpecs = new HashMap<>();
 
+
+
     public fragment_fleetRoster(){}
 
     @Override
@@ -71,6 +88,7 @@ public class fragment_fleetRoster extends Fragment {
         if(roster == null) {
             roster = new ArrayList<>();
         }
+
         vehiclePos = bundle.getInt("pos", -1);
         if (vehiclePos == -1){
             FragmentManager fm = getChildFragmentManager();
@@ -86,6 +104,12 @@ public class fragment_fleetRoster extends Fragment {
         }else{
             vehicle = roster.get(vehiclePos);
         }
+
+        /*private FirebaseFirestore db;
+
+    public FirestoreHelper(){
+            db = FirebaseFirestore.getInstance();
+            CollectionReference userReference = db.collection("users");*/
     }
 
     @Override
@@ -94,16 +118,7 @@ public class fragment_fleetRoster extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_fleet_roster, container, false);
         mContext = getActivity().getApplicationContext();
 
-        //Spinner
-        vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
-        mvehicleTypes = mContext.getResources().getStringArray(R.array.vehicle_type);
-        vehicleSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                vehicle.setVehicleType(vehicleSpinner.getText().toString());
-            }});
-        vehicleSpinner.setAdapter(new ArrayAdapter<> (getActivity(), R.layout.spinner_drop_item, mvehicleTypes));
-        businessVal = (CheckBox) view.findViewById(R.id.checkbox_business);
+
 
         //Recycler View
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
@@ -181,12 +196,12 @@ public class fragment_fleetRoster extends Fragment {
         ArrayList<String> result = bundle.getStringArrayList("fieldData");
 
         switch (resultCode){
-            case (0):
+            case ADD_VEHICLE:
                 vehicle = new Vehicle("", bundle.getBoolean("isBusiness"),
                         result.get(0), result.get(1), result.get(2));
                 break;
 
-            case (1):
+            case ADD_FIELD:
                 allSpecs.add(result);
                 switch (result.get(0)) {
                     case "General":
@@ -204,7 +219,7 @@ public class fragment_fleetRoster extends Fragment {
                 }
                 break;
 
-            case (2):
+            case EDIT_FIELD:
                 int pos = bundle.getInt("pos");
                 switch (result.get(0)) {
                     case "General":
@@ -245,7 +260,7 @@ public class fragment_fleetRoster extends Fragment {
         switch (item.getItemId()){
             case R.id.menu_save:
                 Boolean isUS = true, useDist = true;
-                String type = vehicleSpinner.getText().toString();
+                /*String type = vehicleSpinner.getText().toString();
                 if (!mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
                         .getString("prefUnitDist", "mi").equals("mi")) {
                     isUS = false;
@@ -254,7 +269,7 @@ public class fragment_fleetRoster extends Fragment {
                 if (type.equals("Utility") || type.equals("Marine") || type.equals("Lawn and Garden")){
 
                     useDist = false;
-                }
+                }*/
 
                 String unitDist, unitMileage;
                 if (useDist) {
@@ -281,9 +296,38 @@ public class fragment_fleetRoster extends Fragment {
                 vehicle.setEngineSpecs(engineSpecs);
                 vehicle.setPowerTrainSpecs(powerTrainSpecs);
                 vehicle.setOtherSpecs(otherSpecs);
-                vehicle.setBusiness(businessVal.isChecked());
+                //vehicle.setBusiness(businessVal.isChecked());
 
-                SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
+               // Map<String, Object> entry = new HashMap<>();
+                //entry.put("general", generalSpecs);
+
+                FirestoreHelper firestoreHelper = FirestoreHelper.getInstance();
+                firestoreHelper.addToFLeet(vehicle);
+
+                //getUID()
+                /*DocumentReference docrefVehicle = db.collection("users").document();
+                batch.set(docrefVehicle, entry);//        .add(entry)
+                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });*/
+                    /*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+*/
+
+                /*SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
                 if (vehiclePos != -1) {
                     if (!vehicle.equals(roster.get(vehiclePos))) {
@@ -293,10 +337,10 @@ public class fragment_fleetRoster extends Fragment {
                 }else{
                     roster.add(vehicle);
                     saveLoadHelper.save(roster);
-                }
+                }*/
 
-                getActivity().setResult(90);
-                getActivity().finish();
+                //getActivity().setResult(90);
+                //getActivity().finish();
 
                 return true;
 
@@ -332,7 +376,7 @@ public class fragment_fleetRoster extends Fragment {
     }
 
     private void prepEdit(){
-        generalSpecs = vehicle.getGeneralSpecs();
+        /*generalSpecs = vehicle.getGeneralSpecs();
         engineSpecs = vehicle.getEngineSpecs();
         powerTrainSpecs = vehicle.getPowerTrainSpecs();
         otherSpecs = vehicle.getOtherSpecs();
@@ -367,6 +411,7 @@ public class fragment_fleetRoster extends Fragment {
             temp.add(otherSpecs.get(key));
             allSpecs.add(temp);
         }
+        */
     }
 
     private void removeEntry(int i){

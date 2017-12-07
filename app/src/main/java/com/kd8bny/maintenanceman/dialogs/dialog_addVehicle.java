@@ -2,24 +2,30 @@ package com.kd8bny.maintenanceman.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 
 public class dialog_addVehicle extends DialogFragment {
-    private static final String TAG = "dlg_add_fld";
+    private static final String TAG = "dlg_add_vehicle";
 
     private static final int REQUEST_CODE = 0;
 
+    private Context mContext;
+    private MaterialBetterSpinner vehicleSpinner;
     private MaterialEditText yearVal;
     private MaterialEditText makeVal;
     private MaterialEditText modelVal;
@@ -28,6 +34,8 @@ public class dialog_addVehicle extends DialogFragment {
     private String MODEL;
     private Boolean isBusiness = false;
     private Boolean isEdit;
+
+    private String [] mvehicleTypes;
 
     public dialog_addVehicle(){}
 
@@ -47,6 +55,17 @@ public class dialog_addVehicle extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_add_vehicle, null);
+
+        //Spinner
+        //vehicleSpinner = (MaterialBetterSpinner) view.findViewById(R.id.spinner_vehicle_type);
+        /*mvehicleTypes = mContext.getResources().getStringArray(R.array.vehicle_type);
+        vehicleSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               // vehicle.setVehicleType(vehicleSpinner.getText().toString());
+            }});
+        vehicleSpinner.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mvehicleTypes));*/
+      //  businessVal = (CheckBox) view.findViewById(R.id.checkbox_business);*/
 
         yearVal = (MaterialEditText) view.findViewById(R.id.year_val);
         yearVal.setHint(view.getResources().getString(R.string.hint_year));

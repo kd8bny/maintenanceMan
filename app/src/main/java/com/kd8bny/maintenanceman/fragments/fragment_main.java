@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
@@ -35,14 +34,15 @@ import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.adapters.OverviewAdapter;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.dialogs.dialog_firebase_auth;
+import com.kd8bny.maintenanceman.interfaces.AuthenticatedUser;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.activities.IntroActivity;
@@ -61,15 +61,16 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class fragment_main extends Fragment {
+public class fragment_main extends Fragment implements AuthenticatedUser {
     private static final String TAG = "frg_main";
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
-    private FirebaseAuth mAuth;
+
     private FirebaseUser currentUser;
 
     private Context mContext;
     private SharedPreferences sharedPreferences;
+    private Boolean isAuthUser;
     private RecyclerView cardList;
     private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
@@ -77,6 +78,10 @@ public class fragment_main extends Fragment {
 
     private ArrayList<Vehicle> mRoster;
     private int mSortType = 0;
+
+    private static final int IGNORE_RESULT = -1;
+    private static final int ADD_VEHICLE = 1;
+    private static final int ADD_MILEAGE = 2;
 
     public fragment_main() {}
 
@@ -86,7 +91,7 @@ public class fragment_main extends Fragment {
         setHasOptionsMenu(true);
         mContext = getActivity().getApplicationContext();
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE);
-        mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
@@ -130,7 +135,7 @@ public class fragment_main extends Fragment {
                 Intent intent = new Intent(getActivity(), VehicleActivity.class);
                 Bundle bundle = new Bundle();
                 switch (i) {
-                    case 1: //Add Vehicle
+                    case ADD_VEHICLE:
                         bundle.putInt("caseID", 0);
                         bundle.putParcelableArrayList("roster", mRoster);
                         bundle.putInt("vehiclePos", -1);
@@ -140,7 +145,7 @@ public class fragment_main extends Fragment {
 
                         return true;
 
-                    case 2: //Add mileage
+                    case ADD_MILEAGE:
                         if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
@@ -373,11 +378,11 @@ public class fragment_main extends Fragment {
     public void onResume() {
         super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser == null) {
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance();
+        if (!firestoreHelper.getIsAuthuser()) {
             dialog_firebase_auth dialog = new dialog_firebase_auth();
-            dialog.setTargetFragment(fragment_main.this, 0);
-            dialog.show(getFragmentManager(), "dialog_add_mileage");
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getFragmentManager(), "dg_fb_auth");
         }
 
         /*mRoster = new SaveLoadHelper(mContext, this).load();
@@ -480,6 +485,11 @@ public class fragment_main extends Fragment {
         if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
             Log.v(TAG,"Permission: " + permissions[0] + "was " + grantResults[0]);
         }
+    }
+
+    public void isUserAuthenticated(Boolean isAuth){
+        isAuthUser = isAuth;
+        Log.e(TAG, isAuth+"");
     }
 
     /*

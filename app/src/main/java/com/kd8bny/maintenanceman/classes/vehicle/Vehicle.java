@@ -30,6 +30,8 @@ public class Vehicle implements Parcelable{
     private String unitDist;
     private String unitMileage;
 
+    public Vehicle(){}
+
     public Vehicle(String vehicleType, Boolean isBusiness, String year, String make, String model){
         this.refID = UUID.randomUUID().toString();
         this.vehicleType = vehicleType;
@@ -54,20 +56,6 @@ public class Vehicle implements Parcelable{
         engineSpecs = parcel.readString();
         powerTrainSpecs = parcel.readString();
         otherSpecs = parcel.readString();
-    }
-
-    public Vehicle(String refID, String vehicleType, String year, String make, String model){
-        /*
-        *TODO Temp to bring everyone up to new spec
-         */
-        this.refID = refID;
-        this.title = year + " " + make + " " + model;
-        this.vehicleType = vehicleType;
-        HashMap<String, String> temp = new HashMap<>();
-        temp.put("year", year);
-        temp.put("make", make);
-        temp.put("model", model);
-        setReservedSpecs(temp);
     }
 
     @Override

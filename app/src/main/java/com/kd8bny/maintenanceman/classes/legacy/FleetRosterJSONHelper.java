@@ -205,7 +205,7 @@ public class FleetRosterJSONHelper {
     }
 
     public ArrayList<Vehicle> saveToNew(HashMap<String, HashMap> oldRoster){
-        Log.i(TAG, "Attempting to capture old data and store new format");
+        /*Log.i(TAG, "Attempting to capture old data and store new format");
         ArrayList<Vehicle> newRoster = new ArrayList<>();
         for (String key : oldRoster.keySet()) {
             HashMap<String, HashMap> oldVehicle = oldRoster.get(key);
@@ -240,7 +240,8 @@ public class FleetRosterJSONHelper {
 
             newRoster.add(tempVehicle);
         }
-        return newRoster;
+        return newRoster;*/
+        return null;
     }
 }
 

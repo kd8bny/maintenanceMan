@@ -21,7 +21,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseUser;
 import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -57,11 +56,11 @@ public class dialog_firebase_auth extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_firebase_auth, null);
 
-        buttonLogIn = view.findViewById(R.id.button_login);
-        buttonCreate = view.findViewById(R.id.button_create);
+        buttonLogIn = (Button) view.findViewById(R.id.button_login);
+        buttonCreate = (Button) view.findViewById(R.id.button_create);
 
-        vEmail = view.findViewById(R.id.email);
-        vPassword = view.findViewById(R.id.password);
+        vEmail = (MaterialEditText) view.findViewById(R.id.email);
+        vPassword = (MaterialEditText) view.findViewById(R.id.password);
 
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
