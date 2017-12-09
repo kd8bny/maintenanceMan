@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.MileageAdapter;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
@@ -28,6 +29,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_mileageHistory;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import org.joda.time.DateTime;
@@ -35,7 +37,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class fragment_mileage extends fragment_vehicleInfo {
+public class fragment_mileage extends fragment_vehicleInfo implements QueryComplete {
     private static final String TAG = "frgmnt_mileage";
 
     private View mView;
@@ -199,11 +201,15 @@ public class fragment_mileage extends fragment_vehicleInfo {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
+        firestoreHelper.getMileageEvents(mRoster.get(mPos).getRefID());
+    }
+
+    @Override
     public void onResume(){
         super.onResume();
-        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        //mMileageHist = vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID(), true);
-        mileageList.setAdapter(new MileageAdapter(mContext, mVehicle, mMileageHist));
     }
 
     @Override
@@ -232,5 +238,14 @@ public class fragment_mileage extends fragment_vehicleInfo {
             default:
                 return false;
         }
+    }
+
+    public void updateUI(ArrayList<Object> l) {
+        mMileageHist = new ArrayList<>();
+        for(Object o : l){
+            mMileageHist.add((Mileage) o);
+        }
+
+        mileageList.setAdapter(new MileageAdapter(mContext, mVehicle, mMileageHist));
     }
 }

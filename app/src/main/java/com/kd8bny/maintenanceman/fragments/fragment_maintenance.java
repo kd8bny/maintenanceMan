@@ -65,6 +65,7 @@ public class fragment_maintenance extends fragment_vehicleInfo implements QueryC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+
         vFilterView = inflater.inflate(R.layout.dialog_filter, null);
         ((CoordinatorLayout) mView.findViewById(R.id.snackbar)).addView(vFilterView);
         vFilterView.setVisibility(View.INVISIBLE);

@@ -34,7 +34,7 @@ import org.joda.time.DateTime;
 import java.util.ArrayList;
 
 public class fragment_travel extends fragment_vehicleInfo {
-    private static final String TAG = "frgmnt_bsnss";
+    private static final String TAG = "frg_travel";
 
     private View mView;
 

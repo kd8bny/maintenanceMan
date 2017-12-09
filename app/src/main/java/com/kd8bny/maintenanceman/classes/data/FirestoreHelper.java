@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
+import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 
@@ -29,6 +30,7 @@ public class FirestoreHelper {
     private static final String USERS = "users";
     private static final String FLEET = "fleet";
     private static final String MAINTENANCE = "maintenance";
+    private static final String MILEAGE = "mileage";
 
     private static FirestoreHelper sInstance;
     private FirebaseFirestore mFirestore;
@@ -175,6 +177,63 @@ public class FirestoreHelper {
                             }
 
                             mQueryComplete.updateUI(vehicleHistory);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void addMileageEvent(Mileage mileage){
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("refID", mileage.getRefID());
+        entry.put("date", mileage.getDate());
+        entry.put("mileage", mileage.getMileage());
+        entry.put("price", mileage.getPrice());
+        entry.put("fill_vol", mileage.getFillVol());
+        entry.put("tripometer", mileage.getTripometer());
+
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
+                .collection(MILEAGE).document()
+                .set(entry)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+    public void getMileageEvents(String refID){
+        final ArrayList<Object> mileageHistory = new ArrayList<>();
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
+                .collection(MILEAGE)
+                .whereEqualTo("refID", refID)
+                .get() //TODO limit number of events
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Mileage mileage = new Mileage(document.getString("refID"));
+                                mileage.setDate(document.getString("date"));
+                                mileage.setMileage(
+                                        document.getDouble("tripomter"),
+                                        document.getDouble("fill_vol"),
+                                        document.getDouble("price"));
+
+                                mileageHistory.add(mileage);
+                            }
+
+                            mQueryComplete.updateUI(mileageHistory);
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
