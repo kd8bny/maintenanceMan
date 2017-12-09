@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;

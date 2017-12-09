@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -20,7 +19,6 @@ import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
-import java.util.ArrayList;
 
 public class dialog_addVehicle extends DialogFragment {
     private static final String TAG = "dlg_add_vehicle";

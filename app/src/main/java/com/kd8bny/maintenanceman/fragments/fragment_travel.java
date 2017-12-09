@@ -21,7 +21,6 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.TravelAdapter;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;

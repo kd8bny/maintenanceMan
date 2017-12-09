@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 
 import java.util.ArrayList;
 import java.util.Locale;

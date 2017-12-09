@@ -5,46 +5,28 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.FleetRosterAdapter;
 import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
-import com.kd8bny.maintenanceman.classes.data.SaveLoadHelper;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addVehicle;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class fragment_fleetRoster extends Fragment {
     private static final String TAG = "frg_fltRstr";
@@ -333,12 +315,7 @@ public class fragment_fleetRoster extends Fragment {
                 builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        VehicleLogDBHelper.getInstance(mContext).purgeVehicle(vehicle.getRefID());
-
-                        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
-                        ArrayList<Vehicle> temp = saveLoadHelper.load();
-                        temp.remove(vehiclePos);
-                        saveLoadHelper.save(temp);
+                        
 
                         getActivity().setResult(91);
                         getActivity().finish();

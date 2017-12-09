@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.MileageAdapter;
-import com.kd8bny.maintenanceman.classes.data.VehicleLogDBHelper;
 import com.kd8bny.maintenanceman.classes.utils.Export;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
