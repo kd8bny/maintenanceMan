@@ -151,10 +151,11 @@ public class FirestoreHelper {
                 });
     }
 
-    public void getMaintenanceEvents(){
+    public void getMaintenanceEvents(String refID){
         final ArrayList<Object> vehicleHistory = new ArrayList<>();
         mFirestore.collection(USERS).document(mFirebaseUser.getUid())
                 .collection(MAINTENANCE)
+                .whereEqualTo("refID", refID)
                 .get() //TODO limit number of events
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -253,7 +253,7 @@ public class fragment_maintenance extends fragment_vehicleInfo implements QueryC
     public void onStart(){
         super.onStart();
         FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
-        firestoreHelper.getMaintenanceEvents();
+        firestoreHelper.getMaintenanceEvents(mRoster.get(mPos).getRefID());
     }
 
     @Override
