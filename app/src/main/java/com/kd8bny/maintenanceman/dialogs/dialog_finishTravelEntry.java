@@ -116,9 +116,9 @@ public class dialog_finishTravelEntry extends DialogFragment {
                     if (isLegit()) {
                         mTravel.setStop(Double.parseDouble(vOdo.getText().toString()));
 
-                        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                        vehicleLogDBHelper.deleteEntry(mTravel);
-                        vehicleLogDBHelper.insertEntry(mTravel);
+                        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                       // vehicleLogDBHelper.deleteEntry(mTravel);
+                       // vehicleLogDBHelper.insertEntry(mTravel);
                         dismiss();
                         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
                                 new Intent());

@@ -21,14 +21,14 @@ public class LocaleChange {
     }
 
     public void changeUnits(String unit){
-        Boolean isUS = true;
+        /*Boolean isUS = true;
         Boolean useDist = true;
         if (!unit.equals("mi")) {
             isUS = false;
         }
 
-        SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
-        ArrayList<Vehicle> temp = saveLoadHelper.load();
+        //SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
+        //ArrayList<Vehicle> temp = saveLoadHelper.load();
         for (int i=0; i< temp.size(); i++) {
             Vehicle v = temp.get(i);
             String type = v.getVehicleType();
@@ -61,6 +61,6 @@ public class LocaleChange {
 
             temp.set(i, v);
         }
-        saveLoadHelper.save(temp);
+        saveLoadHelper.save(temp);*/
     }
 }

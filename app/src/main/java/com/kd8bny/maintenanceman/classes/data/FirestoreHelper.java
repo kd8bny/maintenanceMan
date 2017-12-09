@@ -11,15 +11,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
+import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
-import com.kd8bny.maintenanceman.fragments.fragment_main;
-import com.kd8bny.maintenanceman.interfaces.AuthenticatedUser;
 import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 
 import java.util.ArrayList;
@@ -32,18 +28,21 @@ public class FirestoreHelper {
 
     private static final String USERS = "users";
     private static final String FLEET = "fleet";
+    private static final String MAINTENANCE = "maintenance";
 
     private static FirestoreHelper sInstance;
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
-    private FirebaseUser mfirebaseUser;
-    private QueryComplete mqueryComplete;
+    private FirebaseUser mFirebaseUser;
+    private static QueryComplete mQueryComplete;
 
-    public Boolean isAuthuser = false;
+    private Boolean isAuthUser = false;
 
     public static synchronized FirestoreHelper getInstance(QueryComplete queryComplete) {
         if (sInstance == null) {
             sInstance = new FirestoreHelper(queryComplete);
+        } else {
+            mQueryComplete = queryComplete;
         }
 
         return sInstance;
@@ -52,15 +51,19 @@ public class FirestoreHelper {
     public FirestoreHelper(QueryComplete queryComplete){
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
-        mfirebaseUser = mAuth.getCurrentUser();
+        mFirebaseUser = mAuth.getCurrentUser();
 
-        isAuthuser = mfirebaseUser != null;
-        mqueryComplete = queryComplete;
+        isAuthUser = mFirebaseUser != null;
+        mQueryComplete = queryComplete;
     }
 
-    public ArrayList<Vehicle> getFleet() {
-        final ArrayList<Vehicle> fleetRoster = new ArrayList<>();
-        mFirestore.collection(USERS).document(mfirebaseUser.getUid())
+    public Boolean getIsAuthUser(){
+        return isAuthUser;
+    }
+
+    public void getFleet() {
+        final ArrayList<Object> fleetRoster = new ArrayList<>();
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
                 .collection(FLEET)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -80,20 +83,16 @@ public class FirestoreHelper {
                                 vehicle.setOtherSpecs((HashMap<String, String>) document.get("other"));
 
                                 fleetRoster.add(vehicle);
-                                Log.e(TAG, fleetRoster.toString());
-                                mqueryComplete.fleetRosterUpdate(fleetRoster);
                             }
 
+                            mQueryComplete.updateUI(fleetRoster);
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-        return fleetRoster;
     }
-
 
     public void addToFleet(Vehicle vehicle) {
         Map<String, Object> entry = new HashMap<>();
@@ -108,7 +107,7 @@ public class FirestoreHelper {
         entry.put("power_train", vehicle.getPowerTrainSpecs());
         entry.put("other", vehicle.getOtherSpecs());
 
-        mFirestore.collection(USERS).document(mfirebaseUser.getUid())
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
                 .collection(FLEET).document(vehicle.getRefID())
                 .set(entry)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -125,9 +124,72 @@ public class FirestoreHelper {
                 });
     }
 
-    public Boolean getIsAuthuser(){
-        return isAuthuser;
+    public void addMaintenanceEvent(Maintenance maintenance){
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("refID", maintenance.getRefID());
+        entry.put("date", maintenance.getDate());
+        entry.put("icon", maintenance.getIcon());
+        entry.put("event", maintenance.getEvent());
+        entry.put("odometer", maintenance.getOdometer());
+        entry.put("price", maintenance.getPrice());
+        entry.put("comment", maintenance.getComment());
+
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
+                .collection(MAINTENANCE).document()
+                .set(entry)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
     }
+
+    public void getMaintenanceEvents(){
+        final ArrayList<Object> vehicleHistory = new ArrayList<>();
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
+                .collection(MAINTENANCE)
+                .get() //TODO limit number of events
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Maintenance maintenance = new Maintenance(document.getString("refID"));
+                                maintenance.setDate(document.getString("date"));
+                                maintenance.setIcon(document.getLong("icon").intValue());
+                                maintenance.setEvent(document.getString("event"));
+                                maintenance.setOdometer(document.getString("odometer"));
+                                maintenance.setPrice(document.getString("price"));
+                                maintenance.setComment(document.getString("comment"));
+
+                                vehicleHistory.add(maintenance);
+                            }
+
+                            mQueryComplete.updateUI(vehicleHistory);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    /* private ArrayList<String> setEvents(){ //TODO get out of sql helper and include
+        //VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(getActivity().getApplicationContext());
+        ArrayList<String> eventList = new ArrayList<>();
+       // eventList.addAll(vehicleDB.getEntries());
+
+        return eventList;
+    }*/
 
 /*
     public ArrayList<Maintenance> getMaintenanceEntries(String refID, Boolean sortDesc) {

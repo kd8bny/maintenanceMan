@@ -25,6 +25,7 @@ import android.view.animation.TranslateAnimation;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.MaintenanceAdapter;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.utils.Export;
@@ -32,6 +33,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_maintenanceHistory;
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
@@ -39,14 +41,14 @@ import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.stream.Collector;
 
-public class fragment_maintenance extends fragment_vehicleInfo {
+public class fragment_maintenance extends fragment_vehicleInfo implements QueryComplete {
     private static final String TAG = "frgmnt_hist";
 
     private View mView;
     private View vFilterView;
     private RecyclerView histList;
-    private RecyclerView.LayoutManager histMan;
 
     private ArrayList<Maintenance> mVehicleHist;
     private ArrayList<Maintenance> mUnfilteredHist;
@@ -70,8 +72,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
 
         //Task History
         histList = (RecyclerView) mView.findViewById(R.id.cardList);
-        histMan = new LinearLayoutManager(getActivity());
-        histList.setLayoutManager(histMan);
+        histList.setLayoutManager(new LinearLayoutManager(getActivity()));
         histList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, histList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
@@ -124,7 +125,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper.getInstance(mContext).deleteEntry(maintenance);
+                                            //VehicleLogDBHelper.getInstance(mContext).deleteEntry(maintenance);
                                             onResume(); //TODO
                                             //getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
@@ -205,7 +206,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
                 return false;
             }});
 
-        //Filter dialog
+        //Filter dialog //TODO coord this maybe
         final MaterialAutoCompleteTextView tFilter = (MaterialAutoCompleteTextView) vFilterView.findViewById(R.id.met_filter);
         tFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -249,11 +250,15 @@ public class fragment_maintenance extends fragment_vehicleInfo {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
+        firestoreHelper.getMaintenanceEvents();
+    }
+
+    @Override
     public void onResume(){
         super.onResume();
-        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mVehicleHist = vehicleLogDBHelper.getMaintenanceEntries(mVehicle.getRefID(), mSortDesc);
-        histList.setAdapter(new MaintenanceAdapter(mContext, mVehicle, mVehicleHist));
     }
 
     @Override
@@ -333,5 +338,14 @@ public class fragment_maintenance extends fragment_vehicleInfo {
             vFilterView.setVisibility(View.INVISIBLE);
         }
         vFilterView.startAnimation(translateAnim);
+    }
+
+    public void updateUI(ArrayList<Object> l) {
+        mVehicleHist = new ArrayList<>();
+        for(Object o : l){
+            mVehicleHist.add((Maintenance) o);
+        }
+
+        histList.setAdapter(new MaintenanceAdapter(mContext, mVehicle, mVehicleHist));
     }
 }

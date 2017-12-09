@@ -151,11 +151,11 @@ public class dialog_addTravelEntry extends DialogFragment {
                         mTravel.setDest(vDest.getText().toString());
                         mTravel.setPurpose(vPurpose.getText().toString());
 
-                        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
                         if (mOldTravel != null){
-                            vehicleLogDBHelper.deleteEntry(mOldTravel);
+                         //   vehicleLogDBHelper.deleteEntry(mOldTravel);
                         }
-                        vehicleLogDBHelper.insertEntry(mTravel);
+                        //vehicleLogDBHelper.insertEntry(mTravel);
                         dismiss();
                         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
                                 new Intent());

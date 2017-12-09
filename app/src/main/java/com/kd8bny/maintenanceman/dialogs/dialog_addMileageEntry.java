@@ -130,11 +130,11 @@ public class dialog_addMileageEntry extends DialogFragment {
                                 Double.parseDouble(vTripValue.getText().toString()),
                                 Double.parseDouble(vFillValue.getText().toString()),
                                 Double.parseDouble(vPriceValue.getText().toString()));
-                        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
                         if (mOldMileage != null){
-                            vehicleLogDBHelper.deleteEntry(mOldMileage);
+                       //     vehicleLogDBHelper.deleteEntry(mOldMileage);
                         }
-                        vehicleLogDBHelper.insertEntry(mMileage);
+                       // vehicleLogDBHelper.insertEntry(mMileage);
 
                         dismiss();
                         Bundle bundle = new Bundle();

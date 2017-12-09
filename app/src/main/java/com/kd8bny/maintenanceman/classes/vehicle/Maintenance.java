@@ -1,16 +1,14 @@
 package com.kd8bny.maintenanceman.classes.vehicle;
 
-/**
- * Created by kd8bny on 2/13/16.
- */
+
 public class Maintenance extends Entry{
     private static final String TAG = "Maintenance";
 
-    public int mIcon = 0;
-    public String mEvent;
-    public String mOdometer;
-    public String mPrice = "";
-    public String mComment = "";
+    private int mIcon = 0;
+    private String mEvent;
+    private String mOdometer;
+    private String mPrice = "";
+    private String mComment = "";
 
     public Maintenance(String refID){
         mRefID = refID;

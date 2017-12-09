@@ -360,7 +360,6 @@ public class fragment_main extends Fragment implements QueryComplete{
     @Override
     public void onStart() {
         super.onStart();
-
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -373,15 +372,14 @@ public class fragment_main extends Fragment implements QueryComplete{
             }
         }
 
-        QueryComplete queryComplete = this;
-        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(queryComplete);
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
 
-        if (!firestoreHelper.getIsAuthuser()) {
+        if (!firestoreHelper.getIsAuthUser()) {
             dialog_firebase_auth dialog = new dialog_firebase_auth();
             dialog.setTargetFragment(this, 0);
             dialog.show(getFragmentManager(), "dg_fb_auth");
         }
-        mRoster = firestoreHelper.getFleet();
+        firestoreHelper.getFleet();
     }
 
     @Override
@@ -389,10 +387,6 @@ public class fragment_main extends Fragment implements QueryComplete{
         super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
 
-        if (mRoster != null) {
-            cardListAdapter = new OverviewAdapter(mContext, mRoster);
-            cardList.setAdapter(cardListAdapter);
-        }
     }
 
     @Override
@@ -490,10 +484,16 @@ public class fragment_main extends Fragment implements QueryComplete{
         }
     }
 
-    public void fleetRosterUpdate(ArrayList<Vehicle> roster){
-        Log.e(TAG, "queryuyu");
-        mRoster = roster;
-        onResume();
+    public void updateUI(ArrayList<Object> roster){
+        mRoster = new ArrayList<>();
+        for(Object o : roster){
+            mRoster.add((Vehicle) o);
+        }
+
+        if (mRoster != null) {
+            cardListAdapter = new OverviewAdapter(mContext, mRoster);
+            cardList.setAdapter(cardListAdapter);
+        }
     }
 
     /*

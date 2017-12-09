@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
@@ -96,7 +97,7 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
         vDate.setText(new Utils(mContext).toFriendlyDate(new DateTime(mMaintenance.getDate())));
         vOdo.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vPrice.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        vEvent.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, setEvents()));
+        //TODO vEvent.setAdapter(new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, setEvents()));
 
         if (!isNew){
             vIcon.setImageResource(icons.getResourceId(mOldMaintenance.getIcon(), 0));
@@ -166,16 +167,18 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
                         int pos = mVehicleTitles.indexOf(vehicleSpinner.getText().toString());
                         mMaintenance.setRefID(mRoster.get(pos).getRefID());
 
-                        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                        if (mOldMaintenance != null){
-                            vehicleLogDBHelper.deleteEntry(mOldMaintenance);
-                        }
-                        vehicleLogDBHelper.insertEntry(mMaintenance);
+                        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(null);
+                        firestoreHelper.addMaintenanceEvent(mMaintenance);
+                        //TODO when edit lets just update the event
+                        //if (mOldMaintenance != null){
+                         //   vehicleLogDBHelper.deleteEntry(mOldMaintenance);
+                        //}
+                       // vehicleLogDBHelper.insertEntry(mMaintenance);
 
-                        Bundle bundle = new Bundle();
+                        /*Bundle bundle = new Bundle();
                         bundle.putBoolean("save", true);
                         getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                                new Intent().putExtra("bundle", bundle));
+                                new Intent().putExtra("bundle", bundle));*/
                         dismiss();
                     }}});
         }
@@ -204,17 +207,10 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
     private ArrayAdapter<String> setVehicles(){
         mVehicleTitles = new ArrayList<>();
         for(Vehicle v : mRoster) {
-            mVehicleTitles.add(v.getYear());
+            mVehicleTitles.add(String.format("%s %s %s", v.getYear(), v.getMake(), v.getModel()));
         }
+
         return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mVehicleTitles);
-    }
-
-    private ArrayList<String> setEvents(){ //TODO get out of sql helper and include
-        VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(getActivity().getApplicationContext());
-        ArrayList<String> eventList = new ArrayList<>();
-        eventList.addAll(vehicleDB.getEntries());
-
-        return eventList;
     }
 
     private Boolean isLegit(){

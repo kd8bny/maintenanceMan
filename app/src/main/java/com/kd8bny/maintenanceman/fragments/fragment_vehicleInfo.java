@@ -11,13 +11,14 @@ import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 import com.kd8bny.maintenanceman.interfaces.SyncData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class fragment_vehicleInfo extends Fragment implements SyncData {
+public class fragment_vehicleInfo extends Fragment {
     private static final String TAG = "fvi";
 
     public Context mContext;
@@ -78,7 +79,7 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                             break;
                     }
                     mRoster.set(mPos, mVehicle);
-                    new SaveLoadHelper(mContext, this).save(mRoster);
+                    //new SaveLoadHelper(mContext, this).save(mRoster);
                 }
                 viewPager.getAdapter().notifyDataSetChanged();
                 Snackbar.make(getActivity().findViewById(R.id.snackbar),
@@ -98,12 +99,12 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                 break;
 
             case (90)://Saved
-                mRoster = new SaveLoadHelper(mContext, this).load();
-                mVehicle = mRoster.get(mPos);
+                //mRoster = new SaveLoadHelper(mContext, this).load();
+                /*mVehicle = mRoster.get(mPos);
                 viewPager.getAdapter().notifyDataSetChanged();
                 Snackbar.make(getActivity().findViewById(R.id.snackbar),
                         String.format(Locale.ENGLISH, "saved"), Snackbar.LENGTH_LONG).show();
-                break;
+                */break;
 
             case (91)://Delete mVehicle
                 getActivity().finish();
@@ -115,15 +116,5 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                         String.format(Locale.ENGLISH, "saved"), Snackbar.LENGTH_LONG).show();
                 break;
         }
-    }
-
-    public void onDownloadComplete(Boolean isComplete){
-        if (isComplete) {
-            Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_update_ui), Snackbar.LENGTH_SHORT).show();
-            viewPager.getAdapter().notifyDataSetChanged();
-        }
-    }
-
-    public void onDownloadStart(){
     }
 }

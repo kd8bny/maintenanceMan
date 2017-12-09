@@ -16,23 +16,25 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.adapters.InfoAdapter;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
+import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.dialogs.dialog_addField;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
-public class fragment_info extends fragment_vehicleInfo {
-    private static final String TAG = "frgmnt_inf";
+public class fragment_info extends fragment_vehicleInfo implements QueryComplete{
+    private static final String TAG = "frg_info";
 
     private RecyclerView cardList;
     private View mView;
-    private RecyclerView.LayoutManager cardMan;
 
     private ArrayList<Maintenance> mVehicleHist;
     private ArrayList<Mileage> mMileage;
@@ -49,12 +51,12 @@ public class fragment_info extends fragment_vehicleInfo {
         mPos = bundle.getInt("pos", -1);
         mVehicle = mRoster.get(mPos);
 
-        VehicleLogDBHelper vehicleDB = VehicleLogDBHelper.getInstance(mContext);
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
 
         int year = new DateTime().getYear();
 
-        mVehicleHist = vehicleDB.getCostByYear(mVehicle.getRefID(), year);
-        mMileage = vehicleDB.getMileageEntriesByYear(mVehicle.getRefID(), year);
+        mVehicleHist = new ArrayList<>();//vehicleDB.getCostByYear(mVehicle.getRefID(), year);
+        mMileage = new ArrayList<>(); //vehicleDB.getMileageEntriesByYear(mVehicle.getRefID(), year);
     }
 
     @Override
@@ -63,8 +65,7 @@ public class fragment_info extends fragment_vehicleInfo {
 
         //Info Cards
         cardList = (RecyclerView) mView.findViewById(R.id.cardList);
-        cardMan = new LinearLayoutManager(getActivity());
-        cardList.setLayoutManager(cardMan);
+        cardList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //fab
         final FloatingActionMenu fabMenu = (FloatingActionMenu) mView.findViewById(R.id.fabmenu);
@@ -166,5 +167,9 @@ public class fragment_info extends fragment_vehicleInfo {
             default:
                 return false;
         }
+    }
+
+    public void updateUI(ArrayList<Object> l){
+
     }
 }

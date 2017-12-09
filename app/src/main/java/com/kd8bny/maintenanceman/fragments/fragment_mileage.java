@@ -114,7 +114,7 @@ public class fragment_mileage extends fragment_vehicleInfo {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper.getInstance(mContext).deleteEntry(mileage);
+                                            //VehicleLogDBHelper.getInstance(mContext).deleteEntry(mileage);
                                             onResume(); //TODO
                                             //getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
@@ -201,8 +201,8 @@ public class fragment_mileage extends fragment_vehicleInfo {
     @Override
     public void onResume(){
         super.onResume();
-        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mMileageHist = vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID(), true);
+        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+        //mMileageHist = vehicleLogDBHelper.getMileageEntries(mVehicle.getRefID(), true);
         mileageList.setAdapter(new MileageAdapter(mContext, mVehicle, mMileageHist));
     }
 

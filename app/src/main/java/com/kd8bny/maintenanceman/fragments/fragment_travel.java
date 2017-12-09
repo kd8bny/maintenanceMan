@@ -113,7 +113,7 @@ public class fragment_travel extends fragment_vehicleInfo {
                                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int which) {
-                                            VehicleLogDBHelper.getInstance(mContext).deleteEntry(travel);
+                                            //VehicleLogDBHelper.getInstance(mContext).deleteEntry(travel);
                                             onResume(); //TODO
                                             //getTargetFragment().onActivityResult(getTargetRequestCode(), -1, new Intent());
                                         }
@@ -200,8 +200,8 @@ public class fragment_travel extends fragment_vehicleInfo {
     @Override
     public void onResume(){
         super.onResume();
-        VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        mTravelLog = vehicleLogDBHelper.getFullTravelEntries(mVehicle.getRefID(), true);
+        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+        //mTravelLog = vehicleLogDBHelper.getFullTravelEntries(mVehicle.getRefID(), true);
         businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
         businessList.setAdapter(businessListAdapter);
     }

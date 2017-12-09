@@ -25,13 +25,11 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
     private View itemView;
     private int recycler_i = 0;
 
-    private VehicleLogDBHelper mVehicleLogDBHelper;
     private ArrayList<Vehicle> mRoster;
     private TypedArray headerColors;
 
     public OverviewAdapter(Context context, ArrayList<Vehicle> roster) {
         mContext = context;
-        mVehicleLogDBHelper = VehicleLogDBHelper.getInstance(context);
         mRoster = roster;
     }
 
@@ -91,7 +89,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
             GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();
             shapeDrawable.setColor(color);
 
-            ArrayList<Maintenance> temp = mVehicleLogDBHelper.getMaintenanceEntries(vehicle.getRefID(), true);
+            /*ArrayList<Maintenance> temp = mVehicleLogDBHelper.getMaintenanceEntries(vehicle.getRefID(), true);
             if (!temp.isEmpty()) {
                 adapterViewHolder.vLastLabel.setText(itemView.getResources().getString(R.string.last_event));
                 adapterViewHolder.vEvent.setText(temp.get(0).getEvent());
@@ -103,7 +101,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
                     Log.wtf(TAG, "parse error:" + temp.get(0).getOdometer());
                     adapterViewHolder.vOdo.setText(temp.get(0).getOdometer());
                 }
-            }
+            }*/
         }
     }
 
