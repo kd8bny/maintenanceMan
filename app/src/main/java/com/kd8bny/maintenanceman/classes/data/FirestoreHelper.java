@@ -102,7 +102,7 @@ public class FirestoreHelper {
         entry.put("make", vehicle.getMake());
         entry.put("model", vehicle.getModel());
         entry.put("type", vehicle.getVehicleType());
-        entry.put("commercial", vehicle.getBusiness());
+        entry.put("commercial", vehicle.getIsCommercial());
         entry.put("general", vehicle.getGeneralSpecs());
         entry.put("engine", vehicle.getEngineSpecs());
         entry.put("power_train", vehicle.getPowerTrainSpecs());

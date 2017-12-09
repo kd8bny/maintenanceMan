@@ -86,7 +86,8 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_trailer);
                     break;
             }
-            adapterViewHolder.vTitle.setText(vehicle.getYear());
+            adapterViewHolder.vTitle.setText(
+                    String.format("%s %s %s", vehicle.getYear(), vehicle.getMake(), vehicle.getModel()));
             adapterViewHolder.vRect.setBackgroundColor(color);
             GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();
             shapeDrawable.setColor(color);

@@ -390,10 +390,7 @@ public class fragment_main extends Fragment implements QueryComplete{
         // Check if user is signed in (non-null) and update UI accordingly.
 
         if (mRoster != null) {
-            Log.e(TAG, mRoster.toString());
             cardListAdapter = new OverviewAdapter(mContext, mRoster);
-            Log.e(TAG, cardListAdapter.toString());
-            Log.e(TAG, cardList.toString());
             cardList.setAdapter(cardListAdapter);
         }
     }

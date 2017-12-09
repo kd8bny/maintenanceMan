@@ -2,7 +2,6 @@ package com.kd8bny.maintenanceman.classes.vehicle;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Since;
@@ -25,7 +24,7 @@ public class Vehicle implements Parcelable{
     private String mPowerTrainSpecs;
     private String mOtherSpecs;
 
-    private Boolean mBusinessVehicle;
+    private Boolean mIsCommercial = false;
 
     public Vehicle(){}
 
@@ -36,7 +35,7 @@ public class Vehicle implements Parcelable{
     private Vehicle(Parcel parcel){
         mRefID = parcel.readString();
         mVehicleType = parcel.readString();
-        mBusinessVehicle = parcel.readByte() != 0;
+        mIsCommercial = parcel.readByte() != 0;
         mGeneralSpecs= parcel.readString();
         mEngineSpecs = parcel.readString();
         mPowerTrainSpecs = parcel.readString();
@@ -47,7 +46,7 @@ public class Vehicle implements Parcelable{
     public void writeToParcel(Parcel parcel, int flags){
         parcel.writeString(mRefID);
         parcel.writeString(mVehicleType);
-        parcel.writeByte((byte) (mBusinessVehicle ? 1 : 0));
+        parcel.writeByte((byte) (mIsCommercial ? 1 : 0));
         parcel.writeString(mGeneralSpecs);
         parcel.writeString(mEngineSpecs);
         parcel.writeString(mPowerTrainSpecs);
@@ -95,12 +94,12 @@ public class Vehicle implements Parcelable{
         mVehicleType = type;
     }
 
-    public Boolean getBusiness() {
-        return mBusinessVehicle;
+    public Boolean getIsCommercial() {
+        return mIsCommercial;
     }
 
-    public void setBusiness(Boolean isBusiness) {
-        mBusinessVehicle = isBusiness;
+    public void setIsCommercial(Boolean isCommerical) {
+        mIsCommercial = isCommerical;
     }
 
     public HashMap<String, String> getGeneralSpecs() {

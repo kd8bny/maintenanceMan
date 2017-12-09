@@ -60,12 +60,17 @@ public class fragment_fleetRoster extends Fragment {
     private RecyclerView.LayoutManager addMan;
     private RecyclerView.Adapter addListAdapter;
     private FloatingActionButton fab;
-    private CheckBox businessVal;
+    private Boolean isCommercial;
 
     private String [] mvehicleTypes;
     private ArrayList<Vehicle> roster;
     private Vehicle vehicle;
     private int vehiclePos;
+
+    private String mYear;
+    private String mMake;
+    private String mModel;
+    private String mVehicleType;
 
     private ArrayList<ArrayList> allSpecs = new ArrayList<>();
     private HashMap<String, String> generalSpecs = new HashMap<>();
@@ -112,8 +117,6 @@ public class fragment_fleetRoster extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.fragment_fleet_roster, container, false);
         mContext = getActivity().getApplicationContext();
-
-
 
         //Recycler View
         addList = (RecyclerView) view.findViewById(R.id.add_fleet_roster_list_car);
@@ -189,15 +192,21 @@ public class fragment_fleetRoster extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle = data.getBundleExtra("bundle");
         ArrayList<String> result = bundle.getStringArrayList("fieldData");
+        //TODO fix this result
 
         switch (resultCode){
             case ADD_VEHICLE:
                 vehicle = new Vehicle(null);
-               /* vehicle = new Vehicle("", bundle.getBoolean("isBusiness"),
-                        result.get(0), result.get(1), result.get(2));*/
+                vehicle.setVehicleType(bundle.getString("type"));
+                vehicle.setYear(bundle.getString("year"));
+                vehicle.setMake(bundle.getString("make"));
+                vehicle.setModel(bundle.getString("model"));
+                vehicle.setIsCommercial(bundle.getBoolean("commercial"));
+
                 break;
 
             case ADD_FIELD:
+
                 allSpecs.add(result);
                 switch (result.get(0)) {
                     case "General":
@@ -216,6 +225,7 @@ public class fragment_fleetRoster extends Fragment {
                 break;
 
             case EDIT_FIELD:
+
                 int pos = bundle.getInt("pos");
                 switch (result.get(0)) {
                     case "General":
@@ -267,7 +277,7 @@ public class fragment_fleetRoster extends Fragment {
                     useDist = false;
                 }*/
 
-                String unitDist, unitMileage;
+                /*String unitDist, unitMileage;
                 if (useDist) {
                     if (isUS) {
                         unitDist = mContext.getResources().getString(R.string.unit_dist_us);
@@ -283,21 +293,17 @@ public class fragment_fleetRoster extends Fragment {
                         unitMileage = mContext.getResources().getString(R.string.unit_mileage_time_metric);
                     }
                     unitDist = mContext.getResources().getString(R.string.unit_time);
-                }
+                }*/
 
                // vehicle.setUnitDist(unitDist);
                // vehicle.setUnitMileage(unitMileage);
-
                 vehicle.setGeneralSpecs(generalSpecs);
                 vehicle.setEngineSpecs(engineSpecs);
                 vehicle.setPowerTrainSpecs(powerTrainSpecs);
                 vehicle.setOtherSpecs(otherSpecs);
-                //vehicle.setBusiness(businessVal.isChecked());
 
-                //TODO open agin
-                /*FirestoreHelper firestoreHelper = FirestoreHelper.getInstance();
-                firestoreHelper.addToFleet(vehicle);*/
-
+                FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(null);
+                firestoreHelper.addToFleet(vehicle);
 
                 /*SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());

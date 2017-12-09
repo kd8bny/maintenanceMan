@@ -122,7 +122,7 @@ public class SaveLoadHelper {
                 temp = load();
                 for (int i=0; i<temp.size(); i++) {
                     Vehicle v = temp.get(i);
-                    v.setBusiness(false);
+                    v.setIsCommercial(false);
                     temp.set(i, v);
                 }
                 save(temp);
