@@ -57,8 +57,8 @@ public class LocaleChange {
                 unitDist = mContext.getResources().getString(R.string.unit_time);
             }
 
-            v.setUnitDist(unitDist);
-            v.setUnitMileage(unitMileage);
+            //v.setUnitDist(unitDist);
+            //v.setUnitMileage(unitMileage);
 
             temp.set(i, v);
         }

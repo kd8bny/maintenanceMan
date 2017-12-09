@@ -37,8 +37,8 @@ public class MileageAdapter extends RecyclerView.Adapter<MileageAdapter.AdapterV
     public MileageAdapter(Context context, Vehicle vehicle, ArrayList<Mileage> mileageList) {
         mContext = context;
         mMileageList = mileageList;
-        UNIT_DIST = vehicle.getUnitDist();
-        UNIT_MILEAGE = vehicle.getUnitMileage();
+       // UNIT_DIST = vehicle.getUnitDist();
+       // UNIT_MILEAGE = vehicle.getUnitMileage();
 
         if (!mMileageList.isEmpty()) {
             ArrayList<Double> mileages = new ArrayList<>();

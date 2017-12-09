@@ -105,11 +105,6 @@ public class fragment_fleetRoster extends Fragment {
             vehicle = roster.get(vehiclePos);
         }
 
-        /*private FirebaseFirestore db;
-
-    public FirestoreHelper(){
-            db = FirebaseFirestore.getInstance();
-            CollectionReference userReference = db.collection("users");*/
     }
 
     @Override
@@ -197,8 +192,9 @@ public class fragment_fleetRoster extends Fragment {
 
         switch (resultCode){
             case ADD_VEHICLE:
-                vehicle = new Vehicle("", bundle.getBoolean("isBusiness"),
-                        result.get(0), result.get(1), result.get(2));
+                vehicle = new Vehicle(null);
+               /* vehicle = new Vehicle("", bundle.getBoolean("isBusiness"),
+                        result.get(0), result.get(1), result.get(2));*/
                 break;
 
             case ADD_FIELD:
@@ -289,8 +285,8 @@ public class fragment_fleetRoster extends Fragment {
                     unitDist = mContext.getResources().getString(R.string.unit_time);
                 }
 
-                vehicle.setUnitDist(unitDist);
-                vehicle.setUnitMileage(unitMileage);
+               // vehicle.setUnitDist(unitDist);
+               // vehicle.setUnitMileage(unitMileage);
 
                 vehicle.setGeneralSpecs(generalSpecs);
                 vehicle.setEngineSpecs(engineSpecs);
@@ -298,34 +294,10 @@ public class fragment_fleetRoster extends Fragment {
                 vehicle.setOtherSpecs(otherSpecs);
                 //vehicle.setBusiness(businessVal.isChecked());
 
-               // Map<String, Object> entry = new HashMap<>();
-                //entry.put("general", generalSpecs);
+                //TODO open agin
+                /*FirestoreHelper firestoreHelper = FirestoreHelper.getInstance();
+                firestoreHelper.addToFleet(vehicle);*/
 
-                FirestoreHelper firestoreHelper = FirestoreHelper.getInstance();
-                firestoreHelper.addToFLeet(vehicle);
-
-                //getUID()
-                /*DocumentReference docrefVehicle = db.collection("users").document();
-                batch.set(docrefVehicle, entry);//        .add(entry)
-                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                    }
-                });*/
-                    /*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
-*/
 
                 /*SaveLoadHelper saveLoadHelper = new SaveLoadHelper(mContext, null);
                 final ArrayList<Vehicle> roster = new ArrayList<>(saveLoadHelper.load());
@@ -339,8 +311,8 @@ public class fragment_fleetRoster extends Fragment {
                     saveLoadHelper.save(roster);
                 }*/
 
-                //getActivity().setResult(90);
-                //getActivity().finish();
+                getActivity().setResult(90);
+                getActivity().finish();
 
                 return true;
 
@@ -351,7 +323,7 @@ public class fragment_fleetRoster extends Fragment {
             case R.id.menu_del:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(true);
-                builder.setTitle("Are you sure you would like to delete " + vehicle.getTitle() + "?");
+                //builder.setTitle("Are you sure you would like to delete " + vehicle.getTitle() + "?");
                 builder.setNegativeButton("No", null);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

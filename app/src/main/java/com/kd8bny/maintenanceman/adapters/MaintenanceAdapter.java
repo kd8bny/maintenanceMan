@@ -37,7 +37,7 @@ public class MaintenanceAdapter extends RecyclerView.Adapter<MaintenanceAdapter.
 
     public MaintenanceAdapter(Context context, Vehicle vehicle, ArrayList<Maintenance> maintenanceList) {
         mContext = context;
-        UNIT_DIST = vehicle.getUnitDist();
+        UNIT_DIST = ""; //vehicle.getUnitDist();
         mMaintenanceList = maintenanceList;
     }
 

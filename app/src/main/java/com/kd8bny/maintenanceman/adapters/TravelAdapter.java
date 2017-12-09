@@ -34,7 +34,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.AdapterVie
     public TravelAdapter(Context context, Vehicle vehicle, ArrayList<Travel> travelList) {
         mContext = context;
         mTravelList = travelList;
-        UNIT_DIST = vehicle.getUnitDist();
+        UNIT_DIST = "";//vehicle.getUnitDist();
     }
 
     @Override

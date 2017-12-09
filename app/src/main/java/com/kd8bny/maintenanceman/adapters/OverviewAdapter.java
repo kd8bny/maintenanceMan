@@ -61,7 +61,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
         if(!mRoster.isEmpty()) {
             int color = headerColors.getColor(i % 8, 0);
             Vehicle vehicle = mRoster.get(i);
-            switch (vehicle.getVehicleType()){
+            switch ("Automobile"){ //vehicle.getVehicleType()
                 case "Automobile":
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_car);
                     break;
@@ -86,7 +86,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
                     adapterViewHolder.vCarPic.setImageResource(R.drawable.np_trailer);
                     break;
             }
-            adapterViewHolder.vTitle.setText(vehicle.getTitle());
+            adapterViewHolder.vTitle.setText(vehicle.getYear());
             adapterViewHolder.vRect.setBackgroundColor(color);
             GradientDrawable shapeDrawable = (GradientDrawable) adapterViewHolder.vCarPicBack.getBackground();
             shapeDrawable.setColor(color);
@@ -98,7 +98,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.Adapte
                 adapterViewHolder.vTitle.setSelected(true);
                 try {
                     adapterViewHolder.vOdo.setText(String.format(Locale.ENGLISH, "%1$,.1f %2$s",
-                            Double.parseDouble(temp.get(0).getOdometer()), vehicle.getUnitDist()));
+                            Double.parseDouble(temp.get(0).getOdometer()), ""));
                 }catch (Exception e){
                     Log.wtf(TAG, "parse error:" + temp.get(0).getOdometer());
                     adapterViewHolder.vOdo.setText(temp.get(0).getOdometer());

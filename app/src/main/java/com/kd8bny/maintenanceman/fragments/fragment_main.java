@@ -43,6 +43,7 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_donate;
 import com.kd8bny.maintenanceman.dialogs.dialog_firebase_auth;
 import com.kd8bny.maintenanceman.interfaces.AuthenticatedUser;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 import com.kd8bny.maintenanceman.dialogs.dialog_whatsNew;
 import com.kd8bny.maintenanceman.activities.IntroActivity;
@@ -61,7 +62,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class fragment_main extends Fragment implements AuthenticatedUser {
+public class fragment_main extends Fragment implements QueryComplete{
     private static final String TAG = "frg_main";
 
     private final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
@@ -70,9 +71,7 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
 
     private Context mContext;
     private SharedPreferences sharedPreferences;
-    private Boolean isAuthUser;
     private RecyclerView cardList;
-    private RecyclerView.LayoutManager cardMan;
     private RecyclerView.Adapter cardListAdapter;
     private FloatingActionButton fabBusiness;
 
@@ -228,8 +227,8 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
 
         //cards
         cardList = (RecyclerView) view.findViewById(R.id.overview_cardList);
-        cardMan = new LinearLayoutManager(getActivity());
-        cardList.setLayoutManager(cardMan);
+        Log.e(TAG, cardList.toString());
+        cardList.setLayoutManager(new LinearLayoutManager(getActivity()));
         cardList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, cardList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
@@ -361,6 +360,7 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
     @Override
     public void onStart() {
         super.onStart();
+
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -372,24 +372,30 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }
         }
+
+        QueryComplete queryComplete = this;
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(queryComplete);
+
+        if (!firestoreHelper.getIsAuthuser()) {
+            dialog_firebase_auth dialog = new dialog_firebase_auth();
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getFragmentManager(), "dg_fb_auth");
+        }
+        mRoster = firestoreHelper.getFleet();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance();
-        if (!firestoreHelper.getIsAuthuser()) {
-            dialog_firebase_auth dialog = new dialog_firebase_auth();
-            dialog.setTargetFragment(this, 0);
-            dialog.show(getFragmentManager(), "dg_fb_auth");
-        }
 
-        /*mRoster = new SaveLoadHelper(mContext, this).load();
         if (mRoster != null) {
+            Log.e(TAG, mRoster.toString());
             cardListAdapter = new OverviewAdapter(mContext, mRoster);
+            Log.e(TAG, cardListAdapter.toString());
+            Log.e(TAG, cardList.toString());
             cardList.setAdapter(cardListAdapter);
-        }*/
+        }
     }
 
     @Override
@@ -403,7 +409,7 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
                 if (mileage != null) {
                     Snackbar.make(getActivity().findViewById(R.id.snackbar),
                             String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
-                                    mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
+                                    mileage.getMileage(), ""), //mRoster.get(bundle.getInt("pos")).getUnitMileage()
                             Snackbar.LENGTH_LONG).show();
                 }
                 break;
@@ -442,12 +448,12 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
             String value;
             switch (mSortType){
                 case 0:
-                    value = String.format("%s:%s", mVehicle.getReservedSpecs().get("year"), i);
+                    value = String.format("%s:%s", "", i);
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_year), Snackbar.LENGTH_SHORT).show();
 
                     break;
                 case 1:
-                    value = String.format("%s:%s", mVehicle.getReservedSpecs().get("model"), i);
+                    value = String.format("%s:%s", "", i);
                     Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.toast_sort_model), Snackbar.LENGTH_SHORT).show();
                     break;
                 case 2:
@@ -487,9 +493,10 @@ public class fragment_main extends Fragment implements AuthenticatedUser {
         }
     }
 
-    public void isUserAuthenticated(Boolean isAuth){
-        isAuthUser = isAuth;
-        Log.e(TAG, isAuth+"");
+    public void fleetRosterUpdate(ArrayList<Vehicle> roster){
+        Log.e(TAG, "queryuyu");
+        mRoster = roster;
+        onResume();
     }
 
     /*

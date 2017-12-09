@@ -3,7 +3,7 @@
     <string name="app_name">Maintenance Man</string>
 
     <!-- Add Vehicle-->
-    <string name="title_intro_add_vehicle">Let's a New Vehicle</string>
+    <string name="title_intro_add_vehicle">Let\'s a New Vehicle</string>
     <string name="message_intro_add_vehicle">Add a New Vehicle</string>
 
     <!--Firebase-->

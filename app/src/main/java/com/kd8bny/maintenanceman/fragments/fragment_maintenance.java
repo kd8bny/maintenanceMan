@@ -291,7 +291,7 @@ public class fragment_maintenance extends fragment_vehicleInfo {
 
             case R.id.menu_export_csv:
                 Export export = new Export();
-                Uri uri = export.maintenanceToCSV(mVehicle.getTitle(), mVehicleHist);
+                Uri uri = export.maintenanceToCSV("", mVehicleHist);
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

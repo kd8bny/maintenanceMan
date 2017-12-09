@@ -220,7 +220,7 @@ public class fragment_mileage extends fragment_vehicleInfo {
         switch (menuitem.getItemId()) {
             case R.id.menu_export_csv:
                 Export export = new Export();
-                Uri uri = export.mileageToCSV(mVehicle.getTitle(), mMileageHist);
+                Uri uri = export.mileageToCSV("", mMileageHist);
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

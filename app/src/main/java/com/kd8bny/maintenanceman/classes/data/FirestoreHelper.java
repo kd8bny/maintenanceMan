@@ -4,19 +4,25 @@ package com.kd8bny.maintenanceman.classes.data;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.fragments.fragment_main;
 import com.kd8bny.maintenanceman.interfaces.AuthenticatedUser;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,47 +37,76 @@ public class FirestoreHelper {
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
     private FirebaseUser mfirebaseUser;
-    private AuthenticatedUser authenticatedUser;
+    private QueryComplete mqueryComplete;
 
     public Boolean isAuthuser = false;
 
-    public static synchronized FirestoreHelper getInstance() {
+    public static synchronized FirestoreHelper getInstance(QueryComplete queryComplete) {
         if (sInstance == null) {
-            sInstance = new FirestoreHelper();
+            sInstance = new FirestoreHelper(queryComplete);
         }
 
         return sInstance;
     }
 
-    public FirestoreHelper(){
+    public FirestoreHelper(QueryComplete queryComplete){
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
         mfirebaseUser = mAuth.getCurrentUser();
 
         isAuthuser = mfirebaseUser != null;
-        //isUserAuthenticated(mfirebaseUser != null);
-        Log.e(TAG, mfirebaseUser+"");
-        Log.e(TAG, mfirebaseUser+"");
-
-        //DatabaseReference myRef = database.getReference("message");
-        //myRef.setValue("Hello, World!");
+        mqueryComplete = queryComplete;
     }
 
-    /*public void newUser(){
-        db.collection("users").document("fleet");
-    }*/
+    public ArrayList<Vehicle> getFleet() {
+        final ArrayList<Vehicle> fleetRoster = new ArrayList<>();
+        mFirestore.collection(USERS).document(mfirebaseUser.getUid())
+                .collection(FLEET)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Vehicle vehicle = new Vehicle(document.getString("refID"));
+                                vehicle.setYear(document.getString("year"));
+                                vehicle.setMake(document.getString("make"));
+                                vehicle.setModel(document.getString("model"));
+                                vehicle.setVehicleType(document.getString("type"));
+                                vehicle.setGeneralSpecs((HashMap<String, String>) document.get("general"));
+                                vehicle.setEngineSpecs((HashMap<String, String>) document.get("engine"));
+                                vehicle.setPowerTrainSpecs((HashMap<String, String>) document.get("power_train"));
+                                vehicle.setOtherSpecs((HashMap<String, String>) document.get("other"));
+
+                                fleetRoster.add(vehicle);
+                                Log.e(TAG, fleetRoster.toString());
+                                mqueryComplete.fleetRosterUpdate(fleetRoster);
+                            }
 
 
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
 
-    public void addToFLeet(Vehicle vehicle) {
-        CollectionReference fleetCollectionReference =
-                mFirestore.collection(USERS).document(mfirebaseUser.getUid()).collection(FLEET);
-        //DocumentReference userReference = usersReference.document(mfirebaseUser.getUid());
-        //CollectionReference fleetReference = db.collection(FLEET);
+        return fleetRoster;
+    }
+
+
+    public void addToFleet(Vehicle vehicle) {
         Map<String, Object> entry = new HashMap<>();
         entry.put("refID", vehicle.getRefID());
-        entry.put("title", vehicle.getTitle());
+        entry.put("year", vehicle.getYear());
+        entry.put("make", vehicle.getMake());
+        entry.put("model", vehicle.getModel());
+        entry.put("type", vehicle.getVehicleType());
+        entry.put("commercial", vehicle.getBusiness());
         entry.put("general", vehicle.getGeneralSpecs());
+        entry.put("engine", vehicle.getEngineSpecs());
+        entry.put("power_train", vehicle.getPowerTrainSpecs());
+        entry.put("other", vehicle.getOtherSpecs());
 
         mFirestore.collection(USERS).document(mfirebaseUser.getUid())
                 .collection(FLEET).document(vehicle.getRefID())
@@ -88,22 +123,6 @@ public class FirestoreHelper {
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
-        //WriteBatch batch = mFirestore.batch();
-
-        /*batch.set(userReference, vehicle.getRefID());
-        batch.set(userReference, vehicle.getTitle());
-        batch.set(userReference, vehicle.getVehicleType());
-        batch.set(userReference, vehicle.getReservedSpecs());
-        batch.set(userReference, vehicle.getGeneralSpecs());
-        batch.set(userReference, vehicle.getEngineSpecs());
-        batch.set(userReference, vehicle.getPowerTrainSpecs());
-        batch.set(userReference, vehicle.getOtherSpecs());
-        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-
-            }
-        });*/
     }
 
     public Boolean getIsAuthuser(){

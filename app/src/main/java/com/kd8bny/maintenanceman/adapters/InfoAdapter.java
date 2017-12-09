@@ -52,8 +52,8 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         mVehicle = vehicle;
         mCostHist = costHist;
         mMileages = mileages;
-        UNIT_DIST = vehicle.getUnitDist();
-        UNIT_MILEAGE = vehicle.getUnitMileage();
+        //UNIT_DIST = vehicle.getUnitDist();
+        //UNIT_MILEAGE = vehicle.getUnitMileage();
 
         HashMap<String, String> tempSpecs = mVehicle.getGeneralSpecs();
         if (!tempSpecs.isEmpty()) {
@@ -119,7 +119,7 @@ public class InfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 break;
 
             default :
-                new vhSpecs(vSpecs, i, cardInfo, viewTypes.get(i), mVehicle.getTitle());
+                new vhSpecs(vSpecs, i, cardInfo, viewTypes.get(i), mVehicle.getYear());
                 break;
         }
     }

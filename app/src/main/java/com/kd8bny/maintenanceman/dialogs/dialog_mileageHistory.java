@@ -58,7 +58,7 @@ public class dialog_mileageHistory extends DialogFragment {
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         String unitVol = "gal", relation = "above your average";
-        if (!mVehicle.getUnitDist().equals("mi")){
+        /*if (!mVehicle.getUnitDist().equals("mi")){
             unitVol = "L";
         }
         if (mMileage.getMileage() < mAvgMileage){
@@ -75,7 +75,7 @@ public class dialog_mileageHistory extends DialogFragment {
                 mMileage.getPrice(), unitVol));
         ((TextView) view.findViewById(R.id.fill_vol)).setText(String.format(Locale.ENGLISH,
                 "Traveled %1$.1f %2$s and used %3$.2f %4$s", mMileage.getTripometer(), mVehicle.getUnitDist(), mMileage.getFillVol(), unitVol));
-
+*/
         return view;
     }
 }

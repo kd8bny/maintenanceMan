@@ -92,10 +92,10 @@ public class fragment_vehicleInfo extends Fragment implements SyncData {
                 Mileage mileage = (Mileage) bundle.getSerializable("event");
                 if (mileage != null) {
                     viewPager.getAdapter().notifyDataSetChanged();
-                    Snackbar.make(getActivity().findViewById(R.id.snackbar),
+                    /*Snackbar.make(getActivity().findViewById(R.id.snackbar),
                             String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
-                                    mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),
-                            Snackbar.LENGTH_LONG).show();
+                                    mileage.getMileage(), mRoster.get(bundle.getInt("pos")).getUnitMileage()),*/
+                            //Snackbar.LENGTH_LONG).show();
                 }
                 break;
 

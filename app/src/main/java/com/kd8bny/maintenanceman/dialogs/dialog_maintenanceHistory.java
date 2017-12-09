@@ -47,7 +47,7 @@ public class dialog_maintenanceHistory extends DialogFragment {
         String odo;
         try {
             odo = String.format(Locale.ENGLISH, "%1$,.1f %2$s", Double.parseDouble(mMaintenance.getOdometer()),
-                    mVehicle.getUnitDist());
+                    "");
         }catch (Exception e){
             Log.wtf(TAG, "parse error:" + mMaintenance.getOdometer());
             odo = mMaintenance.getOdometer();

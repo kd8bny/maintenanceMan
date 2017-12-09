@@ -220,7 +220,7 @@ public class fragment_travel extends fragment_vehicleInfo {
         switch (menuitem.getItemId()) {
             case R.id.menu_export_csv:
                 Export export = new Export();
-                Uri uri = export.travelToCSV(mVehicle.getTitle(), mTravelLog);
+                Uri uri = export.travelToCSV("", mTravelLog);
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);

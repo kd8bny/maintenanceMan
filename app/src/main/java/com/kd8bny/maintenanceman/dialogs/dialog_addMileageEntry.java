@@ -82,7 +82,7 @@ public class dialog_addMileageEntry extends DialogFragment {
         vehicleSpinner.setAdapter(setVehicles());
         if (mPos > -1) {
             mVehicle = mRoster.get(mPos);
-            vehicleSpinner.setText(mVehicle.getTitle());
+            vehicleSpinner.setText("");
         }
         vTripValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         vFillValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -150,7 +150,7 @@ public class dialog_addMileageEntry extends DialogFragment {
     private ArrayAdapter<String> setVehicles(){
         mVehicleTitles = new ArrayList<>();
         for(Vehicle v : mRoster) {
-            mVehicleTitles.add(v.getTitle());
+            mVehicleTitles.add(v.getYear());
         }
         return new ArrayAdapter<>(getActivity(), R.layout.spinner_drop_item, mVehicleTitles);
     }

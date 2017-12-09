@@ -15,63 +15,43 @@ public class Vehicle implements Parcelable{
     private static final String TAG = "Vehicle";
 
     @Since(1.0)
-    private String vehicleType;
-    private String refID;
-    private String title;
-    private Boolean isBusiness;
+    private String mRefID;
+    private String mYear;
+    private String mMake;
+    private String mModel;
+    private String mVehicleType;
+    private String mGeneralSpecs;
+    private String mEngineSpecs;
+    private String mPowerTrainSpecs;
+    private String mOtherSpecs;
 
-    private String reservedSpecs;
-    private String generalSpecs;
-    private String engineSpecs;
-    private String powerTrainSpecs;
-    private String otherSpecs;
-
-    @Since(1.1)
-    private String unitDist;
-    private String unitMileage;
+    private Boolean mBusinessVehicle;
 
     public Vehicle(){}
 
-    public Vehicle(String vehicleType, Boolean isBusiness, String year, String make, String model){
-        this.refID = UUID.randomUUID().toString();
-        this.vehicleType = vehicleType;
-        this.isBusiness = isBusiness;
-        this.title = year + " " + make + " " + model;
-        HashMap<String, String> temp = new HashMap<>();
-        temp.put("year", year);
-        temp.put("make", make);
-        temp.put("model", model);
-        setReservedSpecs(temp);
+    public Vehicle(String refID){
+        mRefID = (refID == null) ? UUID.randomUUID().toString() : refID;
     }
 
     private Vehicle(Parcel parcel){
-        vehicleType = parcel.readString();
-        refID = parcel.readString();
-        title = parcel.readString();
-        isBusiness = parcel.readByte() != 0;
-        unitDist = parcel.readString();
-        unitMileage = parcel.readString();
-        reservedSpecs = parcel.readString();
-        generalSpecs= parcel.readString();
-        engineSpecs = parcel.readString();
-        powerTrainSpecs = parcel.readString();
-        otherSpecs = parcel.readString();
+        mRefID = parcel.readString();
+        mVehicleType = parcel.readString();
+        mBusinessVehicle = parcel.readByte() != 0;
+        mGeneralSpecs= parcel.readString();
+        mEngineSpecs = parcel.readString();
+        mPowerTrainSpecs = parcel.readString();
+        mOtherSpecs = parcel.readString();
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags){
-        parcel.writeString(vehicleType);
-        parcel.writeString(refID);
-        parcel.writeString(title);
-        parcel.writeByte((byte) (isBusiness ? 1 : 0));
-        parcel.writeString(unitDist);
-        parcel.writeString(unitMileage);
-
-        parcel.writeString(reservedSpecs);
-        parcel.writeString(generalSpecs);
-        parcel.writeString(engineSpecs);
-        parcel.writeString(powerTrainSpecs);
-        parcel.writeString(otherSpecs);
+        parcel.writeString(mRefID);
+        parcel.writeString(mVehicleType);
+        parcel.writeByte((byte) (mBusinessVehicle ? 1 : 0));
+        parcel.writeString(mGeneralSpecs);
+        parcel.writeString(mEngineSpecs);
+        parcel.writeString(mPowerTrainSpecs);
+        parcel.writeString(mOtherSpecs);
     }
 
     @Override
@@ -80,97 +60,90 @@ public class Vehicle implements Parcelable{
     }
 
     public String getRefID() {
-        return refID;
+        return mRefID;
     }
 
-    public String getTitle() {
-        return title;
+    public void setYear(String year){
+        mYear = year;
+    }
+
+    public String getYear(){
+        return mYear;
+    }
+
+    public void setMake(String make){
+        mMake = make;
+    }
+
+    public String getMake(){
+        return mMake;
+    }
+
+    public void setModel(String model){
+        mModel = model;
+    }
+
+    public String getModel(){
+        return mModel;
     }
 
     public String getVehicleType() {
-        return vehicleType;
+        return mVehicleType;
     }
 
     public void setVehicleType(String type) {
-        this.vehicleType = type;
-    }
-
-    public HashMap<String, String> getReservedSpecs() {
-        Gson gson = new Gson();
-        return gson.fromJson(reservedSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
+        mVehicleType = type;
     }
 
     public Boolean getBusiness() {
-        return isBusiness;
+        return mBusinessVehicle;
     }
 
-    public void setBusiness(Boolean bool) {
-        isBusiness = bool;
-    }
-
-    public void setReservedSpecs(HashMap<String, String> reservedSpecs) {
-        Gson gson = new Gson();
-
-        this.reservedSpecs = gson.toJson(reservedSpecs);
+    public void setBusiness(Boolean isBusiness) {
+        mBusinessVehicle = isBusiness;
     }
 
     public HashMap<String, String> getGeneralSpecs() {
         Gson gson = new Gson();
-        return gson.fromJson(generalSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
+        return gson.fromJson(mGeneralSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
     }
 
     public void setGeneralSpecs(HashMap<String, String> generalSpecs) {
         Gson gson = new Gson();
-        this.generalSpecs = gson.toJson(generalSpecs);
+        mGeneralSpecs = gson.toJson(generalSpecs);
     }
 
     public HashMap<String, String> getEngineSpecs() {
         Gson gson = new Gson();
-        return gson.fromJson(engineSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
+        return gson.fromJson(mEngineSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
     }
 
     public void setEngineSpecs(HashMap<String, String> engineSpecs) {
         Gson gson = new Gson();
 
-        this.engineSpecs = gson.toJson(engineSpecs);
+        mEngineSpecs = gson.toJson(engineSpecs);
     }
 
     public HashMap<String, String> getPowerTrainSpecs() {
         Gson gson = new Gson();
-        return gson.fromJson(powerTrainSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
+        return gson.fromJson(mPowerTrainSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
     }
 
     public void setPowerTrainSpecs(HashMap<String, String> powerTrainSpecs) {
         Gson gson = new Gson();
 
-        this.powerTrainSpecs = gson.toJson(powerTrainSpecs);
+        mPowerTrainSpecs = gson.toJson(powerTrainSpecs);
     }
 
     public HashMap<String, String> getOtherSpecs() {
         Gson gson = new Gson();
-        return gson.fromJson(otherSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
+        return gson.fromJson(mOtherSpecs, new TypeToken<HashMap<String, String>>(){}.getType());
     }
 
     public void setOtherSpecs(HashMap<String, String> otherSpecs) {
         Gson gson = new Gson();
 
-        this.otherSpecs = gson.toJson(otherSpecs);
-    }
-
-    public String getUnitDist() {
-        return this.unitDist;
-    }
-
-    public void setUnitDist(String unit) {
-        this.unitDist = unit;
-    }
-
-    public String getUnitMileage() {
-        return this.unitMileage;
-    }
-
-    public void setUnitMileage(String unit) {
-        this.unitMileage = unit;
+        mOtherSpecs = gson.toJson(otherSpecs);
     }
 
 
