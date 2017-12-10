@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import com.github.clans.fab.FloatingActionMenu;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.adapters.TravelAdapter;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.utils.Export;
@@ -27,22 +28,22 @@ import com.kd8bny.maintenanceman.dialogs.dialog_addMaintenanceEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addMileageEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_addTravelEntry;
 import com.kd8bny.maintenanceman.dialogs.dialog_finishTravelEntry;
+import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 import com.kd8bny.maintenanceman.listeners.RecyclerViewOnItemClickListener;
 
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 
-public class fragment_travel extends fragment_vehicleInfo {
+public class fragment_travel extends fragment_vehicleInfo implements QueryComplete {
     private static final String TAG = "frg_travel";
 
     private View mView;
 
     private RecyclerView businessList;
-    private RecyclerView.LayoutManager businessMan;
     private RecyclerView.Adapter businessListAdapter;
 
-    private ArrayList<Travel> mTravelLog;
+    private ArrayList<Travel> mTravelHistory;
 
     public fragment_travel() {}
 
@@ -59,14 +60,13 @@ public class fragment_travel extends fragment_vehicleInfo {
 
         //Task History
         businessList = (RecyclerView) mView.findViewById(R.id.cardList);
-        businessMan = new LinearLayoutManager(getActivity());
-        businessList.setLayoutManager(businessMan);
+        businessList.setLayoutManager(new LinearLayoutManager(getActivity()));
         businessList.addOnItemTouchListener(new RecyclerViewOnItemClickListener(mContext, businessList,
                 new RecyclerViewOnItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int pos) {
-                if (!mTravelLog.isEmpty()) {
-                    final Travel travel = mTravelLog.get(pos);
+                if (!mTravelHistory.isEmpty()) {
+                    final Travel travel = mTravelHistory.get(pos);
                     if (travel.getStop() == -1.0) {
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("event", travel);
@@ -81,8 +81,8 @@ public class fragment_travel extends fragment_vehicleInfo {
 
             @Override
             public void onItemLongClick(final View view, int pos) {
-                if (!mTravelLog.isEmpty()) {
-                    final Travel travel = mTravelLog.get(pos);
+                if (!mTravelHistory.isEmpty()) {
+                    final Travel travel = mTravelHistory.get(pos);
                     PopupMenu popupMenu = new PopupMenu(getActivity(), view);
                     popupMenu.getMenuInflater().inflate(R.menu.pop_menu_history, popupMenu.getMenu());
                     //TODO vibrate
@@ -198,18 +198,21 @@ public class fragment_travel extends fragment_vehicleInfo {
     }
 
     @Override
+    public void onStart(){
+        super.onStart();
+        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
+        firestoreHelper.getMileageEvents(mRoster.get(mPos).getRefID());
+    }
+
+    @Override
     public void onResume(){
         super.onResume();
-        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-        //mTravelLog = vehicleLogDBHelper.getFullTravelEntries(mVehicle.getRefID(), true);
-        businessListAdapter = new TravelAdapter(mContext, mVehicle, mTravelLog);
-        businessList.setAdapter(businessListAdapter);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if (!mTravelLog.isEmpty()) {
+        if (!mTravelHistory.isEmpty()) {
             inflater.inflate(R.menu.menu_travel, menu);
         }
     }
@@ -219,7 +222,7 @@ public class fragment_travel extends fragment_vehicleInfo {
         switch (menuitem.getItemId()) {
             case R.id.menu_export_csv:
                 Export export = new Export();
-                Uri uri = export.travelToCSV("", mTravelLog);
+                Uri uri = export.travelToCSV("", mTravelHistory);
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
@@ -231,5 +234,14 @@ public class fragment_travel extends fragment_vehicleInfo {
         }
 
         return false;
+    }
+
+    public void updateUI(ArrayList<Object> l) {
+        mTravelHistory = new ArrayList<>();
+        for(Object o : l){
+            mTravelHistory.add((Travel) o);
+        }
+
+        businessList.setAdapter(new TravelAdapter(mContext, mVehicle, mTravelHistory));
     }
 }

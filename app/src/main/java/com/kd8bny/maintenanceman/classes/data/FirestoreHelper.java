@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.kd8bny.maintenanceman.classes.vehicle.Maintenance;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
+import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.kd8bny.maintenanceman.interfaces.QueryComplete;
 
@@ -234,6 +235,65 @@ public class FirestoreHelper {
                             }
 
                             mQueryComplete.updateUI(mileageHistory);
+
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void addTravelEvent(Travel travel){
+        Map<String, Object> entry = new HashMap<>();
+        entry.put("refID", travel.getRefID());
+        entry.put("date", travel.getDate());
+        entry.put("start", travel.getStart());
+        entry.put("stop", travel.getStop());
+        entry.put("delta", travel.getDelta());
+        entry.put("dest", travel.getDest());
+        entry.put("purpose", travel.getPurpose());
+        entry.put("date_end", travel.getDateEnd());
+
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
+                .collection(MILEAGE).document()
+                .set(entry)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+    public void getTravelEvents(String refID){
+        final ArrayList<Object> travelHistory = new ArrayList<>();
+        mFirestore.collection(USERS).document(mFirebaseUser.getUid())
+                .collection(MILEAGE)
+                .whereEqualTo("refID", refID)
+                .get() //TODO limit number of events
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Travel travel = new Travel(document.getString("refID"));
+                                travel.setDate(document.getString("date"));
+                                travel.setStop(document.getDouble("stop"));
+                                travel.setDest(document.getString("dest"));
+                                travel.setPurpose("purpose");
+                                travel.setDateEnd("date_end");
+
+                                travelHistory.add(travel);
+                            }
+
+                            mQueryComplete.updateUI(travelHistory);
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
