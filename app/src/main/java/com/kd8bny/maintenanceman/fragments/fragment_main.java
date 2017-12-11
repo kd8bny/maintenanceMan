@@ -35,6 +35,7 @@ import com.google.android.gms.wearable.Wearable;
 import com.google.gson.Gson;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.activities.ExportActivity;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
 import com.kd8bny.maintenanceman.activities.VehicleActivity;
 import com.kd8bny.maintenanceman.activities.ViewPagerActivity;
@@ -124,6 +125,7 @@ public class fragment_main extends Fragment implements SyncData,
                 .withSelectedItem(-1)
                 .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Export All Data"),
                         new PrimaryDrawerItem().withName(R.string.title_add_fleet_roster).withIcon(R.drawable.ic_action_add_fleet),
                         new PrimaryDrawerItem().withName(R.string.title_mileage_add).withIcon(R.drawable.ic_mileage_bk),
                         new PrimaryDrawerItem().withName(R.string.title_add_vehicle_event).withIcon(R.drawable.ic_action_add_event),
@@ -143,7 +145,16 @@ public class fragment_main extends Fragment implements SyncData,
                 Intent intent = new Intent(getActivity(), VehicleActivity.class);
                 Bundle bundle = new Bundle();
                 switch (i) {
-                    case 1: //Add Vehicle
+                    case 1: //Export
+                        Intent exportIntent = new Intent(getActivity(), ExportActivity.class);
+                        bundle.putParcelableArrayList("roster", mRoster);
+                        exportIntent.putExtra("bundle", bundle);
+                        view.getContext().startActivity(exportIntent);
+                        drawer.closeDrawer();
+
+                        return true;
+
+                    case 2: //Add Vehicle
                         bundle.putInt("caseID", 0);
                         bundle.putParcelableArrayList("roster", mRoster);
                         bundle.putInt("vehiclePos", -1);
@@ -153,7 +164,7 @@ public class fragment_main extends Fragment implements SyncData,
 
                         return true;
 
-                    case 2: //Add mileage
+                    case 3: //Add mileage
                         if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
@@ -168,7 +179,7 @@ public class fragment_main extends Fragment implements SyncData,
 
                         return true;
 
-                    case 3: //Add Event
+                    case 4: //Add Event
                         if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
@@ -183,7 +194,7 @@ public class fragment_main extends Fragment implements SyncData,
 
                         return true;
 
-                    case 4: //Travel Log
+                    case 5: //Travel Log
                         if (mRoster.isEmpty()){
                             Snackbar.make(getActivity().findViewById(R.id.snackbar), getString(R.string.empty_db),
                                     Snackbar.LENGTH_SHORT).show();
@@ -198,14 +209,14 @@ public class fragment_main extends Fragment implements SyncData,
 
                         return true;
 
-                    case 6: //Settings
+                    case 7: //Settings
                         Intent settingsIntent = new Intent(view.getContext(), SettingsActivity.class);
                         view.getContext().startActivity(settingsIntent);
                         drawer.closeDrawer();
 
                         return true;
 
-                    case 7: //Contact Me
+                    case 8: //Contact Me
                         Intent contactIntent = new Intent(Intent.ACTION_SEND)
                                 .setType("plain/text")
                                 .putExtra(Intent.EXTRA_EMAIL, new String[]{ mContext.getString(R.string.to) })
@@ -216,14 +227,14 @@ public class fragment_main extends Fragment implements SyncData,
 
                         return true;
 
-                    case 8: //Donate
+                    case 9: //Donate
                         dialog_donate dialog_donate = new dialog_donate();
                         dialog_donate.show(fm, "dialog_donate");
                         drawer.closeDrawer();
 
                         return true;
 
-                    case 9: //Community
+                    case 10: //Community
                         Uri gplus = Uri.parse("https://plus.google.com/u/0/communities/102216501931497148667");
                         Intent gplusIntent = new Intent(Intent.ACTION_VIEW, gplus);
                         startActivity(gplusIntent);
