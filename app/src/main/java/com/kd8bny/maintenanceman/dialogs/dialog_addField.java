@@ -22,7 +22,7 @@ public class dialog_addField extends DialogFragment {
     private static final String TAG = "dlg_add_fld";
 
     private int RESULT_CODE;
-
+//TODO
     public MaterialBetterSpinner spinnerFieldType;
     public MaterialAutoCompleteTextView editFieldName, editFieldVal;
 

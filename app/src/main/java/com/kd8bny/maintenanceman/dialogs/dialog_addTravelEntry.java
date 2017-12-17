@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.utils.Utils;
 import com.kd8bny.maintenanceman.classes.vehicle.Travel;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
@@ -151,14 +152,14 @@ public class dialog_addTravelEntry extends DialogFragment {
                         mTravel.setDest(vDest.getText().toString());
                         mTravel.setPurpose(vPurpose.getText().toString());
 
-                        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
+                        FirestoreHelper firestoreHelper =  FirestoreHelper.getInstance(null);
+                        firestoreHelper.addTravelEvent(mTravel);
+//TODO
                         if (mOldTravel != null){
                          //   vehicleLogDBHelper.deleteEntry(mOldTravel);
                         }
-                        //vehicleLogDBHelper.insertEntry(mTravel);
+
                         dismiss();
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                                new Intent());
                     }}});
         }
     }

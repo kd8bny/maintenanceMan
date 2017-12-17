@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import com.kd8bny.maintenanceman.R;
+import com.kd8bny.maintenanceman.classes.data.FirestoreHelper;
 import com.kd8bny.maintenanceman.classes.vehicle.Mileage;
 import com.kd8bny.maintenanceman.classes.vehicle.Vehicle;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -28,6 +29,7 @@ public class dialog_addMileageEntry extends DialogFragment {
 
     private int RESULT_CODE;
     private Context mContext;
+
     private MaterialBetterSpinner vehicleSpinner;
     private MaterialEditText vTripValue, vFillValue, vPriceValue;
 
@@ -87,9 +89,9 @@ public class dialog_addMileageEntry extends DialogFragment {
         vPriceValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         if (!isNew){
-            vTripValue.setText(mMileage.getTripometer().toString());
-            vFillValue.setText(mMileage.getFillVol().toString());
-            vPriceValue.setText(mMileage.getPrice().toString());
+            vTripValue.setText(String.format("%s", mMileage.getTripometer().toString()));
+            vFillValue.setText(String.format("%s", mMileage.getFillVol().toString()));
+            vPriceValue.setText(String.format("%s", mMileage.getPrice().toString()));
         }
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity())
@@ -130,11 +132,8 @@ public class dialog_addMileageEntry extends DialogFragment {
                                 Double.parseDouble(vTripValue.getText().toString()),
                                 Double.parseDouble(vFillValue.getText().toString()),
                                 Double.parseDouble(vPriceValue.getText().toString()));
-                        //VehicleLogDBHelper vehicleLogDBHelper = VehicleLogDBHelper.getInstance(mContext);
-                        if (mOldMileage != null){
-                       //     vehicleLogDBHelper.deleteEntry(mOldMileage);
-                        }
-                       // vehicleLogDBHelper.insertEntry(mMileage);
+                        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(null);
+                        firestoreHelper.addMileageEvent(mMileage);
 
                         dismiss();
                         Bundle bundle = new Bundle();

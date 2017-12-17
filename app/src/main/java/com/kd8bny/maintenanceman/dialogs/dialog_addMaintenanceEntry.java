@@ -173,12 +173,7 @@ public class dialog_addMaintenanceEntry extends DialogFragment {
                         //if (mOldMaintenance != null){
                          //   vehicleLogDBHelper.deleteEntry(mOldMaintenance);
                         //}
-                       // vehicleLogDBHelper.insertEntry(mMaintenance);
 
-                        /*Bundle bundle = new Bundle();
-                        bundle.putBoolean("save", true);
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_CODE,
-                                new Intent().putExtra("bundle", bundle));*/
                         dismiss();
                     }}});
         }

@@ -13,14 +13,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.kd8bny.maintenanceman.R;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -36,10 +40,8 @@ public class dialog_firebase_auth extends DialogFragment {
     private MaterialEditText vEmail, vPassword;
     private Button buttonLogIn, buttonCreate;
     //google button
-    /*https://developers.google.com/identity/sign-in/android/sign-in
-    SignInButton signInButton = findViewById(R.id.sign_in_button);
-    signInButton.setSize(SignInButton.SIZE_STANDARD);*/
-
+    /*https://developers.google.com/identity/sign-in/android/sign-in*/
+    private SignInButton signInButton;
 
     public dialog_firebase_auth(){}
 
@@ -58,6 +60,9 @@ public class dialog_firebase_auth extends DialogFragment {
 
         buttonLogIn = (Button) view.findViewById(R.id.button_login);
         buttonCreate = (Button) view.findViewById(R.id.button_create);
+        signInButton = (SignInButton) view.findViewById(R.id.button_google_signin);
+        signInButton.setSize(SignInButton.SIZE_ICON_ONLY);
+
 
         vEmail = (MaterialEditText) view.findViewById(R.id.email);
         vPassword = (MaterialEditText) view.findViewById(R.id.password);
@@ -139,6 +144,27 @@ public class dialog_firebase_auth extends DialogFragment {
                                 // ...
                             }
                         });
+                }});
+
+            signInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                 //   Log.d(TAG, "firebaseAuthWithGoogle:" + m.getId());
+                    AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+                    mAuth.signInWithCredential(credential)
+                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        alertDialog.dismiss();
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+
+                                    }
+                                }
+                            });
                 }});
         }
     }
