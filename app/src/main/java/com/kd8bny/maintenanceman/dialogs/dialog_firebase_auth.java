@@ -146,7 +146,7 @@ public class dialog_firebase_auth extends DialogFragment {
                         });
                 }});
 
-            signInButton.setOnClickListener(new View.OnClickListener() {
+           /* signInButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                  //   Log.d(TAG, "firebaseAuthWithGoogle:" + m.getId());
@@ -165,7 +165,7 @@ public class dialog_firebase_auth extends DialogFragment {
                                     }
                                 }
                             });
-                }});
+                }});*/
         }
     }
 }

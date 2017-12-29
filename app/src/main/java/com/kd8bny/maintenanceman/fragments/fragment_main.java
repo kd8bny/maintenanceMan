@@ -27,6 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
@@ -81,6 +87,9 @@ public class fragment_main extends Fragment implements QueryComplete{
     private static final int IGNORE_RESULT = -1;
     private static final int ADD_VEHICLE = 1;
     private static final int ADD_MILEAGE = 2;
+    private static final int RC_SIGN_IN = 3;
+
+    private GoogleSignInClient mGoogleSignInClient;
 
     public fragment_main() {}
 
@@ -103,6 +112,11 @@ public class fragment_main extends Fragment implements QueryComplete{
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
         //Drawer
         final DrawerBuilder drawerBuilder = new DrawerBuilder(getActivity());
@@ -372,14 +386,21 @@ public class fragment_main extends Fragment implements QueryComplete{
             }
         }
 
-        FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
 
-        if (!firestoreHelper.getIsAuthUser()) {
-            dialog_firebase_auth dialog = new dialog_firebase_auth();
-            dialog.setTargetFragment(this, 0);
-            dialog.show(getFragmentManager(), "dg_fb_auth");
+
+        //FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
+        if (account == null){
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
         }
-        firestoreHelper.getFleet();
+
+        //gso.getAccount();
+        //mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        //updateUI(account);
+        //firestoreHelper.getFleet();
     }
 
     @Override
@@ -402,6 +423,21 @@ public class fragment_main extends Fragment implements QueryComplete{
                             String.format(Locale.ENGLISH, "%1$s %2$.2f %3$s", getString(R.string.result_mileage),
                                     mileage.getMileage(), ""), //mRoster.get(bundle.getInt("pos")).getUnitMileage()
                             Snackbar.LENGTH_LONG).show();
+                }
+                break;
+
+            case RC_SIGN_IN:
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+
+                    // Signed in successfully, show authenticated UI.
+                    //TODO updateUI(account);
+                } catch (ApiException e) {
+                    // The ApiException status code indicates the detailed failure reason.
+                    // Please refer to the GoogleSignInStatusCodes class reference for more information.
+                    Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+                    //TODO updateUI(null);
                 }
                 break;
 

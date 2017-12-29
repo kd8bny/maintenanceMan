@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.kd8bny.maintenanceman.fragments.intro.slide_add;
-import com.kd8bny.maintenanceman.fragments.intro.slide_dbx;
 import com.kd8bny.maintenanceman.fragments.intro.slide_mileage;
 import com.kd8bny.maintenanceman.fragments.intro.slide_mm;
 import com.kd8bny.maintenanceman.fragments.intro.slide_spec;
@@ -22,7 +21,6 @@ public class IntroActivity extends AppIntro {
         addSlide(new slide_spec());
         addSlide(new slide_mileage());
         addSlide(new slide_travel());
-        addSlide(new slide_dbx());
 
         // Hide Skip/Done button
         showSkipButton(true);
