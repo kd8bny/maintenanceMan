@@ -64,8 +64,6 @@ public class FirestoreHelper {
         return isAuthUser;
     }
 
-
-
     public void getFleet() {
         final ArrayList<Object> fleetRoster = new ArrayList<>();
         mFirestore.collection(USERS).document(mFirebaseUser.getUid())

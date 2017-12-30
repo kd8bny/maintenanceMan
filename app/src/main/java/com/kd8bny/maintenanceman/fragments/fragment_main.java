@@ -1,6 +1,7 @@
 package com.kd8bny.maintenanceman.fragments;
 
 import android.Manifest;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -32,8 +33,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.activities.SettingsActivity;
@@ -90,6 +96,7 @@ public class fragment_main extends Fragment implements QueryComplete{
     private static final int RC_SIGN_IN = 3;
 
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAuth mAuth;
 
     public fragment_main() {}
 
@@ -114,6 +121,7 @@ public class fragment_main extends Fragment implements QueryComplete{
         ((AppCompatActivity)getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
@@ -386,27 +394,23 @@ public class fragment_main extends Fragment implements QueryComplete{
             }
         }
 
-
-
-        //FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
-        if (account == null){
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null){
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         }
-
-        //gso.getAccount();
-        //mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        //GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        //updateUI(account);
-        //firestoreHelper.getFleet();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         // Check if user is signed in (non-null) and update UI accordingly.
+        if (mAuth.getCurrentUser() != null) {
+            Log.d(TAG, "got user");
+            FirestoreHelper firestoreHelper = FirestoreHelper.getInstance(this);
+            firestoreHelper.getFleet();
+        }
 
     }
 
@@ -414,8 +418,9 @@ public class fragment_main extends Fragment implements QueryComplete{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle bundle;
-        switch (resultCode){ //Mileage
-            case 2:
+        switch (requestCode){
+           //TODO
+            /*case 2:
                 bundle = data.getBundleExtra("bundle");
                 Mileage mileage = (Mileage) bundle.getSerializable("event");
                 if (mileage != null) {
@@ -424,20 +429,34 @@ public class fragment_main extends Fragment implements QueryComplete{
                                     mileage.getMileage(), ""), //mRoster.get(bundle.getInt("pos")).getUnitMileage()
                             Snackbar.LENGTH_LONG).show();
                 }
-                break;
+                break;*/
 
             case RC_SIGN_IN:
                 Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                 try {
                     GoogleSignInAccount account = task.getResult(ApiException.class);
+                    AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
 
-                    // Signed in successfully, show authenticated UI.
-                    //TODO updateUI(account);
+                    mAuth.signInWithCredential(credential)
+                            .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        // Sign in success, update UI with the signed-in user's information
+                                        Log.d(TAG, "signInWithCredential:success");
+                                        FirebaseUser user = mAuth.getCurrentUser();
+                                      //  updateUI(user);
+                                    } else {
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                       // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                                       // updateUI(null);
+                                    }
+                                }
+                            });
                 } catch (ApiException e) {
-                    // The ApiException status code indicates the detailed failure reason.
-                    // Please refer to the GoogleSignInStatusCodes class reference for more information.
-                    Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-                    //TODO updateUI(null);
+                    // Google Sign In failed, update UI appropriately
+                    Log.w(TAG, "Google sign in failed", e);
                 }
                 break;
 
