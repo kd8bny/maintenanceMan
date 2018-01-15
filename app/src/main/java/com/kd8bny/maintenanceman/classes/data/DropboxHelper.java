@@ -8,6 +8,7 @@ import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import com.dropbox.core.v2.files.WriteMode;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
@@ -109,11 +110,11 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
                         listener.onDownloadStart();
                         download(REMOTE, local);
                         filesUpdated = true;
-                        Log.v(TAG, "Replacing local " + local.getName() + remoteDate + " >> " + localDate);
+                        Log.v(TAG, "Replacing local " + local.getName() + " " + remoteDate + " >> " + localDate);
                     } else {
                         upload(local, REMOTE);
                         upload(writeMD5(mContext.getFilesDir() + remoteHash, localHash), remoteHash);
-                        Log.v(TAG, "Replacing remote " + local.getName() + localDate + " >> " + remoteDate);
+                        Log.v(TAG, "Replacing remote " + local.getName() + " " + localDate + " >> " + remoteDate);
                     }
                 }
             }
@@ -128,7 +129,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
          **/
         try {
             FileInputStream fis = new FileInputStream(local);
-            mClient.files().uploadBuilder(REMOTE).uploadAndFinish(fis);
+            mClient.files().uploadBuilder(REMOTE).withMode(WriteMode.OVERWRITE).uploadAndFinish(fis);
         } catch (IOException | DbxException e) {
             e.printStackTrace();
             return false;
