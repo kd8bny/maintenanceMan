@@ -66,7 +66,6 @@ public class fragment_settings extends PreferenceFragment {
         String authToken = Auth.getOAuth2Token();
 
         if(authToken != null){
-            Log.d(TAG, authToken);
             SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
             SharedPreferences.Editor editor= sharedPreferences.edit();
             editor.putString(getString(R.string.pref_key_dropbox), authToken);
