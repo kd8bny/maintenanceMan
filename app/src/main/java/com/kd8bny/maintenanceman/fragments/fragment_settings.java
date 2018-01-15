@@ -7,18 +7,17 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.core.android.Auth;
+import com.dropbox.core.v2.DbxClientV2;
 import com.kd8bny.maintenanceman.BuildConfig;
 import com.kd8bny.maintenanceman.R;
 import com.kd8bny.maintenanceman.classes.utils.LocaleChange;
 
 
-public class fragment_settings extends PreferenceFragment{
+public class fragment_settings extends PreferenceFragment {
     private static final String TAG = "frgmnt_sttngs";
 
-    private DropboxAPI<AndroidAuthSession> mDBApi;
+    private DbxClientV2 mClient;
 
     private static final String SHARED_PREF = "com.kd8bny.maintenanceman_preferences";
     private Context mContext;
@@ -37,15 +36,11 @@ public class fragment_settings extends PreferenceFragment{
         final Preference dropboxButton = findPreference(getString(R.string.pref_key_dropbox));
         final String APP_KEY = mContext.getResources().getString(R.string.dropboxKey);
         final String APP_SECRET = mContext.getResources().getString(R.string.dropboxSecret);
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-
-        mDBApi = new DropboxAPI<>(session);
 
         dropboxButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                mDBApi.getSession().startOAuth2Authentication(getActivity());
+                Auth.startOAuth2Authentication(mContext, APP_KEY);
 
                 return true;
             }
@@ -68,19 +63,14 @@ public class fragment_settings extends PreferenceFragment{
     @Override
     public void onResume(){
         super.onResume();
-        if(mDBApi.getSession().authenticationSuccessful()){
-            try{
-                mDBApi.getSession().finishAuthentication();
+        String authToken = Auth.getOAuth2Token();
 
-                String accessToken = mDBApi.getSession().getOAuth2AccessToken();
-                SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
-                SharedPreferences.Editor editor= sharedPreferences.edit();
-                editor.putString(getString(R.string.pref_key_dropbox), accessToken);
-                editor.apply();
-
-            } catch (IllegalStateException e) {
-                Log.i("DbAuthLog", "DROPBOX: Error authenticating", e);
-            }
+        if(authToken != null){
+            Log.d(TAG, authToken);
+            SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(SHARED_PREF, 0);
+            SharedPreferences.Editor editor= sharedPreferences.edit();
+            editor.putString(getString(R.string.pref_key_dropbox), authToken);
+            editor.apply();
         }
     }
 }

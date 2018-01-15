@@ -39,6 +39,7 @@ dependencies {
     compile 'com.google.android.support:wearable:1.4.0'
     compile 'com.google.android.gms:play-services-wearable:9.6.1'
 
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.6'
     compile 'com.google.guava:guava:19.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.github.clans:fab:1.6.4'

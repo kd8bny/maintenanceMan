@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.core.DbxException;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.FileMetadata;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
@@ -34,7 +34,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String TAG = "dbxHlpr";
 
     public SyncData listener = null;
-    private DropboxAPI<AndroidAuthSession> mDBApi;
+    private DbxClientV2 mClient;
     private Context mContext;
 
     private  VehicleLogDBHelper vehicleLogDBHelper;
@@ -46,19 +46,15 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
     private static final String FLEETROSTER_MD5 = "/fleetRoster.md5";
     private static final String VEHICLELOG_MD5 = "/vehicleLog.md5";
     private static final String FLEETROSTER_EMPTY_MD5 = "d751713988987e9331980363e24189ce";
-    private static final String VEHICLELOG_EMPTY_MD5 = "d751713988987e9331980363e24189ce";
     private Boolean filesUpdated = false;
 
     public DropboxHelper(Context context) {
         mContext = context;
-        String APP_KEY =  mContext.getResources().getString(R.string.dropboxKey);
-        String APP_SECRET = mContext.getResources().getString(R.string.dropboxSecret);
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        mDBApi = new DropboxAPI<>(session);
-        mDBApi.getSession().setOAuth2AccessToken(
-                mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
-                        .getString(mContext.getString(R.string.pref_key_dropbox), ""));
+        String ACCESS_TOKEN = mContext.getSharedPreferences(SHARED_PREF, Context.MODE_PRIVATE)
+                .getString(mContext.getString(R.string.pref_key_dropbox), "");
+
+        DbxRequestConfig config = new DbxRequestConfig("dropbox/maintenanceman", "en_US");
+        mClient = new DbxClientV2(config, ACCESS_TOKEN);
     }
 
     @Override
@@ -102,8 +98,8 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
 
     private void sync(File local, String localHash, String REMOTE, String remoteHash){
         try {
-            SimpleDateFormat dbxDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
-            Date remoteDate = dbxDateFormat.parse(mDBApi.metadata(REMOTE, 1, null, false, null).modified);
+            FileMetadata remoteMeta = (FileMetadata) mClient.files().getMetadata(REMOTE);
+            Date remoteDate = remoteMeta.getServerModified();
             Date localDate = new Date(local.lastModified());
             long timeDiff = Math.abs(remoteDate.getTime() - localDate.getTime());
 
@@ -121,7 +117,7 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
                     }
                 }
             }
-        }catch (ParseException | DropboxException e){
+        }catch (DbxException e){
             e.printStackTrace();
         }
     }
@@ -132,20 +128,8 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
          **/
         try {
             FileInputStream fis = new FileInputStream(local);
-            mDBApi.putFileOverwrite(REMOTE, fis, local.length(), null);
-        } catch (IOException | DropboxException e) {
-            e.printStackTrace(); //TODO log dbx
-            return false;
-        }
-
-        return true;
-    }
-
-    private Boolean download(String REMOTE, File local){
-        try {
-            FileOutputStream fos = new FileOutputStream(local);
-            DropboxAPI.DropboxFileInfo ifInfo = mDBApi.getFile(REMOTE, null, fos, null);
-        } catch (IOException | DropboxException e){
+            mClient.files().uploadBuilder(REMOTE).uploadAndFinish(fis);
+        } catch (IOException | DbxException e) {
             e.printStackTrace();
             return false;
         }
@@ -153,7 +137,19 @@ public class DropboxHelper extends AsyncTask<String, Void, String> {
         return true;
     }
 
-    private File writeMD5(String name, String md5){ //TODO move to utils
+    private Boolean download(String REMOTE, File local){
+       try {
+            FileOutputStream fos = new FileOutputStream(local);
+            mClient.files().downloadBuilder(REMOTE).download(fos);
+        } catch (IOException | DbxException e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private File writeMD5(String name, String md5){
         File file = new File(name);
         try {
             FileWriter fileWriter = new FileWriter(file, false); //no append
